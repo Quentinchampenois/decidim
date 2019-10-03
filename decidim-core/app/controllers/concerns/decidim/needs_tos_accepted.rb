@@ -45,7 +45,7 @@ module Decidim
       # TOS is agreed.
       store_location_for(
         current_user,
-        stored_location_for(current_user) || request.path
+        stored_location_for(current_user) || request.fullpath
       )
 
       flash[:notice] = flash[:notice] if flash[:notice]

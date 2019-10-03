@@ -28,7 +28,7 @@ module Decidim
       end
 
       def new_managed_user
-        Decidim::User.new(managed: true, admin: false, roles: [])
+        Decidim::User.new(managed: true, admin: false, roles: [], organization: current_organization)
       end
     end
   end
