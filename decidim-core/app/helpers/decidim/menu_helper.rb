@@ -8,6 +8,7 @@ module Decidim
       @main_menu ||= ::Decidim::MenuPresenter.new(
         :menu,
         self,
+        "main-nav",
         element_class: "main-nav__link",
         active_class: "main-nav__link--active"
       )
@@ -18,6 +19,7 @@ module Decidim
       @user_menu ||= ::Decidim::InlineMenuPresenter.new(
         :user_menu,
         self,
+        "user-nav",
         element_class: "tabs-title",
         active_class: "is-active"
       )

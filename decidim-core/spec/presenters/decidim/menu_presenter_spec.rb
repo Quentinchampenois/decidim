@@ -4,7 +4,7 @@ require "spec_helper"
 
 module Decidim
   describe MenuPresenter, type: :helper do
-    subject { MenuPresenter.new(:custom_menu, view) }
+    subject { MenuPresenter.new(:custom_menu, view, "custom-nav") }
 
     after { MenuRegistry.destroy(:custom_menu) }
 
