@@ -16,6 +16,8 @@ module Decidim
     belongs_to :user, foreign_key: "decidim_user_id", class_name: "Decidim::User"
     has_one :organization, through: :user, class_name: "Decidim::Organization"
 
+    attr_reader :metadata
+
     validates :name, uniqueness: { scope: :decidim_user_id }
     validates :verification_metadata, absence: true, if: :granted?
     validates :verification_attachment, absence: true, if: :granted?
@@ -30,7 +32,9 @@ module Decidim
 
       authorization.attributes = {
         unique_id: handler.unique_id,
-        metadata: handler.metadata
+        encrypted_metadata: Decidim::MetadataEncryptor.new(
+          uid: handler.unique_id
+        ).encrypt(handler.metadata)
       }
 
       authorization.grant!
@@ -61,6 +65,10 @@ module Decidim
       expires_at.present? && expires_at < Time.current
     end
 
+    def metadata
+      encryptor.decrypt(encrypted_metadata)
+    end
+
     private
 
     def active_handler?
@@ -69,6 +77,10 @@ module Decidim
 
     def workflow_manifest
       @workflow_manifest ||= Decidim::Verifications.find_workflow_manifest(name)
+    end
+
+    def encryptor
+      @encryptor ||= Decidim::MetadataEncryptor.new(uid: unique_id)
     end
   end
 end
