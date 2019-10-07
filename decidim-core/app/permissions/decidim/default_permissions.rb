@@ -38,6 +38,12 @@ module Decidim
         [:participatory_space, :component].include?(permission_action.subject)
     end
 
+    def available_verification_workflows
+      Verifications::Adapter.from_collection(
+        user.organization.available_authorizations & Decidim.authorization_workflows.map(&:name)
+      )
+    end
+
     def authorized?(permission_action, resource: nil)
       return unless resource || component
       return if component && resource && component != resource.component

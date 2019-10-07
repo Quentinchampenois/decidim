@@ -439,7 +439,8 @@ en:
       initiatives_type:
         actions:
           title: Actions
-          vote: Sign
+          create: Create initiative
+          vote: Sign initiative
   layouts:
     decidim:
       admin:

@@ -46,6 +46,14 @@ module Decidim
           end
         end
 
+        get "authorization_creation_modal", to: "authorization_creation_modals#show"
+
+        resources :initiative_types, only: [:show], path: "initiatives_types" do
+          member do
+            get "authorization_creation_modal", to: "authorization_creation_for_type_modals#show"
+          end
+        end
+
         scope "/initiatives/:initiative_slug/f/:component_id" do
           Decidim.component_manifests.each do |manifest|
             next unless manifest.engine

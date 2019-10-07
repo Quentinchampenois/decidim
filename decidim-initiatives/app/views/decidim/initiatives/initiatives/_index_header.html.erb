@@ -7,5 +7,10 @@
         <%= t(".new_initiative") %>
         <%= icon "plus" %>
     <% end %>
+  <% else %>
+    <%= authorized_creation_modal_button_to authorization_creation_modal_path, remote: true, class: "title-action__action button small hollow" do %>
+      <%= t(".new_initiative") %>
+      <%= icon "plus" %>
+    <% end %>
   <% end %>
 </div>

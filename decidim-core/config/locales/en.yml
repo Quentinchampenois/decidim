@@ -279,6 +279,10 @@ en:
           authorize: Authorize with "%{authorization}"
           explanation: In order to perform this action, you need to be authorized with "%{authorization}".
           title: Authorization required
+        ok:
+          authorize: Already authorized
+          explanation: "%{authorization}"
+          title: Authorization confirmed
         pending:
           explanation: In order to perform this action, you need to be authorized with "%{authorization}", but your authorization is still in progress
           resume: Check your "%{authorization}" authorization progress

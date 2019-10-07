@@ -99,6 +99,29 @@ module Decidim
 
         send("#{tag}_to", "", html_options, &block)
       end
+
+      def authorized_creation_modal_button_to(path, html_options, &block)
+        # return if any_initiative_types_authorized?
+        html_options ||= {}
+
+        if !current_user
+          html_options["data-open"] = "loginModal"
+        else
+          html_options["data-open"] = "authorizationModal"
+          html_options["data-open-url"] = path
+        end
+
+        html_options["onclick"] = "event.preventDefault();"
+
+        send("button_to", "", html_options, &block)
+      end
+
+      def any_initiative_types_authorized?
+        return unless current_user
+        Decidim::Initiatives::InitiativeTypes.for(current_user.organization).inject do |result, type|
+          result && ActionAuthorizer.new(current_user, :create, type, type).authorize.ok?
+        end
+      end
     end
   end
 end

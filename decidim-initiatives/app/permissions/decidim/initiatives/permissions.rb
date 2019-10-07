@@ -22,6 +22,7 @@ module Decidim
         return permission_action unless user
 
         create_initiative?
+        create_initiative_with_type?
         request_membership?
 
         vote_initiative?
@@ -35,6 +36,10 @@ module Decidim
 
       def initiative
         @initiative ||= context.fetch(:initiative, nil) || context.fetch(:current_participatory_space, nil)
+      end
+
+      def initiative_type
+        @initiative_type ||= context.fetch(:initiative_type, nil) || initiative.type
       end
 
       def list_public_initiatives?
@@ -68,9 +73,20 @@ module Decidim
 
       def creation_enabled?
         Decidim::Initiatives.creation_enabled && (
-          Decidim::Initiatives.do_not_require_authorization ||
-            UserAuthorizations.for(user).any? ||
-            Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
+          creation_authorized? || Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
+        )
+      end
+
+      def create_initiative_with_type?
+        return unless permission_action.subject == :initiative_type &&
+                      permission_action.action == :create
+
+        toggle_allow(creation_enabled_for?(initiative_type))
+      end
+
+      def creation_enabled_for?(initiative_type)
+        Decidim::Initiatives.creation_enabled && (
+          creation_authorized_for?(initiative_type) || Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
         )
       end
 
@@ -82,7 +98,7 @@ module Decidim
                       !initiative.has_authorship?(user) &&
                       (
                         Decidim::Initiatives.do_not_require_authorization ||
-                        UserAuthorizations.for(user).any? ||
+                        creation_authorized? ||
                         Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
                       )
 
@@ -115,6 +131,23 @@ module Decidim
         return unless resource || permissions_holder
 
         ActionAuthorizer.new(user, permission_action, permissions_holder, resource).authorize.ok?
+      end
+
+      def creation_authorized?
+        return true if Decidim::Initiatives.do_not_require_authorization
+        return true if available_verification_workflows.empty?
+
+        Decidim::Initiatives::InitiativeTypes.for(user.organization).inject do |result, type|
+          result ||
+            ActionAuthorizer.new(user, :create, type, type).authorize.ok?
+        end
+      end
+
+      def creation_authorized_for?(initiative_type)
+        return true if Decidim::Initiatives.do_not_require_authorization
+        return true if available_verification_workflows.empty?
+
+        ActionAuthorizer.new(user, :create, initiative_type, initiative_type).authorize.ok?
       end
 
       def unvote_initiative?

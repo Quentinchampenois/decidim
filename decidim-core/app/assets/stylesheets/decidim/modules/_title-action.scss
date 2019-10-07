@@ -3,6 +3,10 @@
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 1.5rem;
+
+  form.button_to {
+    display: inline-block;
+  }
 }
 
 .title-action__title{
