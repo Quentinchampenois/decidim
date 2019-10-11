@@ -67,9 +67,13 @@ module Decidim
       # the TOS. Most of the times this is because of a redirect to the TOS
       # page (in which case the desired location is somewhere else after the
       # TOS is agreed).
-      return true if current_user && !current_user.tos_accepted? && request.path == tos_path
+      return true if current_user && !current_user.tos_accepted? && same_path?(request.path, tos_path)
 
       false
+    end
+
+    def same_path?(path1, path2)
+      path1.split('?').first == path2.split('?').first
     end
 
     def user_has_no_permission_path
