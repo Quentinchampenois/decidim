@@ -43,21 +43,39 @@ module Decidim
     def create_or_find_user
       generated_password = SecureRandom.hex
 
-      @user = User.find_or_initialize_by(
-        email: verified_email,
-        organization: organization
-      )
+      if (verified_email || form.email).blank?
 
-      unless @user.persisted?
-        @user.email = (verified_email || form.email)
-        @user.name = form.name
-        @user.nickname = form.normalized_nickname
-        @user.newsletter_notifications_at = nil
-        @user.email_on_notification = true
-        @user.password = generated_password
-        @user.password_confirmation = generated_password
-        @user.remote_avatar_url = form.avatar_url if form.avatar_url.present?
-        @user.skip_confirmation! if verified_email
+        @user = User.new(
+          email: "",
+          organization: organization,
+          name: form.name,
+          nickname: form.nickname,
+          newsletter_notifications_at: nil,
+          email_on_notification: false,
+          password: generated_password,
+          password_confirmation: generated_password,
+          accepted_tos_version: organization.tos_version,
+          managed: true
+        )
+        @user.skip_confirmation!
+      else
+
+        @user = User.find_or_initialize_by(
+          email: verified_email,
+          organization: organization
+        )
+
+        unless @user.persisted?
+          @user.email = (verified_email || form.email)
+          @user.name = form.name
+          @user.nickname = form.normalized_nickname
+          @user.newsletter_notifications_at = nil
+          @user.email_on_notification = true
+          @user.password = generated_password
+          @user.password_confirmation = generated_password
+          @user.remote_avatar_url = form.avatar_url if form.avatar_url.present?
+          @user.skip_confirmation! if verified_email
+        end
       end
 
       @user.tos_agreement = "1"
