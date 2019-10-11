@@ -137,10 +137,9 @@ module Decidim
         return true if Decidim::Initiatives.do_not_require_authorization
         return true if available_verification_workflows.empty?
 
-        Decidim::Initiatives::InitiativeTypes.for(user.organization).inject do |result, type|
-          result ||
-            ActionAuthorizer.new(user, :create, type, type).authorize.ok?
-        end
+        Decidim::Initiatives::InitiativeTypes.for(user.organization).find do |type|
+          ActionAuthorizer.new(user, :create, type, type).authorize.ok?
+        end.present?
       end
 
       def creation_authorized_for?(initiative_type)
