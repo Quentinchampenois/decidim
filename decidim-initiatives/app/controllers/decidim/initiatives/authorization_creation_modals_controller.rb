@@ -23,7 +23,7 @@ module Decidim
       end
 
       def authorizations
-        @authorizations ||= Decidim::Initiatives::InitiativeTypes.for(current_user.organization).map do |type|
+        @authorizations ||= Decidim::Initiatives::InitiativeTypes.for(current_organization).map do |type|
           action_authorized_to("create", resource: type, permissions_holder: type)
         end.reject do |authorization|
           authorization.ok?

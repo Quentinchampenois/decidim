@@ -87,12 +87,15 @@ module Decidim
 
         tag = "button"
         html_options ||= {}
+        action = initiative_initiative_signatures_path(initiative_slug: initiative.slug)
 
         if !current_user
           html_options["data-open"] = "loginModal"
+          html_options["data-redirect-url"] = action
+          request.env[:available_authorizations] = permissions_for(:vote, initiative.type)
         else
           html_options["data-open"] = "authorizationModal"
-          html_options["data-open-url"] = authorization_sign_modal_initiative_path(initiative)
+          html_options["data-open-url"] = authorization_sign_modal_initiative_path(initiative, redirect: action)
         end
 
         html_options["onclick"] = "event.preventDefault();"
@@ -100,15 +103,33 @@ module Decidim
         send("#{tag}_to", "", html_options, &block)
       end
 
-      def authorized_creation_modal_button_to(path, html_options, &block)
-        # return if any_initiative_types_authorized?
+      def authorized_creation_modal_button_to(action, html_options, &block)
         html_options ||= {}
 
         if !current_user
           html_options["data-open"] = "loginModal"
+          html_options["data-redirect-url"] = action
+          request.env[:available_authorizations] = merged_permissions_for(:create)
         else
           html_options["data-open"] = "authorizationModal"
-          html_options["data-open-url"] = path
+          html_options["data-open-url"] = authorization_creation_modal_path(redirect: action)
+        end
+
+        html_options["onclick"] = "event.preventDefault();"
+
+        send("button_to", "", html_options, &block)
+      end
+
+      def authorized_creation_modal_for_type_button_to(type, action, html_options, &block)
+        html_options ||= {}
+
+        if !current_user
+          html_options["data-open"] = "loginModal"
+          html_options["data-redirect-url"] = action
+          request.env[:available_authorizations] = permissions_for(:create, type)
+        else
+          html_options["data-open"] = "authorizationModal"
+          html_options["data-open-url"] = authorization_creation_modal_initiative_type_path(type.id, redirect: action)
         end
 
         html_options["onclick"] = "event.preventDefault();"
@@ -121,6 +142,19 @@ module Decidim
         Decidim::Initiatives::InitiativeTypes.for(current_user.organization).inject do |result, type|
           result && ActionAuthorizer.new(current_user, :create, type, type).authorize.ok?
         end
+      end
+
+      def permissions_for(action, type)
+        return [] unless type.permissions
+        type.permissions.dig(action.to_s,"authorization_handlers").keys
+      end
+
+      def merged_permissions_for(action)
+        Decidim::Initiatives::InitiativeTypes.for(current_organization).map do |type|
+          permissions_for(action,type)
+        end.inject do |result, list|
+          result + list
+        end.uniq
       end
     end
   end

@@ -21,7 +21,11 @@ module Decidim
       # GET /initiatives/:initiative_id/initiative_signatures/:step
       def show
         group_id = params[:group_id] || (session[:initiative_vote_form] ||= {})["group_id"]
-        enforce_permission_to :sign_initiative, :initiative, initiative: current_initiative, group_id: group_id, signature_has_steps: signature_has_steps?
+        if params[:id] == "finish"
+          enforce_permission_to :vote, :initiative, initiative: current_initiative, group_id: group_id
+        else
+          enforce_permission_to :sign_initiative, :initiative, initiative: current_initiative, group_id: group_id, signature_has_steps: signature_has_steps?
+        end
         send("#{step}_step", initiative_vote_form: session[:initiative_vote_form])
       end
 

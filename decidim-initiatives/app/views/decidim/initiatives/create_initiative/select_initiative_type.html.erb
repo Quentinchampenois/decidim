@@ -46,7 +46,7 @@
                     <%= f.submit t(".select"), class: "button" %>
                   <% end %>
                 <% else %>
-                  <%= authorized_creation_modal_button_to authorization_creation_modal_initiative_type_path(type.id, redirect: next_wizard_path), remote: true, class: "button hollow" do %>
+                  <%= authorized_creation_modal_button_to type, next_wizard_path, remote: true, class: "button hollow" do %>
                     <%= t(".select") %>
                   <% end %>
                 <% end %>
