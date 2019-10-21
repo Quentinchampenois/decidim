@@ -29,6 +29,15 @@ module Decidim
                default: :expired)
       end
 
+      # Public: The state of an initiative in a way a human can understand.
+      #
+      # initiative - Decidim::Initiative.
+      #
+      # Returns a String.
+      def humanize_initiative_state(initiative)
+        I18n.t(initiative.state , scope: "decidim.initiatives.state", default: :created)
+      end
+
       # Public: The state of an initiative from an administration perspective in
       # a way that a human can understand.
       #

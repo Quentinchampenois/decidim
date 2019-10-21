@@ -5,6 +5,7 @@ module Decidim
     # This cell renders the Medium (:m) initiative card
     # for an given instance of an Initiative
     class InitiativeMCell < Decidim::CardMCell
+      include InitiativeHelper
       include Decidim::Initiatives::Engine.routes.url_helpers
 
       property :state
@@ -47,6 +48,10 @@ module Decidim
       def authors
         [present(model).author] +
           model.committee_members.approved.non_deleted.excluding_author.map { |member| present(member.user) }
+      end
+
+      def badge_name
+        humanize_initiative_state model
       end
     end
   end
