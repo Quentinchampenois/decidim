@@ -1,7 +1,16 @@
 # Change Log
 
-## [Unreleased](https://github.com/decidim/decidim/tree/HEAD)
+## [Unreleased](https://github.com/decidim/decidim/tree/0.19-stable)
 
+**Added**:
+
+**Changed**:
+
+**Fixed**:
+
+**Removed**:
+
+## [0.19.0](https://github.com/decidim/decidim/tree/v0.19)
 
 **Added**:
 
@@ -26,7 +35,6 @@
 - **decidim-core**: Adds new language: Norwegian [#5335](https://github.com/decidim/decidim/pull/5335)
 - **decidim-initiatives**: UX improvements to initiatives [#5369](https://github.com/decidim/decidim/pull/5369)
 
-
 **Changed**:
 
 - **decidim-comments**: Change: Promote URLs in plain text to HTML anchors in comments.[\#5401](https://github.com/decidim/decidim/pull/5401)
@@ -37,6 +45,9 @@
 
 **Fixed**:
 
+- **decidim-assemblies**, **decidim-core**, **decidim-participatory_processes**, **decidim-proposals**: Fix: Non-private users can amend proposals from a private space [#5427](https://github.com/decidim/decidim/pull/5427)
+- **decidim-sortitions**: Fix: Creating a Sortition ignores categories [#5412](https://github.com/decidim/decidim/pull/5412)
+- **decidim-proposals**: Fix: ParticipatoryText workflow creates multiple versions [#5399](https://github.com/decidim/decidim/pull/5399)
 - **decidim-assemblies**: Fix: show the Assemblies button to allow managing nested assemblies [#5386](https://github.com/decidim/decidim/pull/5386)
 - **decidim-admin**: Fix: Remove first `:header_snippets` field on organization admin apparence form. [#5352](https://github.com/decidim/decidim/pull/5352)
 - **decidim-accountability**, **decidim-core**, **decidim-proposals**, **decidim-dev**: Fix: diffing empty versions of translatable attributes [\#5312](https://github.com/decidim/decidim/pull/5312)
@@ -78,6 +89,7 @@
 - **decidim-core** Fix omniauth registration edge cases and specs [#5397](https://github.com/decidim/decidim/pull/5397)
 - **decidim-core**: Fix errors controller forgery protection [#5398](https://github.com/decidim/decidim/pull/5398)
 - **decidim-meetings**, **decidim-core**: Various bugfixes [#5402](https://github.com/decidim/decidim/pull/5402)
+- **decidim-participatory_processes**: Fix: Duplicate private process [\#5379](https://github.com/decidim/decidim/pull/5379)
 
 **Removed**:
 
