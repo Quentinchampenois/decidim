@@ -51,6 +51,8 @@ en:
           - You send the letter to their address with the verification code.
           - You mark the letter as sent.
           - Once you mark the letter as sent, the participant will be able to introduce the code and get verified.
+      anti_affinity:
+        explanation: You must login with another account to validate this authorization
       csv_census:
         explanation: Get verified using the organization's census
         name: Organization's census

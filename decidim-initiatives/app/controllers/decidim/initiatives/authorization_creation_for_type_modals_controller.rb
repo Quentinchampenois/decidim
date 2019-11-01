@@ -3,8 +3,10 @@
 module Decidim
   module Initiatives
     class AuthorizationCreationForTypeModalsController < Decidim::Initiatives::ApplicationController
+      include Decidim::UserProfile
       include Decidim::Initiatives::NeedsInitiative
 
+      helper Decidim::Verifications::AntiAffinityHelper
       helper_method :authorizations, :authorize_action_path, :redirect_url, :initiative_type
       layout false
 

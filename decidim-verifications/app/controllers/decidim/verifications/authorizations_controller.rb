@@ -5,7 +5,7 @@ module Decidim
     # This controller allows users to create and destroy their authorizations. It
     # shouldn't be necessary to expand it to add new authorization schemes.
     class AuthorizationsController < ApplicationController
-      helper_method :handler, :unauthorized_methods
+      helper_method :handler, :unauthorized_methods, :disabled_methods, :authorization_anti_affinity
       before_action :valid_handler, only: [:new, :create]
 
       include Decidim::UserProfile
@@ -71,8 +71,20 @@ module Decidim
 
       def unauthorized_methods
         @unauthorized_methods ||= available_verification_workflows.reject do |handler|
-          active_authorization_methods.include?(handler.key)
+          (active_authorization_methods + authorization_anti_affinity).include?(handler.key)
         end
+      end
+
+      def disabled_methods
+        @disabled_methods ||= available_verification_workflows.select do |handler|
+          authorization_anti_affinity.include?(handler.key)
+        end
+      end
+
+      def authorization_anti_affinity
+        @authorization_anti_affinity ||= active_authorization_methods.map do |handler|
+          Decidim::Verifications.find_workflow_manifest(handler).anti_affinity
+        end.flatten.compact
       end
 
       def active_authorization_methods

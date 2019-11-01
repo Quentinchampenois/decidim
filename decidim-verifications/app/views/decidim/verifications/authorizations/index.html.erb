@@ -69,5 +69,33 @@
         <% end %>
       </div>
     <% end %>
+
+    <% if disabled_methods.any? %>
+      <div class="card card--list disabled">
+        <% disabled_methods.each do |method| %>
+          <%= link_to decidim.destroy_user_session_path, method: :delete do %>
+            <div class="card--list__item">
+              <div class="card--list__text">
+                <%= icon "account-logout", class: "card--list__icon" %>
+                <div>
+                  <h5 class="card--list__heading">
+                    <%= t("#{method.key}.name", scope: "decidim.authorization_handlers") %>
+                  </h5>
+                  <span class="text-small">
+                    <%= t("omniauth_anti_affinity.explanation", scope: "decidim.authorization_handlers") %>
+                  </span>
+                </div>
+              </div>
+              <div class="card--list__data">
+                <span class="card--list__data__icon">
+                  <%= icon "chevron-right" %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
   </section>
 </div>

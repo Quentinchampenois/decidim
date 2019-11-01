@@ -15,7 +15,7 @@
     <h3 class="reveal__title"><%= t ".#{base_code}.title" %></h3>
   </div>
   <% authorizations.statuses.each do |status| %>
-    <% next if status.ok? || authorizations.global_code && status.code != base_code %>
+    <% next if status.ok? || (authorizations.global_code && status.code != base_code) || authorization_anti_affinity.include?(status.handler_name) %>
     <p><%= t ".#{status.code}.explanation", authorization: t("#{status.handler_name}.name", scope: "decidim.authorization_handlers") %></p>
     <% if status.data[:extra_explanation] %>
       <p><%= t status.data[:extra_explanation][:key], **status.data[:extra_explanation][:params] %></p>
@@ -41,5 +41,11 @@
         <button class="link" data-close><%= t ".#{status.code}.cancel" %></button>
       </div>
     <% end %>
+  <% end %>
+  <% disabled_methods.each do |handler| %>
+    <p class="explanation">
+      <%= t ".missing.explanation", authorization: t("#{handler.name}.name", scope: "decidim.authorization_handlers") %>
+    </p>
+    <%= link_to t("sign_out", scope: "layouts.decidim.user_menu"), decidim.destroy_user_session_path, method: :delete, class: "button expanded" %>
   <% end %>
 <% end %>

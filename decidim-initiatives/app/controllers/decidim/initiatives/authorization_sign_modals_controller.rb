@@ -3,8 +3,10 @@
 module Decidim
   module Initiatives
     class AuthorizationSignModalsController < Decidim::Initiatives::ApplicationController
+      include Decidim::UserProfile
       include Decidim::Initiatives::NeedsInitiative
 
+      helper Decidim::Verifications::AntiAffinityHelper
       helper_method :authorizations, :authorize_action_path
       layout false
 

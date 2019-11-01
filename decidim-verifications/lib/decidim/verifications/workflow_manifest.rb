@@ -35,6 +35,8 @@ module Decidim
       attribute :expires_in, ActiveSupport::Duration, default: 0.minutes
       attribute :action_authorizer, String
 
+      attribute :anti_affinity, Array[String], default: []
+
       validate :engine_or_form
 
       attribute :name, String
