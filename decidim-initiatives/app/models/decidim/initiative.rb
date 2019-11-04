@@ -167,9 +167,7 @@ module Decidim
     # for the initiative type.
     #
     # RETURNS string
-    delegate :banner_image, to: :type
-
-    delegate :document_number_authorization_handler, to: :type
+    delegate :banner_image, :document_number_authorization_handler, :comments_enabled, to: :type
     delegate :supports_required, to: :scoped_type
 
     def votes_enabled?

@@ -53,6 +53,22 @@ module Decidim
       def badge_name
         humanize_initiative_state model
       end
+
+      def comments_count
+        return 0 unless model.type.comments_enabled
+        return model.comments.not_hidden.count if model.comments.respond_to? :not_hidden
+
+        model.comments.count
+      end
+
+      def comments_count_status
+        return unless model.type.comments_enabled
+        return render_comments_count unless has_link_to_resource?
+
+        link_to resource_path do
+          render_comments_count
+        end
+      end
     end
   end
 end
