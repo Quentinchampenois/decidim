@@ -15,6 +15,7 @@ module Decidim
         attribute :signature_type, String
         attribute :undo_online_signatures_enabled, Boolean
         attribute :promoting_committee_enabled, Boolean
+        attribute :comments_enabled, Boolean
         attribute :minimum_committee_members, Integer
         attribute :collect_user_extra_fields, Boolean
         translatable_attribute :extra_fields_legal_information, String

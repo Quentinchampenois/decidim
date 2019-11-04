@@ -28,6 +28,7 @@ en:
         user: Committee member
       initiatives_type:
         banner_image: Banner image
+        comments_enabled: Enable comments
         collect_user_extra_fields: Collect participant personal data on signature
         description: Description
         document_number_authorization_handler: Authorization to verify document number on signatures

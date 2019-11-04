@@ -27,6 +27,7 @@ fr:
         user: Membre du Comité de promotion
       initiatives_type:
         banner_image: Image d'en-tête
+        comments_enabled: Activer les commentaires
         collect_user_extra_fields: Collecter les données personnelles de l'utilisateur lors de la signature
         description: Description
         document_number_authorization_handler: Autorisation de vérifier le numéro de document sur les votes
