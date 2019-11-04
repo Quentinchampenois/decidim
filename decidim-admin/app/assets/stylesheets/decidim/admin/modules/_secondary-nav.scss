@@ -47,10 +47,12 @@ $process-title-height: 3rem;
   }
 }
 
+.secondary-nav--subnav {
+  padding-top: 2rem;
+}
+
 .secondary-nav--subnav,
 .process-content{
-  padding-top: 2rem;
-
   @include breakpoint(large){
     min-height: calc(100% - #{$process-title-height});
     margin-top: $process-title-height;
