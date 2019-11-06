@@ -1182,6 +1182,9 @@ en:
         unhappy: Unhappy?
         update: Update
         we_need_your_current_password_to_confirm_your_changes: we need your current password to confirm your changes
+      logout:
+        success: Successfully signed out from your %{kind} account.
+        error: Could not sign you out from %{kind}.
       new:
         sign_up: Sign up
       signed_up: Welcome! You have signed up successfully.

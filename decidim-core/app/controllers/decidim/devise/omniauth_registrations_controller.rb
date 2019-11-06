@@ -45,8 +45,25 @@ module Decidim
         end
       end
 
+      def logout
+
+        %w(notice success alert error warning info primary secondary omniauth logout).each do |type|
+          flash.keep(type.to_sym)
+        end
+
+        if params["state"] == stored_state
+          flash[:logout] = t("devise.registrations.logout.success", kind: params[:provider])
+        else
+          flash[:alert] = t("devise.registrations.logout.error", kind: params[:provider])
+        end
+
+        redirect_to after_sign_in_path_for(current_user)
+      end
+
       def after_sign_in_path_for(user)
-        if !pending_redirect?(user) && first_login_and_not_authorized?(user)
+        if logout_uri_is_valid?
+          oauth_data[:logout]
+        elsif !pending_redirect?(user) && first_login_and_not_authorized?(user)
           decidim_verifications.authorizations_path
         else
           super
@@ -74,7 +91,7 @@ module Decidim
       private
 
       def oauth_data
-        @oauth_data ||= oauth_hash.slice(:provider, :uid, :info)
+        @oauth_data ||= oauth_hash.slice(:provider, :uid, :info, :logout)
       end
 
       # Private: Create form params from omniauth hash
@@ -102,6 +119,15 @@ module Decidim
         return {} unless raw_hash
 
         raw_hash.deep_symbolize_keys
+      end
+
+      def logout_uri_is_valid?
+        oauth_data[:logout] &&
+          oauth_data[:logout] =~ URI::DEFAULT_PARSER.make_regexp
+      end
+
+      def stored_state
+        session.delete('omniauth.state')
       end
     end
   end

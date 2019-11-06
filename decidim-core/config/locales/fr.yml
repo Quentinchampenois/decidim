@@ -1073,7 +1073,7 @@ fr:
       invalid: '%{authentication_keys} ou mot de passe invalide.'
       invited: Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte.
       last_attempt: Vous avez encore une tentative avant que votre compte soit verrouillé.
-      locked: Ton compte est bloqué.
+      locked: Votre compte est bloqué.
       not_found_in_database: '%{authentication_keys} ou mot de passe invalide.'
       timeout: Votre session a expiré. Veuillez vous connecter à nouveau pour continuer.
       unauthenticated: Vous devez vous connecter ou vous inscrire avant de continuer.
@@ -1142,8 +1142,8 @@ fr:
         message: Votre compte a été verrouillé en raison d'une quantité excessive de tentatives de connexion infructueuses.
         subject: Instructions de déverrouillage
     omniauth_callbacks:
-      failure: Impossible de vous authentifier à partir de %{kind} car "%{reason}".
-      success: Authentifié avec succès à partir de %{kind} compte.
+      failure: 'Impossible de vous authentifier à partir de "%{kind}" : %{reason}.'
+      success: Authentifié avec succès à partir de votre compte "%{kind}".
     passwords:
       edit:
         change_my_password: Changer mon mot de passe
@@ -1167,9 +1167,12 @@ fr:
         currently_waiting_confirmation_for_email: 'En attente de confirmation pour: %{email}'
         leave_blank_if_you_don_t_want_to_change_it: laisser vide si vous ne voulez pas le changer
         title: Modifier %{resource}
-        unhappy: Pas satisfait ? 
+        unhappy: Pas satisfait ?
         update: Mettre à jour
         we_need_your_current_password_to_confirm_your_changes: nous avons besoin de votre mot de passe actuel pour confirmer vos modifications
+      logout:
+        success: Vous avez été automatiquement déconnecté de votre compte "%{kind}".
+        error: Impossible de vous déconnecter à distance de "%{kind}".
       new:
         sign_up: S'inscrire
       signed_up: Bienvenue! Vous vous êtes inscrit avec succès.
