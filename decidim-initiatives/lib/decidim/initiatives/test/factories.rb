@@ -13,6 +13,8 @@ FactoryBot.define do
     undo_online_signatures_enabled { true }
     promoting_committee_enabled { true }
     minimum_committee_members { 3 }
+    child_scope_threshold_enabled { false }
+    only_global_scope_enabled { false }
 
     trait :online_signature_enabled do
       signature_type { :online }
@@ -46,6 +48,14 @@ FactoryBot.define do
 
     trait :with_sms_code_validation do
       validate_sms_code_on_votes { true }
+    end
+
+    trait :child_scope_threshold_enabled do
+      child_scope_threshold_enabled { true }
+    end
+
+    trait :only_global_scope_enabled do
+      only_global_scope_enabled { true }
     end
   end
 
@@ -124,7 +134,7 @@ FactoryBot.define do
       signature_type { "online" }
 
       after(:build) do |initiative|
-        initiative.initiative_votes_count = initiative.scoped_type.supports_required + 1
+        initiative.online_votes["total"] = initiative.supports_required + 1
       end
     end
 
@@ -134,7 +144,7 @@ FactoryBot.define do
       signature_type { "online" }
 
       after(:build) do |initiative|
-        initiative.initiative_votes_count = initiative.scoped_type.supports_required - 1
+        initiative.online_votes["total"] = 0
       end
     end
 
@@ -149,15 +159,8 @@ FactoryBot.define do
   factory :initiative_user_vote, class: Decidim::InitiativesVote do
     initiative { create(:initiative) }
     author { create(:user, :confirmed, organization: initiative.organization) }
-  end
-
-  factory :organization_user_vote, class: Decidim::InitiativesVote do
-    initiative { create(:initiative) }
-    author { create(:user, :confirmed, organization: initiative.organization) }
-    decidim_user_group_id { create(:user_group).id }
-    after(:create) do |support|
-      create(:user_group_membership, user: support.author, user_group: Decidim::UserGroup.find(support.decidim_user_group_id))
-    end
+    hash_id { SecureRandom.uuid }
+    scope { initiative.scope }
   end
 
   factory :initiatives_committee_member, class: Decidim::InitiativesCommitteeMember do
