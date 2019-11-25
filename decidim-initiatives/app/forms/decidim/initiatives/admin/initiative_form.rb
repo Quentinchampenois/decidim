@@ -47,7 +47,7 @@ module Decidim
               scope_name = model.votable_initiative_type_scopes.find do |initiative_scope_type|
                 initiative_scope_type.global_scope? && decidim_scope_id == "global" ||
                   initiative_scope_type.decidim_scopes_id == decidim_scope_id.to_i
-              end.scope_name
+              end&.scope_name
 
               all_votes[decidim_scope_id || "global"] = [votes, scope_name]
             end
