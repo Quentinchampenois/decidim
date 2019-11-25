@@ -277,6 +277,10 @@ fr:
           authorize: Autoriser avec "%{authorization}"
           explanation: Pour effectuer cette action, vous devez être autorisé avec "%{authorization}".
           title: Autorisation requise
+        ok:
+          authorize: Déjà autorisé
+          explanation: "%{autorisation}> %{autorisation"
+          title: Autorisation confirmée
         pending:
           explanation: Pour effectuer cette action, vous devez être autorisé avec "%{authorization}", mais votre autorisation est toujours en cours de validation.
           resume: Vérifiez votre progression d'autorisation "%{authorization}"
@@ -309,6 +313,7 @@ fr:
             comments_enabled: Activer le module de commentaire
             dummy_global_attribute_1: Attribut factice 1
             dummy_global_attribute_2: Attribut factice 2
+            dummy_global_translatable_text: Texte traduisible factice
             enable_pads_creation: Activer la création de pads
             resources_permissions_enabled: Autorisations de ressources activées
           step:
@@ -319,6 +324,7 @@ fr:
             comments_blocked: Bloquer la création de nouveaux commentaires
             dummy_step_attribute_1: Attribut d'étape factice 1
             dummy_step_attribute_2: Attribut d'étape factice 2
+            dummy_step_translatable_text: Étape factice Texte traduisible
     contact: Contact
     content_blocks:
       footer_sub_hero:
@@ -1214,7 +1220,11 @@ fr:
       long_words: contient des mots trop longs (plus de 35 caractères)
       must_start_with_caps: doit commencer par une majuscule
       nesting_too_deep: ne peut pas être à l'intérieur d'une sous-catégorie
+      not_found: n'a pas pu être trouvé. Vous êtes-vous déjà inscrit ?
       not_locked: n'était pas verrouillé
+      not_saved:
+        one: 'Il y a eu une erreur dans le traitement de votre demande :'
+        other: 'Il y a eu plusieurs erreurs lors du traitement de votre demande :'
       too_many_marks: utilise trop de signes de ponctuation consécutifs (par exemple! et?)
       too_much_caps: utilise trop de lettres majuscules (plus de 25% du texte)
       too_short: est trop court (moins de 15 caractères)

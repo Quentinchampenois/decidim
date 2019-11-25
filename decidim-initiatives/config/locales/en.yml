@@ -474,6 +474,8 @@ en:
         title: Create new initiative
       initiative_header:
         initiative_menu_item: Initiative
+      initiative_header_steps:
+        description: Signature period between
       initiative_signature_creation_header:
         back: Back
         fill_personal_data: Complete your data
