@@ -62,11 +62,13 @@ module Decidim
       # have been added to the InitiativeType with its voting settings.
       #
       def authorized_scopes
-        initiative.votable_initiative_type_scopes.select do |initiative_type_scope|
-          initiative_type_scope.global_scope? ||
+        list = initiative.votable_initiative_type_scopes.select do |initiative_type_scope|
+          ( initiative_type_scope.scope || initiative.type.only_global_scope_enabled ) && (
             initiative_type_scope.scope == user_authorized_scope ||
             initiative_type_scope.scope.ancestor_of?(user_authorized_scope)
-        end.flat_map(&:scope)
+          )
+        end
+        list.flat_map(&:scope)
       end
 
       # Public: Finds the scope the user has an authorization for, this way the user can vote
@@ -86,17 +88,12 @@ module Decidim
         return scope if handler_name.blank?
         return unless authorized?
 
-        @user_authorized_scope ||= authorized_scope_candidates.find do |scope|
-          handler = Decidim::AuthorizationHandler.handler_for(
-            handler_name,
-            document_number: document_number,
-            name_and_surname: name_and_surname,
-            date_of_birth: date_of_birth,
-            postal_code: postal_code,
-            scope_id: scope&.id
-          )
+        manifest = Decidim::Verifications.workflows.find { |m| m.name == handler_name }
+        return unless manifest
 
-          authorization.metadata.symbolize_keys == handler.metadata.symbolize_keys
+        @user_authorized_scope ||= authorized_scope_candidates.find do |scope|
+          return unless scope
+          authorization.metadata.symbolize_keys.dig(:scope_id) == scope&.id
         end
       end
 
@@ -108,13 +105,11 @@ module Decidim
       #
       # Returns an array of Decidim::Scopes.
       def authorized_scope_candidates
-        authorized_scope_candidates = [initiative.scope]
-        authorized_scope_candidates += if initiative.scope.present?
-                                         initiative.scope.descendants
-                                       else
-                                         initiative.organization.scopes
-                                       end
-        authorized_scope_candidates.uniq
+        if scope
+          [scope] + initiative.scope.descendants
+        else
+          initiative.organization.scopes
+        end
       end
 
       def metadata
@@ -193,11 +188,7 @@ module Decidim
       def authorization_handler
         return unless document_number && handler_name
 
-        @authorization_handler ||= Decidim::AuthorizationHandler.handler_for(handler_name,
-                                                                             document_number: document_number,
-                                                                             name_and_surname: name_and_surname,
-                                                                             date_of_birth: date_of_birth,
-                                                                             postal_code: postal_code)
+        @authorization_handler ||= Decidim::AuthorizationHandler.handler_for(handler_name)
       end
 
       # Private: The AuthorizationHandler name used to verify the user's

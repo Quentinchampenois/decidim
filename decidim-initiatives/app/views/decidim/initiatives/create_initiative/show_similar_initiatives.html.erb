@@ -7,17 +7,16 @@
 <div class="row column">
   <div class="callout secondary">
     <%= t(".compare_help") %>
-    <%= link_to t(".more_information"), decidim.page_path("initiatives"), target: "_blank" %>.
   </div>
 </div>
 <br>
 
-<div class="row small-up-1 medium-up-2 card-grid">
+<div class="row card-grid">
   <%= render similar_initiatives %>
 </div>
 
 <div class="row">
-  <div class="columns mediumlarge-4 small-12 mediumlarge-push-4">
+  <div class="columns mediumlarge-6 small-12 mediumlarge-push-3">
     <%= link_to t(".continue"), next_wizard_path, class: "button expanded" %>
   </div>
 </div>
