@@ -1,4 +1,4 @@
-<div id="initiative-<%= current_initiative.id %>-progress-bar">
+<div id="initiative-<%= current_initiative.id %>-progress-bar" class="vote-cabin-progress-bar">
   <% current_initiative.votable_initiative_type_scopes.each_with_index do |type_scope, index| %>
     <% if type_scope.global_scope? %>
       <%= cell(

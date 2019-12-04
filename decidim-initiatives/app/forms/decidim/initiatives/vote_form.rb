@@ -63,10 +63,13 @@ module Decidim
       #
       def authorized_scopes
         list = initiative.votable_initiative_type_scopes.select do |initiative_type_scope|
-          ( initiative_type_scope.scope || initiative.type.only_global_scope_enabled ) && (
+          if initiative_type_scope.scope.present?
             initiative_type_scope.scope == user_authorized_scope ||
-            initiative_type_scope.scope.ancestor_of?(user_authorized_scope)
-          )
+              initiative_type_scope.scope.ancestor_of?(user_authorized_scope)
+          else
+            initiative.type.only_global_scope_enabled &&
+              user_authorized_scope.present?
+          end
         end
         list.flat_map(&:scope)
       end
@@ -91,9 +94,9 @@ module Decidim
         manifest = Decidim::Verifications.workflows.find { |m| m.name == handler_name }
         return unless manifest
 
-        @user_authorized_scope ||= authorized_scope_candidates.find do |scope|
-          return unless scope
-          authorization.metadata.symbolize_keys.dig(:scope_id) == scope&.id
+        @user_authorized_scope ||= authorized_scope_candidates.find do |candidates|
+          return unless candidates
+          authorization.metadata.symbolize_keys.dig(:scope_id) == candidates&.id
         end
       end
 
