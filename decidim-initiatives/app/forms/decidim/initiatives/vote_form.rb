@@ -67,8 +67,7 @@ module Decidim
             initiative_type_scope.scope == user_authorized_scope ||
               initiative_type_scope.scope.ancestor_of?(user_authorized_scope)
           else
-            initiative.type.only_global_scope_enabled &&
-              user_authorized_scope.present?
+            initiative.type.only_global_scope_enabled
           end
         end
         list.flat_map(&:scope)

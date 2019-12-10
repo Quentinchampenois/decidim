@@ -29,8 +29,7 @@ module Decidim
             :finish
 
       def show
-        enforce_permission_to :create, :initiative
-        send("#{step}_step", initiative: session_initiative)
+        send("#{step}_step", initiative: session_initiative, type_id: params[:type_id])
       end
 
       def update
@@ -47,11 +46,13 @@ module Decidim
       end
 
       def previous_form_step(parameters)
+        enforce_permission_to :create, :initiative
         @form = build_form(Decidim::Initiatives::PreviousForm, parameters)
         render_wizard
       end
 
       def show_similar_initiatives_step(parameters)
+        enforce_permission_to :create, :initiative
         @form = build_form(Decidim::Initiatives::PreviousForm, parameters)
         unless @form.valid?
           redirect_to previous_wizard_path(validate_form: true)
@@ -67,11 +68,13 @@ module Decidim
       end
 
       def fill_data_step(parameters)
+        enforce_permission_to :create, :initiative
         @form = build_form(Decidim::Initiatives::InitiativeForm, parameters)
         render_wizard
       end
 
       def promotal_committee_step(parameters)
+        enforce_permission_to :create, :initiative
         skip_step unless promotal_committee_required?
 
         if session_initiative.has_key?(:id)
@@ -99,6 +102,7 @@ module Decidim
       end
 
       def finish_step(_parameters)
+        enforce_permission_to :create, :initiative
         render_wizard
       end
 

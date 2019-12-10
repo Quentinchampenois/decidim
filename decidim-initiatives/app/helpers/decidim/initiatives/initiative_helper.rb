@@ -134,8 +134,9 @@ module Decidim
 
         if !current_user
           html_options["data-open"] = "loginModal"
-          html_options["data-redirect-url"] = action
-          request.env[:available_authorizations] = permissions_for(:create, type)
+          binder = action.include?("?") ? "&" : "?"
+          html_options["data-redirect-url"] = "#{action}#{binder}type_id=#{type.id}"
+          request.env[:available_authorizations] = merged_permissions_for(:create)
         else
           html_options["data-open"] = "authorizationModal"
           html_options["data-open-url"] = authorization_creation_modal_initiative_type_path(type.id, redirect: action)
