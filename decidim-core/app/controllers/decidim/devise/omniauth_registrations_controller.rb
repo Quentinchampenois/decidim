@@ -7,6 +7,11 @@ module Decidim
       include FormFactory
       include Decidim::DeviseControllers
 
+      prepend_before_action :manage_omniauth_origin, except: [:logout]
+      prepend_before_action :manage_omniauth_authorization, except: [:logout]
+
+      after_action :grant_omniauth_authorization, except: [:logout]
+
       def new
         @form = form(OmniauthRegistrationForm).from_params(params[:user])
       end
@@ -21,7 +26,7 @@ module Decidim
           on(:ok) do |user|
             if user.active_for_authentication?
               sign_in_and_redirect user, event: :authentication
-              set_flash_message :notice, :success, kind: @form.provider.capitalize
+              set_flash_message :notice, :success, kind: provider_name(@form.provider)
             else
               expire_data_after_sign_in!
               user.resend_confirmation_instructions unless user.confirmed?
@@ -31,13 +36,13 @@ module Decidim
           end
 
           on(:invalid) do
-            set_flash_message :notice, :success, kind: @form.provider.capitalize
+            set_flash_message :notice, :success, kind: provider_name(@form.provider)
             render :new
           end
 
           on(:error) do |user|
             if user.errors[:email]
-              set_flash_message :alert, :failure, kind: @form.provider.capitalize, reason: t("decidim.devise.omniauth_registrations.create.email_already_exists")
+              set_flash_message :alert, :failure, kind: provider_name(@form.provider), reason: t("decidim.devise.omniauth_registrations.create.email_already_exists")
             end
 
             render :new
@@ -52,9 +57,9 @@ module Decidim
         end
 
         if params["state"] == stored_state
-          flash[:logout] = t("devise.registrations.logout.success", kind: params[:provider])
+          flash[:logout] = t("devise.registrations.logout.success", kind: provider_name(params[:provider]))
         else
-          flash[:alert] = t("devise.registrations.logout.error", kind: params[:provider])
+          flash[:alert] = t("devise.registrations.logout.error", kind: provider_name(params[:provider]))
         end
 
         redirect_to after_sign_in_path_for(current_user)
@@ -86,6 +91,69 @@ module Decidim
         return send(:create) if devise_mapping.omniauthable? && User.omniauth_providers.include?(action_name.to_sym)
 
         raise AbstractController::ActionNotFound, "The action '#{action_name}' could not be found for Decidim::Devise::OmniauthCallbacksController"
+      end
+
+      def manage_omniauth_origin
+        return unless request.env["omniauth.origin"].present?
+        return if  request.env["omniauth.origin"].split("?").first == decidim.new_user_session_url.split("?").first
+
+        Rails.logger.debug "+++++++++++++++++++++++++"
+        Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_origin"
+        Rails.logger.debug "omniauth_origin --> " + request.env["omniauth.origin"].split("?").first.to_s
+        Rails.logger.debug "new_user_session_url --> " + decidim.new_user_session_path.split("?").first.to_s
+        Rails.logger.debug "+++++++++++++++++++++++++"
+
+        store_location_for(:user, request.env["omniauth.origin"])
+      end
+
+      def manage_omniauth_authorization
+
+        Rails.logger.debug "+++++++++++++++++++++++++"
+        Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_authorization"
+        Rails.logger.debug "with current_user" if current_user
+        Rails.logger.debug "+++++++++++++++++++++++++"
+
+        if current_user
+          @verified_email = current_user.email
+        end
+
+        store_location_for(:user, stored_location_for(:redirect))
+      end
+
+      def grant_omniauth_authorization
+
+        location = store_location_for(:user, stored_location_for(:user))
+        return unless !!location.match(/^\/#{params[:action]}\/$/)
+
+        Rails.logger.debug "+++++++++++++++++++++++++"
+        Rails.logger.debug "OmniauthRegistrationsController.grant_omniauth_authorization"
+        Rails.logger.debug oauth_data.to_json if oauth_data
+        Rails.logger.debug "+++++++++++++++++++++++++"
+
+        return unless Decidim.authorization_workflows.one?{ |a| a.try(:omniauth_provider) == params[:action] }
+
+        # just to be safe
+        return unless current_user
+
+        current_user.update_column(:managed, true) if current_user.email.blank?
+
+        @workflow = Decidim.authorization_workflows.find{ |a| a.try(:omniauth_provider) == params[:action] }
+
+        @form = Decidim::Verifications::Omniauth::OmniauthAuthorizationForm.from_params(user: current_user, provider: @workflow.omniauth_provider, oauth_data: oauth_data[:info])
+
+        @authorization = Decidim::Authorization.find_or_initialize_by(
+          user: current_user,
+          name: @workflow.name
+        )
+
+        Decidim::Verifications::Omniauth::ConfirmOmniauthAuthorization.call(@authorization, @form) do
+          on(:ok) do
+            flash[:omniauth] = t("authorizations.new.success", scope: "decidim.verifications.omniauth", locale: current_user.locale)
+          end
+          on(:invalid) do
+            flash[:alert] = @form.errors.to_h.values.join(' ')
+          end
+        end
       end
 
       private
@@ -128,6 +196,14 @@ module Decidim
 
       def stored_state
         session.delete('omniauth.state')
+      end
+
+      def provider_name(provider)
+        if Rails.application.secrets.dig(:omniauth, provider.to_sym, :provider_name).present?
+          Rails.application.secrets.dig(:omniauth, provider.to_sym, :provider_name)
+        else
+          provider.capitalize
+        end
       end
     end
   end

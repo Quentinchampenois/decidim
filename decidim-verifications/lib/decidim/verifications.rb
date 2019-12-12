@@ -8,6 +8,7 @@ require "decidim/verifications/id_documents"
 require "decidim/verifications/postal_letter"
 require "decidim/verifications/sms"
 require "decidim/verifications/csv_census"
+require "decidim/verifications/omniauth"
 
 module Decidim
   def self.authorization_workflows

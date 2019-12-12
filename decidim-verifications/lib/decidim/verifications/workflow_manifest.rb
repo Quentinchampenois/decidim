@@ -35,7 +35,11 @@ module Decidim
       attribute :expires_in, ActiveSupport::Duration, default: 0.minutes
       attribute :action_authorizer, String
 
+      attribute :omniauth_provider, String
+      attribute :minimum_age, Integer, default: 0
       attribute :anti_affinity, Array[String], default: []
+      attribute :omniauth_provider, String
+      attribute :minimum_age, Integer, default: 0
 
       validate :engine_or_form
 

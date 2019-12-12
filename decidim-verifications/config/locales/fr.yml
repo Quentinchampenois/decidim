@@ -44,6 +44,9 @@ fr:
             - Vous remplissez les informations présentes dans l'image téléchargée.
             - L'information doit correspondre à tout ce que l'utilisateur a rempli.
             - Si vous ne pouvez pas voir clairement les informations ou si vous ne pouvez pas les vérifier, vous pouvez rejeter la demande et l'utilisateur sera en mesure de les corriger.
+        omniauth:
+          help:
+          - Validate with an external OmniAuth account
         postal_letter:
           help:
             - Les utilisateurs demandent un code de vérification à envoyer à leur adresse.
@@ -60,6 +63,10 @@ fr:
         name: Documents d'identité
       multistep: En plusieurs étapes
       name: Nom
+      omniauth_anti_affinity:
+        explanation: Vous devez vous connecter avec un autre compte pour valider cette autorisation.
+      omniauth_decidim_handler:
+        name: Omniauth Decidim
       postal_letter:
         explanation: Nous vous enverrons une lettre postale avec un code que vous devrez saisir afin que nous puissions vérifier votre adresse
         name: Code par lettre postale
@@ -175,6 +182,27 @@ fr:
         dni: Carte nationale d'identité
         nie: Carte de séjour ou de résident
         passport: Passeport
+      metadata:
+        content:
+          title: Données issues de l'autorisation
+      omniauth:
+        authorizations:
+          new:
+            error: Impossible de confirmer votre compte avec ce service externe.
+            success: Votre compte a été confirmé avec succès.
+        errors:
+          anti_affinity: "Vous ne pouvez pas être connecter avec ces 2 identités en même temps: %{anti_affinity}"
+          minimum_age: "Vous devez avoir au moins %{minimum_age} pour confirmer votre compte."
+        admin:
+          authorizations:
+            index:
+              actions:
+                metadata: Voir les informations
+              fields:
+                name: Utilisateur
+                granted_at: Autorisé le
+                uid: UID
+              title: Autorisations pour %{handler_name}
       postal_letter:
         admin:
           pending_authorizations:

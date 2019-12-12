@@ -110,8 +110,44 @@
   .action-icon.action-icon--remove{
     color: $alert-color;
   }
+
+  .button_to .button {
+    text-transform: lowercase;
+    font-variant: small-caps;
+    font-size: 100%;
+    font-weight: bold;
+
+    margin-bottom: 0;
+
+    &.tiny{ padding: .15rem .5rem .35rem; }
+
+    .icon{
+      vertical-align: inherit;
+      margin-right: .25rem;
+    }
+  }
 }
 
 .table-list__state{
   text-align: center;
+}
+
+.authorizations-list {
+
+  .card--list__item svg {
+    flex-basis: 5vw;
+  }
+
+  .card--list__text span.text-small {
+    display: block;
+    white-space: pre-line;
+
+    &:first-line, &::first-line {
+      line-height: 0;
+    }
+  }
+}
+
+.authorizations .table-list__actions{
+  vertical-align: middle;
 }
