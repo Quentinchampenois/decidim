@@ -42,6 +42,8 @@ module Decidim
       enforce_permission_to :delete, :user, current_user: current_user
       @form = form(DeleteAccountForm).from_params(params)
 
+      flash[:notice] = t("account.destroy.success", scope: "decidim")
+
       DestroyAccount.call(current_user, @form) do
         on(:ok) do
           sign_out(current_user)

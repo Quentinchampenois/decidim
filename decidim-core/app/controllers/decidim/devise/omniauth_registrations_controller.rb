@@ -7,7 +7,6 @@ module Decidim
       include FormFactory
       include Decidim::DeviseControllers
 
-      prepend_before_action :manage_omniauth_origin, except: [:logout]
       prepend_before_action :manage_omniauth_authorization, except: [:logout]
 
       after_action :grant_omniauth_authorization, except: [:logout]
@@ -93,37 +92,34 @@ module Decidim
         raise AbstractController::ActionNotFound, "The action '#{action_name}' could not be found for Decidim::Devise::OmniauthCallbacksController"
       end
 
-      def manage_omniauth_origin
-        return unless request.env["omniauth.origin"].present?
-        return if  request.env["omniauth.origin"].split("?").first == decidim.new_user_session_url.split("?").first
-
-        Rails.logger.debug "+++++++++++++++++++++++++"
-        Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_origin"
-        Rails.logger.debug "omniauth_origin --> " + request.env["omniauth.origin"].split("?").first.to_s
-        Rails.logger.debug "new_user_session_url --> " + decidim.new_user_session_path.split("?").first.to_s
-        Rails.logger.debug "+++++++++++++++++++++++++"
-
-        store_location_for(:user, request.env["omniauth.origin"])
-      end
-
       def manage_omniauth_authorization
 
         Rails.logger.debug "+++++++++++++++++++++++++"
         Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_authorization"
+        Rails.logger.debug params
         Rails.logger.debug "with current_user" if current_user
+        Rails.logger.debug "location_for :user --> " + store_location_for(:user, stored_location_for(:user)).to_s
+        Rails.logger.debug "location_for :redirect --> " + store_location_for(:redirect, stored_location_for(:redirect)).to_s
+        Rails.logger.debug "match : " + ( store_location_for(:user, stored_location_for(:user)) =~ /^\/#{params[:action]}\/$/ ).inspect
+        Rails.logger.debug "omniauth_origin --> " + request.env["omniauth.origin"].split("?").first.to_s if request.env["omniauth.origin"].present?
+        Rails.logger.debug "new_user_session_url --> " + decidim.new_user_session_path.split("?").first.to_s
         Rails.logger.debug "+++++++++++++++++++++++++"
+
+        location = store_location_for(:user, stored_location_for(:user))
+        return unless location.present? && !!location.match(/^\/#{params[:action]}\/$/)
 
         if current_user
           @verified_email = current_user.email
         end
 
-        store_location_for(:user, stored_location_for(:redirect))
+        if request.env["omniauth.origin"].present? && (request.env["omniauth.origin"].split("?").first != decidim.new_user_session_url.split("?").first)
+          store_location_for(:user, request.env["omniauth.origin"])
+        else
+          store_location_for(:user, stored_location_for(:redirect))
+        end
       end
 
       def grant_omniauth_authorization
-
-        location = store_location_for(:user, stored_location_for(:user))
-        return unless !!location.match(/^\/#{params[:action]}\/$/)
 
         Rails.logger.debug "+++++++++++++++++++++++++"
         Rails.logger.debug "OmniauthRegistrationsController.grant_omniauth_authorization"

@@ -119,7 +119,8 @@ module Decidim
           name_and_surname: name_and_surname,
           document_number: document_number,
           date_of_birth: date_of_birth,
-          postal_code: postal_code
+          postal_code: postal_code,
+          scope: postal_code
         }
       end
 
