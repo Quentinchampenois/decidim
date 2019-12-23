@@ -3,7 +3,6 @@
 module Decidim
   # A Helper to render image according to the device screen
   module ImageResponsiveHelper
-
     def image_responsive(image, options = {})
       # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
       # https://gist.github.com/armandfardeau/0730c917e4a2c82871b85d690b1b169f
@@ -16,6 +15,5 @@ module Decidim
         concat image_tag(image.url, options)
       end
     end
-
   end
 end
