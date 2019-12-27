@@ -18,6 +18,7 @@ module Decidim
     include Decidim::Resourceable
     include Decidim::HasReference
     include Decidim::Randomable
+    include Decidim::Searchable
 
     belongs_to :organization,
                foreign_key: "decidim_organization_id",
@@ -92,6 +93,24 @@ module Decidim
 
     after_save :notify_state_change
     after_create :notify_creation
+
+    searchable_fields({
+                        participatory_space: :itself,
+                        A: :title,
+                        D: :description,
+                        datetime: :published_at
+                      },
+                      index_on_create: ->(_initiative) { false },
+                      # is Resourceable instead of ParticipatorySpaceResourceable so we can't use `visible?`
+                      index_on_update: ->(initiative) { initiative.published? })
+
+    def self.future_spaces
+      none
+    end
+
+    def self.past_spaces
+      closed
+    end
 
     def self.log_presenter_class_for(_log)
       Decidim::Initiatives::AdminLog::InitiativePresenter
