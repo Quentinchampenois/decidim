@@ -41,7 +41,7 @@ module Decidim
           else
             ids = InitiativesCreated.by(user).with_state(state).pluck(:id)
             ids += InitiativesPromoted.by(user).with_state(state).pluck(:id)
-            base = Initiative.where(id: ids)
+            base = Initiative.where(id: ids).order(id: :desc)
           end
 
           return base if q.blank?

@@ -57,10 +57,10 @@ module Decidim
           nickname: form.nickname,
           newsletter_notifications_at: nil,
           email_on_notification: false,
+          # accepted_tos_version: organization.tos_version,
+          # managed: true,
           password: generated_password,
-          password_confirmation: generated_password,
-          accepted_tos_version: organization.tos_version,
-          managed: true
+          password_confirmation: generated_password
         )
         @user.skip_confirmation!
       else

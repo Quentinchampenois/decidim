@@ -131,7 +131,7 @@ module Decidim
         # just to be safe
         return unless current_user
 
-        current_user.update_column(:managed, true) if current_user.email.blank?
+        # current_user.update_column(:managed, true) if current_user.email.blank?
 
         @workflow = Decidim.authorization_workflows.find{ |a| a.try(:omniauth_provider) == params[:action] }
 

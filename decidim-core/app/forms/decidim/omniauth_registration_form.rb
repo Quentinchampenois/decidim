@@ -15,7 +15,7 @@ module Decidim
     attribute :avatar_url, String
     attribute :raw_data, Hash
 
-    validates :email, presence: true
+    # validates :email, presence: true
     validates :name, presence: true
     validates :provider, presence: true
     validates :uid, presence: true
