@@ -148,6 +148,7 @@ module Decidim
           end
           on(:invalid) do
             flash[:alert] = @form.errors.to_h.values.join(' ')
+            store_location_for(:user, decidim.root_path)
           end
         end
       end

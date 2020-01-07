@@ -34,7 +34,7 @@ module Decidim
         private
 
         def redirect_url
-          @redirect_url ||= request.referer || decidim_verifications.authorizations_path
+          @redirect_url ||= params[:redirect_url] || request.referer || decidim_verifications.authorizations_path
         end
 
         def authorization
