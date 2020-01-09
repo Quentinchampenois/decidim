@@ -16,20 +16,16 @@ module Decidim
       def initiative_types_select(name, collection, options = {})
         selected = object.send(name)
 
-        if selected.present?
-          if selected == "all"
-            types = collection.all.map do |type|
-              [type.title[I18n.locale.to_s], type.id]
-            end
-          else
-            selected = selected.values if selected.is_a?(Hash)
-            selected = [selected] unless selected.is_a?(Array)
-            types = collection.where(id: selected.map(&:to_i)).map do |type|
-              [type.title[I18n.locale.to_s], type.id]
-            end
+        if selected.present? && selected != "all"
+          selected = selected.values if selected.is_a?(Hash)
+          selected = [selected] unless selected.is_a?(Array)
+          types = collection.where(id: selected.map(&:to_i)).map do |type|
+            [type.title[I18n.locale.to_s], type.id]
           end
         else
-          types = []
+          types = collection.all.map do |type|
+            [type.title[I18n.locale.to_s], type.id]
+          end
         end
 
         prompt = options.delete(:prompt)

@@ -158,6 +158,7 @@ module Decidim
 
     def tos_accepted?
       return true if managed
+      return true if email.blank?
       return false if accepted_tos_version.nil?
 
       # For some reason, if we don't use `#to_i` here we get some
