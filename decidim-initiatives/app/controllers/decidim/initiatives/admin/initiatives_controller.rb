@@ -26,6 +26,7 @@ module Decidim
                            @query,
                            @state
                          )
+                         .order(id: :desc)
                          .page(params[:page])
                          .per(15)
         end
