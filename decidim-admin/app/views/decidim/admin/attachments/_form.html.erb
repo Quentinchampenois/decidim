@@ -18,9 +18,11 @@
       <%= form.translated :text_field, :description %>
     </div>
 
-    <div class="row column">
-      <%= form.select :attachment_collection_id, @form.attachment_collections.collect { |c| [translated_attribute(c.name), c.id] }, include_blank: true %>
-    </div>
+    <% if @form.attachment_collections.present? %>
+      <div class="row column">
+        <%= form.select :attachment_collection_id, @form.attachment_collections.collect { |c| [translated_attribute(c.name), c.id] }, include_blank: true %>
+      </div>
+    <% end %>
 
     <div class="row column">
       <%= form.upload :file, optional: false %>

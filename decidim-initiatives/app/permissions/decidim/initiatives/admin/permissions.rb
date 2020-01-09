@@ -68,14 +68,17 @@ module Decidim
 
         def attachment_action?
           return unless permission_action.subject == :attachment
+          return unless permission_action.subject == :attachment
 
           attachment = context.fetch(:attachment, nil)
           attached = attachment&.attached_to
 
           case permission_action.action
           when :update, :destroy
-            toggle_allow(attached && attached.is_a?(Decidim::Initiative))
-          when :read, :create
+            toggle_allow(attached && attached.is_a?(Decidim::Initiative) && initiative.created?)
+          when :create
+            toggle_allow(initiative.created?)
+          when :read
             allow!
           else
             disallow!
