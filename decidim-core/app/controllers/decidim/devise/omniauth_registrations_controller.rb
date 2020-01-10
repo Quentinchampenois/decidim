@@ -55,10 +55,10 @@ module Decidim
           flash.keep(type.to_sym)
         end
 
-        if params["state"].present? && params["state"] != stored_state
-            # flash[:logout] = t("devise.registrations.logout.success", kind: provider_name(params[:provider]))
-            flash[:alert] = t("devise.registrations.logout.error", kind: provider_name(params[:provider]))
-        end
+        # if params["state"].present? && params["state"] != stored_state
+        #     # flash[:logout] = t("devise.registrations.logout.success", kind: provider_name(params[:provider]))
+        #     flash[:alert] = t("devise.registrations.logout.error", kind: provider_name(params[:provider]))
+        # end
 
         redirect_to after_sign_in_path_for(current_user)
       end
