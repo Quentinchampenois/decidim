@@ -63,7 +63,7 @@ module Decidim
       #
       # Returns an HTML-safe String.
       def present_user_name
-        extra["name"].html_safe
+        extra["name"].html_safe || I18n.t("decidim.profile.deleted.name")
       end
 
       # Private: Presents the nickname of the user performing the action.
@@ -78,7 +78,7 @@ module Decidim
       #
       # Returns an HTML-safe String.
       def user_path
-        h.decidim.profile_path(present_user_nickname)
+        h.decidim.profile_path(present_user_nickname) unless present_user_nickname.blank?
       end
     end
   end
