@@ -28,6 +28,17 @@ module Decidim
 
     scope :for_scope, ->(scope) { where(scope: scope) }
 
+    def self.user_collection(author)
+      where(decidim_author_id: author.id)
+    end
+
+    def self.export_serializer
+      Decidim::Initiatives::DataPortabilityInitiativesVoteSerializer
+    end
+
+    def self.data_portability_images(user)
+    end
+
     # Public: Generates a hashed representation of the initiative support.
     #
     # Used when exporting the votes as CSV.

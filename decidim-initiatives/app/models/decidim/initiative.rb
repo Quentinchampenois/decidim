@@ -116,6 +116,18 @@ module Decidim
       Decidim::Initiatives::AdminLog::InitiativePresenter
     end
 
+    def self.user_collection(author)
+      return unless author.is_a?(Decidim::User)
+      where(decidim_author_id: author.id)
+    end
+
+    def self.export_serializer
+      Decidim::Initiatives::InitiativeSerializer
+    end
+
+    def self.data_portability_images(user)
+    end
+
     # PUBLIC banner image
     #
     # Overrides participatory space's banner image with the banner image defined

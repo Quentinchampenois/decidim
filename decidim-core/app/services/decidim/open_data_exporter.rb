@@ -25,7 +25,7 @@ module Decidim
     private
 
     def data
-      buffer = Zip::OutputStream.write_buffer do |out|
+      buffer = ::Zip::OutputStream.write_buffer do |out|
         open_data_manifests.each do |export_manifest|
           csv_data = data_for(export_manifest)
           out.put_next_entry("#{organization.host}-open-data-#{export_manifest.name}.csv")

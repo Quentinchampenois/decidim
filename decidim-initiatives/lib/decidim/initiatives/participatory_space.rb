@@ -32,6 +32,21 @@ Decidim.register_participatory_space(:initiatives) do |participatory_space|
   participatory_space.model_class_name = "Decidim::Initiative"
   participatory_space.permissions_class_name = "Decidim::Initiatives::Permissions"
 
+  participatory_space.data_portable_entities = [
+    "Decidim::Initiative",
+    "Decidim::InitiativesVote"
+  ]
+
+  participatory_space.exports :initiatives do |export|
+    export.collection do |initiative|
+      Decidim::Initiative.where(id: initiative.id)
+    end
+
+    exports.include_in_open_data = true
+  
+    export.serializer Decidim::Initiatives::InitiativeSerializer
+  end
+
   participatory_space.seeds do
     seeds_root = File.join(__dir__, "..", "..", "..", "db", "seeds")
     organization = Decidim::Organization.first
