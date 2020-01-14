@@ -53,6 +53,12 @@ module Decidim
           enforce_permission_to :update, :initiative, initiative: current_initiative
 
           params[:id] = params[:slug]
+          if params[:initiative].present?
+            current_organization.available_locales.each do |locale|
+              params[:initiative]["description_#{locale}"] = Decidim::ApplicationController.helpers.strip_tags(params[:initiative]["description_#{locale}"])
+            end
+          end
+
           @form = form(Decidim::Initiatives::Admin::InitiativeForm)
                   .from_params(params, initiative: current_initiative)
 

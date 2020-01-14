@@ -116,6 +116,7 @@ module Decidim
       def build_form(klass, parameters)
         @form = form(klass).from_params(parameters)
         attributes = @form.attributes_with_values
+        attributes[:description] = Decidim::ApplicationController.helpers.strip_tags(attributes[:description])
         session[:initiative] = session_initiative.merge(attributes)
         @form.valid? if params[:validate_form]
 
