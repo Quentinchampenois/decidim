@@ -315,6 +315,8 @@ module Decidim
         counters["total"] += count
       end
 
+      online_votes = { "total": 0 } if online_votes.blank?
+
       update_column("online_votes", online_votes)
       # rubocop:enable Rails/SkipsModelValidations
     end
