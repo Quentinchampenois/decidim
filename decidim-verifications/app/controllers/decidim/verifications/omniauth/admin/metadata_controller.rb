@@ -7,10 +7,11 @@ module Decidim
         class MetadataController < Decidim::Admin::ApplicationController
           layout false
           helper Decidim::Verifications::MetadataHelper
-          helper_method :handler_name
+          helper_method :handler_name, :target_user
 
           def show
             @metadata ||= current_authorization.metadata
+            @user ||= current_authorization.user
             render template: "decidim/verifications/metadata/show"
           end
 
