@@ -11,6 +11,8 @@ module Decidim
 
       after_action :grant_omniauth_authorization, except: [:logout]
 
+      skip_before_action :verify_authenticity_token, if: :is_saml_callback?
+
       def new
         @form = form(OmniauthRegistrationForm).from_params(params[:user])
       end
@@ -200,6 +202,13 @@ module Decidim
         else
           provider.capitalize
         end
+      end
+
+      def is_saml_callback?
+        request.path.end_with?("/callback") &&
+          params[:action].present? &&
+          Rails.application.secrets.dig(:omniauth, params[:action].to_sym, :idp_sso_target_url).present? &&
+          URI.parse(request.origin).host == URI.parse(Rails.application.secrets.dig(:omniauth, params[:action].to_sym, :idp_sso_target_url)).host
       end
     end
   end
