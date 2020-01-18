@@ -9,6 +9,7 @@ module Decidim
     def initialize(form, verified_email = nil)
       @form = form
       @verified_email = verified_email
+      @after_confirmation = false
     end
 
     # Executes the command. Broadcasts these events:
@@ -33,6 +34,7 @@ module Decidim
           create_or_find_user
           @identity = create_identity
         end
+        @user.after_confirmation if @after_confirmation
         trigger_omniauth_registration
 
         broadcast(:ok, @user)
@@ -85,6 +87,7 @@ module Decidim
           @user.password_confirmation = generated_password
           @user.remote_avatar_url = form.avatar_url if form.avatar_url.present?
           @user.skip_confirmation! if verified_email
+          @after_confirmation = true
         end
       end
 

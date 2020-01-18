@@ -192,6 +192,27 @@ module Decidim
       end
     end
 
+    def after_confirmation
+      return if skip_after_confirmation?
+      return unless organization.send_welcome_notification?
+
+      Decidim::EventsManager.publish(
+        event: "decidim.events.core.welcome_notification",
+        event_class: WelcomeNotificationEvent,
+        resource: self,
+        affected_users: [self]
+      )
+    end
+
+    def skip_reconfirmation!
+      @skip_after_confirmation = true
+      @bypass_confirmation_postpone = true
+    end
+
+    def skip_after_confirmation?
+      defined?(@skip_after_confirmation) && @skip_after_confirmation
+    end
+
     protected
 
     # Overrides devise email required validation.
@@ -208,17 +229,6 @@ module Decidim
       return false if managed?
 
       super
-    end
-
-    def after_confirmation
-      return unless organization.send_welcome_notification?
-
-      Decidim::EventsManager.publish(
-        event: "decidim.events.core.welcome_notification",
-        event_class: WelcomeNotificationEvent,
-        resource: self,
-        affected_users: [self]
-      )
     end
 
     private
