@@ -8,6 +8,7 @@ module Decidim
     after_action :set_smtp
 
     default from: Decidim.config.mailer_sender
+    default reply_to: Decidim.config.mailer_reply || Decidim.config.mailer_sender
     layout "decidim/mailer"
 
     private
