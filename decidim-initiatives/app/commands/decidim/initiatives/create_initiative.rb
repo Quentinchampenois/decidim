@@ -57,7 +57,7 @@ module Decidim
         Initiative.new(
           organization: form.current_organization,
           title: { current_locale => form.title },
-          description: { current_locale => form.description },
+          description: { current_locale => Decidim::ApplicationController.helpers.strip_tags(form.description) },
           author: current_user,
           decidim_user_group_id: form.decidim_user_group_id,
           scoped_type: scoped_type,
