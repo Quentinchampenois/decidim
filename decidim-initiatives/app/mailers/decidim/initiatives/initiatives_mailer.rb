@@ -42,7 +42,7 @@ module Decidim
           @body = I18n.t(
             "decidim.initiatives.initiatives_mailer.status_change_body_for",
             title: translated_attribute(initiative.title),
-            state: I18n.t(initiative.state, scope: "decidim.initiatives.admin_states")
+            state: I18n.t(initiative.reload.state, scope: "decidim.initiatives.admin_states")
           )
 
           @link = initiative_url(initiative, host: @organization.host)
@@ -88,7 +88,8 @@ module Decidim
 
           @subject = I18n.t(
             "decidim.initiatives.initiatives_mailer.progress_report_for",
-            title: translated_attribute(initiative.title)
+            title: translated_attribute(initiative.title),
+            percentage: initiative.percentage
           )
 
           mail(to: "#{user.name} <#{user.email}>", subject: @subject)
