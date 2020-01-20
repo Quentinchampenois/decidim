@@ -19,13 +19,10 @@ module Decidim
         if selected.present? && selected != "all"
           selected = selected.values if selected.is_a?(Hash)
           selected = [selected] unless selected.is_a?(Array)
-          types = collection.where(id: selected.map(&:to_i)).map do |type|
-            [type.title[I18n.locale.to_s], type.id]
-          end
-        else
-          types = collection.all.map do |type|
-            [type.title[I18n.locale.to_s], type.id]
-          end
+        end
+
+        types = collection.all.map do |type|
+          [type.title[I18n.locale.to_s], type.id]
         end
 
         prompt = options.delete(:prompt)
