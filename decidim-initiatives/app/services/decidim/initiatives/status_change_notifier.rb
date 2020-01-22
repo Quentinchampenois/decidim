@@ -50,13 +50,13 @@ module Decidim
         initiative.committee_members.approved.each do |committee_member|
           if initiative.author != committee_member.user
             Decidim::Initiatives::InitiativesMailer
-              .notify_state_change(initiative, committee_member.user)
+              .notify_state_change(initiative, committee_member.user, initiative.state)
               .deliver_later
           end
         end
 
         Decidim::Initiatives::InitiativesMailer
-          .notify_state_change(initiative, initiative.author)
+          .notify_state_change(initiative, initiative.author, initiative.state)
           .deliver_later
       end
 
@@ -65,13 +65,13 @@ module Decidim
 
           initiative.organization.admins.each do |user|
             Decidim::Initiatives::InitiativesMailer
-              .notify_state_change(initiative, user)
+              .notify_state_change(initiative, user, initiative.state)
               .deliver_later
           end
 
           if initiative.author != follower
             Decidim::Initiatives::InitiativesMailer
-              .notify_state_change(initiative, follower)
+              .notify_state_change(initiative, follower, initiative.state)
               .deliver_later
           end
         end
@@ -79,13 +79,13 @@ module Decidim
         initiative.committee_members.approved.each do |committee_member|
           if initiative.author != committee_member.user
             Decidim::Initiatives::InitiativesMailer
-              .notify_state_change(initiative, committee_member.user)
+              .notify_state_change(initiative, committee_member.user, initiative.state)
               .deliver_later
           end
         end
 
         Decidim::Initiatives::InitiativesMailer
-          .notify_state_change(initiative, initiative.author)
+          .notify_state_change(initiative, initiative.author, initiative.state)
           .deliver_later
       end
     end

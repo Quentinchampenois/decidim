@@ -74,9 +74,11 @@ module Decidim
       end
 
       def notify_percentage_change(before, after)
-        percentage = [25, 50, 75, 90, 92, 94, 96, 98, 100].find do |milestone|
+        percentage = [25, 50, 75, 100].find do |milestone|
           before < milestone && after >= milestone
         end
+
+        percentage = 100 if before != after && after == 100
 
         return unless percentage
 

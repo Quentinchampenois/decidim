@@ -164,7 +164,7 @@ module Decidim
       end
 
       def permissions_for(action, type)
-        return [] unless type.permissions
+        return [] unless type.permissions && type.permissions.dig(action.to_s,"authorization_handlers")
         type.permissions.dig(action.to_s,"authorization_handlers").keys
       end
 
