@@ -31,6 +31,7 @@ module Decidim
       def notify_state_change(initiative, user, state)
         return if user.email.blank?
 
+        @initiative = initiative
         @organization = initiative.organization
 
         with_user(user) do
@@ -55,6 +56,7 @@ module Decidim
       def notify_validating_request(initiative, user)
         return if user.email.blank?
 
+        @initiative = initiative
         @organization = initiative.organization
         @link = decidim_admin_initiatives.edit_initiative_url(initiative, host: @organization.host)
 
@@ -76,6 +78,7 @@ module Decidim
       def notify_progress(initiative, user)
         return if user.email.blank?
 
+        @initiative = initiative
         @organization = initiative.organization
         @link = initiative_url(initiative, host: @organization.host)
 
