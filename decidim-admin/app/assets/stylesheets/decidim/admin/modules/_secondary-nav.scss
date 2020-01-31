@@ -47,9 +47,13 @@ $process-title-height: 3rem;
   }
 }
 
-.secondary-nav--subnav {
-  padding-top: 2rem;
-}
+.secondary-nav--subnav,
+.process-content{
+  padding-top: 1rem;
+
+  .card{
+    margin-top: -2rem;
+  }
 
 .secondary-nav--subnav,
 .process-content{
