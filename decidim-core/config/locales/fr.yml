@@ -53,8 +53,8 @@ fr:
         one: Groupe d'utilisateurs
         other: Groupes d'utilisateurs
   booleans:
-    'false': 'Non'
-    'true': 'Oui'
+    'false': Non
+    'true': Oui
   carrierwave:
     errors:
       image_too_big: L'image est trop grande
@@ -88,6 +88,9 @@ fr:
         error: Une erreur s'est produite lors de la mise à jour de votre compte.
         success: Votre compte a été mis à jour avec succès.
         success_with_email_confirmation: Votre compte a été mis à jour avec succès. Vous recevrez un email pour confirmer votre nouvelle adresse email.
+    admin:
+      actions:
+        cancel: Annuler
     admin_log:
       area:
         create: "%{user_name} a créé la zone d'application %{resource_name}"
@@ -136,6 +139,8 @@ fr:
         reject: "%{user_name} a rejeté la vérification du groupe d'utilisateurs %{resource_name}"
         verify: "%{user_name} a vérifié le groupe d'utilisateurs %{resource_name}"
         verify_via_csv: "%{user_name} vérifié le groupe %{resource_name} utilisateur via un fichier CSV"
+    admin_terms_of_use:
+      default_body: "<h2>ADMIN CONDITIONS D'UTILISATION</h2><p>Nous espérons que vous avez reçu la leçon habituelle de l'administrateur système local. Cela se résume généralement à ces trois choses:</p><ol><li>Respecter la vie privée des autres.</li><li>Penser avant de cliquer.</li><li>Avec un grand pouvoir vient une grande responsabilité.</li></ol>"
     amendments:
       accepted:
         error: Une erreur s'est produite lors de l'acceptation de l'amendement.
@@ -177,7 +182,10 @@ fr:
             Cet amendement pour le %{amendable_type} %{amendable_link}
             est en cours d’évaluation.
           promoted: Promouvé à un %{amendable_type}.
-          rejected: "Cet amendement pour la proposition %{amendable_type}\n%{proposal_link}\na été rejeté le <strong>%{date}</strong>."
+          rejected: |-
+            Cet amendement pour la proposition %{amendable_type}
+            %{proposal_link}
+            a été rejeté le <strong>%{date}</strong>.
           withdrawn: |-
             L'amendement pour le %{amendable_type} %{proposal_link}
             a été retiré par l'auteur.
@@ -398,8 +406,7 @@ fr:
             check: Oui, je souhaite m'inscrire à la newsletter
             close_modal: Fermer la fenêtre
             uncheck: Non merci, je m'informerai autrement
-          notice: |-
-            La newsletter vous permet de suivre tous les événements importants sur la plateforme (lancement de nouvelles concertations, annonce des résultats, etc.). Souhaitez-vous vous y inscrire ?
+          notice: La newsletter vous permet de suivre tous les événements importants sur la plateforme (lancement de nouvelles concertations, annonce des résultats, etc.). Souhaitez-vous vous y inscrire ?
           title: Inscription à la newsletter
         omniauth_buttons:
           or: Ou
@@ -486,7 +493,7 @@ fr:
           notification_title: La fonctionnalité %{resource_title} est maintenant active pour <a href="%{resource_path}">%{participatory_space_title}</a>
       email_event:
         email_greeting: Bonjour %{user_name},
-        email_intro: '« %{resource_title} » a été mis à jour. Vous pouvez y accéder ici :'
+        email_intro: "« %{resource_title} » a été mis à jour. Vous pouvez y accéder ici :"
         email_outro: Vous recevez cet notification car vous suivez « %{resource_title} ». Vous pouvez cesser de le suivre en allant sur le lien précédent.
         email_subject: Mise à jour de %{resource_title}
       gamification:
@@ -1064,11 +1071,11 @@ fr:
     failure:
       already_authenticated: Vous êtes déjà connecté.
       inactive: Votre compte n'est pas encore activé.
-      invalid: '%{authentication_keys} ou mot de passe invalide.'
+      invalid: "%{authentication_keys} ou mot de passe invalide."
       invited: Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte.
       last_attempt: Vous avez encore une tentative avant que votre compte soit verrouillé.
       locked: Votre compte est bloqué.
-      not_found_in_database: '%{authentication_keys} ou mot de passe invalide.'
+      not_found_in_database: "%{authentication_keys} ou mot de passe invalide."
       timeout: Votre session a expiré. Veuillez vous connecter à nouveau pour continuer.
       unauthenticated: Vous devez vous connecter ou vous inscrire avant de continuer.
     invitations:
@@ -1165,8 +1172,8 @@ fr:
         update: Mettre à jour
         we_need_your_current_password_to_confirm_your_changes: nous avons besoin de votre mot de passe actuel pour confirmer vos modifications
       logout:
-        success: Vous avez été automatiquement déconnecté de votre compte "%{kind}".
         error: Impossible de vous déconnecter à distance de "%{kind}".
+        success: Vous avez été automatiquement déconnecté de votre compte "%{kind}".
       new:
         sign_up: S'inscrire
       signed_up: Bienvenue! Vous vous êtes inscrit avec succès.
@@ -1210,14 +1217,15 @@ fr:
       cycle_detected: un périmètre d'application ne peut pas être du même niveau que ses descendants
       expired: a expiré, s'il vous plaît demander un nouveau
       file_size_is_less_than_or_equal_to: la taille du fichier doit être inférieure ou égale à %{count}
+      invalid_time_zone: n'est pas un fuseau horaire valide
       long_words: contient des mots trop longs (plus de 35 caractères)
       must_start_with_caps: doit commencer par une majuscule
       nesting_too_deep: ne peut pas être à l'intérieur d'une sous-catégorie
       not_found: introuvable. Vous êtes-vous déjà inscrit ?
       not_locked: n'était pas verrouillé
       not_saved:
-        one: 'Une erreur est survenue pendant le traitement de votre requête.'
-        other: 'Plusieurs erreurs sont survenues pendant le traitement de votre requête.'
+        one: Une erreur est survenue pendant le traitement de votre requête.
+        other: Plusieurs erreurs sont survenues pendant le traitement de votre requête.
       too_many_marks: utilise trop de signes de ponctuation consécutifs (par exemple! et?)
       too_much_caps: utilise trop de lettres majuscules (plus de 25% du texte)
       too_short: est trop court (moins de 15 caractères)
@@ -1322,8 +1330,11 @@ fr:
       left: Suppressions
       right: Ajouts
     dropdown:
+      choose_diff_view_html: 'Mode de vue HTML:'
       choose_diff_view_mode: 'Sélectionner le mode de vue :'
+      option_escaped: Avec échappement
       option_split: Côte à côte
+      option_unescaped: Sans échappement
       option_unified: Unifié
   views:
     pagination:

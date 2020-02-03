@@ -49,17 +49,16 @@ $process-title-height: 3rem;
 
 .secondary-nav--subnav,
 .process-content{
+
+  @include breakpoint(large){
+    min-height: calc(100% - #{$process-title-height});
+    margin-top: $process-title-height;
+  }
+  
   padding-top: 1rem;
 
   .card{
     margin-top: -2rem;
-  }
-
-.secondary-nav--subnav,
-.process-content{
-  @include breakpoint(large){
-    min-height: calc(100% - #{$process-title-height});
-    margin-top: $process-title-height;
   }
 }
 

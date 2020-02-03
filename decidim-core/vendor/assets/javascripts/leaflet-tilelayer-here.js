@@ -24,13 +24,9 @@ L.TileLayer.HERE = L.TileLayer.extend({
 		// Image format to be used (`png8`, `png`, or `jpg`)
 		format: 'png8',
 
-		// 🍂option appId: String = ''
-		// Required option. The `app_id` provided as part of the HERE credentials
-		appId: '',
-
-		// 🍂option appCode: String = ''
-		// Required option. The `app_code` provided as part of the HERE credentials
-		appCode: '',
+		// 🍂option apiKey: String = ''
+		// Required option. The `api_key` provided as part of the HERE credentials
+		apiKey: ''
 	},
 
 
@@ -46,14 +42,13 @@ L.TileLayer.HERE = L.TileLayer.extend({
 		}
 
 // 		{Base URL}{Path}/{resource (tile type)}/{map id}/{scheme}/{zoom}/{column}/{row}/{size}/{format}
-// 		?app_id={YOUR_APP_ID}
-// 		&app_code={YOUR_APP_CODE}
+// 		?apiKey={YOUR_API_KEY}
 // 		&{param}={value}
 
-		var path = '/{resource}/2.1/{resource}/{mapId}/{scheme}/{z}/{x}/{y}/{tileResolution}/{format}?app_id={appId}&app_code={appCode}';
-		var attributionPath = '/maptile/2.1/copyright/{mapId}?app_id={appId}&app_code={appCode}';
+		var path = '/{resource}/2.1/{resource}/{mapId}/{scheme}/{z}/{x}/{y}/{tileResolution}/{format}?apiKey={apiKey}';
+		var attributionPath = '/maptile/2.1/copyright/{mapId}?apiKey={apiKey}';
 
-		var tileServer = 'base.maps.api.here.com';
+		var tileServer = 'base.maps.ls.hereapi.com';
 		if (schemeStart == 'satellite' ||
 				schemeStart == 'terrain' ||
 				schemeStart == 'hybrid') {
