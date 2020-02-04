@@ -12,6 +12,12 @@ module Decidim
 
       include NeedsInitiative
 
+      def show
+        redirect_to "/404" unless current_initiative.published?
+
+        super
+      end
+
       private
 
       def model
