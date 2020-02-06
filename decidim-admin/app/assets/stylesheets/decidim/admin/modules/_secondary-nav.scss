@@ -54,10 +54,10 @@ $process-title-height: 3rem;
     min-height: calc(100% - #{$process-title-height});
     margin-top: $process-title-height;
   }
-  
+
   padding-top: 1rem;
 
-  .card{
+  .card:first-of-type{
     margin-top: -2rem;
   }
 }
