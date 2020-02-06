@@ -26,6 +26,8 @@ module Decidim
 
     mount_uploader :banner_image, Decidim::BannerImageUploader
 
+    before_update :update_global_scope, if: :missing_global_scope?
+
     def allowed_signature_types_for_initiatives
       return %w(online offline any) if any_signature_type?
 
@@ -42,6 +44,21 @@ module Decidim
 
     def mounted_params
       { host: organization.host }
+    end
+
+    private
+
+    def missing_global_scope?
+      only_global_scope_enabled? && scopes.present? && !scopes.include?(nil)
+    end
+
+    def update_global_scope
+      total_required = scopes.sum(&:supports_required)
+      InitiativesTypeScope.new(
+        supports_required: total_required,
+        decidim_scopes_id: nil,
+        decidim_initiatives_types_id: self.id
+      ).save
     end
   end
 end

@@ -103,11 +103,14 @@ module Decidim
           return unless permission_action.subject == :initiative_type_scope
 
           initiative_type_scope = context.fetch(:initiative_type_scope, nil)
+          initiative_type = initiative_type_scope&.type
 
           case permission_action.action
           when :destroy
             scopes_is_empty = initiative_type_scope && initiative_type_scope.initiatives.empty?
-            toggle_allow(scopes_is_empty)
+            is_global_scope = initiative_type_scope&.scope.nil?
+            global_scope_required = initiative_type.only_global_scope_enabled? && initiative_type.scopes.present?
+            toggle_allow(scopes_is_empty && !(is_global_scope && global_scope_required))
           else
             allow!
           end

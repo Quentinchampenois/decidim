@@ -27,10 +27,22 @@
               <td><%= translated_attribute(s.scope_name) %></td>
               <td class="text-right"><%= s.supports_required %></td>
               <td class="table-list__actions">
-                <%= icon_link_to "pencil",
-                                decidim_admin_initiatives.edit_initiatives_type_initiatives_type_scope_path(initiative_type, s),
-                                t("actions.configure", scope: "decidim.admin"),
-                                class: "action-icon--new" if allowed_to? :edit, :initiative_type_scope, initiative_type_scope: s %>
+                <% if allowed_to? :edit, :initiative_type_scope, initiative_type_scope: s %>
+                  <%= icon_link_to "pencil",
+                                  decidim_admin_initiatives.edit_initiatives_type_initiatives_type_scope_path(initiative_type, s),
+                                  t("actions.configure", scope: "decidim.admin"),
+                                  class: "action-icon--new"
+                  %>
+                <% end %>
+                <% if allowed_to? :destroy, :initiative_type_scope, initiative_type_scope: s %>
+                  <%= icon_link_to "circle-x",
+                                  initiatives_type_initiatives_type_scope_path(initiative_type, s),
+                                  t("actions.destroy", scope: "decidim.admin"),
+                                  class: "action-icon--remove",
+                                  method: :delete,
+                                  data: { confirm: t("actions.confirm_destroy", scope: "decidim.admin") }
+                  %>
+                <% end %>
               </td>
             </tr>
           <% end %>
