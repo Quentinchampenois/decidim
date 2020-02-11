@@ -95,16 +95,16 @@ module Decidim
 
       def manage_omniauth_authorization
 
-        Rails.logger.debug "+++++++++++++++++++++++++"
-        Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_authorization"
-        Rails.logger.debug params
-        Rails.logger.debug "with current_user" if current_user
-        Rails.logger.debug "location_for :user --> " + store_location_for(:user, stored_location_for(:user)).to_s
-        Rails.logger.debug "location_for :redirect --> " + store_location_for(:redirect, stored_location_for(:redirect)).to_s
-        Rails.logger.debug "match : " + ( store_location_for(:user, stored_location_for(:user)) =~ /^\/#{params[:action]}\/$/ ).inspect
-        Rails.logger.debug "omniauth_origin --> " + request.env["omniauth.origin"].split("?").first.to_s if request.env["omniauth.origin"].present?
-        Rails.logger.debug "new_user_session_url --> " + decidim.new_user_session_path.split("?").first.to_s
-        Rails.logger.debug "+++++++++++++++++++++++++"
+        # Rails.logger.debug "+++++++++++++++++++++++++"
+        # Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_authorization"
+        # Rails.logger.debug params
+        # Rails.logger.debug "with current_user" if current_user
+        # Rails.logger.debug "location_for :user --> " + store_location_for(:user, stored_location_for(:user)).to_s
+        # Rails.logger.debug "location_for :redirect --> " + store_location_for(:redirect, stored_location_for(:redirect)).to_s
+        # Rails.logger.debug "match : " + ( store_location_for(:user, stored_location_for(:user)) =~ /^\/#{params[:action]}\/$/ ).inspect
+        # Rails.logger.debug "omniauth_origin --> " + request.env["omniauth.origin"].split("?").first.to_s if request.env["omniauth.origin"].present?
+        # Rails.logger.debug "new_user_session_url --> " + decidim.new_user_session_path.split("?").first.to_s
+        # Rails.logger.debug "+++++++++++++++++++++++++"
 
         location = store_location_for(:user, stored_location_for(:user))
         return unless location.present? && !!location.match(/^\/#{params[:action]}\/$/)
@@ -122,10 +122,10 @@ module Decidim
 
       def grant_omniauth_authorization
 
-        Rails.logger.debug "+++++++++++++++++++++++++"
-        Rails.logger.debug "OmniauthRegistrationsController.grant_omniauth_authorization"
-        Rails.logger.debug oauth_data.to_json if oauth_data
-        Rails.logger.debug "+++++++++++++++++++++++++"
+        # Rails.logger.debug "+++++++++++++++++++++++++"
+        # Rails.logger.debug "OmniauthRegistrationsController.grant_omniauth_authorization"
+        # Rails.logger.debug oauth_data.to_json if oauth_data
+        # Rails.logger.debug "+++++++++++++++++++++++++"
 
         return unless Decidim.authorization_workflows.one?{ |a| a.try(:omniauth_provider) == params[:action] }
 
@@ -206,9 +206,8 @@ module Decidim
 
       def is_saml_callback?
         request.path.end_with?("/callback") &&
-          params[:action].present? &&
-          Rails.application.secrets.dig(:omniauth, params[:action].to_sym, :idp_sso_target_url).present? &&
-          URI.parse(request.origin).host == URI.parse(Rails.application.secrets.dig(:omniauth, params[:action].to_sym, :idp_sso_target_url)).host
+          request.env["omniauth.strategy"].options[:idp_sso_target_url].present? &&
+          URI.parse(request.origin).host == URI.parse(request.env["omniauth.strategy"].options[:idp_sso_target_url]).host
       end
     end
   end

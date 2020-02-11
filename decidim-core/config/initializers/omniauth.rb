@@ -8,7 +8,6 @@ def setup_provider_proc(provider, config_mapping = {})
 
     config_mapping.each do |option_key, config_key|
       env["omniauth.strategy"].options[option_key] = provider_config[config_key]
-      env["omniauth.strategy"].options[option_key] = provider_config[config_key]
     end
   end
 end
