@@ -38,8 +38,6 @@ module Decidim
       attribute :omniauth_provider, String
       attribute :minimum_age, Integer, default: 0
       attribute :anti_affinity, Array[String], default: []
-      attribute :omniauth_provider, String
-      attribute :minimum_age, Integer, default: 0
 
       validate :engine_or_form
 
