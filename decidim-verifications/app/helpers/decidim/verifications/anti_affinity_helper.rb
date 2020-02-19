@@ -21,6 +21,14 @@ module Decidim
       def active_authorization_methods
         Decidim::Verifications::Authorizations.new(organization: current_organization, user: current_user).pluck(:name)
       end
+
+      # Public: Available authorization handlers in order to conditionally
+      # show the menu element.
+      def available_verification_workflows
+        Verifications::Adapter.from_collection(
+          current_organization.available_authorizations & Decidim.authorization_workflows.map(&:name)
+        )
+      end
     end
   end
 end

@@ -21,6 +21,7 @@ module Decidim
       helper Decidim::ResourceHelper
       helper Decidim::ScopesHelper
       helper Decidim::ActionAuthorizationHelper
+      helper Decidim::Verifications::AntiAffinityHelper
       helper Decidim::AttachmentsHelper
       helper Decidim::SanitizeHelper
       helper Decidim::PadHelper
