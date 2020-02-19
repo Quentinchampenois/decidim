@@ -62,6 +62,10 @@ $process-title-height: 3rem;
   }
 }
 
+.process-content fieldset .card:first-of-type{
+  margin-top: 0;
+}
+
 .secondary-nav__title,
 .process-title-content{
   margin-bottom: 1.5rem;

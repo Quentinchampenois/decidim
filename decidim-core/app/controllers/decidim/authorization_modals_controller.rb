@@ -2,6 +2,8 @@
 
 module Decidim
   class AuthorizationModalsController < Decidim::ApplicationController
+    include UserProfile
+    helper Decidim::Verifications::AntiAffinityHelper
     helper_method :authorizations, :authorize_action_path
     layout false
 
