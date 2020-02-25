@@ -9,7 +9,6 @@ module Decidim
 
         validate :has_identity?
         validate :check_anti_affinity?
-        validate :has_minimum_age?
 
         def metadata
           super.merge(provider: provider).merge(oauth_data)
@@ -48,15 +47,6 @@ module Decidim
           end.join(" / ")
 
           errors.add(:anti_affinity, I18n.t("decidim.verifications.omniauth.errors.anti_affinity", anti_affinity: anti_affinity_labels, locale: user.locale))
-          false
-        end
-
-        def has_minimum_age?
-          return true unless manifest.minimum_age &&
-            metadata.dig(:date_of_birth).present? &&
-            (((Time.zone.now - metadata.dig(:date_of_birth).to_time) / 1.year.seconds).floor < manifest.minimum_age)
-
-          errors.add(:minimum_age, I18n.t("decidim.verifications.omniauth.errors.minimum_age", minimum_age: manifest.minimum_age, locale: user.locale))
           false
         end
 

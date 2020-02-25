@@ -11,11 +11,12 @@ module Decidim
       # component     - The component where the authorization is taking place.
       # resouce       - The resource where the authorization is taking place. Can be nil.
       #
-      def initialize(authorization, options, component, resource)
+      def initialize(authorization, options, component, resource, action)
         @authorization = authorization
         @options = options.deep_dup || {} # options hash is cloned to allow changes applied to it without risks
         @component = resource.try(:component) || component
         @resource = resource
+        @action = action
       end
 
       #
@@ -67,7 +68,7 @@ module Decidim
 
       protected
 
-      attr_reader :authorization, :options, :component, :resource
+      attr_reader :authorization, :options, :component, :resource, :action
 
       def unmatched_fields
         @unmatched_fields ||= (valued_options_keys & authorization.metadata.to_h.keys).each_with_object({}) do |field, unmatched|

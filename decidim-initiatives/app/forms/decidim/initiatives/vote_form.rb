@@ -120,7 +120,7 @@ module Decidim
           document_number: document_number,
           date_of_birth: date_of_birth,
           postal_code: postal_code,
-          scope: postal_code
+          scope: scope
         }
       end
 
@@ -205,7 +205,7 @@ module Decidim
       def authorization_status
         return unless authorization
 
-        Decidim::Verifications::Adapter.from_element(handler_name).authorize(authorization, {}, nil, nil)
+        Decidim::Verifications::Adapter.from_element(handler_name).authorize(authorization, {}, nil, nil, nil)
       end
 
       def encryptor

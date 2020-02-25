@@ -29,7 +29,7 @@ module Decidim
     def authorize
       raise AuthorizationError, "Missing data" unless component && action
 
-      AuthorizationStatusCollection.new(authorization_handlers, user, component, resource)
+      AuthorizationStatusCollection.new(authorization_handlers, user, component, resource, action)
     end
 
     private
@@ -92,12 +92,12 @@ module Decidim
     class AuthorizationStatusCollection
       attr_reader :statuses
 
-      def initialize(authorization_handlers, user, component, resource)
+      def initialize(authorization_handlers, user, component, resource, action)
         @authorization_handlers = authorization_handlers
         @statuses = authorization_handlers&.map do |name, opts|
           handler = Verifications::Adapter.from_element(name)
           authorization = user ? Verifications::Authorizations.new(organization: user.organization, user: user, name: name).first : nil
-          status_code, data = handler.authorize(authorization, opts["options"], component, resource)
+          status_code, data = handler.authorize(authorization, opts["options"], component, resource, action)
           AuthorizationStatus.new(status_code, handler, data)
         end
       end

@@ -83,8 +83,8 @@ module Decidim
       #
       # Returns the result of authorization handler check. Check Decidim::Verifications::DefaultActionAuthorizer class docs.
       #
-      def authorize(authorization, options, component, resource)
-        @action_authorizer = @manifest.action_authorizer_class.new(authorization, options_for_authorizer_class(options), component, resource)
+      def authorize(authorization, options, component, resource, action)
+        @action_authorizer = @manifest.action_authorizer_class.new(authorization, options_for_authorizer_class(options), component, resource, action)
         @action_authorizer.authorize
       end
 

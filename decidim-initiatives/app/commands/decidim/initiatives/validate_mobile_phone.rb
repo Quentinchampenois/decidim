@@ -38,7 +38,7 @@ module Decidim
       def authorizer
         return unless authorization
 
-        Decidim::Verifications::Adapter.from_element(authorization_name).authorize(authorization, {}, nil, nil)
+        Decidim::Verifications::Adapter.from_element(authorization_name).authorize(authorization, {}, nil, nil, nil)
       end
 
       def authorization

@@ -12,6 +12,7 @@ module Decidim
       helper Decidim::DecidimFormHelper
       helper Decidim::CtaButtonHelper
       helper Decidim::AuthorizationFormHelper
+      helper MetadataHelper
 
       layout "layouts/decidim/user_profile", only: [:index]
 
