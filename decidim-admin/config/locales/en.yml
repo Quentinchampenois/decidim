@@ -319,6 +319,14 @@ en:
         search_placeholder:
           name_or_nickname_or_email_cont: Search %{collection} by email, name or nickname.
           title_cont: Search %{collection} by title.
+        state_eq:
+          label: State
+          values:
+            accepted: Accepted
+            created: Created
+            discarded: Discarded
+            published: Published
+            rejected: Rejected
       help_sections:
         error: There was a problem updating the help sections
         form:

@@ -237,6 +237,7 @@ fr:
       photos:
         related_photos: Photos associées
     author:
+      avatar: Avatar
       comments:
         one: commentaire
         other: commentaires
@@ -587,6 +588,7 @@ fr:
       create:
         button: Suivre
         error: Une erreur s'est produite lors du traitement de votre demande de suivre ce contenu.
+        participatory_space: Espace participatif suivi
       destroy:
         button: Ne plus suivre
         error: Une erreur s'est produite lors du traitement de votre demande de ne plus suivre ce contenu.
@@ -605,7 +607,7 @@ fr:
       badges:
         followers:
           conditions:
-            - Être actif et suivre les autres incitera sûrement les autres à vous suivre.
+          - Être actif et suivre les autres incitera sûrement les autres à vous suivre.
           description: Ce badge est attribué lorsque vous atteignez un certain nombre d'adeptes. %{organization_name} est un réseau social et politique, tissez votre site Web pour communiquer avec les autres personnes de la plate-forme.
           description_another: Cet utilisateur a %{score} abonnés.
           description_own: "%{score} utilisateurs vous suivent."
@@ -620,9 +622,9 @@ fr:
           title: Insignes
         invitations:
           conditions:
-            - Utilisez le lien "inviter des amis" sur votre page utilisateur pour inviter vos amis.
-            - Personnalisez, si vous le souhaitez, le message que vous envoyez
-            - Vous augmenterez votre niveau en envoyant des invitations et en les faisant enregistrer.
+          - Utilisez le lien "inviter des amis" sur votre page utilisateur pour inviter vos amis.
+          - Personnalisez, si vous le souhaitez, le message que vous envoyez
+          - Vous augmenterez votre niveau en envoyant des invitations et en les faisant enregistrer.
           description: Ce badge est attribué lorsque vous avez invité des personnes qui ont passé un peu de temps à s’inscrire à %{organization_name} et devenir des participants. Merci de faire connaître %{organization_name} aux autres et d’aider à élargir la communauté!
           description_another: Cet utilisateur a invité %{score} utilisateurs.
           description_own: Vous avez invité %{score} utilisateurs.

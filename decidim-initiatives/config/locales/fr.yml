@@ -70,13 +70,7 @@ fr:
         search_placeholder:
           title_or_description_cont: Recherche %{collection} par titre ou description.
         state_eq:
-          label: État
           values:
-            accepted: Accepté
-            created: Créé
-            discarded: Rejeté
-            published: Publié
-            rejected: Rejeté
             validating: Validation technique
       menu:
         initiatives: Initiatives

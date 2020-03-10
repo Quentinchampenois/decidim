@@ -318,6 +318,14 @@ fr:
         search_placeholder:
           name_or_nickname_or_email_cont: Recherche %{collection} par e-mail, nom ou surnom.
           title_cont: Recherche %{collection} par titre.
+        state_eq:
+          label: État
+          values:
+            accepted: Accepté
+            created: Créé
+            discarded: Rejeté
+            published: Publié
+            rejected: Rejeté
       help_sections:
         error: Une erreur s'est produite lors de la mise à jour des sections d'aide.
         form:

@@ -22,7 +22,9 @@ fr:
         participatory_structure: Modalités de décision
         promoted: Mise en avant
         published_at: Publiée à
+        related_process_ids: Processus connexes
         scope_id: Périmètre d'application
+        scope_type_max_depth_id: Profondeur du filtre
         scopes_enabled: Périmètres d'application activés
         short_description: Résumé
         show_statistics: Montrer les statistiques
@@ -322,6 +324,8 @@ fr:
             images: Images
             metadata: Métadonnées
             other: Autre
+            related_processes: Processus connexes
+            scope_type_max_depth_help: Restreindre la profondeur du filtre du champ d'application ; le filtre affichera du général au type de champ d'application sélectionné.
             select_an_area: Sélectionnez un secteur
             select_process_group: Sélectionnez un groupe de concertations
             slug_help: 'Les identifiants d''URL sont utilisés pour générer les URL qui envoient vers cette concertation. Ils n''acceptent que des lettres, des chiffres et des tirets et doivent commencer par une lettre. Exemple : %{url}'
@@ -377,6 +381,7 @@ fr:
         participatory_scope: Objectifs
         participatory_structure: Modalités de décision
         private_space: Ceci est une concertation privée
+        related_processes: Processus connexes
         scope: Périmètre d'application
         start_date: Date de début
         target: Participants

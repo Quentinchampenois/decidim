@@ -103,6 +103,7 @@ fr:
         name: Propositions
         settings:
           global:
+            allow_card_image: Autoriser l'image de la carte
             amendments_enabled: Modifications activées
             amendments_enabled_help: Si actif, configurez les fonctionnalités d'amendement pour chaque étape.
             amendments_wizard_help_text: Texte d'aide de l'assistant
@@ -140,6 +141,7 @@ fr:
             amendments_visibility: Visibilité des amendements
             amendments_visibility_help: Si l'option "Les amendements ne sont visibles que pour leurs auteurs" est sélectionnée, le participant doit être connecté pour voir les amendements apportés.
             announcement: Annonce
+            answers_with_costs: Permettre les coûts sur les réponses aux propositions
             automatic_hashtags: Hashtags ajoutés à toutes les propositions
             comments_blocked: Bloquer la création de nouveaux commentaires
             creation_enabled: Autoriser la création de nouvelles propositions
@@ -320,6 +322,7 @@ fr:
         import: Importer depuis une autre fonctionnalité
         new: Nouvelle proposition
         participatory_texts: Textes participatifs
+        show: Afficher la proposition
         title: Actions
       admin:
         actions:
@@ -365,6 +368,10 @@ fr:
             success: Texte participatif mis à jour avec succès.
         proposal_answers:
           form:
+            accepted: Accepté
+            answer_proposal: Réponse
+            evaluating: Évaluation
+            rejected: Rejeté
             title: Réponse à la proposition %{title}
         proposal_notes:
           create:
@@ -408,8 +415,28 @@ fr:
             create: Créer
             title: Créer une proposition
           show:
+            amendments_count: Les amendements comptent
+            authors: Auteurs
+            body: Corps
+            comments_count: Les commentaires comptent
+            comments_negative_count: Contre
+            comments_neutral_count: Neutre
+            comments_positive_count: Favor
             created_at: Date de création
+            documents: Documents
+            endorsements_count: Les soutiens comptent
+            endorsements_ranking: Classement par endossements
+            endorsers: Adhérents
+            link: Lien
+            n_more_endorsers:
+              one: et 1 autre
+              other: et %{compte} plus
+            photos: Photos
+            proposals: Propositions
+            ranking: "%{classement} de %{total}"
+            related_meetings: Réunions connexes
             votes_count: Nombre de votes
+            votes_ranking: Classement par soutiens
           update_category:
             invalid: 'Ces propositions avaient déjà la catégorie %{category} : %{proposals}.'
             select_a_category: Veuillez sélectionner une catégorie
@@ -446,16 +473,21 @@ fr:
         rejected: Non retenue
         withdrawn: Retirée
       application_helper:
+        filter_category_values:
+          all: Tous
         filter_origin_values:
           all: Tout
           citizens: Propositions citoyennes
           meetings: Des réunions
           official: Propositions officielles
           user_groups: Groupes d'utilisateurs
+        filter_scope_values:
+          all: Tous
         filter_state_values:
           accepted: Accepté
           all: Tout
           evaluating: En cours d'évaluation
+          not_answered: Pas de réponse
           rejected: Rejeté
         filter_type_values:
           all: Tout
@@ -507,6 +539,7 @@ fr:
           open: Ouvrir
           published: Publié
           related_to: Lié à
+          scope: Champ d'application
           search: Chercher
           state: État
           withdrawn: Retiré
@@ -712,6 +745,7 @@ fr:
           changes_at_title: Amendement de (%{title}"
           edit_proposal: Modifier la proposition
           endorsements_list: Liste des soutiens
+          estimated_cost: Estimation du coût
           hidden_endorsers_count:
             one: et %{count} personne de plus
             other: et %{count} autres personnes
@@ -724,6 +758,8 @@ fr:
           proposal_accepted_reason: 'Cette proposition a été retenue parce que :'
           proposal_in_evaluation_reason: Cette proposition est en cours d'évaluation
           proposal_rejected_reason: 'Cette proposition n''a pas été retenue parce que :'
+          read_less: Lire la suite
+          read_more: En savoir plus
           report: Signaler
           withdraw_btn_hint: Si vous changez d'avis et tant que votre proposition n'a pas reçu de vote, commentaire et/ou soutien, vous pouvez toujours la retirer. Cette dernière ne sera pas supprimée mais elle apparaîtra dans la liste des propositions retirées.
           withdraw_confirmation: Êtes-vous sûr de vouloir retirer cette proposition ?
