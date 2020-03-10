@@ -11,7 +11,7 @@ module Decidim
 
       after_action :grant_omniauth_authorization, except: [:logout]
 
-      skip_before_action :verify_authenticity_token, if: :is_saml_callback?
+      # skip_before_action :verify_authenticity_token, if: :is_saml_callback?
 
       def new
         @form = form(OmniauthRegistrationForm).from_params(params[:user])
@@ -101,7 +101,7 @@ module Decidim
         # Rails.logger.debug "with current_user" if current_user
         # Rails.logger.debug "location_for :user --> " + store_location_for(:user, stored_location_for(:user)).to_s
         # Rails.logger.debug "location_for :redirect --> " + store_location_for(:redirect, stored_location_for(:redirect)).to_s
-        # Rails.logger.debug "match : " + ( store_location_for(:user, stored_location_for(:user)) =~ /^\/#{params[:action]}\/$/ ).inspect
+        # Rails.logger.debug "match : " + ( !!store_location_for(:user, stored_location_for(:user)).match(/^\/#{params[:action]}\/$/) ).inspect
         # Rails.logger.debug "omniauth_origin --> " + request.env["omniauth.origin"].split("?").first.to_s if request.env["omniauth.origin"].present?
         # Rails.logger.debug "new_user_session_url --> " + decidim.new_user_session_path.split("?").first.to_s
         # Rails.logger.debug "+++++++++++++++++++++++++"
@@ -127,31 +127,33 @@ module Decidim
         # Rails.logger.debug oauth_data.to_json if oauth_data
         # Rails.logger.debug "+++++++++++++++++++++++++"
 
-        return unless Decidim.authorization_workflows.one?{ |a| a.try(:omniauth_provider) == params[:action] }
+        return unless Decidim.authorization_workflows.any?{ |a| a.try(:omniauth_provider) == params[:action] }
 
         # just to be safe
         return unless current_user
 
-        # current_user.update_column(:managed, true) if current_user.email.blank?
+        flash_for_granted = []
+        flash_for_refused = []
+        Decidim.authorization_workflows.select{ |a| a.try(:omniauth_provider) == params[:action] }.each do |workflow|
+          form = Decidim::Verifications::Omniauth::OmniauthAuthorizationForm.from_params(user: current_user, provider: workflow.omniauth_provider, oauth_data: oauth_data[:info])
 
-        @workflow = Decidim.authorization_workflows.find{ |a| a.try(:omniauth_provider) == params[:action] }
+          authorization = Decidim::Authorization.find_or_initialize_by(
+            user: current_user,
+            name: workflow.name
+          )
 
-        @form = Decidim::Verifications::Omniauth::OmniauthAuthorizationForm.from_params(user: current_user, provider: @workflow.omniauth_provider, oauth_data: oauth_data[:info])
-
-        @authorization = Decidim::Authorization.find_or_initialize_by(
-          user: current_user,
-          name: @workflow.name
-        )
-
-        Decidim::Verifications::Omniauth::ConfirmOmniauthAuthorization.call(@authorization, @form) do
-          on(:ok) do
-            flash[:omniauth] = t("authorizations.new.success", scope: "decidim.verifications.omniauth", locale: current_user.locale)
-          end
-          on(:invalid) do
-            flash[:alert] = @form.errors.to_h.values.join(' ')
-            store_location_for(:user, decidim.root_path)
+          Decidim::Verifications::Omniauth::ConfirmOmniauthAuthorization.call(authorization, form) do
+            on(:ok) do
+              flash_for_granted << t("authorizations.new.success", scope: "decidim.verifications.omniauth", locale: current_user.locale)
+            end
+            on(:invalid) do
+              flash_for_refused << form.errors.to_h.values.join('. ')
+            end
           end
         end
+
+        flash[:success] = flash_for_granted.uniq.join(". ") if flash_for_granted.present?
+        flash[:alert] = flash_for_refused.uniq.join(". ") if flash_for_refused.present?
       end
 
       private

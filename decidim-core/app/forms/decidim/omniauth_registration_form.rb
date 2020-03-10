@@ -15,12 +15,12 @@ module Decidim
     attribute :avatar_url, String
     attribute :raw_data, Hash
 
-    # validates :email, presence: true
+    validates :email, presence: true
     validates :name, presence: true
     validates :provider, presence: true
     validates :uid, presence: true
 
-    validate :email, :email_is_unique, unless: -> { email.blank? }
+    # validate :email, :email_is_unique, unless: -> { email.blank? }
 
     def self.create_signature(provider, uid)
       Digest::MD5.hexdigest("#{provider}-#{uid}-#{Rails.application.secrets.secret_key_base}")
