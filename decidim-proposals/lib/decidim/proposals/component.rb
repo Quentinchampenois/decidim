@@ -314,7 +314,7 @@ Decidim.register_component(:proposals) do |component|
           )
           if index.even?
             group = Decidim::UserGroup.create!(
-              name: Faker::Name.name,
+              name: Faker::Name.name + "endr#{index}",
               nickname: Faker::Twitter.unique.screen_name,
               email: Faker::Internet.email,
               extended_data: {
