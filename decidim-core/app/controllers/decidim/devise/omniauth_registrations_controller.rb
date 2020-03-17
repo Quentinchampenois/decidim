@@ -134,6 +134,7 @@ module Decidim
 
         flash_for_granted = []
         flash_for_refused = []
+        
         Decidim.authorization_workflows.select{ |a| a.try(:omniauth_provider) == params[:action] }.each do |workflow|
           form = Decidim::Verifications::Omniauth::OmniauthAuthorizationForm.from_params(user: current_user, provider: workflow.omniauth_provider, oauth_data: oauth_data[:info])
 
@@ -199,8 +200,8 @@ module Decidim
       end
 
       def provider_name(provider)
-        if Rails.application.secrets.dig(:omniauth, provider.to_sym, :provider_name).present?
-          Rails.application.secrets.dig(:omniauth, provider.to_sym, :provider_name)
+        if current_organization.enabled_omniauth_providers[provider.to_sym][:provider_name].present?
+          current_organization.enabled_omniauth_providers[provider.to_sym][:provider_name]
         else
           provider.capitalize
         end

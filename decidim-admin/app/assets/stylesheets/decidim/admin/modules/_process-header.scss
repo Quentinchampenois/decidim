@@ -12,3 +12,11 @@
 
   margin-bottom: 2rem;
 }
+
+.process-content {
+  & > .assembly-title-summary,
+  & > .process-title-summary {
+    margin-top: -2rem;
+    margin-bottom: 1rem;
+  }
+}

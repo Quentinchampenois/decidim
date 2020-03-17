@@ -172,7 +172,7 @@ Decidim.register_component(:meetings) do |component|
       Decidim::Attachment.create!(
         title: Decidim::Faker::Localized.sentence(2),
         description: Decidim::Faker::Localized.sentence(5),
-        file: File.new(File.join(__dir__, "seeds", "city.jpeg")),
+        file: File.new(File.join(__dir__, "seeds", "Exampledocument.pdf")),
         attached_to: meeting
       )
       Decidim::Attachment.create!(

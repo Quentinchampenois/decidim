@@ -161,7 +161,7 @@ Decidim.register_participatory_space(:consultations) do |participatory_space|
         Decidim::Attachment.create!(
           title: Decidim::Faker::Localized.sentence(2),
           description: Decidim::Faker::Localized.sentence(5),
-          file: File.new(File.join(seeds_root, "city.jpeg")),
+          file: File.new(File.join(seeds_root, "Exampledocument.pdf")),
           attached_to: question
         )
 

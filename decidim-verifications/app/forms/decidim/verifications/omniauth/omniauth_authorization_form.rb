@@ -29,7 +29,7 @@ module Decidim
         private
 
         def manifest
-          @mainfest ||= Decidim::Verifications.find_workflow_manifest(provider)
+          @manifest ||= Decidim::Verifications.find_workflow_manifest(provider)
         end
 
         def has_identity?
