@@ -83,6 +83,7 @@ en:
         email_greeting: Email greeting
         email_intro: Email intro
         email_outro: Email outro
+        email_see_more: You are missing important things on <a href="organization_path">%{organization_name}</a>, visit <a href="%{notifications_path}">notifications</a>
     account:
       data_portability_export:
         file_no_exists: File does not exist
