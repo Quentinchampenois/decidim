@@ -57,9 +57,9 @@ module Decidim
 
       def process_followers_stats(conditions)
         Decidim.stats.only([:followers_count])
-          .filter(conditions)
-          .with_context(participatory_process)
-          .map { |stat_title, stat_number| [participatory_process.manifest.name, stat_title, stat_number] }
+               .filter(conditions)
+               .with_context(participatory_process)
+               .map { |stat_title, stat_number| [participatory_process.manifest.name, stat_title, stat_number] }
       end
 
       def published_components
