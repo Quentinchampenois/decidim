@@ -272,6 +272,7 @@ module Decidim
     24.hours
   end
 
+
   # Exposes a configuration option: an object to configure Etherpad
   config_accessor :etherpad do
     # {
