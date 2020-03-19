@@ -986,12 +986,6 @@ en:
         manage_user_group_admins: Manage admins
         manage_user_group_users: Manage members
         resend_email_confirmation_instructions: Resend email confirmation instructions
-    proposals:
-      proposal_endorsements_helper:
-        endorsements_count_title: Proposal endorsements count
-      proposals:
-        endorsements_card_row:
-          comments_title: Proposal comments count
     reported_mailer:
       hide:
         hello: Hello %{name},
