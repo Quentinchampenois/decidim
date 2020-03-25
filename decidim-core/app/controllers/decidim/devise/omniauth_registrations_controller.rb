@@ -42,7 +42,7 @@ module Decidim
           end
 
           on(:error) do |user|
-            if user.errors[:email]
+            if user && user.errors[:email]
               set_flash_message :alert, :failure, kind: provider_name(@form.provider), reason: t("decidim.devise.omniauth_registrations.create.email_already_exists")
             end
 
