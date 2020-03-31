@@ -107,7 +107,7 @@ module Decidim
 
           SendInitiativeToTechnicalValidation.call(current_initiative, current_user) do
             on(:ok) do
-              redirect_to edit_initiative_path(current_initiative), flash: {
+              redirect_to Decidim::Initiatives::Engine.routes.url_helpers.initiatives_path, flash: {
                 notice: I18n.t(
                   "success",
                   scope: %w(decidim initiatives admin initiatives edit)
