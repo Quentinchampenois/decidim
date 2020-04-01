@@ -98,6 +98,12 @@ describe "Initiative", type: :system do
           expect(page).not_to have_current_path(decidim_initiatives.create_initiative_path(id: :select_initiative_type))
         end
 
+        it "doesn't displays the 'choose' step" do
+          within ".wizard__steps" do
+            expect(page).not_to have_content("Choose")
+          end
+        end
+
         it "Has a hidden field with the selected initiative type" do
           expect(page).to have_xpath("//input[@id='initiative_type_id']", visible: false)
           expect(find(:xpath, "//input[@id='initiative_type_id']", visible: false).value).to eq(initiative_type.id.to_s)

@@ -20,6 +20,7 @@ module Decidim
       helper_method :current_initiative
       helper_method :initiative_type
       helper_method :promotal_committee_required?
+      helper_method :single_initiative_type?
 
       steps :select_initiative_type,
             :previous_form,
@@ -43,7 +44,7 @@ module Decidim
       def select_initiative_type_step(_parameters)
         session[:initiative] = {}
 
-        if single_initiative?
+        if single_initiative_type?
           redirect_to next_wizard_path
           return
         end
@@ -115,8 +116,8 @@ module Decidim
       end
 
       def build_form(klass, parameters)
-        @form = if single_initiative?
-                  form(klass).from_params(parameters.merge(type_id: current_organization_initiatives.first.id))
+        @form = if single_initiative_type?
+                  form(klass).from_params(parameters.merge(type_id: current_organization_initiatives_type.first.id))
                 else
                   form(klass).from_params(parameters)
                 end
@@ -136,12 +137,12 @@ module Decidim
         Initiative.find(session_initiative[:id]) if session_initiative.has_key?(:id)
       end
 
-      def current_organization_initiatives
+      def current_organization_initiatives_type
         Decidim::InitiativesType.where(organization: current_organization)
       end
 
-      def single_initiative?
-        current_organization_initiatives.count == 1
+      def single_initiative_type?
+        current_organization_initiatives_type.count == 1
       end
 
       def initiative_type
