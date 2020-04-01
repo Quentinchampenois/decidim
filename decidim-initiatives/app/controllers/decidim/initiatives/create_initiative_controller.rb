@@ -12,6 +12,7 @@ module Decidim
       include Decidim::FormFactory
       include InitiativeHelper
       include TypeSelectorOptions
+      include SingleInitiativeType
 
       helper Decidim::Admin::IconLinkHelper
       helper InitiativeHelper
@@ -20,7 +21,6 @@ module Decidim
       helper_method :current_initiative
       helper_method :initiative_type
       helper_method :promotal_committee_required?
-      helper_method :single_initiative_type?
 
       steps :select_initiative_type,
             :previous_form,
@@ -135,14 +135,6 @@ module Decidim
 
       def current_initiative
         Initiative.find(session_initiative[:id]) if session_initiative.has_key?(:id)
-      end
-
-      def current_organization_initiatives_type
-        Decidim::InitiativesType.where(organization: current_organization)
-      end
-
-      def single_initiative_type?
-        current_organization_initiatives_type.count == 1
       end
 
       def initiative_type
