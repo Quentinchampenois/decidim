@@ -15,17 +15,5 @@ module Decidim
 
       expect(new_env["HTTP_X_FORWARDED_HOST"]).to eq(nil)
     end
-
-    context "when the follow_http_x_forwarded_host param is set to true" do
-      before do
-        allow(Decidim.config).to receive(:follow_http_x_forwarded_host).and_return(true)
-      end
-
-      it "doesn't strips the header" do
-        _code, new_env = middleware.call(env)
-
-        expect(new_env["HTTP_X_FORWARDED_HOST"]).to eq(forwarded_host)
-      end
-    end
   end
 end
