@@ -15,7 +15,7 @@ module Decidim::Assemblies
     describe "query" do
       it "returns assemblies that can be parent" do
         expect(subject.count).to eq(3)
-        expect(subject).to eq(assemblies.reverse)
+        expect(subject.sort).to eq(assemblies.sort)
       end
 
       context "when assembly is nil" do
