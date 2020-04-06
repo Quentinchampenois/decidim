@@ -1,3 +1,4 @@
+---
 fr:
   activemodel:
     attributes:
@@ -136,7 +137,7 @@ fr:
       badges:
         attended_meetings:
           conditions:
-           - Inscrivez-vous aux rencontres auxquelles vous souhaitez participer
+          - Inscrivez-vous aux rencontres auxquelles vous souhaitez participer
           description: Ce badge est attribué lorsque vous participez à plusieurs rencontres en face à face.
           description_another: Cet utilisateur a participé à %{score} rencontres.
           description_own: Vous avez assisté à %{score} rencontres.
@@ -368,6 +369,7 @@ fr:
           confirm: Confirmer
         show:
           attendees: Nombre de participants
+          back: Retour à la liste
           contributions: Décompte des contributions
           going: J'y vais
           join: Participer à la rencontre
