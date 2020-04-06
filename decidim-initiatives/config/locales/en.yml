@@ -344,6 +344,7 @@ en:
           invalid: The phone number is invalid or pending of authorization. Please, check your authorizations.
       initiatives:
         author:
+          identifier: "Identifier: <b>N°%{identifier}</b>"
           deleted: Deleted
         author_list:
           hidden_authors_count:
