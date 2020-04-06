@@ -87,7 +87,7 @@ module Decidim
           @user.password_confirmation = generated_password
           @user.remote_avatar_url = form.avatar_url if form.avatar_url.present?
           @user.skip_confirmation! if verified_email
-          @after_confirmation = true
+          @after_confirmation = (verified_email != form.email)
         end
       end
 
