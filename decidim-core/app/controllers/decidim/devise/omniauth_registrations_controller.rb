@@ -45,7 +45,10 @@ module Decidim
 
           on(:error) do |user|
             session[:oauth_hash] = oauth_hash if oauth_hash.present?
-            if user && user.errors[:email]
+            
+            if user.nil? && oauth_hash.present?
+              set_flash_message :notice, :success, kind: provider_name(@form.provider)
+            elsif user && user.errors[:email]
               set_flash_message :alert, :failure, kind: provider_name(@form.provider), reason: t("decidim.devise.omniauth_registrations.create.email_already_exists")
             end
 
