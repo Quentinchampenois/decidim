@@ -30,8 +30,8 @@ en:
       initiatives_type:
         banner_image: Banner image
         child_scope_threshold_enabled: Enable child scope signatures
-        comments_enabled: Enable comments
         collect_user_extra_fields: Collect participant personal data on signature
+        comments_enabled: Enable comments
         description: Description
         document_number_authorization_handler: Authorization to verify document number on signatures
         extra_fields_legal_information: Legal information about the collection of personal data
@@ -450,8 +450,8 @@ en:
     resources:
       initiatives_type:
         actions:
-          title: Actions
           create: Create initiative
+          title: Actions
           vote: Sign initiative
   layouts:
     decidim:
