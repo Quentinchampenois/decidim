@@ -69,7 +69,7 @@ module Decidim
     end
 
     def metadata=(data)
-      encrypted_metadata = encryptor.encrypt(data)
+      self.encrypted_metadata = encryptor.encrypt(data)
     end
 
     private

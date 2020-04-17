@@ -95,7 +95,8 @@ module Decidim
         return unless manifest
 
         @user_authorized_scope ||= authorized_scope_candidates.find do |candidates|
-          return unless candidates
+          return false unless candidates
+
           authorization.metadata.symbolize_keys.dig(:scope_id) == candidates&.id
         end
       end

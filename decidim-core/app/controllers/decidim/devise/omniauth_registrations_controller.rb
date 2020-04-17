@@ -13,12 +13,13 @@ module Decidim
 
       after_action :grant_omniauth_authorization, except: [:logout]
 
-      # skip_before_action :verify_authenticity_token, if: :is_saml_callback?
+      # skip_before_action :verify_authenticity_token, if: :saml_callback?
 
       def new
         @form = form(OmniauthRegistrationForm).from_params(user_params)
       end
 
+      # rubocop:disable Metrics/PerceivedComplexity
       def create
         session[:verified_email] = verified_email
         @form = form(OmniauthRegistrationForm).from_params(user_params)
@@ -45,7 +46,7 @@ module Decidim
 
           on(:error) do |user|
             session[:oauth_hash] = oauth_hash if oauth_hash.present?
-            
+
             if user.nil? && oauth_hash.present?
               set_flash_message :notice, :success, kind: provider_name(@form.provider)
             elsif user && user.errors[:email]
@@ -56,9 +57,9 @@ module Decidim
           end
         end
       end
+      # rubocop:enable Metrics/PerceivedComplexity
 
       def logout
-
         %w(notice success alert error warning info primary secondary omniauth logout).each do |type|
           flash.keep(type.to_sym)
         end
@@ -100,7 +101,6 @@ module Decidim
       end
 
       def manage_omniauth_authorization
-
         # Rails.logger.debug "+++++++++++++++++++++++++"
         # Rails.logger.debug "OmniauthRegistrationsController.manage_omniauth_authorization"
         # Rails.logger.debug params
@@ -113,11 +113,9 @@ module Decidim
         # Rails.logger.debug "+++++++++++++++++++++++++"
 
         location = store_location_for(:user, stored_location_for(:user))
-        return unless location.present? && !!location.match(/^\/#{params[:action]}\/$/)
+        return unless location.present? && location.match(%r{^/#{params[:action]}/$}).present?
 
-        if current_user
-          @verified_email = current_user.email
-        end
+        @verified_email = current_user.email if current_user
 
         if request.env["omniauth.origin"].present? && (request.env["omniauth.origin"].split("?").first != decidim.new_user_session_url.split("?").first)
           store_location_for(:user, request.env["omniauth.origin"])
@@ -127,14 +125,13 @@ module Decidim
       end
 
       def grant_omniauth_authorization
-
         Rails.logger.debug "+++++++++++++++++++++++++"
         Rails.logger.debug "OmniauthRegistrationsController.grant_omniauth_authorization"
         Rails.logger.debug params
         Rails.logger.debug oauth_data.to_json if oauth_data
         Rails.logger.debug "+++++++++++++++++++++++++"
 
-        return unless Decidim.authorization_workflows.any?{ |a| a.try(:omniauth_provider).to_s == oauth_data[:provider].to_s }
+        return unless Decidim.authorization_workflows.any? { |a| a.try(:omniauth_provider).to_s == oauth_data[:provider].to_s }
 
         # just to be safe
         return unless current_user
@@ -142,7 +139,7 @@ module Decidim
         flash_for_granted = []
         flash_for_refused = []
 
-        Decidim.authorization_workflows.select{ |a| a.try(:omniauth_provider).to_s == oauth_data[:provider].to_s }.each do |workflow|
+        Decidim.authorization_workflows.select { |a| a.try(:omniauth_provider).to_s == oauth_data[:provider].to_s }.each do |workflow|
           form = Decidim::Verifications::Omniauth::OmniauthAuthorizationForm.from_params(user: current_user, provider: workflow.omniauth_provider, oauth_data: oauth_data[:info])
 
           authorization = Decidim::Authorization.find_or_initialize_by(
@@ -155,7 +152,7 @@ module Decidim
               flash_for_granted << t("authorizations.new.success", scope: "decidim.verifications.omniauth", locale: current_user.locale)
             end
             on(:invalid) do
-              flash_for_refused << form.errors.to_h.values.join('. ')
+              flash_for_refused << form.errors.to_h.values.join(". ")
             end
           end
         end
@@ -167,15 +164,13 @@ module Decidim
       protected
 
       def configure_permitted_parameters
-        if OmniauthRegistrationForm.respond_to?(:extra_params)
-          devise_parameter_sanitizer.permit(:sign_up, keys: OmniauthRegistrationForm.extra_params)
-        end
+        devise_parameter_sanitizer.permit(:sign_up, keys: OmniauthRegistrationForm.extra_params) if OmniauthRegistrationForm.respond_to?(:extra_params)
       end
 
       private
 
       def oauth_data
-        @oauth_data ||= (oauth_hash.present? ? oauth_hash : (session[:oauth_hash] || {}).deep_symbolize_keys).slice(:provider, :uid, :info, :logout)
+        @oauth_data ||= (oauth_hash.presence || (session[:oauth_hash] || {}).deep_symbolize_keys).slice(:provider, :uid, :info, :logout)
       end
 
       def user_params
@@ -224,18 +219,14 @@ module Decidim
       end
 
       def stored_state
-        session.delete('omniauth.state')
+        session.delete("omniauth.state")
       end
 
       def provider_name(provider)
-        if current_organization.enabled_omniauth_providers[provider.to_sym][:provider_name].present?
-          current_organization.enabled_omniauth_providers[provider.to_sym][:provider_name]
-        else
-          provider.capitalize
-        end
+        current_organization.enabled_omniauth_providers[provider.to_sym][:provider_name].presence || provider.capitalize
       end
 
-      def is_saml_callback?
+      def saml_callback?
         request.path.end_with?("/callback") &&
           request.env["omniauth.strategy"].options[:idp_sso_target_url].present? &&
           URI.parse(request.origin).host == URI.parse(request.env["omniauth.strategy"].options[:idp_sso_target_url]).host
