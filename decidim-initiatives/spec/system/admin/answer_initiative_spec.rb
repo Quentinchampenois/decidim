@@ -102,7 +102,8 @@ describe "User answers the initiative", type: :system do
           expect(page).to have_css("#initiative_state")
           expect(page).to have_css("#initiative_answer_date")
 
-          fill_in :initiative_signature_start_date, with: 1.day.ago
+          fill_in :initiative_answer_date, with: 1.day.ago.strftime("%dd/%mm/%Y")
+          fill_in :initiative_signature_start_date, with: 2.day.ago
         end
 
         submit_and_validate

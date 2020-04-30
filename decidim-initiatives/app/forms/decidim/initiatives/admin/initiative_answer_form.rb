@@ -26,7 +26,7 @@ module Decidim
         validates :answer_date, date: { before: Date.current }, if: :answer_date_allowed?
 
         def signature_dates_required?
-          @signature_dates_required ||= context.initiative.state == "published"
+          @signature_dates_required ||= check_state
         end
 
         def state_updatable?
@@ -41,6 +41,17 @@ module Decidim
           return false if state == "published"
 
           state_updatable?
+        end
+
+        private
+
+        def check_state
+          case context.initiative.state
+          when "published", "examinated"
+            true
+          else
+            false
+          end
         end
       end
     end
