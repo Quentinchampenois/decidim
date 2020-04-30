@@ -14,7 +14,7 @@ module Decidim
       # Returns a String.
       def state_badge_css_class(initiative)
         return "success" if initiative.accepted? || initiative.debatted? || initiative.published?
-        return "alert" if initiative.examinated?
+        return "alert" if initiative.classified?
 
         "warning"
       end
