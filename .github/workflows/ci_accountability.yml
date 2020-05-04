@@ -5,8 +5,9 @@ on:
       - develop
       - master
       - release/*
+      - wip/*
       - "*-stable"
-      - *
+
   pull_request:
     branches:
       - "*"
