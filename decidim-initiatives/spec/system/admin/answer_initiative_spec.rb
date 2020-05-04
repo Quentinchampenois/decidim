@@ -23,7 +23,7 @@ describe "User answers the initiative", type: :system do
         expect(page).to have_css("#initiative_answer_date")
 
         fill_in :initiative_answer_date, with: 1.day.ago.strftime("%dd/%mm/%Y")
-        fill_in :initiative_signature_start_date, with: 2.day.ago
+        fill_in :initiative_signature_start_date, with: 2.days.ago
       end
 
       submit_and_validate
@@ -122,9 +122,9 @@ describe "User answers the initiative", type: :system do
       it_behaves_like "editable signature dates"
     end
 
-    context "when initiative is in debatted state" do
+    context "when initiative is in classified state" do
       before do
-        initiative.debatted!
+        initiative.classified!
       end
 
       it_behaves_like "editable signature dates"
