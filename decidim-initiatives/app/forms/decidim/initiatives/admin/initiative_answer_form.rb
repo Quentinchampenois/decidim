@@ -46,12 +46,7 @@ module Decidim
         private
 
         def check_state
-          case context.initiative.state
-          when "published", "debatted", "examinated", "classified"
-            true
-          else
-            false
-          end
+          manual_states.include? context.initiative.state
         end
       end
     end
