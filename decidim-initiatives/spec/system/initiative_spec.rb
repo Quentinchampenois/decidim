@@ -55,7 +55,7 @@ describe "Initiative", type: :system do
       end
 
       it "displays date" do
-        expect(page).to have_content(I18n.l(base_initiative.answer_date, format: "%d/%m/%Y"))
+        expect(page).to have_content(I18n.l(base_initiative.answer_date.to_date, format: :decidim_short))
       end
     end
 

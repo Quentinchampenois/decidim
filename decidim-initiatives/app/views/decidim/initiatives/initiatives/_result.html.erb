@@ -10,7 +10,7 @@
         </div>
         <% if initiative.answer_date? %>
           <div class="columns small-12">
-          <span><%= l(initiative.answer_date, format: "%d/%m/%Y") %></span>
+          <span><%= l(initiative.answer_date.to_date, format: :decidim_short) %></span>
           </div>
         <% end %>
       </div>
