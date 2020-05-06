@@ -111,11 +111,9 @@ module Decidim
       #
       # Returns an array of Decidim::Scopes.
       def authorized_scope_candidates
-        if scope
-          initiative.scope.descendants
-        else
-          initiative.organization.scopes
-        end
+        return initiative.organization.scopes if scope.blank?
+
+        initiative.scope.descendants
       end
 
       def metadata

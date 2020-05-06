@@ -165,8 +165,8 @@ module Decidim
             expect(form.authorized_scope_candidates.compact).to match_array(organization.scopes)
           end
 
-          it "includes the scope" do
-            expect(form.authorized_scope_candidates).to include(nil)
+          it "doesn't includes the scope" do
+            expect(form.authorized_scope_candidates).not_to include(nil)
           end
         end
 
