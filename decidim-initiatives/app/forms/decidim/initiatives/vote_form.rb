@@ -28,7 +28,7 @@ module Decidim
       validates :initiative, :signer, presence: true
 
       with_options if: :required_personal_data? do
-        validates :encrypted_metadata, :hash_id, presence: true
+        validates :encrypted_metadata, :hash_id, :resident, presence: true
         validate :already_voted?
         validate :user_scope_belongs_to_organization?
         validates :resident, acceptance: true
@@ -39,7 +39,7 @@ module Decidim
       def encrypted_metadata
         return unless required_personal_data?
 
-        @encrypted_metadata ||= encryptor.encrypt(metadata)
+        @encrypted_metadata ||= encryptor.encrypt({})
       end
 
       # Public: The hash to uniquely identify an initiative vote. It uses the
@@ -112,7 +112,7 @@ module Decidim
       # Returns an array of Decidim::Scopes.
       def authorized_scope_candidates
         if scope
-          [scope] + initiative.scope.descendants
+          initiative.scope.descendants
         else
           initiative.organization.scopes
         end
@@ -120,11 +120,6 @@ module Decidim
 
       def metadata
         {
-            name_and_surname: name_and_surname,
-            document_number: document_number,
-            date_of_birth: date_of_birth,
-            postal_code: postal_code,
-            scope: scope,
             user_scope_id: user_scope_id,
             resident: resident
         }
