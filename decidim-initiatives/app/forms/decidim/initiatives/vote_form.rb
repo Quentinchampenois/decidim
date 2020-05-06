@@ -28,10 +28,8 @@ module Decidim
       validates :initiative, :signer, presence: true
 
       with_options if: :required_personal_data? do
-        validates :name_and_surname, :document_number, :date_of_birth, :postal_code, :encrypted_metadata, :hash_id, presence: true
-        validate :document_number_authorized?
+        validates :encrypted_metadata, :hash_id, presence: true
         validate :already_voted?
-        validate :personal_data_consistent_with_metadata
         validate :user_scope_belongs_to_organization?
         validates :resident, acceptance: true
       end
