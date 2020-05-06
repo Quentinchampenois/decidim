@@ -50,11 +50,11 @@ module Decidim
         return unless initiative && (document_number || signer)
 
         @hash_id ||= Digest::MD5.hexdigest(
-            [
-                initiative.id,
-                document_number || signer.id,
-                Rails.application.secrets.secret_key_base
-            ].compact.join("-")
+          [
+            initiative.id,
+            document_number || signer.id,
+            Rails.application.secrets.secret_key_base
+          ].compact.join("-")
         )
       end
 
@@ -68,7 +68,7 @@ module Decidim
         list = initiative.votable_initiative_type_scopes.select do |initiative_type_scope|
           if initiative_type_scope.scope.present?
             initiative_type_scope.scope == user_authorized_scope ||
-                initiative_type_scope.scope.ancestor_of?(user_authorized_scope)
+              initiative_type_scope.scope.ancestor_of?(user_authorized_scope)
           else
             initiative.type.only_global_scope_enabled && user_authorized_scope.nil?
           end
@@ -120,8 +120,8 @@ module Decidim
 
       def metadata
         {
-            user_scope_id: user_scope_id,
-            resident: resident
+          user_scope_id: user_scope_id,
+          resident: resident
         }
       end
 
@@ -165,9 +165,9 @@ module Decidim
         return unless signer && handler_name
 
         @authorization ||= Verifications::Authorizations.new(
-            organization: signer.organization,
-            user: signer,
-            name: handler_name
+          organization: signer.organization,
+          user: signer,
+          name: handler_name
         ).first
       end
 
@@ -214,7 +214,7 @@ module Decidim
       end
 
       def user_scope_belongs_to_organization?
-        return unless user_scope_id.present?
+        return if user_scope_id.blank?
 
         current_organization.scopes.include? user_scope
       end
