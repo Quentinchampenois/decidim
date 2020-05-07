@@ -52,7 +52,10 @@ module Decidim
              as: :participatory_space
 
     enum signature_type: [:online, :offline, :any], _suffix: true
-    enum state: [:created, :validating, :discarded, :published, :rejected, :accepted]
+
+    AUTOMATIC_STATES = [:created, :validating, :discarded, :published, :rejected, :accepted].freeze
+    MANUAL_STATES = [:published, :examinated, :debatted, :classified].freeze
+    enum state: (AUTOMATIC_STATES + MANUAL_STATES).uniq
 
     validates :title, :description, :state, presence: true
     validates :signature_type, presence: true
@@ -64,13 +67,13 @@ module Decidim
 
     scope :open, lambda {
       published
-        .where.not(state: [:discarded, :rejected, :accepted, :created])
+        .where.not(state: [:discarded, :rejected, :accepted, :created, :classified])
         .where("signature_start_date <= ?", Date.current)
         .where("signature_end_date >= ?", Date.current)
     }
     scope :closed, lambda {
       published
-        .where(state: [:discarded, :rejected, :accepted])
+        .where(state: [:discarded, :rejected, :accepted, :classified])
         .or(where("signature_start_date > ?", Date.current))
         .or(where("signature_end_date < ?", Date.current))
     }
@@ -168,7 +171,7 @@ module Decidim
     #
     # RETURNS BOOLEAN
     def closed?
-      discarded? || rejected? || accepted? || !votes_enabled?
+      discarded? || rejected? || accepted? || !votes_enabled? || classified?
     end
 
     # PUBLIC
@@ -193,9 +196,13 @@ module Decidim
     end
 
     def votes_enabled?
-      published? &&
+      votes_enabled_state? &&
         signature_start_date <= Date.current &&
         signature_end_date >= Date.current
+    end
+
+    def votes_enabled_state?
+      published? || examinated? || debatted?
     end
 
     # Public: Check if the user has voted the question.

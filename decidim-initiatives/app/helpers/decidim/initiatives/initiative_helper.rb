@@ -14,7 +14,8 @@ module Decidim
       #
       # Returns a String.
       def state_badge_css_class(initiative)
-        return "success" if initiative.accepted?
+        return "success" if initiative.accepted? || initiative.debatted? || initiative.published?
+        return "alert" if initiative.classified?
 
         "warning"
       end
@@ -25,9 +26,9 @@ module Decidim
       #
       # Returns a String.
       def humanize_state(initiative)
-        I18n.t(initiative.accepted? ? "accepted" : "expired",
-               scope: "decidim.initiatives.states",
-               default: :expired)
+        return I18n.t("expired", scope: "decidim.initiatives.states") if initiative.rejected?
+
+        I18n.t(initiative.state, scope: "decidim.initiatives.states")
       end
 
       # Public: The state of an initiative in a way a human can understand.
@@ -212,6 +213,10 @@ module Decidim
 
       def authorization_router(_authorization)
         Decidim::Verifications.find_workflow_manifest(@authorizations.first.name).admin_engine.routes.url_helpers
+      end
+
+      def display_badge?(initiative)
+        initiative.rejected? || initiative.accepted? || initiative.debatted? || initiative.examinated? || initiative.classified?
       end
     end
   end

@@ -21,6 +21,22 @@ module Decidim
 
     include_examples "has reference"
 
+    describe ".states" do
+      it "returns the correct enumerator" do
+        expect(subject.class.states).to eq(
+          "created" => 0,
+          "validating" => 1,
+          "discarded" => 2,
+          "published" => 3,
+          "rejected" => 4,
+          "accepted" => 5,
+          "examinated" => 6,
+          "debatted" => 7,
+          "classified" => 8
+        )
+      end
+    end
+
     context "when created initiative" do
       let(:initiative) { create(:initiative, :created) }
       let(:administrator) { create(:user, :admin, organization: initiative.organization) }
@@ -258,6 +274,34 @@ module Decidim
         before { create_list(:initiatives_committee_member, initiatives_type_minimum_committee_members - 1, initiative: initiative) }
 
         it { is_expected.to eq false }
+      end
+    end
+
+    describe "#votes_enabled?" do
+      subject { initiative.votes_enabled? }
+
+      context "when published" do
+        let(:initiative) { build :initiative, :published }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "when examinated" do
+        let(:initiative) { build :initiative, :examinated }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "when debatted" do
+        let(:initiative) { build :initiative, :debatted }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "when classified" do
+        let(:initiative) { build :initiative, :classified }
+
+        it { is_expected.to be_falsy }
       end
     end
   end
