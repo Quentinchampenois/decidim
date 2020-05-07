@@ -50,6 +50,7 @@ en:
         document_number: Document number
         name_and_surname: Name and surname
         postal_code: Postal code
+        resident: I'm a local resident
       organization_data:
         address: Address
         id_document: ID document
@@ -408,8 +409,8 @@ en:
             day: Day
             month: Month
             year: Year
-          help: Please, fill the following fields with your personal data to sign
-            the initiative
+          help: Please, fill the following fields with your personal data to sign the initiative
+          select_scope: Select scope
         finish:
           back_to_initiative: Back to initiative
         sms_code:
