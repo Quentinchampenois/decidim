@@ -28,7 +28,7 @@ module Decidim
       def humanize_state(initiative)
         return I18n.t("expired", scope: "decidim.initiatives.states") if initiative.rejected?
 
-        I18n.t(initiative.state, scope: "decidim.initiatives.states")
+        I18n.t(initiative.state, scope: "decidim.initiatives.states", default: :created)
       end
 
       # Public: The state of an initiative in a way a human can understand.
@@ -37,7 +37,7 @@ module Decidim
       #
       # Returns a String.
       def humanize_initiative_state(initiative)
-        I18n.t(initiative.state, scope: "decidim.initiatives.state", default: :created)
+        I18n.t(initiative.state, scope: "decidim.initiatives.state")
       end
 
       # Public: The state of an initiative from an administration perspective in
