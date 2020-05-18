@@ -67,13 +67,12 @@ describe "Initiatives", type: :system do
       end
 
       it_behaves_like "invalid state for index" do
-        let!(:base_initiative) { create(:initiative, :created, organization: organization)}
+        let!(:base_initiative) { create(:initiative, :created, organization: organization) }
       end
 
       it_behaves_like "invalid state for index" do
-        let!(:base_initiative) { create(:initiative, :validating, organization: organization)}
+        let!(:base_initiative) { create(:initiative, :validating, organization: organization) }
       end
-
     end
 
     it "links to the individual initiative page" do
