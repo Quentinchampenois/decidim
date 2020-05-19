@@ -44,10 +44,6 @@ module Decidim
         @initiative_type ||= context.fetch(:initiative_type, nil) || initiative.type
       end
 
-      def initiative_type
-        @initiative_type ||= context.fetch(:initiative_type, nil)
-      end
-
       def list_public_initiatives?
         allow! if permission_action.subject == :initiative &&
                   permission_action.action == :list
@@ -170,7 +166,7 @@ module Decidim
 
       def initiative_attachment?
         return unless permission_action.action == :add_attachment &&
-          permission_action.subject == :initiative
+                      permission_action.subject == :initiative
 
         toggle_allow(initiative_type.attachments_enabled?)
       end
