@@ -34,6 +34,14 @@ Decidim.register_participatory_space(:initiatives) do |participatory_space|
   participatory_space.model_class_name = "Decidim::Initiative"
   participatory_space.permissions_class_name = "Decidim::Initiatives::Permissions"
 
+  participatory_space.exports :initiatives do |export|
+    export.collection do
+      Decidim::Initiative
+    end
+
+    export.serializer Decidim::Initiatives::InitiativeSerializer
+  end
+
   participatory_space.data_portable_entities = [
     "Decidim::Initiative",
     "Decidim::InitiativesVote"

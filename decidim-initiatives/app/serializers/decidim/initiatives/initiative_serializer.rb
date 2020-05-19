@@ -18,6 +18,8 @@ module Decidim
           id: initiative.id,
           reference: initiative.reference,
           title: initiative.title,
+          created_at: initiative.created_at,
+          published_at: initiative.published_at,
           description: initiative.description,
           hashtag: initiative.hashtag,
           type: {
@@ -38,7 +40,11 @@ module Decidim
             attachment_collections: serialize_attachment_collections,
             files: serialize_attachments
           },
-          components: serialize_components
+          components: serialize_components,
+          authors: {
+            id: initiative.author_users.map(&:id),
+            name: initiative.author_users.map(&:name)
+          }
         }
       end
 

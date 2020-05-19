@@ -302,6 +302,10 @@ module Decidim
       online_votes["total"].to_i
     end
 
+    def author_users
+      [author].concat(committee_members.excluding_author.map(&:user))
+    end
+
     def offline_votes_count
       return 0 if online_signature_type?
 
