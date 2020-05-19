@@ -29,7 +29,9 @@
     <div class="row column">
       <%= form.select :signature_type, form.object.signature_type_options %>
     </div>
-
+    <div class="row column">
+      <%= form.check_box :attachments_enabled %>
+    </div>
     <div class="row column">
       <%= form.check_box :undo_online_signatures_enabled %>
     </div>
