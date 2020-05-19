@@ -61,6 +61,7 @@ module Decidim
           author: current_user,
           decidim_user_group_id: form.decidim_user_group_id,
           scoped_type: scoped_type,
+          area: area,
           signature_type: form.signature_type,
           state: "created"
         )
@@ -71,6 +72,12 @@ module Decidim
           type: form.initiative_type,
           scope: form.scope
         )
+      end
+
+      def area
+        return nil unless form.context.initiative_type.area_enabled?
+
+        form.area
       end
 
       def create_components_for(initiative)
