@@ -63,7 +63,6 @@ describe "InitiativeTypesController", type: :system do
 
       select("In-person", from: "Signature type")
       check "Enable attachments"
-      uncheck "Enable participants to undo their online signatures"
 
       click_button "Update"
 
