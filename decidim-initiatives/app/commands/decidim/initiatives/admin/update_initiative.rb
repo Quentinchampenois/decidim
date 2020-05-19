@@ -39,8 +39,6 @@ module Decidim
         private
 
         attr_reader :form, :initiative, :current_user
-
-        # rubocop:disable Metrics/CyclomaticComplexity
         def attributes
           attrs = {
             title: form.title,
@@ -62,7 +60,6 @@ module Decidim
           attrs
         end
 
-
         def add_admin_accessible_attrs(attrs)
           attrs[:signature_start_date] = form.signature_start_date
           attrs[:signature_end_date] = form.signature_end_date
@@ -72,11 +69,10 @@ module Decidim
 
           if initiative.published?
             @notify_extended = true if form.signature_end_date != initiative.signature_end_date &&
-                form.signature_end_date > initiative.signature_end_date
+                                       form.signature_end_date > initiative.signature_end_date
           end
         end
 
-        # rubocop:enable Metrics/CyclomaticComplexity
         def notify_initiative_is_extended
           Decidim::EventsManager.publish(
             event: "decidim.events.initiatives.initiative_extended",

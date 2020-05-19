@@ -58,6 +58,7 @@ module Decidim
       def area
         @area ||= current_organization.areas.find_by(id: area_id)
       end
+
       private
 
       def scope_exists

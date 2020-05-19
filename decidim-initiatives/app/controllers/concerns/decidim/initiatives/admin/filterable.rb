@@ -27,8 +27,8 @@ module Decidim
 
           def filters_with_values
             {
-                state_eq: Initiative.states.keys,
-                decidim_area_id_eq: current_organization.areas.pluck(:id)
+              state_eq: Initiative.states.keys,
+              decidim_area_id_eq: current_organization.areas.pluck(:id)
             }
           end
 
