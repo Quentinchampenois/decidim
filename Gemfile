@@ -16,6 +16,7 @@ gem "uglifier", "~> 4.1"
 
 gem "faker", "~> 1.9"
 
+gem "activerecord-session_store"
 gem "deepl-rb"
 
 group :development, :test do

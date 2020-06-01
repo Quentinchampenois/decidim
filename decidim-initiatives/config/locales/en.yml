@@ -339,6 +339,7 @@ en:
             year: Year
           help: Please, fill the following fields with your personal data to sign the initiative
           select_scope: Select scope
+          select_scope_label: Scope
         finish:
           back_to_initiative: Back to initiative
         sms_code:
@@ -360,8 +361,8 @@ en:
           invalid: The phone number is invalid or pending of authorization. Please, check your authorizations.
       initiatives:
         author:
-          identifier: "Identifier: <b>N°%{identifier}</b>"
           deleted: Deleted
+          identifier: 'Identifier: <b>N°%{identifier}</b>'
         author_list:
           hidden_authors_count:
             one: and 1 more person
@@ -453,8 +454,11 @@ en:
             see_all_initiatives: See all initiatives
       state:
         accepted: Accepted
+        classified: Classified
         created: Created
+        debatted: Debatted
         discarded: Discarded
+        examinated: Examinated
         published: Published
         rejected: Rejected
         validating: Technical validation

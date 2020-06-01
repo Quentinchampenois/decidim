@@ -56,7 +56,7 @@ fr:
         document_number: Numéro de document
         name_and_surname: Nom et surnom
         postal_code: Code postal
-        resident: I'm a local resident
+        resident: Je suis résident
       organization_data:
         address: Adresse
         id_document: Document d'identité
@@ -419,7 +419,8 @@ fr:
             year: Année
           help: S'il vous plaît, remplissez les champs suivants avec vos données personnelles
             pour signer l'initiative
-          select_scope: "Sélectionner un périmètre d'application"
+          select_scope: Sélectionner un périmètre d'application
+          select_scope_label: Périmètre d'application
         finish:
           back_to_initiative: Retour à l'initiative
         sms_code:
@@ -550,8 +551,11 @@ fr:
             see_all_initiatives: Voir toutes les initiatives
       state:
         accepted: Acceptée
+        classified: Classée
         created: Créée
+        debatted: Débattue
         discarded: Retirée
+        examinated: Examinée
         published: Publiée
         rejected: Rejetée
         validating: Validation technique
