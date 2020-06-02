@@ -25,14 +25,6 @@ describe "Admin manages initiatives", type: :system do
     Decidim::Initiative.join(:scoped_type).where.not(decidim_initiatives_types_id: type).sample
   end
 
-  def initiative_with_type(type)
-    Decidim::Initiative.join(:scoped_type).find_by(decidim_initiatives_types_id: type)
-  end
-
-  def initiative_without_type(type)
-    Decidim::Initiative.join(:scoped_type).where.not(decidim_initiatives_types_id: type).sample
-  end
-
   include_context "with filterable context"
 
   let(:organization) { create(:organization) }

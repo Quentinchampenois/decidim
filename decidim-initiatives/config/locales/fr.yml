@@ -86,6 +86,8 @@ fr:
             debatted: Débattue
             examinated: Examinée
             validating: Validation technique
+        type_id_eq:
+          label: Type
       menu:
         initiatives: Initiatives
         initiatives_types: Types d'initiatives
