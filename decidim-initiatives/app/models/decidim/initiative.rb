@@ -91,6 +91,7 @@ module Decidim
     scope :signature_type_updatable, -> { created }
 
     scope :order_by_most_recent, -> { order(created_at: :desc) }
+    scope :order_by_most_recently_published, -> { order(published_at: :desc) }
     scope :order_by_supports, -> { order("((online_votes->>'total')::int + (offline_votes->>'total')::int) DESC") }
     scope :order_by_most_commented, lambda {
       select("decidim_initiatives.*")
@@ -477,6 +478,28 @@ module Decidim
 
     ransacker :type_id do
       Arel.sql("decidim_initiatives_type_scopes.decidim_initiatives_types_id")
+    end
+
+    # method for sort_link by number of supports
+    ransacker :supports_count do
+     query = <<~SQL
+       (
+         SELECT
+           CASE
+             WHEN signature_type = 0 THEN 0
+             ELSE COALESCE((offline_votes::json->>'total')::int, 0)
+           END
+           +
+           CASE
+             WHEN signature_type = 1 THEN 0
+             ELSE COALESCE((online_votes::json->>'total')::int, 0)
+           END
+          FROM decidim_initiatives as initiatives
+         WHERE initiatives.id = decidim_initiatives.id
+         GROUP BY initiatives.id
+       )
+     SQL
+     Arel.sql(query)
     end
   end
 end
