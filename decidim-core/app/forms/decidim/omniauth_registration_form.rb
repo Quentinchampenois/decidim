@@ -20,18 +20,12 @@ module Decidim
     validates :provider, presence: true
     validates :uid, presence: true
 
-    validate :email, :email_is_unique, unless: -> { email.blank? }
-
     def self.create_signature(provider, uid)
       Digest::MD5.hexdigest("#{provider}-#{uid}-#{Rails.application.secrets.secret_key_base}")
     end
 
     def normalized_nickname
       UserBaseEntity.nicknamize(nickname || name, organization: current_organization)
-    end
-
-    def email_is_unique
-      errors.add(:email, "#{email} #{I18n.t("errors.messages.taken")}") if Decidim::User.where(organization: current_organization, email: email).exists?
     end
   end
 end
