@@ -64,8 +64,8 @@ module Decidim
 
             authorization = Decidim::Authorization.last
             expect(authorization.metadata).to include(
-              "document_number" => authorization_params[:document_number],
-              "postal_code" => authorization_params[:postal_code]
+              document_number: authorization_params[:document_number],
+              postal_code: authorization_params[:postal_code]
             )
             expect(authorization.user.name).to eq("Patrick Participant")
           end
@@ -152,8 +152,8 @@ module Decidim
 
             authorization = Decidim::Authorization.last
             expect(authorization.metadata).to include(
-              "document_number" => authorization_params[:document_number],
-              "postal_code" => authorization_params[:postal_code]
+              document_number: authorization_params[:document_number],
+              postal_code: authorization_params[:postal_code]
             )
           end
         end
