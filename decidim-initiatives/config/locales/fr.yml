@@ -33,6 +33,8 @@ fr:
         collect_user_extra_fields: Collecter les données personnelles de l'utilisateur
           lors de la signature
         comments_enabled: Activer les commentaires
+        custom_signature_end_date_enabled: Enable authors to choose the end of signature
+          collection period
         description: Description
         document_number_authorization_handler: Niveau d'autorisation nécessaire pour
           signer les initiatives de ce type
