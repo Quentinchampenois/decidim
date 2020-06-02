@@ -6,6 +6,7 @@ on:
       - master
       - release/*
       - "*-stable"
+      - fix/*
   pull_request:
     branches:
       - "*"
