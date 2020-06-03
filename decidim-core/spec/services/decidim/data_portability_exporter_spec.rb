@@ -46,7 +46,6 @@ module Decidim
         file_prefixes = expected_files.dup
         Zip::File.open(File.join(tmp_dir_out, DataPortabilityExporter::ZIP_FILE_NAME)) do |zip_file|
           zip_file.each do |entry|
-
             entry_name = entry.name
             prefix = file_prefixes.find { |start| entry_name.start_with?(start) }
             expect(file_prefixes.delete(prefix)).to be_present
