@@ -13,32 +13,28 @@ describe "Initiative widget", type: :system do
   end
 
   context "when the initiative is not published, accepted or rejected" do
-    it "doesn't displays the iframe" do
-      expect(page).not_to have_content(initiative.title)
+    context "when created" do
+      let(:initiative) { create(:initiative, :created, organization: organization) }
+
+      it "doesn't displays the iframe" do
+        expect(page).not_to have_i18n_content(initiative.title)
+      end
     end
-  end
 
-  context "when created" do
-    let(:initiative) { create(:initiative, :created, organization: organization) }
+    context "when validating" do
+      let(:initiative) { create(:initiative, :validating, organization: organization) }
 
-    it "doesn't displays the iframe" do
-      expect(page).not_to have_content(initiative.title)
+      it "doesn't displays the iframe" do
+        expect(page).not_to have_i18n_content(initiative.title)
+      end
     end
-  end
 
-  context "when validating" do
-    let(:initiative) { create(:initiative, :validating, organization: organization) }
+    context "when discarded" do
+      let(:initiative) { create(:initiative, :discarded, organization: organization) }
 
-    it "doesn't displays the iframe" do
-      expect(page).not_to have_content(initiative.title)
-    end
-  end
-
-  context "when discarded" do
-    let(:initiative) { create(:initiative, :discarded, organization: organization) }
-
-    it "doesn't displays the iframe" do
-      expect(page).not_to have_content(initiative.title)
+      it "doesn't displays the iframe" do
+        expect(page).not_to have_i18n_content(initiative.title)
+      end
     end
   end
 
@@ -46,7 +42,7 @@ describe "Initiative widget", type: :system do
     let(:initiative) { create(:initiative, :published, organization: organization) }
 
     it "displays the iframe" do
-      expect(page).to have_content(initiative.title)
+      expect(page).to have_i18n_content(initiative.title)
     end
   end
 
@@ -54,7 +50,7 @@ describe "Initiative widget", type: :system do
     let(:initiative) { create(:initiative, :accepted, organization: organization) }
 
     it "displays the iframe" do
-      expect(page).to have_content(initiative.title)
+      expect(page).to have_i18n_content(initiative.title)
     end
   end
 
@@ -62,7 +58,7 @@ describe "Initiative widget", type: :system do
     let(:initiative) { create(:initiative, :rejected, organization: organization) }
 
     it "displays the iframe" do
-      expect(page).to have_content(initiative.title)
+      expect(page).to have_i18n_content(initiative.title)
     end
   end
 end
