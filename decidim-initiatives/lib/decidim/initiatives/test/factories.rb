@@ -13,6 +13,7 @@ FactoryBot.define do
     undo_online_signatures_enabled { true }
     custom_signature_end_date_enabled { false }
     promoting_committee_enabled { true }
+    comments_enabled { true }
     minimum_committee_members { 3 }
     child_scope_threshold_enabled { false }
     only_global_scope_enabled { false }

@@ -26,7 +26,7 @@ module Decidim
         attribute :document_number_authorization_handler, String
 
         validates :title, :description, translatable_presence: true
-        validates :undo_online_signatures_enabled, :custom_signature_end_date_enabled, :promoting_committee_enabled, inclusion: { in: [true, false] }
+        validates :undo_online_signatures_enabled, :custom_signature_end_date_enabled, :comments_enabled, :promoting_committee_enabled, inclusion: { in: [true, false] }
         validates :minimum_committee_members, numericality: { only_integer: true }, allow_nil: true
         validates :banner_image, presence: true, if: ->(form) { form.context.initiative_type.nil? }
 
