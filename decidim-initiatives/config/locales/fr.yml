@@ -547,7 +547,7 @@ fr:
           of_versions: "(of %{number})"
           offline_method: Cette initiative ne recueille que des soutiens en présentiel.
           see_other_versions: voir les autres versions
-          version: Version %{nombre}
+          version: Version %{number}
         signature_identities:
           select_identity: Sélectionner l'identifiant de l'utilisateur
         signatures_count:
