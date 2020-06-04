@@ -28,6 +28,7 @@ en:
       initiatives_committee_member:
         user: Committee member
       initiatives_type:
+        attachments_enabled: Enable attachments
         banner_image: Banner image
         child_scope_threshold_enabled: Enable child scope signatures
         collect_user_extra_fields: Collect participant personal data on signature
@@ -73,7 +74,8 @@ en:
         new_initiative_type: New initiative type
       filters:
         search_placeholder:
-          title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Search %{collection} by title, description, ID or author name.
+          title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Search
+            %{collection} by title, description, ID or author name.
         state_eq:
           values:
             accepted: Accepted

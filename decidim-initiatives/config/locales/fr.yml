@@ -28,6 +28,7 @@ fr:
       initiatives_committee_member:
         user: Membre du Comité de promotion
       initiatives_type:
+        attachments_enabled: Enable attachments
         banner_image: Image d'en-tête
         child_scope_threshold_enabled: Activer les signatures des sous-périmètres
         collect_user_extra_fields: Collecter les données personnelles de l'utilisateur
