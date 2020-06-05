@@ -2,6 +2,8 @@
 fr:
   activemodel:
     attributes:
+      group:
+        avatar: Avatar
       initiative:
         decidim_user_group_id: Auteur
         description: Description
@@ -77,7 +79,13 @@ fr:
   decidim:
     admin:
       actions:
+        configure: Configure
+        confirm_destroy: Confirm destroy
+        destroy: Destroy
+        new: New
         new_initiative_type: Nouveau type d'initiative
+        publish: Publish
+        unpublish: Unpublish
       filters:
         decidim_area_id_eq:
           label: Area
@@ -101,6 +109,8 @@ fr:
       menu:
         initiatives: Initiatives
         initiatives_types: Types d'initiatives
+        participatory_processes_submenu:
+          moderations: Moderations
       models:
         initiatives:
           fields:
@@ -637,6 +647,8 @@ fr:
           create: Créer une initiative
           title: Actions
           vote: Vote
+    scopes:
+      global: Global
   layouts:
     decidim:
       admin:
