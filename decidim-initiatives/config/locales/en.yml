@@ -285,8 +285,12 @@ en:
           accepted: Enough signatures
           all: All
           answered: Answered
+          classified: Classified
           closed: Closed
+          debatted: Debatted
+          examinated: Examinated
           open: Open
+          published: Published
           rejected: Not enough signatures
         filter_type_values:
           all: All

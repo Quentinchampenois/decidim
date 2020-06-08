@@ -74,7 +74,6 @@ module Decidim
       where(state: [:discarded, :rejected, :accepted])
         .or(currently_unsignable)
     }
-    scope :published, -> { where.not(published_at: nil) }
     scope :with_state, ->(state) { where(state: state) if state.present? }
 
     scope :currently_signable, lambda {
