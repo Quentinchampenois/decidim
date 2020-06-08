@@ -654,6 +654,8 @@ fr:
           version_index: Version %{index}
     menu:
       initiatives: Initiatives
+    progress_bar:
+      number_delimiter: "."
     proposals:
       proposals:
         edit:
