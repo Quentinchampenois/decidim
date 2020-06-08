@@ -376,7 +376,7 @@ fr:
         name: Bannière en dessous de l'image principale ("hero")
     core:
       actions:
-        login_before_access:decidim-initiatives/app/models/decidim/initiative.rb Veuillez vous connecter avec votre compte avant de réaliser cette action
+        login_before_access: decidim-initiatives/app/models/decidim/initiative.rb Veuillez vous connecter avec votre compte avant de réaliser cette action
         unauthorized: Vous n'êtes pas autorisé à effectuer cette action
     data_portability:
       export:
@@ -385,7 +385,7 @@ fr:
         download_data: Télécharger les données
         download_data_description: Un fichier avec toutes les informations associées au compte sera envoyé à <strong>%{user_email}</strong>
         request_data: Demander les données
-    datepicker:decidim-initiatives/app/models/decidim/initiative.rb
+    datepicker:
       help_text: 'Format attendu : %{datepicker_format}'
     devise:
       omniauth_registrations:
