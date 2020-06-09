@@ -123,20 +123,20 @@ describe "Filter Initiatives", :slow, type: :system do
           check "Open"
         end
 
-        expect(page).to have_css(".card--initiative", count: 12)
-        expect(page).to have_content("12 INITIATIVES")
+        expect(page).to have_css(".card--initiative", count: 10)
+        expect(page).to have_content("10 INITIATIVES")
       end
     end
 
     context "when selecting the closed state" do
-      it "lists the closed initiatives" do
+      it "lists the closed initiatives", :slow do
         within ".filters .state_check_boxes_tree_filter" do
           uncheck "All"
           check "Closed"
         end
 
-        expect(page).to have_css(".card--initiative", count: 6)
-        expect(page).to have_content("6 INITIATIVES")
+        expect(page).to have_css(".card--initiative", count: 8)
+        expect(page).to have_content("8 INITIATIVES")
       end
     end
 
@@ -185,6 +185,10 @@ describe "Filter Initiatives", :slow, type: :system do
     context "when selecting the published state" do
       it "lists the published initiatives" do
         within ".filters .state_check_boxes_tree_filter" do
+          uncheck "Open"
+        end
+
+        within ".filters .custom_state_check_boxes_tree_filter" do
           uncheck "All"
           check "Published"
         end
@@ -197,6 +201,10 @@ describe "Filter Initiatives", :slow, type: :system do
     context "when selecting the examinated state" do
       it "lists the examinated initiatives" do
         within ".filters .state_check_boxes_tree_filter" do
+          uncheck "Open"
+        end
+
+        within ".filters .custom_state_check_boxes_tree_filter" do
           uncheck "All"
           check "Examinated"
         end
@@ -209,6 +217,10 @@ describe "Filter Initiatives", :slow, type: :system do
     context "when selecting the classified state" do
       it "lists the classified initiatives" do
         within ".filters .state_check_boxes_tree_filter" do
+          uncheck "Open"
+        end
+
+        within ".filters .custom_state_check_boxes_tree_filter" do
           uncheck "All"
           check "Classified"
         end
@@ -221,6 +233,10 @@ describe "Filter Initiatives", :slow, type: :system do
     context "when selecting the debatted state" do
       it "lists the debatted initiatives" do
         within ".filters .state_check_boxes_tree_filter" do
+          uncheck "Open"
+        end
+
+        within ".filters .custom_state_check_boxes_tree_filter" do
           uncheck "All"
           check "Debatted"
         end
