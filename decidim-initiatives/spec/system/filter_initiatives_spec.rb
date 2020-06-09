@@ -10,6 +10,11 @@ describe "Filter Initiatives", :slow, type: :system do
   let(:scoped_type1) { create :initiatives_type_scope, type: type1 }
   let(:scoped_type2) { create :initiatives_type_scope, type: type2 }
   let(:scoped_type3) { create :initiatives_type_scope, type: type3, scope: nil }
+  let(:area_type1) { create(:area_type, organization: organization) }
+  let(:area_type2) { create(:area_type, organization: organization) }
+  let(:area1) { create(:area, area_type: area_type1, organization: organization) }
+  let(:area2) { create(:area, area_type: area_type1, organization: organization) }
+  let(:area3) { create(:area, area_type: area_type2, organization: organization) }
 
   before do
     switch_to_host(organization.host)
@@ -71,6 +76,12 @@ describe "Filter Initiatives", :slow, type: :system do
       create_list(:initiative, 4, organization: organization)
       create_list(:initiative, 3, :accepted, organization: organization)
       create_list(:initiative, 2, :rejected, organization: organization)
+      create_list(:initiative, 2, :published, organization: organization)
+      create_list(:initiative, 1, :examinated, organization: organization)
+      create_list(:initiative, 2, :classified, organization: organization)
+      create_list(:initiative, 2, :debatted, organization: organization)
+      create_list(:initiative, 3, :validating, organization: organization)
+      create_list(:initiative, 3, :created, organization: organization)
       create(:initiative, :acceptable, organization: organization)
       create(:initiative, organization: organization, answered_at: Time.current)
 
@@ -90,8 +101,18 @@ describe "Filter Initiatives", :slow, type: :system do
           check "All"
         end
 
-        expect(page).to have_css(".card--initiative", count: 11)
-        expect(page).to have_content("11 INITIATIVES")
+        expect(page).to have_css(".card--initiative", count: 18)
+        expect(page).to have_content("18 INITIATIVES")
+      end
+
+      it "does not list created and validating initiatives" do
+        within ".filters .state_check_boxes_tree_filter" do
+          uncheck "All"
+          check "All"
+        end
+
+        expect(page).not_to have_content("CREATED")
+        expect(page).not_to have_content("TECHNICAL VALIDATION")
       end
     end
 
@@ -102,8 +123,8 @@ describe "Filter Initiatives", :slow, type: :system do
           check "Open"
         end
 
-        expect(page).to have_css(".card--initiative", count: 5)
-        expect(page).to have_content("5 INITIATIVES")
+        expect(page).to have_css(".card--initiative", count: 12)
+        expect(page).to have_content("12 INITIATIVES")
       end
     end
 
@@ -160,6 +181,54 @@ describe "Filter Initiatives", :slow, type: :system do
         expect(page).to have_content("1 INITIATIVE")
       end
     end
+
+    context "when selecting the published state" do
+      it "lists the published initiatives" do
+        within ".filters .state_check_boxes_tree_filter" do
+          uncheck "All"
+          check "Published"
+        end
+
+        expect(page).to have_css(".card--initiative", count: 8)
+        expect(page).to have_content("8 INITIATIVES")
+      end
+    end
+
+    context "when selecting the examinated state" do
+      it "lists the examinated initiatives" do
+        within ".filters .state_check_boxes_tree_filter" do
+          uncheck "All"
+          check "Examinated"
+        end
+
+        expect(page).to have_css(".card--initiative", count: 1)
+        expect(page).to have_content("1 INITIATIVE")
+      end
+    end
+
+    context "when selecting the classified state" do
+      it "lists the classified initiatives" do
+        within ".filters .state_check_boxes_tree_filter" do
+          uncheck "All"
+          check "Classified"
+        end
+
+        expect(page).to have_css(".card--initiative", count: 2)
+        expect(page).to have_content("2 INITIATIVES")
+      end
+    end
+
+    context "when selecting the debatted state" do
+      it "lists the debatted initiatives" do
+        within ".filters .state_check_boxes_tree_filter" do
+          uncheck "All"
+          check "Debatted"
+        end
+
+        expect(page).to have_css(".card--initiative", count: 2)
+        expect(page).to have_content("2 INITIATIVES")
+      end
+    end
   end
 
   context "when filtering initiatives by TYPE" do
@@ -196,6 +265,64 @@ describe "Filter Initiatives", :slow, type: :system do
 
         expect(page).to have_css(".card--initiative", count: 2)
         expect(page).to have_content("2 INITIATIVES")
+      end
+    end
+  end
+
+  context "when filtering initiatives by AREA" do
+    before do
+      create_list(:initiative, 2, organization: organization, area: area1)
+      create(:initiative, organization: organization, area: area2)
+      create(:initiative, organization: organization, area: area3)
+
+      visit decidim_initiatives.initiatives_path
+    end
+
+    it "can be filtered by area" do
+      within "form.new_filter" do
+        expect(page).to have_content(/Area/i)
+      end
+    end
+
+    context "when selecting all areas" do
+      it "lists all initiatives", :slow do
+        within ".filters .area_id_check_boxes_tree_filter" do
+          uncheck "All"
+          check "All"
+        end
+
+        expect(page).to have_css(".card--initiative", count: 4)
+        expect(page).to have_content("4 INITIATIVES")
+      end
+    end
+
+    context "when selecting one area" do
+      it "lists the filtered initiatives", :slow do
+        within ".filters .area_id_check_boxes_tree_filter" do
+          uncheck "All"
+          within all(".filters__has-subfilters").first do
+            click_button
+          end
+          within all(".filters__has-subfilters").last do
+            click_button
+          end
+          check area1.name[I18n.locale.to_s]
+        end
+
+        expect(page).to have_css(".card--initiative", count: 2)
+        expect(page).to have_content("2 INITIATIVES")
+      end
+    end
+
+    context "when selecting one area type" do
+      it "lists the filtered initiatives", :slow do
+        within ".filters .area_id_check_boxes_tree_filter" do
+          uncheck "All"
+          check area_type1.name[I18n.locale.to_s]
+        end
+
+        expect(page).to have_css(".card--initiative", count: 3)
+        expect(page).to have_content("3 INITIATIVES")
       end
     end
   end

@@ -28,6 +28,7 @@ en:
       initiatives_committee_member:
         user: Committee member
       initiatives_type:
+        area_enabled: Enable authors to choose the area for their initiative
         attachments_enabled: Enable attachments
         banner_image: Banner image
         child_scope_threshold_enabled: Enable child scope signatures
@@ -57,6 +58,14 @@ en:
         address: Address
         id_document: ID document
         name: Complete name
+    errors:
+      models:
+        initiative:
+          attributes:
+            attachment:
+              file: File is invalid
+              needs_to_be_reattached: Needs to be reattached
+              title: Title shouldn't be empty
   activerecord:
     models:
       decidim/initiative:
@@ -73,6 +82,8 @@ en:
       actions:
         new_initiative_type: New initiative type
       filters:
+        decidim_area_id_eq:
+          label: Area
         search_placeholder:
           title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Search
             %{collection} by title, description, ID or author name.
@@ -257,6 +268,11 @@ en:
             actions_title: Action
             preview: Preview
             print: Print
+          initiative_attachments:
+            documents: Documents
+            edit: Edit
+            new: New
+            photos: Photos
           show:
             print: Print
           update:
@@ -321,14 +337,20 @@ en:
         rejected: Rejected
         validating: Technical validation
       application_helper:
+        filter_area_values:
+          all: All
         filter_scope_values:
           all: All
         filter_state_values:
           accepted: Enough signatures
           all: All
           answered: Answered
+          classified: Classified
           closed: Closed
+          debatted: Debatted
+          examinated: Examinated
           open: Open
+          published: Published
           rejected: Not enough signatures
         filter_type_values:
           all: All
@@ -353,6 +375,7 @@ en:
             district?</li> </ul>"
           initiative_type: Initiative type
           more_information: "(More information)"
+          select_area: Select an area
           select_scope: Select a scope
         finish:
           back: Back
@@ -483,6 +506,7 @@ en:
             other: "%{count} initiatives"
         filters:
           any: Any
+          area: Area
           author: Author
           closed: Closed
           myself: My initiatives
@@ -504,6 +528,7 @@ en:
               one: Comment
               other: Comment
         orders:
+          answer_date: Answer date
           label: 'Sort initiatives by:'
           most_commented: Most commented
           most_voted: Most signed
@@ -578,8 +603,11 @@ en:
       show:
         badge_name:
           accepted: Enough signatures
+          classified: Classified
           created: Created
+          debatted: Debatted
           discarded: Discarded
+          examinated: Examinated
           published: Published
           rejected: Not enough signatures
           validating: Technical validation
@@ -613,6 +641,8 @@ en:
           version_index: Version %{index}
     menu:
       initiatives: Initiatives
+    progress_bar:
+      number_delimiter: "."
     resources:
       initiatives_type:
         actions:

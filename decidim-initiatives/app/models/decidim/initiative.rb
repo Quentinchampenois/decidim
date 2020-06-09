@@ -19,6 +19,7 @@ module Decidim
     include Decidim::HasReference
     include Decidim::Randomable
     include Decidim::Searchable
+    include Decidim::Initiatives::HasArea
 
     belongs_to :organization,
                foreign_key: "decidim_organization_id",
@@ -73,7 +74,6 @@ module Decidim
       where(state: [:discarded, :rejected, :accepted])
         .or(currently_unsignable)
     }
-    scope :published, -> { where.not(published_at: nil) }
     scope :with_state, ->(state) { where(state: state) if state.present? }
 
     scope :currently_signable, lambda {
@@ -90,6 +90,7 @@ module Decidim
     scope :public_spaces, -> { published }
     scope :signature_type_updatable, -> { created }
 
+    scope :order_by_answer_date, -> { order("answered_at DESC nulls last") }
     scope :order_by_most_recent, -> { order(created_at: :desc) }
     scope :order_by_most_recently_published, -> { order(published_at: :desc) }
     scope :order_by_supports, -> { order("((online_votes->>'total')::int + (offline_votes->>'total')::int) DESC") }
@@ -146,7 +147,8 @@ module Decidim
     #
     # RETURNS string
     delegate :banner_image, to: :type
-    delegate :attachments_enabled, :document_number_authorization_handler, :promoting_committee_enabled?, :custom_signature_end_date_enabled?, to: :type
+    delegate :name, to: :area, prefix: true, allow_nil: true
+    delegate :attachments_enabled, :document_number_authorization_handler, :promoting_committee_enabled?, :custom_signature_end_date_enabled?, :area_enabled?, to: :type
     delegate :type, :scope, :scope_name, to: :scoped_type, allow_nil: true
 
     # PUBLIC
@@ -482,24 +484,24 @@ module Decidim
 
     # method for sort_link by number of supports
     ransacker :supports_count do
-     query = <<~SQL
-       (
-         SELECT
-           CASE
-             WHEN signature_type = 0 THEN 0
-             ELSE COALESCE((offline_votes::json->>'total')::int, 0)
-           END
-           +
-           CASE
-             WHEN signature_type = 1 THEN 0
-             ELSE COALESCE((online_votes::json->>'total')::int, 0)
-           END
-          FROM decidim_initiatives as initiatives
-         WHERE initiatives.id = decidim_initiatives.id
-         GROUP BY initiatives.id
-       )
-     SQL
-     Arel.sql(query)
+      query = <<~SQL
+        (
+          SELECT
+            CASE
+              WHEN signature_type = 0 THEN 0
+              ELSE COALESCE((offline_votes::json->>'total')::int, 0)
+            END
+            +
+            CASE
+              WHEN signature_type = 1 THEN 0
+              ELSE COALESCE((online_votes::json->>'total')::int, 0)
+            END
+           FROM decidim_initiatives as initiatives
+          WHERE initiatives.id = decidim_initiatives.id
+          GROUP BY initiatives.id
+        )
+      SQL
+      Arel.sql(query)
     end
   end
 end

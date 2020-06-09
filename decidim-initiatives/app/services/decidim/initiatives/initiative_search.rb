@@ -18,7 +18,8 @@ module Decidim
           .includes(scoped_type: [:scope])
           .joins("JOIN decidim_users ON decidim_users.id = decidim_initiatives.decidim_author_id")
           .where(organization: options[:organization])
-          .published
+          .where.not(state: [:created, :validating])
+          .where.not(published_at: nil)
       end
 
       # Handle the search_text filter
@@ -44,12 +45,17 @@ module Decidim
       end
 
       # Handle the state filter
+      # rubocop:disable Metrics/CyclomaticComplexity
       def search_state
-        accepted = state.member?("accepted") ? query.accepted : nil
-        rejected = state.member?("rejected") ? query.rejected : nil
-        answered = state.member?("answered") ? query.answered : nil
-        open = state.member?("open") ? query.open : nil
-        closed = state.member?("closed") ? query.closed : nil
+        accepted ||= query.accepted if state.member?("accepted")
+        rejected ||= query.rejected if state.member?("rejected")
+        open ||= query.open if state.member?("open")
+        closed ||= query.closed if state.member?("closed")
+        answered ||= query.answered if state.member?("answered")
+        published ||= query.published if state.member?("published")
+        classified ||= query.classified if state.member?("classified")
+        examinated ||= query.examinated if state.member?("examinated")
+        debatted ||= query.debatted if state.member?("debatted")
 
         query
           .where(id: accepted)
@@ -57,8 +63,13 @@ module Decidim
           .or(query.where(id: answered))
           .or(query.where(id: open))
           .or(query.where(id: closed))
+          .or(query.where(id: published))
+          .or(query.where(id: classified))
+          .or(query.where(id: examinated))
+          .or(query.where(id: debatted))
       end
 
+      # rubocop:enable Metrics/CyclomaticComplexity
       def search_type_id
         return query if type_ids.include?("all")
 
@@ -86,6 +97,12 @@ module Decidim
         query.joins(:scoped_type).references(:decidim_scopes).where(conditions.join(" OR "), *clean_scope_ids.map(&:to_i))
       end
 
+      def search_area_id
+        return query if area_ids.include?("all")
+
+        query.where(decidim_area_id: area_ids)
+      end
+
       private
 
       # Private: Returns an array with checked type ids.
@@ -96,6 +113,12 @@ module Decidim
       # Private: Returns an array with checked scope ids.
       def scope_ids
         [scope_id].flatten
+      end
+
+      # Private: Returns an array with checked area ids, handling area_types which are coded as its
+      # areas ids joined by _.
+      def area_ids
+        area_id.map { |id| id.split("_") }.flatten.uniq
       end
     end
   end

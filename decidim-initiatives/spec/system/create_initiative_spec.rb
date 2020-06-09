@@ -237,6 +237,20 @@ describe "Initiative", type: :system do
             expect(page).not_to have_css("#type_description")
           end
         end
+
+        context "when the initiative type does not enable area" do
+          it "does not show the area" do
+            expect(page).not_to have_content("Area")
+          end
+        end
+
+        context "when the initiative type enables area" do
+          let(:initiative_type) { create(:initiatives_type, :area_enabled, organization: organization, minimum_committee_members: initiative_type_minimum_committee_members, signature_type: "offline") }
+
+          it "shows the area" do
+            expect(page).to have_content("Area")
+          end
+        end
       end
 
       context "when Promotal committee" do
@@ -305,6 +319,8 @@ describe "Initiative", type: :system do
 
           select(translated(initiative_type_scope.scope.name, locale: :en), from: "Scope")
           select("Online", from: "Signature collection type")
+          fill_in :initiative_attachment_title, with: "Document name"
+          attach_file :initiative_attachment_file, Decidim::Dev.asset("Exampledocument.pdf")
           find_button("Continue").click
         end
 
