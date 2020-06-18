@@ -5,6 +5,10 @@ fr:
       group:
         avatar: Avatar
       initiative:
+        area_id: "Zone d'application"
+        answer: Réponse
+        answer_date: Date de réponse
+        answer_url: Lien associé
         decidim_user_group_id: Auteur
         description: Description
         offline_votes: Votes en présentiel
@@ -98,7 +102,7 @@ fr:
         unpublish: Unpublish
       filters:
         decidim_area_id_eq:
-          label: Area
+          label: "Zones d'application"
         search_placeholder:
           title_or_description_cont: Recherche %{collection} par titre ou description.
           title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Recherche
@@ -394,7 +398,7 @@ fr:
             ?</li> </ul>"
           initiative_type: Type d'initiative
           more_information: "(Plus d'informations)"
-          select_area: Select an area
+          select_area: "Sélectionnez une zone d'application"
           select_scope: Sélectionnez une portée
         finish:
           back: Retour
@@ -522,9 +526,9 @@ fr:
             one: "%{count} initiative"
             other: "%{count} initiatives"
         filters:
-          select_an_area: Selectionnez un area
+          select_an_area: "Sélectionnez une zone d'application"
           any: Tout
-          area: Area
+          area: "Zones d'application"
           author: Auteur
           closed: Fermées
           myself: Mes initiatives
