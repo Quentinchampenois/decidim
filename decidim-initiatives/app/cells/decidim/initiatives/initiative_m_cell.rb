@@ -17,7 +17,8 @@ module Decidim
       private
 
       def cache_hash
-        hash = model.updated_at.to_s +
+        hash = model.author.cache_version +
+               model.cache_version +
                model.supports_count.to_s +
                comments_count.to_s
 
