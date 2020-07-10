@@ -1,11 +1,9 @@
 // = require decidim/map/factory
 // = require_self
 
-
 ((exports) => {
   const $ = exports.$; // eslint-disable-line
   exports.Decidim = exports.Decidim || {};
-
 
   $(() => {
     // Load the map controller factory method in the document.ready handler to
@@ -38,11 +36,11 @@
       $map.trigger("configure.decidim", [map, mapConfig]);
 
       ctrl.start();
-
       // Indicates the map is loaded with the map objects initialized and ready
       // to be used.
       $map.trigger("ready.decidim", [map, mapConfig]);
     });
   });
 })(window);
+
 
