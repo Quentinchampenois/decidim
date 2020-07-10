@@ -1,10 +1,11 @@
 // = require decidim/map/factory
 // = require_self
 
+
 ((exports) => {
   const $ = exports.$; // eslint-disable-line
-
   exports.Decidim = exports.Decidim || {};
+
 
   $(() => {
     // Load the map controller factory method in the document.ready handler to
@@ -44,3 +45,4 @@
     });
   });
 })(window);
+
