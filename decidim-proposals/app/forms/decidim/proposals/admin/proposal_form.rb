@@ -11,7 +11,6 @@ module Decidim
         translatable_attribute :body, String
 
         validates :title, :body, translatable_presence: true
-
         validate :notify_missing_attachment_if_errored
       end
     end
