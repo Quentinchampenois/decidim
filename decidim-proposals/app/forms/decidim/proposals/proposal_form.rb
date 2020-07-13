@@ -62,8 +62,16 @@ module Decidim
         @scope_id || scope&.id
       end
 
+<<<<<<< HEAD
       def geocoding_enabled?
         Decidim::Map.available?(:geocoding) && current_component.settings.geocoding_enabled?
+=======
+      def geocodable?
+        return if Decidim.geocoder.blank?
+        return unless current_component.settings.geocoding_enabled?
+
+        has_address? && address_has_changed?
+>>>>>>> Ligh refactor
       end
 
       def has_address?
