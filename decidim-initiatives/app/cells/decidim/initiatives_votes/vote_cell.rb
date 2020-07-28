@@ -33,8 +33,10 @@ module Decidim
         metadata[:postal_code]
       end
 
-      def user_scope
-        metadata[:user_scope]
+      def user_scope_name
+        return if metadata[:user_scope_id].blank?
+
+        translated_attribute(Decidim::Scope.find(metadata[:user_scope_id]).name)
       end
 
       def resident
