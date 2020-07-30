@@ -23,6 +23,7 @@ module Decidim
                comments_count.to_s
 
         hash << current_user.follows?(model).to_s if current_user
+        hash << current_locale
 
         hash
       end
