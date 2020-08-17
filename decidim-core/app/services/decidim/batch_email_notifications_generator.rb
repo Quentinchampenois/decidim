@@ -28,9 +28,9 @@ module Decidim
     private
 
     def events
-      # TODO: Checker la priority ?
       @events ||= Decidim::Notification.from_last(Decidim.config.batch_email_notifications_interval)
                                        .unsent
+                                       .priority_level("low")
                                        .order(created_at: :desc)
                                        .limit(Decidim.config.batch_email_notifications_max_length)
     end
