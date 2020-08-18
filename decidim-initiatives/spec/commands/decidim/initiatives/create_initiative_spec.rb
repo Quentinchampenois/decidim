@@ -70,6 +70,14 @@ module Decidim
               resource: kind_of(Decidim::Initiative),
               followers: [follower]
             )
+          expect(Decidim::EventsManager)
+            .to receive(:publish)
+            .with(
+              event: "decidim.events.initiatives.initiative_created",
+              event_class: Decidim::Initiatives::CreateInitiativeEvent,
+              resource: kind_of(Decidim::Initiative),
+              followers: [follower]
+            )
 
           subject.call
         end

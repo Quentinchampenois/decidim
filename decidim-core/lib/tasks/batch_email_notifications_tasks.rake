@@ -7,7 +7,11 @@ namespace :decidim do
       raise ArgumentError unless Decidim.config.batch_email_notifications_enabled
 
       puts "Running BatchEmailNotificationsGeneratorJob..."
+
       Decidim::BatchEmailNotificationsGeneratorJob.perform_later
+
+      # Without sidekiq it kills the process and it is not sent : Use sleep 1.minute
+      sleep 1.minute
 
       puts "Task succeeded !"
     rescue ArgumentError => e
