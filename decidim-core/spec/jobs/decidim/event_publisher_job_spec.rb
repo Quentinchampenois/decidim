@@ -72,8 +72,8 @@ describe Decidim::EventPublisherJob do
             {}
           end
 
-          it "enqueues the jobs" do
-            expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
+          it "only enqueues the notification job" do
+            expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
             expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
 
             subject
