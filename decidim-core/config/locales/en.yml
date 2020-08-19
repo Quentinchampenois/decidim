@@ -318,6 +318,14 @@ en:
           explanation_html: In order to perform this action you need to be authorized, before doing that you need to confirm your email <strong>%{email}</strong>.
           request_confirmation_instructions: Request confirmation instructions
           title: Confirm your email
+    batch_notifications_mailer:
+      event_received:
+        batch_notification_subject: You have received notifications on %{organization_name}
+        email_greeting: Greetings %{username}.
+        email_intro: You are receiving this email because you have subscribed to resources on %{organization_name}
+        email_outro: You can stop receiving notifications by visiting your <a href='%{profile_path}'>profile</a>
+        email_see_more: You have received a lot of notifications on <a href='%{organization_path}'>%{organization_name}</a>Go check them out on your <a href='%{notifications_path}'>notifications</a> space
+        sent_ago: "%{sent_ago} ago"
       show:
         close_modal: Close modal
     collapsible_list:

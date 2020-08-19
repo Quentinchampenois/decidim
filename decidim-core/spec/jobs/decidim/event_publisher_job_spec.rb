@@ -17,9 +17,15 @@ describe Decidim::EventPublisherJob do
     end
 
     let(:event_name) { "some_event" }
+    let(:extra) do
+      {
+        priority: :high
+      }
+    end
     let(:data) do
       {
-        resource: resource
+        resource: resource,
+        extra: extra
       }
     end
 
@@ -31,11 +37,47 @@ describe Decidim::EventPublisherJob do
           resource.published_at = Time.current
         end
 
-        it "enqueues the jobs" do
-          expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
-          expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+        context "and priority level is high" do
+          let(:extra) do
+            {
+              priority: :high
+            }
+          end
 
-          subject
+          it "enqueues the jobs" do
+            expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
+            expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+
+            subject
+          end
+        end
+
+        context "and priority level is low" do
+          let(:extra) do
+            {
+              priority: :low
+            }
+          end
+
+          it "enqueues the jobs" do
+            expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
+            expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+
+            subject
+          end
+        end
+
+        context "and priority level is not defined" do
+          let(:extra) do
+            {}
+          end
+
+          it "enqueues the jobs" do
+            expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
+            expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+
+            subject
+          end
         end
       end
 
@@ -68,6 +110,11 @@ describe Decidim::EventPublisherJob do
 
     context "when there's a component" do
       let(:resource) { build(:dummy_resource) }
+      let(:extra) do
+        {
+          priority: :low
+        }
+      end
 
       context "when it is published" do
         before do
@@ -76,7 +123,7 @@ describe Decidim::EventPublisherJob do
         end
 
         it "enqueues the jobs" do
-          expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
+          expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
           expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
 
           subject
