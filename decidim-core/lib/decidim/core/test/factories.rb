@@ -566,7 +566,8 @@ FactoryBot.define do
     event_class { "Decidim::DummyResourceEvent" }
     extra do
       {
-        some_extra_data: "1"
+        some_extra_data: "1",
+        priority: "low"
       }
     end
 
