@@ -1,5 +1,14 @@
 ---
 en:
+  activemodel:
+    attributes:
+      organization:
+        from_email: Email address
+        from_label: Name
+        address: SMTP hostname
+        password: Password
+        port: Port
+        user_name: Username
   decidim:
     system:
       actions:
@@ -78,6 +87,14 @@ en:
           twitter:
             api_key: API key
             api_secret: API secret
+        smtp_settings:
+          fieldsets:
+            sender: Sender
+          instructions:
+            sender: "Sender Name <email@example.org>"
+          placeholder:
+            from_email: "email@example.org"
+            from_label: "Sender Name"
         update:
           error: There was a problem updating this organization.
           success: Organization successfully updated.
