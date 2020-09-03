@@ -334,10 +334,12 @@ module Decidim
 
       template = text_field(
         attribute,
-        options.merge(data: data)
+        options.merge(data: data),
       )
       help_text = I18n.t("decidim.datepicker.help_text", datepicker_format: datepicker_format)
-      template += error_and_help_text(attribute, options.merge(help_text: help_text))
+      if help_text.present?
+        template += content_tag(:p, help_text, class: 'help-text')
+      end
       template.html_safe
     end
 
@@ -355,7 +357,9 @@ module Decidim
         options.merge(data: data)
       )
       help_text = I18n.t("decidim.datepicker.help_text", datepicker_format: datepicker_format)
-      template += error_and_help_text(attribute, options.merge(help_text: help_text))
+      if help_text.present?
+        template += content_tag(:p, help_text, class: 'help-text')
+      end
       template.html_safe
     end
 
