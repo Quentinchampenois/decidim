@@ -208,8 +208,8 @@ module Decidim
 
     def votes_enabled?
       votes_enabled_state? &&
-        signature_start_date <= Date.current &&
-        signature_end_date >= Date.current
+        signature_start_date.present? && signature_start_date <= Date.current &&
+        signature_end_date.present? && signature_end_date >= Date.current
     end
 
     def votes_enabled_state?
