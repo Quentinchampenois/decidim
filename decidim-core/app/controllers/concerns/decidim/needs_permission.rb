@@ -20,7 +20,9 @@ module Decidim
       # Redirects the user to the root path and shows a flash message telling
       # them they are not authorized.
       def user_has_no_permission
-        flash[:alert] = t("actions.unauthorized", scope: "decidim.core")
+        switch_locale do
+          flash[:alert] = t("actions.unauthorized", scope: "decidim.core")
+        end
         redirect_to(request.referer || user_has_no_permission_path)
       end
 
