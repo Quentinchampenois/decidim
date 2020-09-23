@@ -90,12 +90,6 @@ module Decidim
 
       def notify_followers
         initiative.followers.each do |follower|
-          initiative.organization.admins.each do |user|
-            Decidim::Initiatives::InitiativesMailer
-              .notify_state_change(initiative, user)
-              .deliver_later
-          end
-
           next unless initiative.author != follower
 
           Decidim::Initiatives::InitiativesMailer
