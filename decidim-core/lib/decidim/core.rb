@@ -274,7 +274,7 @@ module Decidim
 
   # Send multiple notifications in a unique mail
   config_accessor :batch_email_notifications_enabled do
-    true
+    false
   end
 
   # Interval between each notification mail batch
