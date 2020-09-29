@@ -48,7 +48,10 @@ shared_examples "accept amendment" do
           event_class: Decidim::Amendable::AmendmentAcceptedEvent,
           resource: emendation,
           followers: kind_of(Array),
-          affected_users: kind_of(Array)
+          affected_users: kind_of(Array),
+          extra: {
+              high_priority: true
+          }
         )
 
       command.call
