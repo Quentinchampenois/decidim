@@ -638,8 +638,11 @@ fr:
           validating: Validation technique
       state:
         accepted: Acceptée
+        classified: Classée
         created: Créée
+        debatted: Débattue
         discarded: Retirée
+        examinated: Examinée
         published: Publiée
         rejected: Rejetée
         validating: Validation technique

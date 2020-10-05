@@ -469,6 +469,7 @@ en:
           help: Please, fill the following fields with your personal data to sign
             the initiative
           select_scope: Select scope
+          select_scope_label: Scope
         finish:
           back_to_initiative: Back to initiative
         sms_code:
@@ -615,8 +616,11 @@ en:
           validating: Technical validation
       state:
         accepted: Accepted
+        classified: Classified
         created: Created
+        debatted: Debatted
         discarded: Discarded
+        examinated: Examinated
         published: Published
         rejected: Rejected
         validating: Technical validation

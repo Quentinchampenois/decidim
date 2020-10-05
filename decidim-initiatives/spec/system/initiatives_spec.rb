@@ -65,6 +65,26 @@ describe "Initiatives", type: :system do
         end
       end
     end
+    
+    context "when the initiative is 'created' or 'technical validation'" do
+      shared_examples_for "invalid state for index" do
+        it "does not list initiative" do
+          within "#initiatives" do
+            expect(page).not_to have_content(translated(initiative.title, locale: :en))
+            expect(page).not_to have_content(initiative.author_name, count: 1)
+            expect(page).not_to have_content(translated(unpublished_initiative.title, locale: :en))
+          end
+        end
+      end
+
+      it_behaves_like "invalid state for index" do
+        let!(:base_initiative) { create(:initiative, :created, organization: organization) }
+      end
+
+      it_behaves_like "invalid state for index" do
+        let!(:base_initiative) { create(:initiative, :validating, organization: organization) }
+      end
+    end
 
     it "links to the individual initiative page" do
       click_link(translated(initiative.title, locale: :en))
@@ -100,12 +120,21 @@ describe "Initiatives", type: :system do
     end
 
     context "when in a manual state" do
-      let(:base_initiative) { create(:initiative, :debatted, organization: organization) }
-
-      it "displays the correct badge status" do
-        within "#initiative_#{base_initiative.id}" do
-          expect(page).to have_css(".success.card__text--status")
+      shared_examples_for "initiative card" do
+        it "displays the correct badge status" do
+          within "#initiative_#{base_initiative.id}" do
+            expect(page).to have_css(".#{state_class}.card__text--status")
+            expect(find("span.#{state_class}.card__text--status").text).to eq(base_initiative.state.upcase)
+          end
         end
+      end
+      it_behaves_like "initiative card" do
+        let(:base_initiative) { create(:initiative, :debatted, organization: organization) }
+        let(:state_class) { "success" }
+      end
+      it_behaves_like "initiative card" do
+        let(:base_initiative) { create(:initiative, :examinated, organization: organization) }
+        let(:state_class) { "warning" }
       end
     end
 
