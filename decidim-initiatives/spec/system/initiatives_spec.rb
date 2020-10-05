@@ -55,7 +55,7 @@ describe "Initiatives", type: :system do
       end
     end
 
-    context "for votable manual state initiative" do
+    context "when initiative has a votable manual state" do
       let(:base_initiative) { create(:initiative, :debatted, organization: organization) }
 
       it "displays a signature gauge" do
@@ -65,7 +65,7 @@ describe "Initiatives", type: :system do
         end
       end
     end
-    
+
     context "when the initiative is 'created' or 'technical validation'" do
       shared_examples_for "invalid state for index" do
         it "does not list initiative" do

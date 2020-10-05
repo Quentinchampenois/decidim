@@ -2,6 +2,18 @@
  * DataPicker component.
  */
 ((exports) => {
+
+  /**
+   * Decode HTML entities
+   * @param {string} text text to decode
+   * @returns {string} text with HTML entities decoded
+   */
+  let decodeHTMLEntities = function(text) {
+    let textArea = document.createElement("textarea");
+    textArea.innerHTML = text;
+    return textArea.value;
+  }
+
   class DataPicker {
     constructor(elements) {
       this.modal = this._createModalContainer();
@@ -188,12 +200,6 @@
         return `&#${char.charCodeAt(0)};`;
       });
     }
-  }
-
-  function decodeHTMLEntities(text) {
-    var textArea = document.createElement('textarea');
-    textArea.innerHTML = text;
-    return textArea.value;
   }
 
   exports.Decidim = exports.Decidim || {};

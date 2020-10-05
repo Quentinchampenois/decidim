@@ -97,7 +97,7 @@ module Decidim
 
         initiative_votes_scopes = []
         initiative.votes.map(&:decrypted_metadata).each do |metadata|
-          next unless metadata.present?
+          next if metadata.blank?
           next unless metadata.is_a? Hash
 
           initiative_votes_scopes << metadata[:user_scope_id]

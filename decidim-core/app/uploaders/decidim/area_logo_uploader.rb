@@ -3,7 +3,6 @@
 module Decidim
   # This class deals with uploading the organization's logo.
   class AreaLogoUploader < ImageUploader
-
     process quality: Decidim.image_uploader_quality
 
     version :medium do

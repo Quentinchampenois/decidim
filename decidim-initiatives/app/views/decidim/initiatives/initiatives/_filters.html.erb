@@ -18,7 +18,7 @@
                           legend_title: t(".area"),
                           label: false,
                           include_blank: t(".select_an_area"),
-                          selected: search.area_id.is_a?(Array) ? search.area_id[0] : search.area_id  %>
+                          selected: search.area_id.is_a?(Array) ? search.area_id[0] : search.area_id %>
     <%= form.check_boxes_tree :custom_state, filter_sorts_values, legend_title: t(".sort") %>
 
     <% if current_user %>

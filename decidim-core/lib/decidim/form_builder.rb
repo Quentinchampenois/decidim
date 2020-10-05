@@ -334,12 +334,10 @@ module Decidim
 
       template = text_field(
         attribute,
-        options.merge(data: data),
+        options.merge(data: data)
       )
       help_text = I18n.t("decidim.datepicker.help_text", datepicker_format: datepicker_format)
-      if help_text.present?
-        template += content_tag(:p, help_text, class: 'help-text')
-      end
+      template += content_tag(:p, help_text, class: "help-text") if help_text.present?
       template.html_safe
     end
 
@@ -357,9 +355,7 @@ module Decidim
         options.merge(data: data)
       )
       help_text = I18n.t("decidim.datepicker.help_text", datepicker_format: datepicker_format)
-      if help_text.present?
-        template += content_tag(:p, help_text, class: 'help-text')
-      end
+      template += content_tag(:p, help_text, class: "help-text") if help_text.present?
       template.html_safe
     end
 
@@ -371,6 +367,7 @@ module Decidim
     # attribute    - The String name of the attribute to buidl the field.
     # options      - A Hash with options to build the field.
     #              * optional: Whether the file can be optional or not.
+    # rubocop:disable Metrics/PerceivedComplexity
     def upload(attribute, options = {})
       self.multipart = true
       options[:optional] = options[:optional].nil? ? true : options[:optional]
@@ -378,12 +375,11 @@ module Decidim
       file = object.send attribute
       template = ""
       template += label(attribute, label_for(attribute) + required_for_attribute(attribute))
-      if options[:accept].present?
-        template += @template.file_field @object_name, attribute, accept: options.delete(:accept)
-      else
-        template += @template.file_field @object_name, attribute
-      end
-
+      template += if options[:accept].present?
+                    @template.file_field @object_name, attribute, accept: options.delete(:accept)
+                  else
+                    @template.file_field @object_name, attribute
+                  end
 
       if file_is_image?(file)
         template += if file.present?
@@ -416,6 +412,7 @@ module Decidim
 
       template.html_safe
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     # Public: Returns the translated name for the given attribute.
     #

@@ -15,7 +15,6 @@ describe "User prints the initiative", type: :system do
 
   context "when initiative update" do
     context "and user is author" do
-
       before do
         switch_to_host(organization.host)
         login_as author, scope: :user

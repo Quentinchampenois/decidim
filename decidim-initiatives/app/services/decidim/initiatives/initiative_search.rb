@@ -53,7 +53,7 @@ module Decidim
       def search_custom_state
         states
       end
-      
+
       def search_type_id
         return query if type_ids.include?("all")
 
@@ -85,16 +85,6 @@ module Decidim
         return query if area_id.include?("all")
 
         query.where(decidim_area_id: area_id)
-      end
-
-      # Handle the custom state filter
-      def search_custom_state
-        states
-      end
-
-      # Handle the state filter
-      def search_state
-        states
       end
 
       private
@@ -169,7 +159,7 @@ module Decidim
       # rubocop:enable Metrics/PerceivedComplexity
 
       # Private: Returns an array with checked type ids.
-      # rubocop:enable Metrics/CyclomaticComplexity
+
       def type_ids
         [type_id].flatten
       end
