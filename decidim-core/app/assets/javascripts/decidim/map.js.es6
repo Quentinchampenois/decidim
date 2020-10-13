@@ -3,6 +3,7 @@
 
 ((exports) => {
   const $ = exports.$; // eslint-disable-line
+
   exports.Decidim = exports.Decidim || {};
 
   $(() => {
@@ -36,11 +37,11 @@
       $map.trigger("configure.decidim", [map, mapConfig]);
 
       ctrl.start();
+
       // Indicates the map is loaded with the map objects initialized and ready
       // to be used.
       $map.trigger("ready.decidim", [map, mapConfig]);
     });
   });
 })(window);
-
 

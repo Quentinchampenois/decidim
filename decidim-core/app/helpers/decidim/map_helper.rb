@@ -100,6 +100,7 @@ module Decidim
 
         sr_content + link
       end
+
       content_tag :div, class: "row column" do
         map = builder.map_element(map_html_options, &block)
         link = link_to("", "#", id: "map_bottom")
