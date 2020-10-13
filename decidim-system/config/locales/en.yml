@@ -2,29 +2,13 @@
 en:
   activemodel:
     attributes:
-      oauth_application:
-        name: OAuth Application Name
-        organization_logo: Organization logo (square)
-        organization_name: Organization
-        organization_url: Organization URL
-        redirect_uri: Redirect URI
-      organization_file_uploads:
-        allowed_content_types:
-          admin: Admin MIME types
-          default: Default MIME types
-        allowed_file_extensions:
-          admin: Admin file extensions
-          default: Default file extensions
-          image: Image file extensions
-        maximum_file_size:
-          avatar: Avatar file size
-          default: Default file size
-    errors:
-      models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: The redirect URI must be a SSL URI
+      organization:
+        from_email: Email address
+        from_label: Name
+        address: SMTP hostname
+        password: Password
+        port: Port
+        user_name: Username
   decidim:
     system:
       actions:
@@ -154,8 +138,11 @@ en:
             api_key: API key
             api_secret: API secret
         smtp_settings:
+          fieldsets:
+            sender: Sender
           instructions:
-            from_label: 'Email sender will be: "your-organization-name <your-organization@example.org>". Leave blank to use the ''from_email'' as label'
+            sender: Sender Name <email@example.org>
+            from_label: 'Email sender will be: "your-organization-name <your-organization@your-provider.org>". Leave blank to use the ''from_email'' as label'
           placeholder:
             from_email: your-organization@example.org
             from_label: your-organization-name
