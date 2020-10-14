@@ -10,11 +10,11 @@
     <% if component_settings.geocoding_enabled? %>
       <% if has_position?(@proposal) %>
         <%= render partial: "dynamic_map_instructions" %>
-        <%= dynamic_map_for proposal_preview_data_for_map(@proposal), "column" do %>
+        <%= dynamic_map_for proposal_preview_data_for_map(@proposal) do %>
           <%= stylesheet_link_tag "decidim/map" %>
           <%= javascript_include_tag "decidim/map" %>
         <% end %>
-        <%= decidim_form_for(@form, url: update_draft_proposal_path(@form), html: { method: :patch, class: "column" }) do |form| %>
+        <%= decidim_form_for(@form, url: update_draft_proposal_path(@form), html: { method: :patch }) do |form| %>
           <%= form.hidden_field :title %>
           <%= form.hidden_field :body, rows: 10 %>
           <%= form.hidden_field :address %>
@@ -31,6 +31,7 @@
               <%= form.select :user_group_id, current_user.user_groups.verified.map { |g| [g.name, g.id] }, prompt: current_user.name %>
             <% end %>
           </div>
+
           <div class="actions">
             <%= form.submit t(".update_position"), class: "button expanded", data: { disable: true } %>
           </div>
