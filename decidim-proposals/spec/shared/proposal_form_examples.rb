@@ -140,12 +140,12 @@ shared_examples "a proposal form" do |options|
       let(:has_address) { true }
 
       context "and the address is not present" do
-          it "does not store the coordinates" do
-            expect(subject).to be_valid
-            expect(subject.address).to be(nil)
-            expect(subject.latitude).to be(nil)
-            expect(subject.longitude).to be(nil)
-          end
+        it "does not store the coordinates" do
+          expect(subject).to be_valid
+          expect(subject.address).to be(nil)
+          expect(subject.latitude).to be(nil)
+          expect(subject.longitude).to be(nil)
+        end
       end
 
       context "when the address is present" do
