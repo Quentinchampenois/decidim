@@ -12,6 +12,7 @@ describe Decidim::EventsManager do
     let(:followers) { create_list :user, 3, organization: organization }
     let(:affected_users) { create_list :user, 3, organization: organization }
     let(:force_send) { true }
+    let(:priority) { :batch }
 
     it "delegates the params to ActiveSupport::Notifications" do
       expect(ActiveSupport::Notifications)
@@ -22,8 +23,9 @@ describe Decidim::EventsManager do
           resource: resource,
           followers: followers,
           affected_users: affected_users,
+          extra: extra,
           force_send: force_send,
-          extra: extra
+          priority: priority
         )
 
       described_class.publish(
@@ -32,8 +34,9 @@ describe Decidim::EventsManager do
         resource: resource,
         followers: followers,
         affected_users: affected_users,
+        extra: extra,
         force_send: force_send,
-        extra: extra
+        priority: priority
       )
     end
 
