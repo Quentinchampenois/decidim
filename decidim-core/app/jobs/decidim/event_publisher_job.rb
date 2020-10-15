@@ -12,7 +12,7 @@ module Decidim
       return unless data[:force_send] || notifiable?
 
       send_event(NotificationGeneratorJob, event_name, data)
-      send_event(EmailNotificationGeneratorJob, event_name, data) if high_priority?(data) || !Decidim.config.batch_email_notifications_enabled || data[:force_send]
+      send_event(EmailNotificationGeneratorJob, event_name, data)
     end
 
     private
@@ -55,14 +55,6 @@ module Decidim
         data[:affected_users],
         data[:extra]
       )
-    end
-
-    # Allows to defined whether an event as to be sent now or to be scheduled
-    # Returns boolean
-    #   - False if high_priority is undefined, unknown or false
-    #   - True if high_priority? is high
-    def high_priority?(data)
-      data[:extra].fetch(:high_priority, false) # If not defined, high_priority is false by default
     end
   end
 end
