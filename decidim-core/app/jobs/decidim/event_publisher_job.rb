@@ -64,6 +64,7 @@ module Decidim
     #   - True if high_priority? is equals to :now
     def high_priority?(data)
       return false if data[:priority].blank?
+
       data[:priority] = data[:priority].to_sym if data[:priority].is_a? String
 
       return false unless Decidim::Notification.priorities.include? data[:priority]
