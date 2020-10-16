@@ -17,12 +17,14 @@ describe Decidim::EventPublisherJob do
     end
 
     let(:event_name) { "some_event" }
+    let(:priority) { :batch }
     let(:extra) do
       {}
     end
     let(:data) do
       {
         resource: resource,
+        priority: priority,
         extra: extra
       }
     end
@@ -35,42 +37,44 @@ describe Decidim::EventPublisherJob do
           resource.published_at = Time.current
         end
 
-        context "and priority level is not defined" do
-          it "enqueues the jobs" do
-            expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
-            expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
-
-            subject
-          end
-        end
-
-        context "and priority level is low" do
-          let(:extra) do
-            {
-              high_priority: false
-            }
+        context "when batch notifications in email is enabled" do
+          before do
+            Decidim.config.batch_email_notifications_enabled = true
           end
 
-          it "enqueues the jobs" do
-            expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
-            expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+          context "and priority level is not defined" do
+            it "enqueues the jobs" do
+              expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
+              expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
 
-            subject
-          end
-        end
-
-        context "and priority level is high" do
-          let(:extra) do
-            {
-              high_priority: true
-            }
+              subject
+            end
           end
 
-          it "enqueues the jobs" do
-            expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
-            expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+          context "and priority level is low" do
+            let(:extra) do
+              {
+                high_priority: false
+              }
+            end
 
-            subject
+            it "enqueues the jobs" do
+              expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
+              expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+
+              subject
+            end
+          end
+
+          context "and priority level is high" do
+            let(:priority) { :now }
+
+            it "enqueues the jobs" do
+              expect(Decidim::EmailNotificationGeneratorJob).to receive(:perform_later)
+              expect(Decidim::NotificationGeneratorJob).to receive(:perform_later)
+
+              subject
+            end
           end
         end
       end

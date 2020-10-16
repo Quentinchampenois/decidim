@@ -53,16 +53,17 @@ module Decidim
         data[:resource],
         data[:followers],
         data[:affected_users],
+        data[:priority],
         data[:extra]
       )
     end
 
     # Allows to defined whether an event as to be sent now or to be scheduled
     # Returns boolean
-    #   - False if high_priority is undefined, unknown or false
-    #   - True if high_priority? is high
+    #   - False if high_priority is undefined, unknown or different to :now
+    #   - True if high_priority? is equals to :now
     def high_priority?(data)
-      data[:extra].fetch(:high_priority, false) # If not defined, high_priority is false by default
+      data[:priority] == :now
     end
   end
 end
