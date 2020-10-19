@@ -14,6 +14,37 @@
       }
     }
 
+    reverseGeocoding(element, coord) {
+      $.ajax({
+        method: "GET",
+        url: "https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json",
+        data: {
+          apiKey: this.config.tileLayer.apiKey,
+          gen: 9,
+          jsonattributes: 1,
+          mode: "trackPosition",
+          pos: `${coord.lat},${coord.lng}`
+        },
+        dataType: "json"
+      }).done((resp) => {
+        if (!resp.response || !Array.isArray(resp.response.view) ||
+          resp.response.view.length < 1
+        ) {
+          return;
+        }
+
+        const view = resp.response.view[0];
+        if (!Array.isArray(view.result) || view.result.length < 1) {
+          return;
+        }
+
+        const result = view.result[0];
+        const address = result.location.address.label;
+
+        $(element).val(address);
+      });
+    }
+
     addMarkers(markersData) {
       if (this.markerClusters === null) {
         this.markerClusters = L.markerClusterGroup();
@@ -25,11 +56,6 @@
         this.config.popupTemplateId,
         $(`#${this.config.popupTemplateId}`).html()
       );
-
-      const updateCoordinates = (data) => {
-        $('input[data-type="latitude"]').val(data.lat);
-        $('input[data-type="longitude"]').val(data.lng);
-      };
 
       const bounds = new L.LatLngBounds(
         markersData.map(
@@ -45,13 +71,28 @@
           draggable: markerData.draggable
         });
 
+        $(marker).bind("geocoder-update-coordinates.decidim", (_event, data) => {
+          $('input[data-type="latitude"]').val(data.coordinates.lat);
+          $('input[data-type="longitude"]').val(data.coordinates.lng);
+
+          if (data.targetAddress !== null) {
+            this.reverseGeocoding(data.targetAddress, data.coordinates)
+          }
+        });
+
         if (markerData.draggable) {
-          updateCoordinates({
-            lat: markerData.latitude,
-            lng: markerData.longitude
+          $(marker).trigger("geocoder-update-coordinates.decidim", {
+            coordinates: {
+              lat: markerData.latitude,
+              lng: markerData.longitude
+            }
           });
-          marker.on("drag", (ev) => {
-            updateCoordinates(ev.target.getLatLng());
+
+          marker.on("dragend", (ev) => {
+            $(marker).trigger("geocoder-update-coordinates.decidim", {
+              coordinates: ev.target.getLatLng(),
+              targetAddress: "#proposal_address"
+            });
           });
         } else {
           let node = document.createElement("div");
