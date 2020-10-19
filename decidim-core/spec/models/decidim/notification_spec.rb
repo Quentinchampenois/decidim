@@ -29,7 +29,7 @@ module Decidim
       let!(:now_notifications) { create_list(:notification, 4, :now_priority) }
 
       context "with batch priority notifications" do
-        let(:priority_level) { :batch }
+        let(:priority) { :batch }
 
         it "returns notifications with batch priority" do
           expect(described_class.with_priority(priority)).to match_array(batch_notifications)
@@ -38,7 +38,7 @@ module Decidim
       end
 
       context "with now priority notifications" do
-        let(:priority_level) { :now }
+        let(:priority) { :now }
 
         it "returns notifications with now priority" do
           expect(described_class.with_priority(priority)).not_to match_array(batch_notifications)
@@ -47,7 +47,7 @@ module Decidim
       end
 
       context "with wrong priority" do
-        let(:priority_level) { nil }
+        let(:priority) { nil }
 
         it "returns nothing" do
           expect(described_class.with_priority(priority).count).to eq(0)
