@@ -10,8 +10,7 @@ module Decidim
     enum priority: [:batch, :now]
 
     scope :unsent, -> { where(sent_at: nil) }
-    scope :priority_level, ->(priority) { where("extra ->> 'priority' = ?", priority) }
-    scope :from_last, ->(time) { where("created_at > ?", time.ago) }
+    scope :not_expired, ->(time) { where("created_at > ?", time.ago) }
     scope :with_priority, ->(priority) { where(priority: priority) }
 
     def event_class_instance

@@ -85,19 +85,23 @@ describe Decidim::BatchEmailNotificationsGenerator do
 
   describe "#events" do
     context "when notifications are marked as batch priority" do
-      let!(:notifications) { create_list(:notification, 2, user: user) }
+      let!(:notifications) { create_list(:notification, 3, user: user) }
 
       it "returns notifications" do
         expect(subject.send(:events)).to match_array(notifications)
-        expect(subject.send(:events).length).to eq(2)
+        expect(subject.send(:events).length).to eq(3)
       end
 
-      context "when batch_email_notifications_max_length" do
-        it "limit the number of notifications" do
-          Decidim.config.batch_email_notifications_max_length = 1
+      context "with batch_email_notifications_expired" do
+        before do
+          notifications.last.update!(created_at: 2.weeks.ago)
+        end
 
-          expect(subject.send(:events)).to match_array(notifications.last)
-          expect(subject.send(:events).length).to eq(1)
+        it "does not fetch the expired notifications" do
+          Decidim.config.batch_email_notifications_expired = 1.week
+
+          expect(subject.send(:events)).to match_array(notifications[0..1])
+          expect(subject.send(:events).length).to eq(2)
         end
       end
 

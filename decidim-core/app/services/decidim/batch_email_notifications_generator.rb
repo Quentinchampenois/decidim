@@ -28,7 +28,7 @@ module Decidim
     private
 
     def events
-      @events ||= Decidim::Notification.from_last(Decidim.config.batch_email_notifications_interval)
+      @events ||= Decidim::Notification.not_expired(Decidim.config.batch_email_notifications_expired)
                                        .unsent
                                        .with_priority(:batch)
                                        .order(created_at: :desc)
