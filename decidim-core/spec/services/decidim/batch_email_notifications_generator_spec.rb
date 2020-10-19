@@ -106,7 +106,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
       end
 
       context "when notifications has already been sent" do
-        let!(:notifications) { create_list(:notification, 2, user: user) }
+        let!(:notifications) { create_list(:notification, 3, user: user) }
 
         before do
           notifications.first.update!(sent_at: 12.hours.ago)
@@ -114,7 +114,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
 
         it "doesn't includes it" do
           expect(subject.send(:events)).not_to include(notifications.first)
-          expect(subject.send(:events).length).to eq(1)
+          expect(subject.send(:events).length).to eq(2)
         end
       end
     end
@@ -128,6 +128,10 @@ describe Decidim::BatchEmailNotificationsGenerator do
 
       before do
         Decidim.config.batch_email_notifications_max_length = 2
+      end
+
+      after do
+        Decidim.config.batch_email_notifications_max_length = 5
       end
 
       it "returns notifications for user" do
