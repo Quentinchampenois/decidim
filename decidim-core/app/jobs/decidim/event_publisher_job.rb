@@ -53,7 +53,6 @@ module Decidim
         data[:resource],
         data[:followers],
         data[:affected_users],
-        data[:priority],
         data[:extra]
       )
     end
