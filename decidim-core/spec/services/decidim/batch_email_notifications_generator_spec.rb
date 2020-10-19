@@ -7,7 +7,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
   subject { described_class.new }
 
   let!(:user) { create(:user) }
-  let!(:notifications) { create_list(:notification, 2, user: user) }
+  let!(:notifications) { create_list(:notification, 2, :now_priority, user: user) }
   let(:serialized_event) do
     {
       resource: notifications.first.resource,
@@ -40,7 +40,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
       expect(Decidim::Notification.where(decidim_user_id: user.id).where.not(sent_at: nil).count).to eq(0)
     end
 
-    context "when the notifications are marked as low priority" do
+    context "when notifications are marked as batch priority" do
       let!(:notifications) { create_list(:notification, 2, user: user) }
 
       it "enqueues the job" do
@@ -84,7 +84,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
   end
 
   describe "#events" do
-    context "when the notifications are marked as low priority" do
+    context "when notifications are marked as batch priority" do
       let!(:notifications) { create_list(:notification, 2, user: user) }
 
       it "returns notifications" do
@@ -117,7 +117,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
   end
 
   describe "#events_for" do
-    context "when the notifications are marked as low priority" do
+    context "when notifications are marked as batch priority" do
       let!(:notifications) { create_list(:notification, 2, user: user) }
       let(:another_user) { create(:user) }
       let(:notification) { create(:notification, user: another_user) }
@@ -135,7 +135,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
   end
 
   describe "#users" do
-    context "when the notifications are marked as low priority" do
+    context "when notifications are marked as batch priority" do
       let!(:notifications) { create_list(:notification, 2, user: user) }
 
       it "returns users id" do
