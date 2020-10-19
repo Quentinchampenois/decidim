@@ -41,7 +41,7 @@
         const result = view.result[0];
         const address = result.location.address.label;
 
-        $(element).val(address);
+        $(`input[data-type="${element}"]`).val(address);
       });
     }
 
@@ -91,7 +91,7 @@
           marker.on("dragend", (ev) => {
             $(marker).trigger("geocoder-update-coordinates.decidim", {
               coordinates: ev.target.getLatLng(),
-              targetAddress: "#proposal_address"
+              targetAddress: "address"
             });
           });
         } else {

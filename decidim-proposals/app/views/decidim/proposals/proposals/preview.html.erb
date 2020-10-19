@@ -17,7 +17,7 @@
         <%= decidim_form_for(@form, url: update_draft_proposal_path(@form), html: { method: :patch }) do |form| %>
           <%= form.hidden_field :title, value: form_presenter.title %>
           <%= form.hidden_field :body, value: form_presenter.body %>
-          <%= form.hidden_field :address %>
+          <%= form.hidden_field :address, data: { type: "address" } %>
           <%= form.hidden_field :latitude, data: { type: "latitude" } %>
           <%= form.hidden_field :longitude, data: { type: "longitude" } %>
           <div class="preview--form__hidden">
