@@ -15,14 +15,14 @@ module Decidim
         next unless user.email_on_notification?
         next if user.email.blank?
 
-        events = events_for(user)
+        user_events = events_for(user)
 
         BatchNotificationsMailer.event_received(
-          serialized_events(events),
+          serialized_events(user_events),
           user
         ).deliver_later
 
-        mark_as_sent(events)
+        mark_as_sent(user_events)
       end
     end
 
