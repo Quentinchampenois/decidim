@@ -21,7 +21,7 @@ module Decidim
       attribute :documents, Array[String]
       attribute :add_documents, Array
 
-      validates :address, geocoding: true, if: :geocodable?
+      validates :address, geocoding: true, if: ->(form) { form.has_address? && !form.geocoded? }
       validates :address, presence: true, if: ->(form) { form.has_address? }
       validates :category, presence: true, if: ->(form) { form.category_id.present? }
       validates :scope, presence: true, if: ->(form) { form.scope_id.present? }
@@ -62,25 +62,12 @@ module Decidim
         @scope_id || scope&.id
       end
 
-      def geocodable?
-        return if Decidim.geocoder.blank?
-        return unless current_component.settings.geocoding_enabled?
-
-        has_address.present? && address_has_changed?
-      end
-
-      def address_has_changed?
-        return true if id.nil?
-
-        address != Proposal.find(id).address unless id.nil?
-      end
-
       def geocoding_enabled?
         Decidim::Map.available?(:geocoding) && current_component.settings.geocoding_enabled?
       end
 
       def has_address?
-        geocoding_enabled? && has_address
+        geocoding_enabled? && address.present?
       end
 
       def geocoded?
