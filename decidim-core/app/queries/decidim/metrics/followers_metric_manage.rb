@@ -26,8 +26,6 @@ module Decidim
 
       private
 
-      # rubocop: disable Metrics/CyclomaticComplexity
-
       # Creates a Hashed structure with number of Followers grouped by
       #
       #  - ParticipatorySpace (type & ID)
@@ -59,7 +57,6 @@ module Decidim
         end
         @query
       end
-      # rubocop: enable Metrics/CyclomaticComplexity
     end
   end
 end

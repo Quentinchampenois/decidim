@@ -23,15 +23,14 @@ module Decidim
       #
       # Returns nothing.
       def call
-        case @weight
-        when 1
+        if @weight == 1
           vote = @comment.up_votes.find_by(author: @author)
           if vote
             vote.destroy!
           else
             @comment.up_votes.create!(author: @author)
           end
-        when -1
+        elsif @weight == -1
           vote = @comment.down_votes.find_by(author: @author)
           if vote
             vote.destroy!

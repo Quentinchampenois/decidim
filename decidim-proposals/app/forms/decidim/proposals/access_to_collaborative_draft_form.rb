@@ -26,7 +26,9 @@ module Decidim
       private
 
       def existence_of_requester_in_requesters
-        errors.add(:requester_user_id, :invalid) if collaborative_draft && !collaborative_draft.requesters.exists?(requester_user_id)
+        if collaborative_draft
+          errors.add(:requester_user_id, :invalid) unless collaborative_draft.requesters.exists? requester_user_id
+        end
       end
     end
   end

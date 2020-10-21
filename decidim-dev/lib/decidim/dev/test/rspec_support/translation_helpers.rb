@@ -14,9 +14,8 @@ module TranslationHelpers
   # translated attributes implementation can change more easily.
   def translated(field, locale: I18n.locale)
     return field if field.is_a?(String)
-    return if field.nil?
 
-    field[locale.to_s] || field.dig("machine_translations", locale.to_s)
+    field.try(:[], locale.to_s)
   end
 
   # Checks that the current page has some translated content. It strips the

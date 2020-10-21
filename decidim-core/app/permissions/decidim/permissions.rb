@@ -127,7 +127,9 @@ module Decidim
       conversation = context.fetch(:conversation)
       interlocutor = context.fetch(:interlocutor, user)
 
-      return disallow! if [:create, :update].include?(permission_action.action) && !conversation&.accept_user?(interlocutor)
+      if [:create, :update].include?(permission_action.action)
+        return disallow! unless conversation&.accept_user? interlocutor
+      end
 
       toggle_allow(conversation&.participating?(interlocutor))
     end

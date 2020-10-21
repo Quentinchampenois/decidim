@@ -10,10 +10,9 @@ module Decidim
         type = ::Decidim::InitiativesType.find(initiative_form.type_id)
         allowed_signatures = type.allowed_signature_types_for_initiatives
 
-        case allowed_signatures
-        when %w(online)
+        if allowed_signatures == %w(online)
           online_signature_type_options
-        when %w(offline)
+        elsif allowed_signatures == %w(offline)
           offline_signature_type_options
         else
           all_signature_type_options

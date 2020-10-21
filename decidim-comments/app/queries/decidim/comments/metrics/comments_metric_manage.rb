@@ -80,11 +80,12 @@ module Decidim
 
         # Gets current ParticipatorySpace of a given 'related_object'
         def retrieve_participatory_space(related_object)
-          if related_object.respond_to?(:participatory_space)
-            related_object.participatory_space
-          elsif related_object.is_a?(Decidim::Participable)
-            related_object
-          end
+          participatory_space = if related_object.respond_to?(:participatory_space)
+                                  related_object.participatory_space
+                                elsif related_object.is_a?(Decidim::Participable)
+                                  related_object
+                                end
+          participatory_space
         end
       end
     end

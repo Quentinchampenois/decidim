@@ -74,7 +74,7 @@ module Decidim
     def scope_belongs_to_organization
       return if !scope || !organization
 
-      errors.add(:scope, :invalid) unless organization.scopes.exists?(id: scope.id)
+      errors.add(:scope, :invalid) unless organization.scopes.where(id: scope.id).exists?
     end
   end
 end

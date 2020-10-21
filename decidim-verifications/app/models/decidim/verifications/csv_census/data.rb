@@ -15,7 +15,6 @@ module Decidim
       # Returns nothing
       class Data
         attr_reader :errors, :values
-
         def initialize(file)
           @file = file
           @values = []

@@ -4,7 +4,6 @@
 # content types. This prevents CarrierWave from uploading the records before
 # they pass the content type validations.
 class UploaderContentTypeValidator < ActiveModel::Validations::FileContentTypeValidator
-  # rubocop: disable Metrics/CyclomaticComplexity
   def validate_each(record, attribute, value)
     begin
       values = parse_values(value)
@@ -40,7 +39,6 @@ class UploaderContentTypeValidator < ActiveModel::Validations::FileContentTypeVa
       validate_blacklist(record, attribute, content_type, forbidden_types)
     end
   end
-  # rubocop: enable Metrics/CyclomaticComplexity
 
   def check_validity!; end
 end

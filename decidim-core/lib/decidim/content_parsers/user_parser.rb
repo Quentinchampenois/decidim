@@ -38,8 +38,11 @@ module Decidim
       private
 
       def users
-        @users ||=
-          existing_users.index_by(&:nickname)
+        @users ||= Hash[
+          existing_users.map do |user|
+            [user.nickname, user]
+          end
+        ]
       end
 
       def existing_users

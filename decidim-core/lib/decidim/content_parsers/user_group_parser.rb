@@ -38,8 +38,11 @@ module Decidim
       private
 
       def groups
-        @groups ||=
-          existing_groups.index_by(&:nickname)
+        @groups ||= Hash[
+          existing_groups.map do |group|
+            [group.nickname, group]
+          end
+        ]
       end
 
       def existing_groups

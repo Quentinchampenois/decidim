@@ -10,10 +10,9 @@ module Decidim
         return Decidim::Proposals::Admin::Permissions.new(user, permission_action, context).permissions if permission_action.scope == :admin
         return permission_action if permission_action.scope != :public
 
-        case permission_action.subject
-        when :proposal
+        if permission_action.subject == :proposal
           apply_proposal_permissions(permission_action)
-        when :collaborative_draft
+        elsif permission_action.subject == :collaborative_draft
           apply_collaborative_draft_permissions(permission_action)
         else
           permission_action

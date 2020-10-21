@@ -42,12 +42,14 @@ module Decidim
               searchable = SearchableResource.find_by(resource_type: resource.class.name, resource_id: resource.id)
               created_at = searchable.created_at
               updated_title = Decidim::Faker::Localized.name
-              expect(resource.update(title: updated_title)).to be_truthy
+              resource.update(title: updated_title)
+
+              resource.save!
+              searchable.reload
 
               organization.available_locales.each do |locale|
                 searchable = SearchableResource.find_by(resource_type: resource.class.name, resource_id: resource.id, locale: locale)
-                searchable.reload
-                expect(searchable.content_a).to eq I18n.transliterate(translated(updated_title, locale: locale))
+                expect(searchable.content_a).to eq I18n.transliterate(updated_title[locale])
                 expect(searchable.updated_at).to be > created_at
               end
             end
@@ -113,10 +115,10 @@ module Decidim
 
     def expected_searchable_resource_attrs(resource, locale)
       {
-        "content_a" => I18n.transliterate(translated(resource.title, locale: locale)),
+        "content_a" => I18n.transliterate(resource.title[locale]),
         "content_b" => "",
         "content_c" => "",
-        "content_d" => I18n.transliterate(translated(resource.description, locale: locale)),
+        "content_d" => I18n.transliterate(resource.description[locale]),
         "locale" => locale,
 
         "decidim_organization_id" => resource.component.organization.id,

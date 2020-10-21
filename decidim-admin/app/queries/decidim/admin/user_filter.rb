@@ -36,7 +36,8 @@ module Decidim
       def query
         users = scope
         users = filter_by_search(users)
-        filter_by_state(users)
+        users = filter_by_state(users)
+        users
       end
 
       private

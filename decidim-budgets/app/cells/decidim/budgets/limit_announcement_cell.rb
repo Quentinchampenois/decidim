@@ -20,7 +20,7 @@ module Decidim
         return if vote_allowed?(budget)
         return if voted?(budget)
 
-        discardable.any? || !vote_allowed?(budget, consider_progress: false)
+        discardable.any? || !vote_allowed?(budget, false)
       end
 
       def announcement_args

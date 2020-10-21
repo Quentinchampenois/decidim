@@ -8,10 +8,17 @@ module Decidim
     def picker
       enforce_permission_to :pick, :scope
 
-      context = picker_context(root, title, max_depth)
-      required = params&.[](:required) != "false"
+      context = root ? { root: root.id, title: title, max_depth: max_depth } : { title: title, max_depth: max_depth }
+      required = params[:required] && params[:required] != "false"
 
-      scopes, parent_scopes = resolve_picker_scopes(root, current)
+      if current
+        scopes = current.children unless scope_depth_limit?
+        parent_scopes = current.part_of_scopes(root)
+      else
+        scopes = root&.children || current_organization.scopes.top_level unless scope_depth_limit?
+
+        parent_scopes = [root].compact
+      end
 
       render(
         :picker,
@@ -32,22 +39,6 @@ module Decidim
     end
 
     private
-
-    def picker_context(root, title, max_depth)
-      root ? { root: root.id, title: title, max_depth: max_depth } : { title: title, max_depth: max_depth }
-    end
-
-    def resolve_picker_scopes(root, current)
-      scopes = nil
-      if current
-        scopes = current.children unless scope_depth_limit?
-        parent_scopes = current.part_of_scopes(root)
-      else
-        scopes = root&.children || current_organization.scopes.top_level unless scope_depth_limit?
-        parent_scopes = [root].compact
-      end
-      [scopes, parent_scopes]
-    end
 
     def title
       @title ||= params[:title] || t("decidim.scopes.picker.title", field: params[:field]&.downcase)

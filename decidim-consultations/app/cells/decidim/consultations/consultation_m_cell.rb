@@ -64,12 +64,10 @@ module Decidim
       end
 
       def questions_count_status
-        # rubocop: disable Style/StringConcatenation
         content_tag(
           :strong,
           t("activemodel.attributes.consultation.questions")
         ) + " " + model.questions.count.to_s
-        # rubocop: enable Style/StringConcatenation
       end
 
       def footer_button_text

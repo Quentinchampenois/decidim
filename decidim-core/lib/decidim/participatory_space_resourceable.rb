@@ -54,7 +54,9 @@ module Decidim
         manifest = Decidim.find_participatory_space_manifest(participatory_space_name)
         return self.class.none unless manifest
 
-        manifest.participatory_spaces.call(organization)
+        scope = manifest.participatory_spaces.call(organization)
+
+        scope
       end
 
       # Links the given resources to this model, replaces any previous links with the same name.

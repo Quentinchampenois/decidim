@@ -67,7 +67,6 @@ module Decidim
 
     class_methods do
       attr_reader :amendable_options
-
       # Public: Configures amendable for this model.
       #
       # fields  - An `Array` of `symbols` specifying the fields that can be amended

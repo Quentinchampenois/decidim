@@ -25,12 +25,15 @@ module Decidim
     # Fetches info about different versions, their processors and dimensions
     def dimensions_info
       if versions.any?
-        versions.transform_values do |info|
-          {
-            processor: info.processors[0][0],
-            dimensions: info.processors[0][1]
-          }
-        end
+        versions.map do |version, info|
+          [
+            version,
+            {
+              processor: info.processors[0][0],
+              dimensions: info.processors[0][1]
+            }
+          ]
+        end.to_h
       else
         processors.map do |info|
           [:default, { processor: info[0], dimensions: info[1] }]

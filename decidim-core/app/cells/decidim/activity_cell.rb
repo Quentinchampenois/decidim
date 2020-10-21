@@ -36,10 +36,9 @@ module Decidim
       resource_title = resource.try(:resource_title) || resource.try(:title)
       return if resource_title.blank?
 
-      case resource_title
-      when String
+      if resource_title.is_a?(String)
         resource_title
-      when Hash
+      elsif resource_title.is_a?(Hash)
         translated_attribute(resource_title)
       end
     end
@@ -51,10 +50,9 @@ module Decidim
       resource_description = resource.try(:resource_description) || resource.try(:description)
       return if resource_description.blank?
 
-      resource_description = case resource_description
-                             when String
+      resource_description = if resource_description.is_a?(String)
                                resource_description
-                             when Hash
+                             elsif resource_description.is_a?(Hash)
                                translated_attribute(resource_description)
                              end
 
@@ -103,10 +101,9 @@ module Decidim
     def author
       return unless show_author? && user.is_a?(UserBaseEntity)
 
-      presenter = case user
-                  when Decidim::User
+      presenter = if user.is_a?(Decidim::User)
                     UserPresenter.new(user)
-                  when Decidim::UserGroup
+                  elsif user.is_a?(Decidim::UserGroup)
                     UserGroupPresenter.new(user)
                   end
 

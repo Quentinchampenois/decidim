@@ -25,11 +25,11 @@ module Decidim
       end
 
       def badge
-        @badge ||= Gamification.find_badge(extra["badge_name"])
+        @badge ||= Gamification.find_badge(extra.dig("badge_name"))
       end
 
       def current_level
-        extra["current_level"]
+        extra.dig("current_level")
       end
 
       def user

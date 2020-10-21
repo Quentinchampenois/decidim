@@ -32,13 +32,14 @@ module Decidim
     def search_search_text
       return query unless self.class.text_search_fields.any?
 
-      fields = self.class.text_search_fields.dup
+      fields = self.class.text_search_fields
 
       text_query = query.where(localized_search_text_in("#{query.model_name.plural}.#{fields.shift}"), text: "%#{search_text}%")
 
       fields.each do |field|
         text_query = text_query.or(query.where(localized_search_text_in("#{query.model_name.plural}.#{field}"), text: "%#{search_text}%"))
       end
+
       text_query
     end
 

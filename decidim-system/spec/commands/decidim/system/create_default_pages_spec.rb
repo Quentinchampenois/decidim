@@ -7,17 +7,15 @@ module Decidim
     describe CreateDefaultPages do
       subject { described_class.new(organization1) }
 
-      let!(:organization1) { create(:organization, create_static_pages: false) }
-      let!(:organization2) { create(:organization, create_static_pages: false) }
+      let(:organization1) { create(:organization) }
+      let(:organization2) { create(:organization) }
 
       before do
-        expect(Decidim::StaticPage.count).to eq 0
+        described_class.new(organization1).call
+        described_class.new(organization2).call
       end
 
       it "creates all the default pages for an organization alt" do
-        described_class.new(organization1).call
-        described_class.new(organization2).call
-
         expect(organization1.static_pages.count).to eq(Decidim::StaticPage::DEFAULT_PAGES.length)
         expect(organization2.static_pages.count).to eq(Decidim::StaticPage::DEFAULT_PAGES.length)
       end

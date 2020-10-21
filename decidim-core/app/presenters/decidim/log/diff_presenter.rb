@@ -103,15 +103,14 @@ module Decidim
         default_klass = Decidim::Log::ValueTypes::DefaultPresenter
         klass = ""
 
-        case type
-        when Symbol
+        if type.is_a?(Symbol)
           klass = "Decidim::Log::ValueTypes::#{type.to_s.camelize}Presenter"
-        when String
+        elsif type.is_a?(String)
           klass = type
         end
 
         begin
-          klass.constantize
+          return klass.constantize
         rescue NameError => _e
           default_klass
         end

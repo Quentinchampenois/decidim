@@ -61,9 +61,9 @@ module Decidim
       end
 
       def csv_array_setting(original)
-        original.transform_values do |value|
-          value.split(",")
-        end
+        original.map do |key, value|
+          [key, value.split(",")]
+        end.to_h
       end
     end
   end

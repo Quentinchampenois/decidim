@@ -53,7 +53,7 @@ module Decidim
     private
 
     def image_names_are_unique
-      image_names = images.pluck(:name)
+      image_names = images.map { |image| image[:name] }
       errors.add(:images, "names must be unique per manifest") if image_names.count != image_names.uniq.count
     end
 

@@ -26,10 +26,9 @@ module Decidim
         scope = scope.where(name: name) unless name.nil?
         scope = scope.where(user: user) unless user.nil?
 
-        case granted
-        when true
+        if granted == true
           scope = scope.where.not(granted_at: nil)
-        when false
+        elsif granted == false
           scope = scope.where(granted_at: nil)
         end
 

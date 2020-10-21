@@ -15,10 +15,9 @@ module Decidim
 
         filters_with_values.each_with_object({}) do |(filter, values), hash|
           link = filter_link_label(filter, i18n_scope)
-          hash[link] = case values
-                       when Array
+          hash[link] = if values.is_a?(Array)
                          build_submenu_options_tree_from_array(filter, values, i18n_scope)
-                       when Hash
+                       elsif values.is_a?(Hash)
                          build_submenu_options_tree_from_hash(filter, values, i18n_scope)
                        end
         end

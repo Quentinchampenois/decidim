@@ -98,13 +98,8 @@
     }
   }
 
-  const createCharacterCounter = ($input) => {
-    $input.data("remaining-characters-counter", new InputCharacterCounter($input));
-  }
-
   exports.Decidim = exports.Decidim || {};
   exports.Decidim.InputCharacterCounter = InputCharacterCounter;
-  exports.Decidim.createCharacterCounter = createCharacterCounter;
 
   exports.$(() => {
     exports.$("input[type='text'], textarea, .editor>input[type='hidden']").each((_i, elem) => {
@@ -114,7 +109,7 @@
         return;
       }
 
-      createCharacterCounter($input);
+      $input.data("remaining-characters-counter", new InputCharacterCounter($input));
     });
   });
 })(window);

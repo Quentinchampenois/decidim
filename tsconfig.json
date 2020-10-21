@@ -18,6 +18,7 @@
     ],
     "exclude": [
         "node_modules",
-        "decidim-amin/app/frontend/entry_test.ts"
+        "decidim-amin/app/frontend/entry_test.ts",
+        "decidim-comments/app/frontend/entry_test.ts"
     ]
 }

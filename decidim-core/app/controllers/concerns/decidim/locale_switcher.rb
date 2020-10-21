@@ -69,9 +69,6 @@ module Decidim
         end
       end
 
-      # rubocop: disable Metrics/CyclomaticComplexity
-      # rubocop: disable Metrics/PerceivedComplexity
-
       # Finds a suitable language or returns nil
       # Follows the RFC 2616 rules with this particularities:
       # if no language matches, goes for the 2 chars prefixes
@@ -99,8 +96,6 @@ module Decidim
         end
         lang == "*" ? nil : lang
       end
-      # rubocop: enable Metrics/CyclomaticComplexity
-      # rubocop: enable Metrics/PerceivedComplexity
     end
   end
 end

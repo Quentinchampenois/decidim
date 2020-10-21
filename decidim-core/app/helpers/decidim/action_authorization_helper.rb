@@ -50,7 +50,6 @@ module Decidim
 
     private
 
-    # rubocop: disable Metrics/PerceivedComplexity
     def authorized_to(tag, action, arguments, block)
       if block
         body = block
@@ -86,7 +85,6 @@ module Decidim
         send("#{tag}_to", body, url, html_options)
       end
     end
-    # rubocop: enable Metrics/PerceivedComplexity
 
     def modal_path(action, resource)
       resource_params = if resource

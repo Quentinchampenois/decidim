@@ -41,7 +41,7 @@ module Decidim
       @dir = File.expand_path(dir)
     end
 
-    def run(command, out: $stdout)
+    def run(command, out: STDOUT)
       interpolated_in_folder(command) do |cmd|
         self.class.run(cmd, out: out)
       end
@@ -72,7 +72,7 @@ module Decidim
         Open3.capture2e(env, cmd)
       end
 
-      def run(cmd, out: $stdout)
+      def run(cmd, out: STDOUT)
         system(cmd, out: out)
       end
 
@@ -96,7 +96,7 @@ module Decidim
         end
       end
 
-      def install_all(out: $stdout)
+      def install_all(out: STDOUT)
         run_all(
           "gem build %name && mv %name-%version.gem ..",
           include_root: false,
@@ -109,7 +109,7 @@ module Decidim
         )
       end
 
-      def uninstall_all(out: $stdout)
+      def uninstall_all(out: STDOUT)
         run_all(
           "gem uninstall %name -v %version --executables --force",
           out: out
@@ -121,7 +121,7 @@ module Decidim
         )
       end
 
-      def run_all(command, out: $stdout, include_root: true)
+      def run_all(command, out: STDOUT, include_root: true)
         all_dirs(include_root: include_root) do |dir|
           status = new(dir).run(command, out: out)
 

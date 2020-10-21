@@ -57,9 +57,9 @@ module Decidim
           # Only admin users can publish many answers at once
           toggle_allow(user.admin?) if permission_action.subject == :proposals && permission_action.action == :publish_answers
 
-          if permission_action.subject == :participatory_texts && participatory_texts_are_enabled? && permission_action.action == :manage
+          if permission_action.subject == :participatory_texts && participatory_texts_are_enabled?
             # Every user allowed by the space can manage (import, update and publish) participatory texts to proposals
-            allow!
+            allow! if permission_action.action == :manage
           end
 
           permission_action
