@@ -186,7 +186,6 @@ en:
           update: Update
         form:
           color: Area color
-          logo: Area logo
         new:
           create: Create area
           title: New area
