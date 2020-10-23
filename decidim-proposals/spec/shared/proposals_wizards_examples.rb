@@ -25,19 +25,6 @@ shared_examples "proposals wizards" do |options|
   end
   let(:component_path) { Decidim::EngineRouter.main_proxy(component) }
 
-  # rubocop:disable RSpec/EmptyExampleGroup
-  context "when creating a new proposal" do
-    before do
-      login_as user, scope: :user
-      visit_component
-      click_link "New proposal"
-    end
-
-    it_behaves_like "with address" if options[:with_address]
-
-    it_behaves_like "without address" unless options[:with_address]
-  end
-
   shared_examples_for "without address" do
     context "when in step_1: Create your proposal" do
       it "show current step_1 highlighted" do
@@ -252,7 +239,6 @@ shared_examples "proposals wizards" do |options|
       end
     end
   end
-
   shared_examples_for "with address" do
     let!(:component) do
       create(:proposal_component,
@@ -315,6 +301,18 @@ shared_examples "proposals wizards" do |options|
         end
       end
     end
+  end
+
+  # rubocop:disable RSpec/EmptyExampleGroup
+  context "when creating a new proposal" do
+    before do
+      login_as user, scope: :user
+      visit_component
+      click_link "New proposal"
+    end
+
+    it_behaves_like "with address" if options[:with_address]
+    it_behaves_like "without address" unless options[:with_address]
   end
   # rubocop:enable RSpec/EmptyExampleGroup
 end
