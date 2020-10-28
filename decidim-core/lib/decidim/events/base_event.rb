@@ -42,12 +42,14 @@ module Decidim
       # user - the User that receives the event
       # user_role - the role the user takes for this event (either `:follower` or
       #   `:affected_user`)
+      # priority - a String : If batch notifications enabled, define if the notification has to be sent directly. By default Batch
       # extra - a Hash with extra information of the event.
-      def initialize(resource:, event_name:, user:, user_role: nil, extra: {})
+      def initialize(resource:, event_name:, user:, user_role: nil, priority: "batch", extra: {})
         @event_name = event_name
         @resource = resource
         @user = user
         @user_role = user_role
+        @priority = priority
         @extra = extra.with_indifferent_access
       end
 
@@ -97,7 +99,7 @@ module Decidim
         resource.try(:participatory_space)
       end
 
-      attr_reader :event_name, :resource, :user, :user_role, :extra
+      attr_reader :event_name, :resource, :user, :user_role, :priority, :extra
     end
   end
 end
