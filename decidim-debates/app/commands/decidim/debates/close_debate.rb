@@ -41,7 +41,7 @@ module Decidim
           event: "decidim.events.debates.debate_closed",
           event_class: Decidim::Debates::CloseDebateEvent,
           resource: debate,
-          followers: debate.followers
+          followers: [form.current_user]
         )
       end
 

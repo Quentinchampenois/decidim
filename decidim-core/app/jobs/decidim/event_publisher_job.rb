@@ -47,7 +47,7 @@ module Decidim
     def send_event(job_klass, event_name, data)
       return if event_name.blank?
 
-      job_klass.perform_later(
+      job_klass.perform_now(
         event_name,
         data[:event_class],
         data[:resource],

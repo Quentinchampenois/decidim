@@ -79,7 +79,7 @@ module Decidim
           priority,
           extra
         )
-        .deliver_later
+        .deliver_now
     end
 
     def component

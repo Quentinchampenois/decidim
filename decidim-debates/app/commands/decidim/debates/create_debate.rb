@@ -58,7 +58,7 @@ module Decidim
           event: "decidim.events.debates.debate_created",
           event_class: Decidim::Debates::CreateDebateEvent,
           resource: debate,
-          followers: debate.author.followers,
+          followers: [form.current_user],
           extra: {
             type: "user"
           }

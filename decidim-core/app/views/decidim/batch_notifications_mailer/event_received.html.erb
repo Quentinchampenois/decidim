@@ -2,14 +2,6 @@
 
 <p><%== t(".email_intro", organization_name: @organization.name.html_safe) %></p>
 
-<% if see_more? %>
-  <p><%== t(".email_see_more",
-            organization_path: decidim.root_url(host: @organization.host),
-            organization_name: @organization.name.html_safe,
-            notifications_path: decidim.notifications_path) %>
-  </p>
-<% end %>
-
 <% @events.each do |event| %>
   <%
     event_instance = event[:event_class].constantize.new(
@@ -36,6 +28,14 @@
     <% end %>
     <span class="notification-time_ago"><%= t(".sent_ago", sent_ago: event[:created_at]) %></span>
   </blockquote>
+<% end %>
+
+<% if see_more? %>
+  <p><%== t(".email_see_more",
+            organization_path: decidim.root_url(host: @organization.host),
+            organization_name: @organization.name.html_safe,
+            notifications_path: decidim.notifications_path) %>
+  </p>
 <% end %>
 
 <p><%== t(".email_outro", profile_path: decidim.profile_path(@user.nickname)) %></p>
