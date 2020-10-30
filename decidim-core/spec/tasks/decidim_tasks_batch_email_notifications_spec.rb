@@ -32,9 +32,9 @@ describe "rake decidim:batch_email_notifications:send", type: :task do
       end
 
       it "send the batch notifications only" do
-        expect(Decidim::Notification.where(sent_at:nil).count).to eq(5)
+        expect(Decidim::Notification.where(sent_at: nil).count).to eq(5)
         Rake::Task[task_name].execute
-        expect(Decidim::Notification.where.not(sent_at:nil).count).to eq(3)
+        expect(Decidim::Notification.where.not(sent_at: nil).count).to eq(3)
       end
 
       it "enqueues mailers" do

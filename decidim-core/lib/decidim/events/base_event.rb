@@ -44,6 +44,7 @@ module Decidim
       #   `:affected_user`)
       # priority - a String : If batch notifications enabled, define if the notification has to be sent directly. By default Batch
       # extra - a Hash with extra information of the event.
+      # rubocop:disable Metrics/ParameterLists
       def initialize(resource:, event_name:, user:, user_role: nil, priority: "batch", extra: {})
         @event_name = event_name
         @resource = resource
@@ -52,6 +53,7 @@ module Decidim
         @priority = priority
         @extra = extra.with_indifferent_access
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # Caches the locator for the given resource, so that
       # we can find the resource URL.
