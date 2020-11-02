@@ -111,12 +111,12 @@ module Decidim
 
       def access_request_membership?
         !initiative.published? &&
-          initiative.promoting_committee_enabled? &&
-          !initiative.has_authorship?(user) &&
-          (
+        initiative.promoting_committee_enabled? &&
+        !initiative.has_authorship?(user) &&
+        (
           Decidim::Initiatives.do_not_require_authorization ||
-              UserAuthorizations.for(user).any? ||
-              Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
+          ActionAuthorizer.new(user, :create, initiative_type, initiative_type).authorize.ok? ||
+          Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
         )
       end
 
