@@ -397,7 +397,6 @@ fr:
             ?</li> </ul>"
           initiative_type: Type d'initiative
           more_information: "(Plus d'informations)"
-          select_area: Sélectionnez une zone d'application
           select_scope: Sélectionnez une portée
         finish:
           back: Retour

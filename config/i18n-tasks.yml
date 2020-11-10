@@ -95,6 +95,7 @@ ignore_missing:
   - notification_title
   - decidim.wizard_step_form_cell.*
   - decidim.proposals.application_helper.activity_filter_values.*
+  - decidim.progress_bar.show.number_delimiter
 
 # Consider these keys used:
 ignore_unused:
@@ -224,6 +225,7 @@ ignore_unused:
   - decidim.initiatives.initiative_signatures.fill_personal_data.date_select.*
   - decidim.initiatives.initiatives.filters.*
   - decidim.initiatives.show.badge_name.*
+  - decidim.progress_bar.number_delimiter
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

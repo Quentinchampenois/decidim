@@ -1,6 +1,5 @@
 <div id="<%= element_id %>" class="<%= container_class %>">
   <div class="progress__bar__title">
-
     <% if horizontal? %>
       <span class="progress__bar__text"><%= subtitle_text %></span>
       <span class="progress__bar__number"><%= number_with_delimiter(progress, delimiter: t(".number_delimiter")) %></span><%= "/#{number_with_delimiter(total, delimiter: t(".number_delimiter"))}" if total != 0 %>
