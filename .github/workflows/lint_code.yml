@@ -6,7 +6,6 @@ on:
       - master
       - release/*
       - "*-stable"
-      - alt/*
   pull_request:
     branches:
       - "*"
