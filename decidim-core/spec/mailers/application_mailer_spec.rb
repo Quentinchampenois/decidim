@@ -26,7 +26,7 @@ module Decidim
         let(:mail) { described_class.fake_mail(user, nil) }
 
         it "returns values defined in Decidim.config" do
-          expect(mail.from).to eq(["change-me@example.org"])
+          expect(mail.from).to eq(["change-me@domain.org"])
           expect(mail.reply_to).to eq(nil)
         end
       end
@@ -35,7 +35,7 @@ module Decidim
         let(:smtp_settings) { nil }
 
         it "returns values defined in Decidim.config" do
-          expect(mail.from).to eq(["change-me@example.org"])
+          expect(mail.from).to eq(["change-me@domain.org"])
           expect(mail.reply_to).to eq(nil)
         end
       end
@@ -44,8 +44,8 @@ module Decidim
         let(:from) { nil }
 
         it "set default values for mail.from and mail.reply_to" do
-          expect(mail.from).to eq(["change-me@example.org"])
-          expect(mail.reply_to).to eq(["change-me@example.org"])
+          expect(mail.from).to eq(["change-me@domain.org"])
+          expect(mail.reply_to).to eq(["change-me@domain.org"])
         end
       end
 
