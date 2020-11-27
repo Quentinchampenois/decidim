@@ -26,9 +26,9 @@ describe Decidim::FindAndUpdateDescendantsJob do
       participatory_process.update_column(:published_at, nil)
       # rubocop:enable Rails/SkipsModelValidations:
 
-      expect {
+      expect do
         Decidim::FindAndUpdateDescendantsJob.perform_now(participatory_process)
-      }.to have_enqueued_job(Decidim::UpdateSearchIndexesJob).exactly(:twice)
+      end.to have_enqueued_job(Decidim::UpdateSearchIndexesJob).exactly(:twice)
     end
   end
 end
