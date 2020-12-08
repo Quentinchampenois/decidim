@@ -76,7 +76,7 @@ module Decidim
         end
       end
 
-      context "when searchable have a component" do
+      context "when searchable has a component" do
         let!(:proposal_component) { create(:proposal_component, participatory_space: participatory_process) }
         let!(:resource) { create(:proposal, :official, component: proposal_component) }
 

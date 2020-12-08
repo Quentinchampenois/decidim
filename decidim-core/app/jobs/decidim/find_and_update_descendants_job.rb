@@ -12,7 +12,6 @@ module Decidim
       return if descendants_collector.blank?
 
       descendants_collector.each do |descendants|
-        # TODO: For comments, descendants is equal to [[]]
         next if descendants.blank?
 
         Decidim::UpdateSearchIndexesJob.perform_later(descendants)
