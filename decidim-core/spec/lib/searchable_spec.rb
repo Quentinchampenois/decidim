@@ -72,7 +72,7 @@ module Decidim
         it "doesn't enqueues the job" do
           participatory_process.update!(published_at: nil)
 
-          expect(Decidim::EmailNotificationGeneratorJob).not_to receive(:perform_later)
+          expect(Decidim::FindAndUpdateDescendantsJob).not_to receive(:perform_later)
         end
       end
 
