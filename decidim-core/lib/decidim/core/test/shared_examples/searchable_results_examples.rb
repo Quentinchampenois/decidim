@@ -39,10 +39,6 @@ shared_examples "searchable results" do
 
     context "when participatory space is not visible" do
       shared_examples_for "no searchs found" do
-        before do
-          perform_enqueued_jobs { commentable.update!(published_at: nil) }
-        end
-
         it "not contains these searchables" do
           expect(searchables).not_to be_empty
           expect(term).not_to be_empty
@@ -70,9 +66,17 @@ shared_examples "searchable results" do
         end
       end
 
+      context "when participatory space is unpublished" do
+        before do
+          perform_enqueued_jobs { participatory_space.update!(published_at: nil) }
+        end
+
+        it_behaves_like "no searchs found"
+      end
+
       context "when participatory space is private" do
-        let(:participatory_process) do
-          create(:participatory_process, :private, :with_steps, organization: organization)
+        before do
+          perform_enqueued_jobs { participatory_space.update!(private_space: true) }
         end
 
         it_behaves_like "no searchs found"
