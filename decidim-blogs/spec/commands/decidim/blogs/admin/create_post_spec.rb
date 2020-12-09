@@ -40,7 +40,7 @@ module Decidim
             expect { subject.call }.to change(Post, :count).by(1)
           end
 
-          it "creates the a searchable resource" do
+          it "creates a searchable resource" do
             expect { subject.call }.to change(Decidim::SearchableResource, :count).by_at_least(1)
           end
 

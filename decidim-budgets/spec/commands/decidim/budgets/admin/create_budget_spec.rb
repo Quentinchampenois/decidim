@@ -64,7 +64,7 @@ describe Decidim::Budgets::Admin::CreateBudget do
     expect(action_log.version.event).to eq "create"
   end
 
-  it "creates the a searchable resource" do
+  it "creates a searchable resource" do
     expect { subject.call }.to change(Decidim::SearchableResource, :count).by_at_least(1)
   end
 
