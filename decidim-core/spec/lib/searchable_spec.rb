@@ -69,10 +69,10 @@ module Decidim
       let!(:participatory_process) { create(:participatory_process) }
 
       context "when searchable doesn't have component" do
-        it "doesn't enqueues the job" do
-          participatory_process.update!(published_at: nil)
+        it "enqueues the job when participatory process is updated" do
+          expect(Decidim::FindAndUpdateDescendantsJob).to receive(:perform_later).with(participatory_process)
 
-          expect(Decidim::FindAndUpdateDescendantsJob).not_to receive(:perform_later)
+          participatory_process.update!(published_at: nil)
         end
       end
 
@@ -82,6 +82,18 @@ module Decidim
 
         it "enqueues the job when participatory process is updated" do
           expect(Decidim::FindAndUpdateDescendantsJob).to receive(:perform_later).with(participatory_process)
+
+          participatory_process.update!(published_at: nil)
+        end
+      end
+
+      context "when class is not a searchable resource" do
+        before do
+          allow(Decidim::ParticipatoryProcess).to receive(:searchable_resource?).with(participatory_process).and_return(false)
+        end
+
+        it "doesn't enqueues the job" do
+          expect(Decidim::FindAndUpdateDescendantsJob).not_to receive(:perform_later)
 
           participatory_process.update!(published_at: nil)
         end
