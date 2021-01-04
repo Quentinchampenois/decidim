@@ -143,7 +143,7 @@ nl:
           error: Er is een fout opgetreden bij het bijwerken van deze mediakoppeling.
           success: Media Link is succesvol bijgewerkt.
       menu:
-        conferences: conferenties
+        conferences: Conferenties
         conferences_submenu:
           attachment_collections: folders
           attachment_files: bestanden
@@ -184,7 +184,7 @@ nl:
             admin: Beheerder
             collaborator: Medewerker
             moderator: Moderator
-            valuator: 'Waarde:'
+            valuator: Beoordelaar
         media_link:
           fields:
             date: Datum
@@ -247,7 +247,7 @@ nl:
           error: Er is een fout opgetreden bij het updaten van een registratietype voor deze conferentie.
           success: Registratietype is succesvol bijgewerkt voor deze conferentie.
       titles:
-        conferences: conferenties
+        conferences: Conferenties
     admin_log:
       conference:
         create: "%{user_name} heeft de %{resource_name} conferentie gemaakt"
@@ -403,7 +403,7 @@ nl:
         personal_website: Persoonlijke website
         show:
           more_info: meer informatie
-          speaking_at: Spreekt bij
+          speaking_at: Spreker bij
       conference_speaker_cell:
         personal_url:
           personal_website: Persoonlijke website
@@ -424,7 +424,7 @@ nl:
         highlighted_conferences:
           name: Gemarkeerde conferenties
       index:
-        title: conferenties
+        title: Conferenties
       mailer:
         conference_registration_mailer:
           confirmation:
@@ -496,7 +496,7 @@ nl:
       statistics:
         answers_count: antwoorden
         comments_count: Comments
-        conference_count: conferenties
+        conference_count: Conferenties
         debates_count: debatten
         endorsements_count: Endorsements
         headline: Activiteit
@@ -550,7 +550,7 @@ nl:
         description: Links over deze conferentie
         title: Media en links
     menu:
-      conferences: conferenties
+      conferences: Conferenties
   devise:
     mailer:
       join_conference:

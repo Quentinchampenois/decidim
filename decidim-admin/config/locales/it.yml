@@ -87,7 +87,10 @@ it:
         name: Nome
         organization: Organizzazione
         plural: Plurale
+      settings:
+        scope_id: Obiettivi
       static_page:
+        allow_public_access: Consenti l'accesso senza autenticazione
         changed_notably: Ci sono stati cambiamenti evidenti.
         content: Contenuto
         organization: Organizzazione
@@ -141,7 +144,6 @@ it:
           error: Si è verificato un errore durante l'accettazione dei termini di utilizzo da parte dell'amministratore.
           success: Ottimo! Hai accettato i termini d'uso dell'amministratore.
         actions:
-          accept: Accetto i termini di amministrazione
           are_you_sure: Sei sicuro di voler rifiutare i termini di amministrazione?
           refuse: Rifiuta i termini di amministrazione
           title: Accetta i termini e le condizioni di utilizzo

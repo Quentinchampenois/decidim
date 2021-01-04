@@ -91,7 +91,10 @@ en:
         name: Name
         organization: Organization
         plural: Plural
+      settings:
+        scope_id: Scope
       static_page:
+        allow_public_access: Allow access without authentication
         changed_notably: There have been noticeable changes.
         content: Content
         organization: Organization
@@ -146,7 +149,7 @@ en:
           error: There's been an error while accepting the admin terms of use.
           success: Great! You've accepted the admin terms of use.
         actions:
-          accept: I agree this admin terms
+          accept: I agree with the following terms
           are_you_sure: Are you sure to refuse the admin terms?
           refuse: Refuse the admin terms
           title: Agree to the terms and conditions of use
@@ -282,6 +285,21 @@ en:
         update:
           error: There was a problem updating this component.
           success: The component was updated successfully.
+      conflicts:
+        attempts: Attempts
+        'false': 'No'
+        managed_user_name: Managed User
+        solved: Solved
+        title: Verifications's conflicts
+        transfer:
+          email: Email
+          error: There was a problem transfering the current participant to managed participant.
+          name: Name
+          reason: Reason
+          success: The current transfer has been successfully completed.
+          title: Transfer
+        'true': 'Yes'
+        user_name: User
       dashboard:
         show:
           view_more_logs: View more logs
@@ -386,6 +404,7 @@ en:
         help_sections: Help sections
         homepage: Homepage
         impersonations: Impersonations
+        moderation: Global moderations
         newsletters: Newsletters
         participants: Participants
         reported_users: Reported Users
@@ -872,6 +891,7 @@ en:
           fields:
             created_at: Creation date
             hidden_at: Hidden at
+            participatory_space: Participatory space
             report_count: Count
             reportable_id: Id
             reportable_type: Type
@@ -889,6 +909,8 @@ en:
   layouts:
     decidim:
       admin:
+        global_moderations:
+          title: Global moderations
         newsletters:
           title: Newsletters
         settings:

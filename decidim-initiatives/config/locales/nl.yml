@@ -85,7 +85,7 @@ nl:
           values:
             validating: Technical validation
       menu:
-        initiatives: initiatieven
+        initiatives: Initiatieven
         initiatives_types: Initiatieftypes
         participatory_processes_submenu:
           moderations: Moderations
@@ -97,7 +97,7 @@ nl:
             published_at: Gepubliceerd op
             state: Status
             supports_count: Handtekeningen
-            title: initiatieven
+            title: Initiatieven
         initiatives_type_scope:
           fields:
             scope: Bereik
@@ -124,7 +124,7 @@ nl:
             time_and_date: Tijd en datum
             timestamp: tijdstempel
       titles:
-        initiatives: initiatieven
+        initiatives: Initiatieven
         initiatives_types: Initiatieftypes
     events:
       initiatives:
@@ -186,7 +186,7 @@ nl:
             created_at: Gemaakt bij
             description: Omschrijving
             initiative_votes_count: Aantal stemmen
-            initiatives: initiatieven
+            initiatives: Initiatieven
             state: Status
         committee_requests:
           index:
@@ -365,7 +365,7 @@ nl:
           email_subject: Initiatief goedgekeurd door %{author_nickname}
           notification_title: Het <a href="%{resource_path}">%{resource_title}</a> initiatief werd goedgekeurd door <a href="%{author_path}">%{author_name} %{author_nickname}</a>.
       index:
-        title: initiatieven
+        title: Initiatieven
       initiative_signatures:
         fill_personal_data:
           continue: Doorgaan met
