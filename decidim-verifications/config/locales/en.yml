@@ -57,9 +57,6 @@ en:
           - You fill in the information present in the uploaded image.
           - The information should match whatever the user filled in.
           - If you can't clearly see the information or you can't get it verified, you can reject the request and the user will be able to fix it.
-        omniauth:
-          help:
-          - Confirmer avec un compte OmniAuth externe
         postal_letter:
           help:
           - Participants request a verification code to be sent to their address.
@@ -76,19 +73,21 @@ en:
         name: Identity documents
       multistep: Multi-Step
       name: Name
-      omniauth_anti_affinity:
-        explanation: You must login with another account to validate this authorization
-      omniauth_decidim_handler:
-        name: Omniauth Decidim
       postal_letter:
         explanation: We'll send you a postal letter with a code that you'll have to enter so we can verify your address
         name: Code by postal letter
     verifications:
       authorizations:
+        authorization_metadata:
+          info: 'This is the data of the current verification:'
+          no_data_stored: No data stored.
         create:
           error: There was a problem creating the authorization.
           success: You've been successfully authorized.
           unconfirmed: You need to confirm your email in order to authorize yourself.
+        destroy:
+          error: There was a problem deleting the authorization.
+          success: You've successfully deleted the authorization.
         first_login:
           actions:
             another_dummy_authorization_handler: Verify against another example of authorization handler
@@ -97,12 +96,23 @@ en:
             dummy_authorization_workflow: Verify against the example authorization workflow
             id_documents: Get verified by uploading your identity document
             postal_letter: Get verified by receiving a verification code through postal mail
-            sms: sms
+            sms: Get verified by receiving a SMS verification code
           title: Verify your identity
           verify_with_these_options: 'These are the available options to verify your identity:'
+        index:
+          expired_verification: Verification expired
+          pending_verification: Pending verification
+          show_renew_info: Click to renew verification
+          unauthorized_verification: New verification
         new:
           authorize: Send
           authorize_with: Verify with %{authorizer}
+        renew_modal:
+          cancel: Cancel
+          close: close
+          continue: Continue
+          info_renew: If you want to update the data, continue with the renewal
+          title: Renew Verification
         skip_verification: You can skip this for now and %{link}
         start_exploring: start exploring
       csv_census:
@@ -122,7 +132,7 @@ en:
             title: Current census data
           instructions:
             body: To do this you must enter system administration and add the csv_census authorizations to the organization
-            title: You need to activate the csv census for this organization
+            title: You need to activate the CSV census for this organization
           new:
             file: ".csv file with emails data"
             info: 'Must be a file in CSV format with only one column with the email address:'
@@ -134,8 +144,10 @@ en:
             success: Your account has been successfully verified.
       dummy_authorization:
         extra_explanation:
-          one: Participation is restricted to participants with the postal code %{postal_codes}.
-          other: 'Participation is restricted to participants with any of the following postal codes: %{postal_codes}.'
+          postal_codes:
+            one: Participation is restricted to participants with the postal code %{postal_codes}.
+            other: 'Participation is restricted to participants with any of the following postal codes: %{postal_codes}.'
+          scope: Participation is restricted to participants with the scope %{scope_name}.
       id_documents:
         admin:
           config:
@@ -196,27 +208,6 @@ en:
         dni: DNI
         nie: NIE
         passport: Passport
-      metadata:
-        content:
-          title: Authorization metadata
-      omniauth:
-        admin:
-          authorizations:
-            index:
-              actions:
-                metadata: View metadata
-              fields:
-                granted_at: Granted at
-                name: User
-                uid: Unique ID
-              title: "%{handler_name} authorizations"
-        authorizations:
-          new:
-            error: We could not verify your account from this external provider.
-            success: Your account has been successfully verified.
-        errors:
-          anti_affinity: 'You can''t be connected with these identities at the same time : %{anti_affinity}'
-          minimum_age: You must be at least %{minimum_age} to validate your account.
       postal_letter:
         admin:
           pending_authorizations:

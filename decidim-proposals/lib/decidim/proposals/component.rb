@@ -5,6 +5,7 @@ require "decidim/components/namer"
 Decidim.register_component(:proposals) do |component|
   component.engine = Decidim::Proposals::Engine
   component.admin_engine = Decidim::Proposals::AdminEngine
+  component.stylesheet = "decidim/proposals/proposals"
   component.icon = "decidim/proposals/icon.svg"
 
   component.on(:before_destroy) do |instance|
@@ -20,9 +21,10 @@ Decidim.register_component(:proposals) do |component|
   component.query_type = "Decidim::Proposals::ProposalsType"
 
   component.permissions_class_name = "Decidim::Proposals::Permissions"
-  component.component_form_class_name = "Decidim::Proposals::Admin::ComponentForm"
 
   component.settings(:global) do |settings|
+    settings.attribute :scopes_enabled, type: :boolean, default: false
+    settings.attribute :scope_id, type: :scope
     settings.attribute :vote_limit, type: :integer, default: 0
     settings.attribute :minimum_votes_per_user, type: :integer, default: 0
     settings.attribute :proposal_limit, type: :integer, default: 0
@@ -33,16 +35,19 @@ Decidim.register_component(:proposals) do |component|
     settings.attribute :proposal_answering_enabled, type: :boolean, default: true
     settings.attribute :official_proposals_enabled, type: :boolean, default: true
     settings.attribute :comments_enabled, type: :boolean, default: true
+    settings.attribute :comments_max_length, type: :integer, required: false
     settings.attribute :geocoding_enabled, type: :boolean, default: false
     settings.attribute :attachments_allowed, type: :boolean, default: false
     settings.attribute :allow_card_image, type: :boolean, default: false
     settings.attribute :resources_permissions_enabled, type: :boolean, default: true
     settings.attribute :collaborative_drafts_enabled, type: :boolean, default: false
-    settings.attribute :participatory_texts_enabled, type: :boolean, default: false
+    settings.attribute :participatory_texts_enabled,
+                       type: :boolean, default: false,
+                       readonly: ->(context) { Decidim::Proposals::Proposal.where(component: context[:component]).any? }
     settings.attribute :amendments_enabled, type: :boolean, default: false
     settings.attribute :amendments_wizard_help_text, type: :text, translated: true, editor: true, required: false
     settings.attribute :announcement, type: :text, translated: true, editor: true
-    settings.attribute :new_proposal_body_template, type: :text, translated: true, editor: false, required: false
+    settings.attribute :new_proposal_body_template, type: :text, translated: true, editor: true, required: false
     settings.attribute :new_proposal_help_text, type: :text, translated: true, editor: true
     settings.attribute :proposal_wizard_step_1_help_text, type: :text, translated: true, editor: true
     settings.attribute :proposal_wizard_step_2_help_text, type: :text, translated: true, editor: true
@@ -64,7 +69,9 @@ Decidim.register_component(:proposals) do |component|
     settings.attribute :amendment_creation_enabled, type: :boolean, default: true
     settings.attribute :amendment_reaction_enabled, type: :boolean, default: true
     settings.attribute :amendment_promotion_enabled, type: :boolean, default: true
-    settings.attribute :amendments_visibility, type: :string, default: "all"
+    settings.attribute :amendments_visibility,
+                       type: :enum, default: "all",
+                       choices: -> { Decidim.config.amendments_visibility_options }
     settings.attribute :announcement, type: :text, translated: true, editor: true
     settings.attribute :automatic_hashtags, type: :text, editor: false, required: false
     settings.attribute :suggested_hashtags, type: :text, editor: false, required: false
@@ -74,6 +81,7 @@ Decidim.register_component(:proposals) do |component|
     resource.model_class_name = "Decidim::Proposals::Proposal"
     resource.template = "decidim/proposals/proposals/linked_proposals"
     resource.card = "decidim/proposals/proposal"
+    resource.reported_content_cell = "decidim/proposals/reported_content"
     resource.actions = %w(endorse vote amend)
     resource.searchable = true
   end
@@ -81,6 +89,7 @@ Decidim.register_component(:proposals) do |component|
   component.register_resource(:collaborative_draft) do |resource|
     resource.model_class_name = "Decidim::Proposals::CollaborativeDraft"
     resource.card = "decidim/proposals/collaborative_draft"
+    resource.reported_content_cell = "decidim/proposals/collaborative_drafts/reported_content"
   end
 
   component.register_stat :proposals_count, primary: true, priority: Decidim::StatsRegistry::HIGH_PRIORITY do |components, start_at, end_at|
@@ -103,7 +112,7 @@ Decidim.register_component(:proposals) do |component|
 
   component.register_stat :comments_count, tag: :comments do |components, start_at, end_at|
     proposals = Decidim::Proposals::FilteredProposals.for(components, start_at, end_at).published.not_hidden
-    Decidim::Comments::Comment.where(root_commentable: proposals).count
+    proposals.sum(:comments_count)
   end
 
   component.register_stat :followers_count, tag: :followers, priority: Decidim::StatsRegistry::LOW_PRIORITY do |components, start_at, end_at|
@@ -185,13 +194,13 @@ Decidim.register_component(:proposals) do |component|
 
     5.times do |n|
       state, answer, state_published_at = if n > 3
-                                            ["accepted", Decidim::Faker::Localized.sentence(10), Time.current]
+                                            ["accepted", Decidim::Faker::Localized.sentence(word_count: 10), Time.current]
                                           elsif n > 2
                                             ["rejected", nil, Time.current]
                                           elsif n > 1
                                             ["evaluating", nil, Time.current]
                                           elsif n.positive?
-                                            ["accepted", Decidim::Faker::Localized.sentence(10), nil]
+                                            ["accepted", Decidim::Faker::Localized.sentence(word_count: 10), nil]
                                           else
                                             [nil, nil, nil]
                                           end
@@ -199,9 +208,9 @@ Decidim.register_component(:proposals) do |component|
       params = {
         component: component,
         category: participatory_space.categories.sample,
-        scope: Faker::Boolean.boolean(0.5) ? global : scopes.sample,
-        title: Faker::Lorem.sentence(2),
-        body: Faker::Lorem.paragraphs(2).join("\n"),
+        scope: Faker::Boolean.boolean(true_ratio: 0.5) ? global : scopes.sample,
+        title: { en: Faker::Lorem.sentence(word_count: 2) },
+        body: { en: Faker::Lorem.paragraphs(number: 2).join("\n") },
         state: state,
         answer: answer,
         answered_at: state.present? ? Time.current : nil,
@@ -265,9 +274,9 @@ Decidim.register_component(:proposals) do |component|
         params = {
           component: component,
           category: participatory_space.categories.sample,
-          scope: Faker::Boolean.boolean(0.5) ? global : scopes.sample,
-          title: "#{proposal.title} #{Faker::Lorem.sentence(1)}",
-          body: "#{proposal.body} #{Faker::Lorem.sentence(3)}",
+          scope: Faker::Boolean.boolean(true_ratio: 0.5) ? global : scopes.sample,
+          title: { en: "#{proposal.title["en"]} #{Faker::Lorem.sentence(word_count: 1)}" },
+          body: { en: "#{proposal.body["en"]} #{Faker::Lorem.sentence(word_count: 3)}" },
           state: "evaluating",
           answer: nil,
           answered_at: Time.current,
@@ -308,7 +317,7 @@ Decidim.register_component(:proposals) do |component|
           tos_agreement: "1",
           confirmed_at: Time.current,
           personal_url: Faker::Internet.url,
-          about: Faker::Lorem.paragraph(2)
+          about: Faker::Lorem.paragraph(sentence_count: 2)
         )
 
         Decidim::Proposals::ProposalVote.create!(proposal: proposal, author: author) unless proposal.published_state? && proposal.rejected?
@@ -360,7 +369,7 @@ Decidim.register_component(:proposals) do |component|
         Decidim::Proposals::ProposalNote.create!(
           proposal: proposal,
           author: author_admin,
-          body: Faker::Lorem.paragraphs(2).join("\n")
+          body: Faker::Lorem.paragraphs(number: 2).join("\n")
         )
       end
 
@@ -382,9 +391,9 @@ Decidim.register_component(:proposals) do |component|
         draft = Decidim::Proposals::CollaborativeDraft.new(
           component: component,
           category: participatory_space.categories.sample,
-          scope: Faker::Boolean.boolean(0.5) ? global : scopes.sample,
-          title: Faker::Lorem.sentence(2),
-          body: Faker::Lorem.paragraphs(2).join("\n"),
+          scope: Faker::Boolean.boolean(true_ratio: 0.5) ? global : scopes.sample,
+          title: Faker::Lorem.sentence(word_count: 2),
+          body: Faker::Lorem.paragraphs(number: 2).join("\n"),
           state: state,
           published_at: Time.current
         )
@@ -393,7 +402,8 @@ Decidim.register_component(:proposals) do |component|
         draft
       end
 
-      if n == 2
+      case n
+      when 2
         author2 = Decidim::User.where(organization: component.organization).all.sample
         Decidim::Coauthorship.create(coauthorable: draft, author: author2)
         author3 = Decidim::User.where(organization: component.organization).all.sample
@@ -404,7 +414,7 @@ Decidim.register_component(:proposals) do |component|
         Decidim::Coauthorship.create(coauthorable: draft, author: author5)
         author6 = Decidim::User.where(organization: component.organization).all.sample
         Decidim::Coauthorship.create(coauthorable: draft, author: author6)
-      elsif n == 3
+      when 3
         author2 = Decidim::User.where(organization: component.organization).all.sample
         Decidim::Coauthorship.create(coauthorable: draft, author: author2)
       end
@@ -417,9 +427,9 @@ Decidim.register_component(:proposals) do |component|
       Decidim::User.where(organization: component.organization).all.sample,
       component: component,
       category: participatory_space.categories.sample,
-      scope: Faker::Boolean.boolean(0.5) ? global : scopes.sample,
-      title: Faker::Lorem.sentence(2),
-      body: Faker::Lorem.paragraphs(2).join("\n")
+      scope: Faker::Boolean.boolean(true_ratio: 0.5) ? global : scopes.sample,
+      title: Faker::Lorem.sentence(word_count: 2),
+      body: Faker::Lorem.paragraphs(number: 2).join("\n")
     )
   end
 end

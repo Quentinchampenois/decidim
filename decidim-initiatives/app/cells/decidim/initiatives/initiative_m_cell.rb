@@ -97,6 +97,20 @@ module Decidim
           model.committee_members.approved.non_deleted.excluding_author.map { |member| present(member.user) }
       end
 
+      def has_image?
+        image.present?
+      end
+
+      def image
+        @image ||= model.attachments.find do |attachment|
+          attachment.file.content_type.start_with?("image")
+        end
+      end
+
+      def resource_image_path
+        image.url if has_image?
+      end
+
       def comments_count
         return 0 unless model.type.comments_enabled
         return model.comments.not_hidden.count if model.comments.respond_to? :not_hidden

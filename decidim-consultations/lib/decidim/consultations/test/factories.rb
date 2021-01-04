@@ -5,11 +5,11 @@ require "decidim/dev"
 
 FactoryBot.define do
   sequence(:consultation_slug) do |n|
-    "#{Faker::Internet.slug(nil, "-")}-#{n}"
+    "#{Decidim::Faker::Internet.slug(words: nil, glue: "-")}-#{n}"
   end
 
   sequence(:question_slug) do |n|
-    "#{Faker::Internet.slug(nil, "-")}-#{n}"
+    "#{Decidim::Faker::Internet.slug(words: nil, glue: "-")}-#{n}"
   end
 
   factory :consultation, class: "Decidim::Consultation" do
@@ -22,6 +22,7 @@ FactoryBot.define do
     published_at { Time.current }
     start_voting_date { Time.zone.today }
     end_voting_date { Time.zone.today + 1.month }
+    introductory_image { Decidim::Dev.test_file("city.jpeg", "image/jpeg") }
     introductory_video_url { "https://www.youtube.com/embed/zhMMW0TENNA" }
     decidim_highlighted_scope_id { create(:scope, organization: organization).id }
     results_published_at { nil }

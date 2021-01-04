@@ -33,7 +33,7 @@ describe "Explore versions", versioning: true, type: :system do
 
   context "when visiting versions index" do
     before do
-      click_link "Show all versions"
+      click_link "see other versions"
     end
 
     it "lists all versions" do
@@ -60,10 +60,10 @@ describe "Explore versions", versioning: true, type: :system do
 
   context "when showing version" do
     before do
-      click_link "Show all versions"
+      click_link "see other versions"
 
       within ".card--list__item:last-child" do
-        click_link("Version 2")
+        first(:link, "Version 2").click
       end
     end
 
@@ -78,7 +78,7 @@ describe "Explore versions", versioning: true, type: :system do
 
     it "allows going back to the versions list" do
       click_link "Show all versions"
-      expect(page).to have_current_path result_path + "/versions"
+      expect(page).to have_current_path "#{result_path}/versions"
     end
 
     it "shows the version author and creation date" do

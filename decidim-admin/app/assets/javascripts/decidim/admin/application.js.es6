@@ -2,6 +2,7 @@
 // = require foundation
 // = require rails-ujs
 // = require ./tab_focus
+// = require ./choose_language
 // = require ./toggle_nav
 // = require ./sort_list.component
 // = require decidim/editor
@@ -17,12 +18,17 @@
 // = require ./bundle
 // = require ./draggable-list
 // = require ./sortable
+// = require ./gallery
+// = require ./moderations
 // = require decidim/input_tags
 // = require decidim/input_hashtags
 // = require decidim/input_mentions
+// = require decidim/vizzs
 // = require jquery.serializejson
 // = require decidim/ajax_modals
 // = require ./officializations
+// = require decidim/input_character_counter
+// = require decidim/geocoding/attach_input
 // = require_self
 
 window.Decidim = window.Decidim || {};

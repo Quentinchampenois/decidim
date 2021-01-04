@@ -91,17 +91,9 @@ ar:
   decidim:
     admin:
       filters:
-        is_emendation_true:
-          label: النوع
-          values:
-            'false': مقترحات
-            'true': تعديلات
-        state_null:
-          label: الحالة
-          values:
-            'true': لم تتم الإجابة عليها
-        valuator_role_ids_has:
-          label: تم إسناده إلى مُقيِّم
+        proposals:
+          valuator_role_ids_has:
+            label: تم إسناده إلى مُقيِّم
     components:
       proposals:
         actions:
@@ -333,9 +325,7 @@ ar:
           new_import:
             accepted_mime_types:
               md: تخفيض السعر
-              odt: ODT
             bottom_hint: "(سوف تكون قادرًا على معاينة وفرز أقسام المستندات)"
-            document_legend: 'أضف مستندًا أقل من 2 ميغابايت ، وسيتم تحليل كل قسم حتى عمق 3 مستويات في الاقتراحات. التنسيقات المدعومة هي: %{valid_mime_types}'
             title: إضافة وثيقة
             upload_document: تحميل المستند
           publish:
@@ -349,9 +339,10 @@ ar:
             success: تم تحديث النص التشاركي بنجاح.
         proposal_answers:
           form:
-            accepted: تم قبوله
-            evaluating: قيد التقييم
-            rejected: تم رفضه
+            accepted: وافقت
+            answer_proposal: إجابة
+            evaluating: تقييم
+            rejected: مرفوض
             title: الإجابة على الاقتراح %{title}
         proposal_notes:
           create:
@@ -373,10 +364,8 @@ ar:
             title: تحديث الاقتراح
             update: تحديث
           form:
-            add_images: إضافة صور
             attachment_legend: "(اختياري) إضافة مرفق"
             created_in_meeting: هذا الاقتراح يأتي من اجتماع
-            gallery_legend: "(اختياري) إضافة معرض للصور"
             select_a_category: اختر تصنيف
             select_a_meeting: اختيار اجتماع
           index:
@@ -403,7 +392,7 @@ ar:
           show:
             amendments_count: تعداد التعديلات
             authors: المؤلفون
-            body: المحتوى
+            body: الجسم
             comments_count: تعداد التعليقات
             comments_negative_count: ضد
             comments_neutral_count: محايد
@@ -412,7 +401,7 @@ ar:
             documents: المستندات
             link: الرابط
             photos: الصور
-            proposals: المقترحات
+            proposals: اقتراحات
             ranking: "%{ranking} مِن %{total}"
             related_meetings: ملتقيات ذات صلة
             valuators: المُقيِّمون
@@ -471,7 +460,7 @@ ar:
           accepted: وافقت
           all: الكل
           evaluating: تقييم
-          not_answered: لم تتم الإجابة عليها
+          not_answered: بلا جواب
           rejected: مرفوض
         filter_type_values:
           all: الكل
@@ -527,7 +516,7 @@ ar:
           open: افتح
           published: نشرت
           related_to: متعلق ب
-          scope: النطاق
+          scope: نطاق
           search: بحث
           state: الحالة
           withdrawn: سحب
@@ -573,14 +562,11 @@ ar:
             many: و %{count} المزيد من الناس
             other: و %{count} المزيد من الناس
           info-message: هذا هو <strong>مشروع تعاوني</strong> لاقتراح. هذا يعني أنه يمكنك مساعدة مؤلفيها في صياغة الاقتراح باستخدام قسم التعليقات أدناه أو تحسينه مباشرةً من خلال طلب الوصول لتحريره. بمجرد أن يمنحك المؤلفون حق الوصول ، ستتمكن من إجراء تغييرات على هذه المسودة.
-          of_versions: "(من %{number})"
           publish: نشر
           publish_info: نشر هذا الإصدار من المسودة أو
           published_proposal: الاقتراح المنشور
           request_access: طلب الدخول
           requested_access: طلب الوصول
-          see_other_versions: رؤية الإصدارات الأخرى
-          version: الإصدار %{number}
           version_history: انظر تاريخ الإصدار لهذا الاقتراح
           withdraw: سحب المشروع
         states:
@@ -635,7 +621,6 @@ ar:
           amend: تعديل
           comment: تعليق
           comments: تعليقات
-          endorse: تأييد
       proposal_votes:
         create:
           error: كانت هناك مشكلة في دعم الاقتراح.
@@ -674,10 +659,10 @@ ar:
           my_proposals: اقتراحاتي
           origin: الأصل
           related_to: متعلق ب
-          scope: النطاق
+          scope: نطاق
           search: بحث
           state: الحالة
-          type: النوع
+          type: نوع
           voted: أيد
         filters_small_view:
           close_modal: إغلاق مشروط
@@ -752,7 +737,6 @@ ar:
           read_more: اقرأ المزيد
           report: أبلغ عن
           withdraw_btn_hint: يمكنك سحب اقتراحك إذا غيرت رأيك ، طالما أنك لم تتلق أي دعم. لم يتم حذف الاقتراح ، وسوف يظهر في قائمة المقترحات المسحوبة.
-          withdraw_confirmation: هل أنت متأكد أنك تريد سحب هذا الاقتراح؟
           withdraw_proposal: سحب الاقتراح
         vote_button:
           already_voted: معتمد بالفعل
@@ -807,20 +791,12 @@ ar:
         error: حدثت مشكلة في حفظ المسودة التعاونية.
         success: تم تحديث مسودة الاقتراح بنجاح.
       versions:
-        changes_at_title: التغييرات في "%{title}"
+        collaborative_drafts:
+          back_to_resource: العودة إلى المسودة التعاونية
         index:
           title: إصدارات
-        stats:
-          back_to_collaborative_draft: العودة إلى المسودة التعاونية
-          back_to_proposal: العودة إلى الاقتراح
-          number_of_versions: إصدارات
-          show_all_versions: عرض جميع الإصدارات
-          version_author: مؤلف الإصدار
-          version_created_at: تم إنشاء الإصدار في
-          version_number: رقم الإصدار
-          version_number_out_of_total: "%{current_version} من %{total_count}"
-        version:
-          version_index: الإصدار %{index}
+        proposals:
+          back_to_resource: العودة إلى الاقتراح
       withdraw:
         errors:
           has_supports: لا يمكن سحب هذا الاقتراح لأنه تلقى دعما مِن قَبل.

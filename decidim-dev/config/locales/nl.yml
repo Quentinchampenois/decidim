@@ -1,9 +1,9 @@
----
 nl:
   activemodel:
     attributes:
       dummy_resource:
         created_at: Aangemaakt op
+        decidim_scope_id: Bereik
         field: Mijn veld
         start_date: Begindatum
         title: Titel
@@ -13,9 +13,17 @@ nl:
     components:
       dummy:
         settings:
+          global:
+            readonly_attribute: Alleen-lezen attribuut
+            test: Een test
+            test_choices:
+              a: Een keuze
+              b: B keuze
+              c: C keuze
           step:
-            endorsements_blocked: Endorsements blocked
-            endorsements_enabled: Endorsements enabled
+            endorsements_blocked: Aanbevelingen geblokkeerd
+            endorsements_enabled: Aanbevelingen ingeschakeld
+            readonly_step_attribute: Kenmerk van alleen-lezenstap
     dummy:
       admin:
         exports:
@@ -24,7 +32,7 @@ nl:
       badges:
         test:
           conditions:
-          - Gebruik een testomgeving voor decidim.
+            - Gebruik een testomgeving voor decidim.
           description: Gebruikers krijgen deze badge door tests te maken.
           description_another: Deze gebruiker heeft %{score} tests gemaakt.
           description_own: U hebt %{score} tests gemaakt.

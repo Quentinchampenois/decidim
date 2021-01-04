@@ -13,6 +13,7 @@ FactoryBot.define do
     end
     tos { generate_localized_title }
     questionnaire_for { build(:participatory_process) }
+    salt { SecureRandom.hex(32) }
 
     trait :with_questions do
       questions do
@@ -23,11 +24,18 @@ FactoryBot.define do
         qs
       end
     end
+
+    trait :empty do
+      title { {} }
+      description { {} }
+      tos { {} }
+    end
   end
 
   factory :questionnaire_question, class: "Decidim::Forms::Question" do
     transient do
       options { [] }
+      rows { [] }
     end
 
     body { generate_localized_title }
@@ -50,12 +58,30 @@ FactoryBot.define do
           )
         end
       end
+
+      if question.matrix_rows.empty?
+        evaluator.rows.each do |row|
+          question.matrix_rows.build(
+            body: row["body"]
+          )
+        end
+      end
     end
 
     trait :with_answer_options do
       answer_options do
         Array.new(3).collect { build(:answer_option) }
       end
+    end
+
+    trait :conditioned do
+      display_conditions do
+        Array.new(3).collect { build(:display_condition) }
+      end
+    end
+
+    trait :separator do
+      question_type { :separator }
     end
   end
 
@@ -64,6 +90,7 @@ FactoryBot.define do
     questionnaire
     question { create(:questionnaire_question, questionnaire: questionnaire) }
     user { create(:user, organization: questionnaire.questionnaire_for.organization) }
+    session_token { Digest::MD5.hexdigest(user.id.to_s) }
   end
 
   factory :answer_option, class: "Decidim::Forms::AnswerOption" do
@@ -75,5 +102,29 @@ FactoryBot.define do
   factory :answer_choice, class: "Decidim::Forms::AnswerChoice" do
     answer
     answer_option { create(:answer_option, question: answer.question) }
+    matrix_row { create(:question_matrix_row, question: answer.question) }
+  end
+
+  factory :question_matrix_row, class: "Decidim::Forms::QuestionMatrixRow" do
+    question { create(:questionnaire_question) }
+    body { generate_localized_title }
+    position { 0 }
+  end
+
+  factory :display_condition, class: "Decidim::Forms::DisplayCondition" do
+    condition_question { create(:questionnaire_question) }
+    question { create(:questionnaire_question, position: 1) }
+    condition_type { :answered }
+    mandatory { true }
+
+    trait :equal do
+      condition_type { :equal }
+      answer_option { create(:answer_option, question: condition_question) }
+    end
+
+    trait :match do
+      condition_type { :match }
+      condition_value { generate_localized_title }
+    end
   end
 end

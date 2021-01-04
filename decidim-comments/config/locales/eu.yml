@@ -16,7 +16,6 @@ eu:
         other: Botoak
   decidim:
     comments:
-      comments: Oharrak
       last_activity:
         new_comment_at_html: "<span>Iruzkin berria %{link}</span>"
       votes:
@@ -54,7 +53,6 @@ eu:
             does_not_belong: Bertan badago legez kontrako jardunik, suizidio-mehatxurik, informazio pertsonalik edo beste zernahi, zure ustez %{organization_name}-ri ez dagokionik.
             offensive: Ertan badago arrazakeriarik, sexismorik, irainik, eraso pertsonalik, heriotza-mehatxurik, suizidio-eskaerarik edo beste edozein eratako gorroto-diskurtsorik.
             spam: Bertan badago clickbait-ik, publizitaterik edo iruzurrik.
-          title: Salatu arazo bat
       comment_order_selector:
         order:
           best_rated: Balorazio hoberenak
@@ -68,12 +66,14 @@ eu:
         blocked_comments_for_user_warning: Oraindik ez duzu iruzkinik egin, baina aurrekoak irakurri ditzakezu.
         blocked_comments_warning: Iruzkinak desgaituta daude une honetan, baina aurrekoak irakur ditzakezu.
         loading: Iruzkinak kargatzen...
-        title: "%{count} iruzkin"
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} iruzkin bat utzi du %{resource_title}helbidean. Orri honetan irakur dezakezu:"
           email_outro: Jakinarazpena jaso duzu %{author_name}jarraituz gero. Erabiltzaile hau bere profileko orrialdetik jarrai dezakezu.
+          email_subject: '%{author_name} %{resource_title} iruzkin berri bat dago'
+          notification_title: <a href="%{author_path}">%{author_name} %{author_nickname}</a> <a href="%{resource_path}">%{resource_title}</a> </a> iruzkin berri bat dago.
+        comment_by_followed_user_group:
           email_subject: '%{author_name} %{resource_title} iruzkin berri bat dago'
           notification_title: <a href="%{author_path}">%{author_name} %{author_nickname}</a> <a href="%{resource_path}">%{resource_title}</a> </a> iruzkin berri bat dago.
         comment_created:

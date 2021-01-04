@@ -84,10 +84,10 @@ bin/rails db:create db:migrate db:seed
 
 This will also create some default data so you can start testing the app:
 
-* A `Decidim::System::Admin` with email `system@example.org` and password `decidim123456`, to log in at `/system`.
-* A `Decidim::Organization` named `Decidim Staging`. You probably want to change its name and hostname to match your needs.
-* A `Decidim::User` acting as an admin for the organization, with email `admin@example.org` and password `decidim123456`.
-* A `Decidim::User` that also belongs to the organization but it's a regular user, with email `user@example.org` and password `decidim123456`.
+- A `Decidim::System::Admin` with email `system@example.org` and password `decidim123456`, to log in at `/system`.
+- A `Decidim::Organization` named `Decidim Staging`. You probably want to change its name and hostname to match your needs.
+- A `Decidim::User` acting as an admin for the organization, with email `admin@example.org` and password `decidim123456`.
+- A `Decidim::User` that also belongs to the organization but it's a regular user, with email `user@example.org` and password `decidim123456`.
 
 This data won't be created in production environments, if you still want to do it, run: ``` $ SEED=true rails db:setup ```
 
@@ -108,17 +108,18 @@ Decidim comes pre-configured with some safe defaults, but can be changed through
 For Decidim to function as expected, there are some background tasks that should be scheduled to be executed regularly.
 
 - Expired *data portability* files should be removed. To do it, write a `crontab -e` line like: `0 0 * * * cd /Users/you/projects/myrailsapp && /usr/local/bin/rake RAILS_ENV=production decidim:delete_data_portability_files`
-- *Metrics* also require a cron to be computed nightly. Find more information in the [related documentation](https://github.com/decidim/decidim/blob/master/docs/advanced/mertics.md#Configuration).
+- *Metrics* also require a cron to be computed nightly. Find more information in the [related documentation](https://github.com/decidim/decidim/blob/master/docs/advanced/metrics.md#Configuration).
 - *Open Data* is also produced nightly via a scheduled job. Find more information in the [open-data documentation](https://github.com/decidim/decidim/blob/master/docs/advanced/open-data.md).
+- Registration forms for meetings that have ended should be removed for privacy concerns. To do it, write a `crontab -e` line like: `0 0 * * * cd /Users/you/projects/myrailsapp && /usr/local/bin/rake RAILS_ENV=production decidim_meetings:clean_registration_forms`
 
 ### Further configuration
 
 We also have other guides on how to configure some extra components:
 
-* [ActiveJob](https://github.com/decidim/decidim/blob/master/docs/services/activejob.md)
-* [Analytics](https://github.com/decidim/decidim/blob/master/docs/services/analytics.md): How to enable analytics
-* [Geocoding](https://github.com/decidim/decidim/blob/master/docs/services/geocoding.md): How to enable geocoding for proposals and meetings
-* [Social providers integration](https://github.com/decidim/decidim/blob/master/docs/services/social_providers.md): Enable sign up from social networks.
+- [ActiveJob](https://github.com/decidim/decidim/blob/master/docs/services/activejob.md)
+- [Analytics](https://github.com/decidim/decidim/blob/master/docs/services/analytics.md): How to enable analytics
+- [Geocoding](https://github.com/decidim/decidim/blob/master/docs/services/geocoding.md): How to enable geocoding for proposals and meetings
+- [Social providers integration](https://github.com/decidim/decidim/blob/master/docs/services/social_providers.md): Enable sign up from social networks.
 
 ## Deploy
 
@@ -166,8 +167,10 @@ You can also make sure new translations are complete for all languages in your
 application with:
 
 ```console
-bin/rails decidim:check_locales
+TARGET_BRANCH=release/0.22-stable bin/rails decidim:check_locales
 ```
+
+Here the `TARGET_BRANCH` must be the same as the `decidim` dependency in your `Gemfile`.
 
 Be aware that this task might not be able to detect everything, so make sure you
 also manually check your application before upgrading.

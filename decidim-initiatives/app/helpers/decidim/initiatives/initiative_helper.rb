@@ -5,6 +5,7 @@ module Decidim
     # Helper method related to initiative object and its internal state.
     module InitiativeHelper
       include Decidim::SanitizeHelper
+      include Decidim::ResourceVersionsHelper
       include Decidim::Verifications::MetadataHelper
 
       # Public: The css class applied based on the initiative state to

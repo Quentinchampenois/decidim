@@ -29,6 +29,7 @@ fi-pl:
             success: Artikkeli poistettu onnistuneesti
           edit:
             save: Päivitä
+            title: Muokkaa artikkelia
           index:
             title: Artikkelit
           new:
@@ -62,6 +63,7 @@ fi-pl:
           global:
             announcement: Ilmoitus
             comments_enabled: Kommentointi käytössä
+            comments_max_length: Kommenttien maksimipituus (jätä arvoksi 0 käyttääksesi oletusarvoa)
           step:
             announcement: Ilmoitus
             comments_blocked: Kommentointi estetty

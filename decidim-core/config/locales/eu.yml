@@ -80,6 +80,9 @@ eu:
         error: Errorea gertatu da zure kontua eguneratzean.
         success: Zure kontua zuzen eguneratu da.
         success_with_email_confirmation: Zure kontua zuzen eguneratu da. Mezu elektroniko bat jasoko duzu zure helbide elektroniko berria baieztatzeko.
+    admin:
+      actions:
+        cancel: Utzi
     admin_log:
       area:
         create: "%{user_name} %{resource_name} eremua sortu zen"
@@ -194,6 +197,7 @@ eu:
         explanation: Egiaztatu pasaportearen zenbakia "A"
         fields:
           passport_number: Pasaporte zenbakia
+          postal_code: Posta kodea
         name: Beste adibide bat baimena
       dummy_authorization_handler:
         explanation: Egiaztatu "X" ren bukaerako dokumentu-zenbaki batekin sartuz.
@@ -340,7 +344,6 @@ eu:
           buttons:
             check: Egiaztatu eta jarraitu
             close_modal: Itxi modal
-            uncheck: Mantendu uncheck
           notice: |-
             <p>Hola, ziur zaude buletin bat jaso nahi duzula?<br>
             Berriro begiratu berriro buletina kontrol-laukia markatuta.<br>
@@ -709,6 +712,7 @@ eu:
         create:
           error: Ez da elkarrizketa hasi. Saiatu berriro geroago
         index:
+          close: Itxi modal
           no_conversations: Oraindik ez duzu elkarrizketarik
           title: Elkarrizketak
         reply:
@@ -719,11 +723,7 @@ eu:
         start:
           send: Bidali
           title: Hasi elkarrizketa bat
-        update:
-          error: Mezua ez da bidali. Saiatu berriro geroago
     metrics:
-      download:
-        csv: Deskargatu datuak (csv)
       followers:
         description: Parte hartze espazio hau jarraitzen duten erabiltzaile kopurua
         object: jarraitzaile
@@ -844,7 +844,6 @@ eu:
           error: Errore bat gertatu da terminoak eta baldintzak onartzen dituzunean.
           success: Great! Baldintzak eta baldintzak onartu dituzu.
         form:
-          agreement: Baldintzak ados nago
           legend: Erabiltzeko baldintzak eta baldintzak onartzen dituzu
         refuse:
           modal_body: Uko egiten baduzu, ezin izango duzu plataforman erabiltzeko gai, ezin duzu <a href="%{data_portability_path}">deskargatu zure datu</a> edo / <a href="%{delete_path}">zure kontua ezabatu</a>.
@@ -898,7 +897,6 @@ eu:
         subject: Eduki bat automatikoki ezkutatu da
       report:
         hello: Kaixo, %{name},
-        manage_moderations: Kudeatu moderazioak
         report_html: <p>Hurrengo <a href="%{url}">edukia</a>zalatua izan da.</p>
         subject: Eduki bat salatua izan da
     reports:
@@ -974,11 +972,12 @@ eu:
         close_window: Itxi leihoa
         share: Partekatu
         share_link: Partekatu esteka
-      version_author:
-        deleted: Erabiltzailea ezabatua
     user_activity:
       index:
         no_activities_warning: Erabiltzaile honek ez du oraindik jarduera izan.
+    user_conversations:
+      update:
+        error: Mezua ez da bidali. Saiatu berriro geroago
     user_interests:
       show:
         my_interests: Nire interesak
@@ -988,6 +987,9 @@ eu:
       update:
         error: Errore bat gertatu da zure interesak eguneratzean.
         success: Zure interesak ondo eguneratu dira.
+    version_author:
+      show:
+        deleted: Erabiltzailea ezabatua
     welcome_notification:
       default_body: <p>Hi {{name}}, eskerrak emateko {{organization}} eta ongi etorria!</p><ul><li>Hemen zer egin dezakezuen ideia azkar bat nahi baduzu, begiratu <a href="{{help_url}}">Laguntza</a> atalean.</li><li>Behin irakurri ondoren, zure lehen txapela jasoko duzu. Hemen da <a href="{{badges_url}}">txapak guztiak zerrenda</a> parte bezala zuk ere lor dezakezu {{organization}}</li><li>Azkenik, beste pertsona batu, share haiekin ari arduratzen eta parte hartzen duten esperientzia {{organization}}. Egin proposamenak, iruzkinak, eztabaidak, ohiko onura nola laguntzen jakitea, konbentzitu, entzun eta irakurri argudioak ematea, zure ideiak modu zehatz eta zehatz batean adieraztea, pazientzia eta erabakia erantzutea, zure ideiak defendatzea eta mantentzea adimen irekia, beste pertsonen ideiak lankidetzan aritzeko.</li></ul>
       default_subject: Eskerrik asko sartzeko {{organization}}!

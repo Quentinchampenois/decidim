@@ -21,13 +21,13 @@ describe "Profile", type: :system do
     end
 
     it "shows the profile page when clicking on the menu" do
-      within "main.wrapper" do
+      within ".wrapper" do
         expect(page).to have_content(user.nickname)
       end
     end
 
     it "adds a link to edit the profile" do
-      within "main.wrapper" do
+      within ".wrapper" do
         click_link "Edit profile"
       end
 
@@ -94,9 +94,9 @@ describe "Profile", type: :system do
       it "lists the followings" do
         click_link "Follows"
 
-        expect(page).to have_content(other_user.name)
-        expect(page).to have_content(user_to_follow.name)
-        expect(page).to have_content(followed_resource.title)
+        expect(page).to have_content(translated(other_user.name))
+        expect(page).to have_content(translated(user_to_follow.name))
+        expect(page).to have_content(translated(followed_resource.title))
       end
     end
 

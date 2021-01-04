@@ -32,7 +32,6 @@ fi-pl:
         scope: Kunnan alue
         slug: URL-tunniste
         subtitle: Alaotsikko
-        title: Otsikko
         vote: Ulkoinen äänestysjärjestelmä
         what_is_decided: Mitä päätetään
       response:
@@ -237,6 +236,8 @@ fi-pl:
           label: 'Lajittele kuulemiset:'
           random: Sattumanvarainen järjestys
           recent: Viimeisin ensin
+        show:
+          dates: Päivämäärät
       content_blocks:
         highlighted_consultations:
           name: Tärkeimmät kuulemiset
@@ -317,8 +318,8 @@ fi-pl:
     help:
       participatory_spaces:
         consultations:
-          contextual: "<p>Kuulemiset ovat osallisuustila, jonka avulla voit esittää selkeän kysymyksen kaikille organisaation ihmisille, tehdä päätöksen kuulemiseen osallistumisesta sekä herättää ja järjestää keskustelua vastauksen saamiseksi. Kun kuulemisen päivä tulee, voit äänestää ja julkaista äänestyksen tulokset.</p> <p>Kuulemisia voidaan järjestää lähes mistä tahansa organisaatioon vaikuttavasta näkökulmasta, kuten nimen tai logon muuttamisesta, päättämisestä laajempaan organisaatioon liittymisestä, strategisen suunnitelman tai työryhmän päätöksen validoinnista tai hylkäämisestä, tai mandaattien vaaditusta määrästä päättäminen.</p>\n"
-          page: "<p>Kuulemiset ovat tila, jonka avulla voit kysyä selkeitä kysymyksiä kaikilta ihmisiltä, jotka muodostavat organisaation, ilmoittavat osallistumishalukkuudestaan kuulemiseen ja aloittavat keskustelun vastauksen saamiseksi. Kuulemisen ajankohtana voit äänestää ja julkaista äänestystulokset.</p> <p>Kuulemiset voivat koskea mitä tahansa organisaatioon vaikuttavaa asiaa, kuten uuden nimen tai logon valitsemista tietyistä vaihtoehdoista, suurempaan organisaatioon liittymisestä päättämistä, työryhmien ehdotusten hyväksyntää tai hylkäystä tai päätöstä tarvittavien mandaattien määrästä organisaation sisällä.</p>\n"
+          contextual: "<p><strong>Kuulemiset</strong> ovat osallistumistila, jonka avulla voit esittää selkeän kysymyksen kaikille organisaation ihmisille, tehdä päätöksen kuulemiseen osallistumisesta sekä herättää ja järjestää keskustelua vastauksen saamiseksi. Kuulemisen ajankohtana voit äänestää ja julkaista äänestystulokset.</p> <p>Esimerkkejä: kuulemisia voidaan järjestää lähes mistä tahansa organisaatioon vaikuttavasta asiasta, kuten nimen tai logon muuttamisesta, päättämisestä laajempaan organisaatioon liittymisestä, strategisen suunnitelman tai työryhmän päätöksen hyväksymisestä tai hylkäämisestä, tai tarvittavien mandaattien määrän päättämisestä.</p>\n"
+          page: "<p><strong>Kuulemiset</strong> ovat osallistumistila, jonka avulla voit esittää selkeän kysymyksen kaikille organisaation ihmisille, tehdä päätöksen kuulemiseen osallistumisesta sekä herättää ja järjestää keskustelua vastauksen saamiseksi. Kuulemisen ajankohtana voit äänestää ja julkaista äänestystulokset.</p> <p>Esimerkkejä: kuulemisia voidaan järjestää lähes mistä tahansa organisaatioon vaikuttavasta asiasta, kuten nimen tai logon muuttamisesta, päättämisestä laajempaan organisaatioon liittymisestä, strategisen suunnitelman tai työryhmän päätöksen hyväksymisestä tai hylkäämisestä, tai tarvittavien mandaattien määrän päättämisestä.</p>\n"
           title: Mitä ovat kuulemiset?
     menu:
       consultations: Kuulemiset
@@ -347,10 +348,12 @@ fi-pl:
         verification_required: Varmenna käyttäjätilisi äänestääksesi
         vote: Äänestä
       vote_modal:
+        close_modal: Sulje ikkuna
         contextual_help: Valitse vaihtoehto.
         title: 'Kuuleminen: kysymyksen kannatus'
       vote_modal_confirm:
         change: Muuta
+        close_modal: Sulje ikkuna
         confirm: Vahvista
         contextual_help: Vahvista valittu vaihtoehto.
         title: 'Kuuleminen: vahvista kannatus'

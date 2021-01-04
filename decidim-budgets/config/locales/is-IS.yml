@@ -2,7 +2,6 @@ is-IS:
   activemodel:
     attributes:
       project:
-        budget: Fjárhagsáætlun
         decidim_category_id: Flokkur
         decidim_scope_id: Umfang
         description: Lýsing
@@ -46,16 +45,15 @@ is-IS:
             title: Titill
       projects:
         budget_confirm:
-          are_you_sure: Ertu sammála? Þegar þú hefur staðfest atkvæði þitt getur þú ekki breytt því.
           cancel: Hætta við
           confirm: Staðfesta
           description: Þetta eru þau verkefni sem þú hefur valið að vera hluti af fjárhagsáætluninni.
           title: Staðfestu atkvæði
         budget_excess:
+          budget_excess:
+            title: Hámarks fjárhagsáætlun yfir
           close: Loka
-          description: Þetta verkefni fer yfir hámarks fjárhagsáætlun og er ekki hægt að bæta við. Ef þú vilt getur þú eytt verkefni sem þú hefur þegar valið til að bæta við eða gera atkvæði með óskir þínar.
           ok: Allt í lagi
-          title: Hámarks fjárhagsáætlun yfir
         budget_summary:
           are_you_sure: Ertu viss um að þú viljir hætta við atkvæði þitt?
           assigned: 'Úthlutað:'
@@ -63,7 +61,6 @@ is-IS:
           checked_out:
             description: Þú hefur þegar kosið fyrir fjárhagsáætlunina. Ef þú hefur skipt um skoðun geturðu %{cancel_link}.
             title: Fjárhagsleg atkvæði lokið
-          description: Hvaða verkefni heldurðu að við eigum að úthluta fjárhagsáætlun fyrir? Gefðu amk %{minimum_budget} til verkefna sem þú vilt og kjósa með óskir þínar til að skilgreina fjárhagsáætlunina.
           title: Þú ákveður fjárhagsáætlunina
         count:
           projects_count:
@@ -71,6 +68,7 @@ is-IS:
             other: "%{count} verkefni"
         filters:
           category: Flokkur
+          scope: Umfang
           search: Leita
         filters_small_view:
           close_modal: Loka mát
@@ -85,15 +83,6 @@ is-IS:
             one: verkefni valin
             other: verkefni valin
           view: Útsýni
-        project:
-          add: Bæta við
-          count:
-            one: 1 stuðningur
-            other: "%{count} styður"
-          remove: Fjarlægja
-        project_budget_button:
-          add: Bæta við
-          added: Bætt við
         show:
           budget: Fjárhagsáætlun
           view_all_projects: Skoða öll verkefni
@@ -115,4 +104,3 @@ is-IS:
             show_votes: Sýna atkvæði
   index:
     confirmed_orders_count: Atkvæðagreiðsla telja
-  total_budget: Samtals fjárhagsáætlun

@@ -7,7 +7,7 @@ module Decidim
     class Result < Accountability::ApplicationRecord
       include Decidim::Resourceable
       include Decidim::HasComponent
-      include Decidim::ScopableComponent
+      include Decidim::ScopableResource
       include Decidim::HasCategory
       include Decidim::HasReference
       include Decidim::Comments::Commentable
@@ -16,11 +16,14 @@ module Decidim
       include Decidim::DataPortability
       include Decidim::Randomable
       include Decidim::Searchable
+      include Decidim::TranslatableResource
 
       component_manifest_name "accountability"
 
+      translatable_fields :title, :description
+
       has_many :children, foreign_key: "parent_id", class_name: "Decidim::Accountability::Result", inverse_of: :parent, dependent: :destroy
-      belongs_to :parent, foreign_key: "parent_id", class_name: "Decidim::Accountability::Result", inverse_of: :children, optional: true, counter_cache: :children_count
+      belongs_to :parent, class_name: "Decidim::Accountability::Result", inverse_of: :children, optional: true, counter_cache: :children_count
 
       belongs_to :status, foreign_key: "decidim_accountability_status_id", class_name: "Decidim::Accountability::Status", inverse_of: :results, optional: true
 
@@ -91,7 +94,7 @@ module Decidim
       def children_use_weighted_progress?
         return false if children.pluck(:weight).all?(&:nil?)
 
-        children.length == 1 || children.pluck(:weight).none? { |weight| weight == 1.0 }
+        children.length == 1 || children.pluck(:weight).none? { |weight| weight&.to_d == 1.0.to_d }
       end
     end
   end

@@ -1,9 +1,9 @@
----
 es:
   activemodel:
     attributes:
       dummy_resource:
         created_at: Creado en
+        decidim_scope_id: Ámbito
         field: Mi campo
         start_date: Fecha de inicio
         title: Título
@@ -13,9 +13,17 @@ es:
     components:
       dummy:
         settings:
+          global:
+            readonly_attribute: Atributo de sólo lectura
+            test: Una prueba
+            test_choices:
+              a: Opción A
+              b: Opción B
+              c: Opción C
           step:
-            endorsements_blocked: Aprobaciones bloqueadas
-            endorsements_enabled: Aprobaciones autorizadas
+            endorsements_blocked: Adhesiones bloqueadas
+            endorsements_enabled: Adhesiones habilitadas
+            readonly_step_attribute: Atributo de sólo lectura
     dummy:
       admin:
         exports:
@@ -24,12 +32,12 @@ es:
       badges:
         test:
           conditions:
-          - Utilice un entorno de prueba para decidim.
+            - Utilice un entorno de prueba para decidim.
           description: Las participantes obtienen esta insignia al crear pruebas.
           description_another: Esta participante ha creado %{score} pruebas.
           description_own: Has creado %{score} pruebas.
           name: Pruebas
-          next_level_in: "¡Crea %{score} pruebas más para alcanzar el siguiente nivel!"
+          next_level_in: '¡Crea %{score} pruebas más para alcanzar el siguiente nivel!'
           unearned_another: Esta participante aún no ha creado ninguna prueba.
           unearned_own: No has creado ninguna prueba todavía.
     pages:

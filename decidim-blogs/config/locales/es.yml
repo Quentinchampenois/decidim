@@ -1,4 +1,3 @@
----
 es:
   activemodel:
     models:
@@ -11,7 +10,7 @@ es:
   decidim:
     blogs:
       actions:
-        confirm_destroy: "¿Estás segura que quieres eliminar esta publicación?"
+        confirm_destroy: '¿Estás segura que quieres eliminar esta publicación?'
         destroy: Borrar
         edit: Editar
         new: Nueva publicación
@@ -49,7 +48,7 @@ es:
             title: título
       posts:
         show:
-          back: Volver a la lista
+          back: Volver al listado
           comments: Comentarios
           view: Ver
         sidebar_blog:
@@ -63,11 +62,12 @@ es:
           global:
             announcement: Aviso
             comments_enabled: Comentarios habilitados
+            comments_max_length: Longitud máxima de los comentarios (deja 0 si quieres mantener la configuración por defecto)
           step:
             announcement: Aviso
             comments_blocked: Comentarios bloqueados
-            endorsements_blocked: Aprobaciones bloqueadas
-            endorsements_enabled: Aprobaciones autorizadas
+            endorsements_blocked: Adhesiones bloqueadas
+            endorsements_enabled: Adhesiones habilitadas
     events:
       blogs:
         post_created:

@@ -95,6 +95,9 @@ en:
         unpublish: Unpublish
       menu:
         participatory_process_groups: Process groups
+        participatory_process_groups_submenu:
+          info: Info
+          landing_page: Landing page
         participatory_processes: Processes
         participatory_processes_submenu:
           attachment_collections: Folders
@@ -146,6 +149,13 @@ en:
           copy: Copy
           select: Select which data you would like to duplicate
           title: Duplicate participatory process
+      participatory_process_group_landing_page:
+        edit:
+          active_content_blocks: Active content blocks
+          inactive_content_blocks: Inactive content blocks
+      participatory_process_group_landing_page_content_blocks:
+        edit:
+          update: Update
       participatory_process_groups:
         destroy:
           error: There was an error while destroying the Participatory process group.
@@ -270,6 +280,11 @@ en:
         update: "%{user_name} changed the role of the participant %{resource_name} in the %{space_name} participatory process"
     events:
       participatory_process:
+        role_assigned:
+          email_intro: You have been assigned as %{role} for participatory process "%{resource_title}".
+          email_outro: You have received this notification because you are %{role} of the "%{resource_title}" participatory process.
+          email_subject: You have been assigned as %{role} for "%{resource_title}".
+          notification_title: You have been assigned as %{role} for participatory process <a href="%{resource_url}">%{resource_title}</a>.
         step_activated:
           email_intro: 'The %{resource_title} phase is now active for %{participatory_space_title}. You can see it from this page:'
           email_outro: You have received this notification because you are following %{participatory_space_title}. You can stop receiving notifications following the previous link.
@@ -293,6 +308,9 @@ en:
         description: Number of participatory processes in this organization
         object: participatory processes
         title: Participatory processes
+    participatory_process:
+      show:
+        related_assemblies: Related assemblies
     participatory_process_groups:
       show:
         group_participatory_processes:
@@ -308,6 +326,9 @@ en:
         content_blocks:
           highlighted_processes:
             max_results: Maximum amount of elements to show
+        new_import:
+          accepted_types:
+            json: JSON
         participatory_process_copies:
           form:
             slug_help: 'URL slugs are used to generate the URLs that point to this process. Only accepts letters, numbers and dashes, and must start with a letter. Example: %{url}'
@@ -348,7 +369,11 @@ en:
             active_step: Active phase
             more_information: More information
             participate: Participate
+            participate_in: Participate in process %{resource_name}
             see_all_processes: See all processes
+      participatory_process_steps:
+        index:
+          back_to_process: Back to the process page
       participatory_processes:
         filters:
           counters:
@@ -378,6 +403,7 @@ en:
           loading: Loading results...
       show:
         area: Area
+        dates: Dates
         developer_group: Promoter group
         end_date: End date
         local_area: Organization Area
@@ -413,6 +439,7 @@ en:
       participatory_process_groups:
         participatory_process_group:
           browse: Browse
+          browse_resource: Browse process group %{resource_name}
           processes_count: 'Processes:'
       participatory_process_widgets:
         show:
@@ -424,13 +451,17 @@ en:
         participatory_process:
           active_step: 'Current phase:'
           more_info: More info
+          more_info_about: More info about process %{resource_name}
           take_part: Take part
+          take_part_in: Take part in process %{resource_name}
         promoted_process:
           active_step: 'Current phase:'
           more_info: More info
+          more_info_about: More info about process %{resource_name}
           take_part: Take part
+          take_part_in: Take part in process %{resource_name}
       process_header_steps:
         step: Phase %{current} of %{total}
-        view_steps: View phases
+        view_steps: Process phases
       process_navigation:
         process_menu_item: The process

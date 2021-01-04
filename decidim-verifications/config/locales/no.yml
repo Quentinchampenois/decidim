@@ -82,6 +82,8 @@
         new:
           authorize: Send
           authorize_with: Verifiser med %{authorizer}
+        renew_modal:
+          cancel: Avbryt
         skip_verification: Du kan hoppe over dette for nå og %{link}
         start_exploring: begynn å utforske
       csv_census:
@@ -101,7 +103,6 @@
             title: Nåværende folketelling data
           instructions:
             body: For å gjøre dette må du gå inn i systemadministrasjon og legge til cvs_census autoriseringen til organisasjonen
-            title: Du må aktivere csv-folketellingen for denne organisasjonen
           new:
             file: ".csv fil med e-postdata"
             info: 'Må være en fil i CSV-format med bare en kolonne med e-postadressen:'
@@ -113,8 +114,9 @@
             success: Kontoen din er verifisert.
       dummy_authorization:
         extra_explanation:
-          one: Deltakelse er begrenset til deltakere med postnummer %{postal_codes}.
-          other: 'Deltakelse er begrenset til deltakere med postnummer %{postal_codes}.'
+          postal_codes:
+            one: Deltakelse er begrenset til deltakere med postnummer %{postal_codes}.
+            other: 'Deltakelse er begrenset til deltakere med postnummer %{postal_codes}.'
       id_documents:
         admin:
           config:

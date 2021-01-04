@@ -44,7 +44,7 @@ module Decidim
           [
             Decidim::CheckBoxesTreeHelper::TreePoint.new("accepted", t("decidim.proposals.application_helper.filter_state_values.accepted")),
             Decidim::CheckBoxesTreeHelper::TreePoint.new("evaluating", t("decidim.proposals.application_helper.filter_state_values.evaluating")),
-            Decidim::CheckBoxesTreeHelper::TreePoint.new("not_answered", t("decidim.proposals.application_helper.filter_state_values.not_answered")),
+            Decidim::CheckBoxesTreeHelper::TreePoint.new("state_not_published", t("decidim.proposals.application_helper.filter_state_values.not_answered")),
             Decidim::CheckBoxesTreeHelper::TreePoint.new("rejected", t("decidim.proposals.application_helper.filter_state_values.rejected"))
           ]
         )
@@ -54,6 +54,12 @@ module Decidim
         @proposal.cost.present? &&
           translated_attribute(@proposal.cost_report).present? &&
           translated_attribute(@proposal.execution_period).present?
+      end
+
+      def resource_version(resource, options = {})
+        return unless resource.respond_to?(:amendable?) && resource.amendable?
+
+        super
       end
     end
   end

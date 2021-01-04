@@ -16,10 +16,12 @@ sv:
         available_slots: Tillgängliga platser för detta möte
         decidim_category_id: Kategori
         decidim_scope_id: Omfång
+        decidim_user_group_id: Användargrupp
         description: Beskrivning
         end_time: Sluttid
         location: Plats
         location_hints: Detaljer om platsen
+        organizer_gid: Skapa som
         organizer_id: Organisatör
         private_meeting: Privat möte
         registration_form_enabled: Registreringsformulär aktiverat
@@ -29,9 +31,7 @@ sv:
         title: Titel
         transparent: Transparent
       minutes:
-        audio_url: Ljud-URL
         description: Beskrivning
-        video_url: Video-URL
         visible: Är synlig
     errors:
       models:
@@ -81,12 +81,17 @@ sv:
           global:
             announcement: Meddelande
             comments_enabled: Kommentarer aktiverade
+            comments_max_length: Maximal längd för kommentarer (Lämna 0 för standardvärde)
+            creation_enabled_for_participants: Deltagarna kan skapa möten
             default_registration_terms: Villkor för standardregistrering
             enable_pads_creation: Aktivera skapande av memo
+            registration_code_enabled: Registreringskod aktiverad
             resources_permissions_enabled: Åtgärdsbehörigheter kan ställas in för varje möte
           step:
             announcement: Meddelande
             comments_blocked: Kommentarer blockerade
+            creation_enabled_for_participants: Mötesskapande av deltagare aktiverat
+            creation_enabled_for_user_groups: Mötesskapande av användargrupper aktiverat
     events:
       meetings:
         meeting_closed:
@@ -102,7 +107,7 @@ sv:
             notification_title: Mötet <a href="%{resource_path}">%{resource_title}</a> stängdes.
         meeting_created:
           email_intro: Mötet "%{resource_title}" har lagts till i "%{participatory_space_title}" som du följer.
-          email_outro: Du har fått den här meddelandet eftersom du följer "%{participatory_space_title}". Du kan avfölja det vid föregående länk.
+          email_outro: Du har fått det här meddelandet eftersom du följer "%{participatory_space_title}". Du kan avfölja det vid föregående länk.
           email_subject: Nytt möte har lagts till i %{participatory_space_title}
           notification_title: Mötet <a href="%{resource_path}">%{resource_title}</a> har lagts till i %{participatory_space_title}
         meeting_registration_confirmed:
@@ -119,17 +124,17 @@ sv:
           notification_title: Mötet <a href="%{resource_path}">%{resource_title}</a> uppdaterades.
         registration_code_validated:
           email_intro: Din anmälningskod "%{registration_code}" till mötet "%{resource_title}" har validerats.
-          email_outro: Du har fått den här meddelandet eftersom din registreringskod för mötet "%{resource_title}" har validerats.
+          email_outro: Du har fått det här meddelandet eftersom din registreringskod för mötet "%{resource_title}" har validerats.
           email_subject: Din anmälningskod "%{registration_code}" till mötet "%{resource_title}" har validerats
           notification_title: Din registreringskod "%{registration_code}" för mötet <a href="%{resource_path}">%{resource_title}</a> har validerats.
         registrations_enabled:
           email_intro: 'Mötet "%{resource_title}" har aktiverat registreringar. Du kan registrera dig själv på dess sida:'
-          email_outro: Du har fått den här meddelandet eftersom du följer mötet "%{resource_title}". Du kan sluta följa det på föregående länk.
+          email_outro: Du har fått det här meddelandet eftersom du följer mötet "%{resource_title}". Du kan sluta följa det på föregående länk.
           email_subject: Mötet "%{resource_title}" har aktiverat registreringar.
           notification_title: Mötet <a href="%{resource_path}">%{resource_title}</a> har aktiverat registreringar.
         upcoming_meeting:
           email_intro: Mötet "%{resource_title}" börjar om mindre än 48 timmar.
-          email_outro: Du har fått den här meddelandet eftersom du följer mötet "%{resource_title}". Du kan sluta följa det på föregående länk.
+          email_outro: Du har fått det här meddelandet eftersom du följer mötet "%{resource_title}". Du kan sluta följa det på föregående länk.
           email_subject: Mötet "%{resource_title}" börjar om färre än 48 timmar.
           notification_title: Mötet <a href="%{resource_path}">%{resource_title}</a> startar inom mindre än 48 timmar.
     gamification:
@@ -153,6 +158,10 @@ sv:
         confirm_destroy: Är du säker på att du vill radera detta möte?
         destroy: Radera
         edit: Redigera
+        invalid_destroy:
+          proposals_count:
+            one: 'Mötet kan inte raderas eftersom det finns %{count} relaterat förslag:'
+            other: 'Mötet kan inte raderas eftersom det finns %{count} relaterade förslag:'
         minutes: Anteckningar
         new: Nytt möte
         preview: Förhandsvisa
@@ -212,7 +221,7 @@ sv:
             filter:
               accepted: Accepterad
               all: Allt
-              rejected: Avvisade
+              rejected: Avvisad
               sent: Skickat
             filter_by: Filtrera efter
             invite_attendee: Bjud in deltagare
@@ -223,9 +232,6 @@ sv:
           edit:
             close: Stäng
             title: Stäng mötet
-        meeting_copies:
-          form:
-            select_organizer: Välj arrangören
         meetings:
           close:
             invalid: Det gick inte att stänga mötet
@@ -234,11 +240,16 @@ sv:
             invalid: Det gick inte att skapa mötet
             success: Möte skapades
           destroy:
+            invalid:
+              proposals_count:
+                one: Mötet kan inte raderas eftersom det finns %{count} relaterat förslag
+                other: Mötet kan inte raderas eftersom det finns %{count} relaterade förslag
             success: Mötet har tagits bort
           edit:
             update: Uppdatera
           form:
-            select_organizer: Välj arrangören
+            address_help: 'Adress: anger en plats för Geocoder'
+            location_help: 'Plats: meddelande till användarna som anger mötesplats'
           index:
             title: Möten
           new:
@@ -280,6 +291,7 @@ sv:
           form:
             available_slots_help: Lämna det till 0 om du har obegränsade platser.
             invites: Inbjudningar
+            recommendation_message: Av sekretessskäl rekommenderar vi att du tar bort detta inskriptionsformulär när du inte längre behöver det. Som standard är detta 3 månader efter att mötet avslutats.
             registration_form: Anmälningsformulär
             registrations_count:
               one: Det har gjorts %{count} anmälan.
@@ -341,31 +353,70 @@ sv:
             subject: Din mötesregistrering har bekräftats
       meeting:
         not_allowed: Du får inte se det här mötet
+      meeting_closes:
+        edit:
+          back: Tillbaka
+          close: Avsluta möte
+          title: Avsluta möte
       meetings:
+        count:
+          meetings_count:
+            one: "%{count} möte"
+            other: "%{count} möten"
+        create:
+          invalid: Det gick inte att skapa mötet.
+          success: Du har skapat mötet.
+        edit:
+          back: Tillbaka
+          title: Redigera ditt möte
+          update: Uppdatera
         filters:
           category: Kategori
-          category_prompt: Välj en kategori
           date: Datum
-          past: Tidigare
+          date_values:
+            all: Alla
+            past: Tidigare
+            upcoming: Kommande
+          origin: Ursprung
+          origin_values:
+            all: Alla
+            citizens: Medborgare
+            official: Officiell
+            user_groups: Grupper
+          scope: Omfattning
           search: Sök
-          upcoming: Kommande
         filters_small_view:
           close_modal: Stäng fönstret
           filter: Filtrera
           filter_by: Filtrera efter
           unfold: Veckla ut
+        form:
+          address_help: 'Adress: som används av Geocoder för att hitta platsen'
+          create_as: Skapa möte som
+          location_help: 'Plats: meddelande riktat till de användare som antyder platsen att träffas på'
+          select_a_category: Välj en kategori
+        index:
+          new_meeting: Nytt möte
         meeting_minutes:
           meeting_minutes: Mötesprotokoll
           related_information: Relaterad information
         meetings:
           no_meetings_warning: Inga möten matchar dina sökkriterier eller det finns inget möte planerat.
           upcoming_meetings_warning: För närvarande finns det inga planerade möten, men här hittar du alla tidigare möten listade.
+        new:
+          back: Tillbaka
+          create: Skapa
+          title: Skapa ditt möte
         registration_confirm:
           cancel: Avbryt
           confirm: Bekräfta
         show:
           attendees: Antal deltagare
+          back: Tillbaka till listan
+          close_meeting: Avsluta möte
           contributions: Antal bidrag
+          date: Datum
+          edit_meeting: Redigera möte
           going: Jag kommer
           join: Gå med i mötet
           meeting_report: Mötesrapport
@@ -379,6 +430,9 @@ sv:
             one: "%{count} plats kvar"
             other: "%{count} platser kvar"
           view: Visa
+        update:
+          invalid: Det gick inte att uppdatera mötet.
+          success: Du har uppdaterat mötet.
       meetings_map:
         view_meeting: Visa möte
       models:
@@ -397,6 +451,7 @@ sv:
             closed: Stängd
             end_time: Slutdatum
             map: Karta
+            official_meeting: Officiellt möte
             start_time: Startdatum
             title: Titel
       read_more: "(läs mer)"
@@ -408,7 +463,7 @@ sv:
       registrations:
         create:
           invalid: Det gick inte att ansluta till mötet.
-          success: Du har gått med på mötet.
+          success: Du har gått med i mötet. Eftersom du har registrerat dig kommer du att få aviseringar om uppdateringar av mötet.
         decline_invitation:
           invalid: Det gick inte att avböja inbjudan.
           success: Du har avböjt inbjudan.
@@ -418,6 +473,8 @@ sv:
       types:
         private_meeting: Privat möte
         transparent: Transparent
+      versions:
+        back_to_resource: Gå tillbaka till mötet
     metrics:
       meetings:
         description: Antal skapade möten

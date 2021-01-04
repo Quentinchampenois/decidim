@@ -2,7 +2,6 @@ ru:
   activemodel:
     attributes:
       project:
-        budget: Бюджет
         decidim_category_id: Категория
         decidim_scope_id: Охват
         description: Описание
@@ -24,7 +23,6 @@ ru:
         destroy: Удалить
         edit: Редактировать
         import: Внести в проекты позаимствованные предложения
-        new: Новый проект
         preview: Предпросмотр
         title: Действия
       admin:
@@ -69,16 +67,15 @@ ru:
             title: Название
       projects:
         budget_confirm:
-          are_you_sure: Вы согласны? Подтвердив свой голос, вы не сможете потом его изменить.
           cancel: Отменить
           confirm: Подтвердить
           description: Вот те проекты, которые вы выбрали для включения в бюджет.
           title: Подтвердить голос
         budget_excess:
+          budget_excess:
+            title: Превышен предельный бюджет
           close: Закрыть
-          description: Добавление этого проекта превысит предельный бюджет, и поэтому его сейчас нельзя добавить. Если хотите, вы можете удалить один из проектов, который вы ранее выбрали для добавления, или проголосовать за то распределение средств, которое вы уже сделали.
           ok: Хорошо
-          title: Превышен предельный бюджет
         budget_summary:
           are_you_sure: Вы действительно хотите отменить свой голос?
           assigned: 'Выделено:'
@@ -86,7 +83,6 @@ ru:
           checked_out:
             description: Вы уже голосовали за бюджет. Если вы передумали, вы можете %{cancel_link}.
             title: Голосование по бюджету завершено
-          description: Какие проекты, по вашему мнению, заслуживают выделения средств? Выделите не менее %{minimum_budget} проектам, которые вы поддерживаете, и проголосуйте за такое распределение средств, чтобы определить бюджет.
           title: Вы определяете бюджет
         count:
           projects_count:
@@ -96,6 +92,7 @@ ru:
             other: "%{count} проектов"
         filters:
           category: Категория
+          scope: Охват
           search: Поиск
         filters_small_view:
           close_modal: Закрыть окошко
@@ -113,17 +110,7 @@ ru:
             other: выбранных проектов
           view: Посмотреть
         project:
-          add: Добавить
-          count:
-            one: 1 человек поддерживает
-            few: "%{count} поддерживают"
-            many: "%{count} поддерживает"
-            other: "%{count} поддерживает"
-          remove: Удалить
           view: Посмотреть
-        project_budget_button:
-          add: Добавить
-          added: Добавлено
         show:
           budget: Бюджет
           view_all_projects: Просмотреть все проекты
@@ -137,14 +124,14 @@ ru:
             announcement: Объявление
             comments_enabled: Комментарии включены
             projects_per_page: Проектов на страницу
-            resources_permissions_enabled: Для каждой встречи можно задать те или иные разрешения на действия
             total_budget: Общий бюджет
             vote_threshold_percent: Минимальный процент бюджета для голосования
           step:
             announcement: Объявление
             comments_blocked: Комментарии отключены
             show_votes: Показать голоса
-            votes_enabled: Голосование включено
+            votes_choices:
+              enabled: Голосование включено
     orders:
       checkout:
         error: При обработке вашего голоса произошла ошибка
@@ -157,4 +144,3 @@ ru:
         project_proposal: 'Предложения, включенные в этот проект:'
   index:
     confirmed_orders_count: Количество голосов
-  total_budget: Общий бюджет

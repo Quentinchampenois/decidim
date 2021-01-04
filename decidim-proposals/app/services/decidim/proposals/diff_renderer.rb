@@ -8,8 +8,8 @@ module Decidim
       # Lists which attributes will be diffable and how they should be rendered.
       def attribute_types
         {
-          title: :string,
-          body: :string,
+          title: :i18n,
+          body: :i18n,
           decidim_category_id: :category,
           decidim_scope_id: :scope,
           address: :string,
@@ -21,14 +21,18 @@ module Decidim
 
       # Parses the values before parsing the changeset.
       def parse_changeset(attribute, values, type, diff)
+        return parse_scope_changeset(attribute, values, type, diff) if type == :scope
+
         values = parse_values(attribute, values)
+        old_value = values[0]
+        new_value = values[1]
 
         diff.update(
           attribute => {
             type: type,
             label: I18n.t(attribute, scope: i18n_scope),
-            old_value: values[0],
-            new_value: values[1]
+            old_value: old_value,
+            new_value: new_value
           }
         )
       end
@@ -54,8 +58,12 @@ module Decidim
       end
 
       # Returns a String with the newline escape sequences normalized.
-      def normalize_line_endings(string)
-        Decidim::ContentParsers::NewlineParser.new(string, context: {}).rewrite
+      def normalize_line_endings(value)
+        if value.is_a?(Hash)
+          value.values.map { |subvalue| normalize_line_endings(subvalue) }
+        else
+          Decidim::ContentParsers::NewlineParser.new(value, context: {}).rewrite
+        end
       end
 
       def proposal

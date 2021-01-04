@@ -14,7 +14,7 @@ nl:
         attachment_collection_id: Map
         description: Beschrijving
         file: Bestand
-        title: Titel
+        title: Bijlage of afbeeldingsnaam
       attachment_collection:
         description: Beschrijving
         name: Naam
@@ -30,16 +30,10 @@ nl:
       newsletter:
         body: Body
         subject: Onderwerp
-      oauth_application:
-        name: Naam
-        organization_logo: Logo organisatie (vierkant)
-        organization_name: Naam van de organisatie
-        organization_url: URL van de organisatie
-        redirect_uri: URI doorsturen
       organization:
-        address: SMTP Hostnaam
         alert_color: Alarm
         badges_enabled: Schakel badges in
+        comments_max_length: Commentaar maximale lengte (laat 0 voor standaard waarde)
         cta_button_path: actieknop pad
         cta_button_text: actieknop tekst
         customize_welcome_notification: Pas welkomstmelding aan
@@ -51,6 +45,8 @@ nl:
         from: Afzender van de e-mail
         github_handler: GitHub gebruikersnaam
         header_snippets: Elementen om toe te voegen tussen HTML-tags
+        highlight_alternative_color: Hoogte, alternatief
+        highlight_color: Markeren
         highlighted_content_banner_action_subtitle: Ondertitel actieknop
         highlighted_content_banner_action_title: Titel actieknop
         highlighted_content_banner_action_url: URL actieknop
@@ -67,20 +63,16 @@ nl:
         omnipresent_banner_short_description: Korte beschrijving
         omnipresent_banner_title: Titel
         omnipresent_banner_url: URL
-        password: Wachtwoord
-        port: Poort
         primary_color: Primaire
         reference_prefix: Referentievoorvoegsel
         rich_text_editor_in_public_views: Gebruik de tekst editor voor deelnemers
         secondary_color: Tweede
         send_welcome_notification: Stuur welkomstmelding
-        show_statistics: Toon statistieken
         success_color: Succes
         time_zone: Tijdszone
         tos_version: Servicevoorwaarden versie
         twitter_handler: Twitter gebruikersnaam
         user_groups_enabled: Groepen inschakelen
-        user_name: Gebruikersnaam
         warning_color: Waarschuwing
         welcome_notification_body: Tekst van de welkomstmelding
         welcome_notification_subject: Welkomstmelding onderwerp
@@ -113,10 +105,6 @@ nl:
         file: Bestand
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: De omleidings-URI moet een SSL-URI zijn
         organization:
           attributes:
             official_img_footer:
@@ -144,7 +132,8 @@ nl:
         browse: Browsen
         export: Exporteren
         manage: Beheer
-        per_page: Per page
+        new: Nieuwe %{name}
+        per_page: Per pagina
         permissions: Permissies
         reject: Weigeren
         verify: Verifiëren
@@ -274,6 +263,7 @@ nl:
           headers:
             actions: Acties
             name: Naam onderdeel
+            scope: Onderdeel scope
             type: Onderdeel type
         new:
           add: Voeg onderdeel toe
@@ -292,34 +282,43 @@ nl:
           welcome: Welkom bij het Decidim Admin Panel.
       exports:
         export_as: "%{name} als %{export_format}"
+        formats:
+          CSV: csv
+          Excel: Excel
+          FormPDF: PDF-bestand
+          JSON: JSON
         notice: Uw export is momenteel aan de gang. U ontvangt een email wanneer het klaar is.
       filters:
         category_id_eq:
-          label: Category
-        filter_label: Filter
+          label: Categorie
+        filter_label: Filteren
+        moderations:
+          reportable_type_string_eq:
+            label: Type
         officialized_at_null:
-          label: State
+          label: Staat
           values:
-            'false': Officialized
-            'true': Not officialized
+            'false': Gevalideerd
+            'true': Niet gevalideerd
         private_space_eq:
-          label: Private
+          label: Privé
           values:
-            'false': Public
-            'true': Private
+            'false': Openbaar
+            'true': Privé
         published_at_null:
-          label: Published
+          label: Ingediend
           values:
-            'false': Published
-            'true': Unpublished
+            'false': Ingediend
+            'true': Niet-gepubliceerde
         scope_id_eq:
-          label: Scope
-        search_label: Search
+          label: Bereik
+        search_label: Zoeken
         search_placeholder:
-          name_or_nickname_or_email_cont: Search %{collection} by email, name or nickname.
-          title_cont: Search %{collection} by title.
+          name_or_nickname_or_email_cont: Zoek %{collection} op e-mail, naam of bijnaam.
+          reported_id_string_or_reported_content_cont: Zoek %{collection} op rapporteerbaar id of op inhoud.
+          title_cont: Zoek %{collection} op titel.
         state_eq:
-          label: State
+          label: Provincie
           values:
             accepted: Accepted
             created: Created
@@ -388,7 +387,6 @@ nl:
         homepage: Startpagina
         impersonations: Zich voordoen als
         newsletters: Nieuwsbrieven
-        oauth_applications: OAuth-toepassingen
         participants: Deelnemers
         scope_types: Scope types
         scopes: Scopes
@@ -396,6 +394,9 @@ nl:
         static_pages: Pagina's
         user_groups: groepen
         users: Deelnemers
+      metrics:
+        metrics:
+          see_more_metrics: Bekijk meer statistieken
       models:
         area:
           fields:
@@ -432,11 +433,6 @@ nl:
             sent_to: Verzonden aan
             subject: Onderwerp
           name: Nieuwsbrief
-        oauth_application:
-          fields:
-            created_at: Aangemaakt op
-            name: Naam
-          name: OAuth-toepassing
         participatory_space_private_user:
           name: Participerende ruimte privé deelnemer
         scope:
@@ -479,6 +475,29 @@ nl:
             does_not_belong: Hoort niet
             offensive: Aanvallend
             spam: Spam
+        reports:
+          index:
+            author: Auteur(s)
+            callout_html: Een inhoud verschijnt in het moderatiescherm als die is gerapporteerd door een gebruiker (kan iedereen met een geregistreerde account zijn) door op de vlag %{icon} te klikken naast het item.
+            content_original_language: Oorspronkelijke taal inhoud
+            participatory_space: Participatieve ruimte
+            reported_content: Gerapporteerde inhoud
+            see_current: Bekijk huidige
+            see_original: Bekijk origineel
+            title: Moderatierapporten
+          show:
+            report_details: Reden details
+            report_language: Taal melden
+            report_reason: Reden
+            title: Rapport details
+      newsletter_templates:
+        index:
+          preview_template: Voorbeeld
+          title: Nieuwsbrief templates
+          use_template: Gebruik deze template
+        show:
+          preview: 'Voorbeeld sjabloon: %{template_name}'
+          use_template: Gebruik deze template
       newsletters:
         create:
           error: Er is een fout opgetreden bij het maken van deze nieuwsbrief.
@@ -492,8 +511,6 @@ nl:
         edit:
           save_and_preview: Opslaan en previewen
           title: Bewerk nieuwsbrief
-        form:
-          interpolations_hint: 'Hint: U kunt "%{name}" overal in de body of onderwerp gebruiken en het wordt vervangen door de naam van de ontvanger.'
         index:
           all: alle
           all_users: 'Alle gebruikers '
@@ -537,25 +554,6 @@ nl:
         update:
           error: Er is een fout opgetreden bij het bijwerken van deze nieuwsbrief.
           success: Nieuwsbrief is succesvol bijgewerkt. Controleer het voordat u verzendt.
-      oauth_applications:
-        create:
-          error: Er is een fout opgetreden bij het maken van deze toepassing.
-          success: Applicatie succesvol aangemaakt.
-        destroy:
-          error: Er is een fout opgetreden tijdens het vernietigen van deze toepassing.
-          success: Toepassing succesvol vernietigd.
-        edit:
-          save: Opslaan
-          title: Bewerk applicatie
-        index:
-          confirm_delete: Weet je zeker dat je deze applicatie wilt verwijderen?
-          title: OAuth-toepassingen
-        new:
-          save: Opslaan
-          title: Nieuwe toepassing
-        update:
-          error: Er is een fout opgetreden bij het bijwerken van deze toepassing.
-          success: Toepassing succesvol bijgewerkt.
       officializations:
         create:
           success: Deelnemer met succes officieel gemaakt
@@ -579,7 +577,7 @@ nl:
           officialized: Gevalideerd
           reofficialize: Hervalideren
           search: Search
-          show_email: Show email address
+          show_email: Toon e-mailadres
           status: status
           unofficialize: Ingetrokken
         new:
@@ -587,12 +585,13 @@ nl:
           officialize: Bevestigen
           title: Deelnemer "%{name}" officieel maken
         show_email_modal:
-          description: If you need to contact a participant directly you can click on the Show button to see the email address. This action will be logged.
-          email_address: Email address
-          full_name: Full name
+          close_modal: Sluit venster
+          description: Als u rechtstreeks contact wilt opnemen met een deelnemer, kunt u klikken op de Toon knop om het e-mailadres te zien. Deze actie wordt geregistreerd.
+          email_address: E-mail adres
+          full_name: Volledige naam
           hidden: hidden
-          show: Show
-          title: Show participant email address
+          show: Weergeven
+          title: Toon e-mailadres van gebruiker
       organization:
         edit:
           title: Organisatie bewerken
@@ -604,7 +603,6 @@ nl:
           rich_text_editor_in_public_views_help: In bepaalde teksten kunnen deelnemers enkele HTML-tags toevoegen door gebruik te maken van de rich text-editor.
           social_handlers: Sociaal
           twitter: Twitter
-          url: Url
           youtube: YouTube
         update:
           error: Er is een fout opgetreden bij het bijwerken van deze organisatie.
@@ -613,13 +611,16 @@ nl:
         edit:
           update: Bijwerken
         form:
-          colors_title: Organisatiekleuren
+          colors:
+            colors_title: Organisatiekleuren
+            header_snippets_help: Gebruik dit veld om dingen toe te voegen aan de HTML-kop. Het meest voorkomende gebruik is het integreren van diensten van derden die extra JavaScript of CSS nodig hebben. U kunt het ook gebruiken om extra metatags toe te voegen aan de HTML. Houd er rekening mee dat dit alleen op openbare pagina's wordt weergegeven, niet in de beheerdersafdeling.
           cta_button_path_help: 'U kunt de verwijzing van de knop "Call to Action" overschrijven. Gebruik hier gedeeltelijke paden, niet volledige URL''s. Aanvaardt letters, cijfers, streepjes en streepjes en moet beginnen met een brief. De knop "Call to Action" wordt weergegeven op de homepage tussen de welkomsttekst en de omschrijving. Voorbeeld: %{url}'
           cta_button_text_help: U kunt de tekst voor "Call To Action" overschrijven op de homepage voor elke beschikbare taal in uw organisatie. Indien niet ingesteld, wordt de standaardwaarde gebruikt. De knop Call to Action wordt weergegeven op de homepage tussen de welkomsttekst en de omschrijving.
-          header_snippets_help: Gebruik dit veld om dingen toe te voegen aan de HTML-kop. Het meest voorkomende gebruik is het integreren van diensten van derden die extra JavaScript of CSS nodig hebben. U kunt het ook gebruiken om extra metatags toe te voegen aan de HTML. Houd er rekening mee dat dit alleen op openbare pagina's wordt weergegeven, niet in de beheerdersafdeling.
           homepage_appearance_title: Bewerk de startpagina-weergave
           homepage_highlighted_content_banner_title: Uitgelichte inhoudsbanner
-          layout_appearance_title: Weergave van de lay-out bewerken
+          images:
+            layout_appearance_title: Weergave van de lay-out bewerken
+            preview: Voorvertoning
           omnipresent_banner_appearance_title: Bewerk de permanente banner
       organization_homepage:
         edit:
@@ -636,7 +637,6 @@ nl:
           error: Er was een probleem met het verwijderen van een privé-deelnemer voor deze participatieruimte.
           success: De toegang van de privé deelnemer voor burgerinspraak is met succes verwijderd.
         index:
-          import_via_csv: Importeren via csv
           title: Participerende ruimte voor privé deelnemer
         new:
           create: creëren
@@ -646,7 +646,6 @@ nl:
           invalid: Er is een fout opgetreden bij het lezen van het CSV-bestand.
           success: Het CSV-bestand is succesvol geüploaded. We sturen een uitnodigingsmail naar de deelnemers. Dit kan even duren.
         new:
-          explanation: Upload uw CSV-bestand zonder headers. Het moet uit twee kolommen bestaan, met het e-mailadres in de eerste kolom en de naam in de laatste kolom van de gebruikers die u wilt toevoegen aan het proces (e-mail, naam).
           title: Upload het CSV-bestand
           upload: Upload
       resource_permissions:
@@ -655,6 +654,10 @@ nl:
           title: Bewerk toelatingen
         update:
           success: Machtigingen succesvol bijgewerkt.
+      resources:
+        index:
+          headers:
+            scope: Scope
       scope_types:
         create:
           error: Er is een fout opgetreden bij het maken van een nieuwe scope type.
@@ -686,6 +689,11 @@ nl:
         update:
           error: Er is een fout opgetreden bij het bijwerken van deze scope.
           success: Scope is succesvol bijgewerkt
+      shared:
+        gallery:
+          add_images: Afbeeldingen toevoegen
+          delete_image: Afbeelding verwijderen
+          gallery_legend: Voeg een afbeeldingsgalerij toe (optioneel)
       static_page_topics:
         create:
           error: Er is een fout opgetreden bij het maken van een nieuw onderwerp.
@@ -737,10 +745,12 @@ nl:
         dashboard: Dashboard
         impersonatable_users: Beheersbare deelnemers
         impersonations: Beheer van deelnemers
+        metrics: Statistieken
         participants: Deelnemers
         scope_types: Scope types
         scopes: Scopes
         static_pages: Pagina's
+        statistics: Activiteit
         user_groups: groepen
         users: Deelnemers
       user_group:
@@ -786,6 +796,14 @@ nl:
         new:
           create: Nodig uit
           title: Nodig deelnemer uit als beheerder
+      users_statistics:
+        users_count:
+          admins: Admins
+          last_day: Afgelopen dag
+          last_month: Vorige maand
+          last_week: Vorige week
+          no_users_count_statistics_yet: Er zijn nog geen gebruikers teller statistieken
+          participants: Deelnemers
       view_public_page: Bekijk openbare pagina
     forms:
       errors:
@@ -793,6 +811,7 @@ nl:
           reason: U moet een reden opgeven voor het beheer van een niet-beheerde deelnemer
     moderations:
       actions:
+        expand: Tonen
         hidden: Verborgen
         hide: Verbergen
         not_hidden: niet verstopt
@@ -813,12 +832,19 @@ nl:
       models:
         moderation:
           fields:
+            created_at: Aanmaakdatum
             hidden_at: Verborgen op
             report_count: Aantal
-            reportable: Rapporterbaar
+            reportable_id: Id
+            reportable_type: Type
             reported_content_url: Gerapporteerde inhouds-URL
             reports: Meldingen
             visit_url: Bezoek URL
+        report:
+          fields:
+            details: Reden details
+            locale: Taal
+            reason: Reden
   errors:
     messages:
       invalid_json: Ongeldige JSON

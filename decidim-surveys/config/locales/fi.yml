@@ -20,6 +20,9 @@ fi:
         settings:
           global:
             announcement: Ilmoitus
+            clean_after_publish: Poista vastaukset julkaistaessa kysely
+            scope_id: Teema
+            scopes_enabled: Teemat käytössä
           step:
             allow_answers: Salli vastaukset
             allow_unregistered: Salli rekisteröitymättömien käyttäjien vastata tähän kyselyyn
@@ -28,7 +31,7 @@ fi:
     events:
       surveys:
         survey_closed:
-          email_intro: Kysely %{resource_title} kohteessa %{participatory_space_title} on suljettu.
+          email_intro: Kysely %{resource_title} osallistumistilassa %{participatory_space_title} on suljettu.
           email_outro: Tämä ilmoitus on lähetetty sinulle, koska seuraat kohdetta %{participatory_space_title}. Voit lopettaa ilmoitusten vastaanottamisen edellä esitetyn linkin kautta.
           email_subject: Kysely on päättynyt kohteessa %{participatory_space_title}
           notification_title: Kysely <a href="%{resource_path}">%{resource_title}</a> kohteessa <a href="%{participatory_space_url}">%{participatory_space_title}</a> on päättynyt.
@@ -55,5 +58,5 @@ fi:
       surveys:
         answer:
           invalid: Kyselyyn vastaaminen epäonnistui.
-          spam_detected: Kyselyn vastaamisessa tapahtui virhe. Ehkä olit liian nopea, voisitko yrittää uudestaan?
+          spam_detected: Kyselyn vastaaminen epäonnistui. Ehkä olit liian nopea, voisitko yrittää uudestaan?
           success: Kyselyyn vastaaminen onnistui.

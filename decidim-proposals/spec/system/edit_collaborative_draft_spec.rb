@@ -84,7 +84,14 @@ describe "Edit collaborative_drafts", type: :system do
           click_button "Send"
         end
 
-        expect(page).to have_content("is using too many capital letters (over 25% of the text), is too short (under 15 characters)")
+        expect(page).to have_content("at least 15 characters", count: 2)
+
+        within "form.edit_collaborative_draft" do
+          fill_in :collaborative_draft_body, with: "WE DO NOT WANT TO SHOUT IN THE PROPOSAL BODY TEXT!"
+          click_button "Send"
+        end
+
+        expect(page).to have_content("is using too many capital letters (over 25% of the text)")
       end
 
       it "keeps the submitted values" do
@@ -96,12 +103,12 @@ describe "Edit collaborative_drafts", type: :system do
 
         within "form.edit_collaborative_draft" do
           fill_in :collaborative_draft_title, with: "A title with a #hashtag"
-          fill_in :collaborative_draft_body, with: "Ỳü"
+          fill_in :collaborative_draft_body, with: "ỲÓÜ WÄNTt TÙ ÚPDÀTÉ À PRÖPÔSÁL"
         end
         click_button "Send"
 
         expect(page).to have_selector("input[value='A title with a #hashtag']")
-        expect(page).to have_content("Ỳü")
+        expect(page).to have_content("ỲÓÜ WÄNTt TÙ ÚPDÀTÉ À PRÖPÔSÁL")
       end
     end
   end
@@ -117,7 +124,7 @@ describe "Edit collaborative_drafts", type: :system do
       click_link "Access collaborative drafts"
       click_link collaborative_draft.title
       expect(page).to have_no_content("Edit collaborative draft")
-      visit current_path + "/edit"
+      visit "#{current_path}/edit"
 
       expect(page).to have_content("not authorized")
     end
@@ -136,7 +143,7 @@ describe "Edit collaborative_drafts", type: :system do
       click_link "Access collaborative drafts"
       click_link collaborative_draft.title
       expect(page).to have_no_content("Edit collaborative draft")
-      visit current_path + "/edit"
+      visit "#{current_path}/edit"
 
       expect(page).to have_content("not authorized")
     end

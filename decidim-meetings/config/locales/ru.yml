@@ -29,9 +29,7 @@ ru:
         title: Название
         transparent: Прозрачная
       minutes:
-        audio_url: Веб-адрес аудиозаписи
         description: Описание
-        video_url: Веб-адрес видеозаписи
         visible: Видимый
     errors:
       models:
@@ -227,9 +225,6 @@ ru:
           edit:
             close: Закрыть
             title: Закрыть встречу
-        meeting_copies:
-          form:
-            select_organizer: Выберите организатора
         meetings:
           close:
             invalid: При попытке закрыть эту встречу произошла ошибка
@@ -241,8 +236,6 @@ ru:
             success: Встреча успешно удалена
           edit:
             update: Обновить
-          form:
-            select_organizer: Выберите организатора
           index:
             title: Встречи
           new:
@@ -341,11 +334,8 @@ ru:
       meetings:
         filters:
           category: Категория
-          category_prompt: Выберите категорию
           date: Дата
-          past: Прошедшие
           search: Поиск
-          upcoming: Предстоящие
         filters_small_view:
           close_modal: Закрыть окошко
           filter: Отобрать

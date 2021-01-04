@@ -1,0 +1,40 @@
+<%
+js_configs = {
+  icons_path: image_path("decidim/icons.svg"),
+  messages: {
+    "selfxssWarning": {
+      title: t("decidim.security.selfxss_warning.title"),
+      description: t("decidim.security.selfxss_warning.description")
+    }
+  }
+}
+character_messages = {
+  "charactersAtLeast": {
+    one: t("forms.length_validator.minimum.one", count: "%count%", default: "forms.length_validator.minimum.other"),
+    other: t("forms.length_validator.minimum.other", count: "%count%")
+  },
+  "charactersLeft": {
+    one: t("decidim.components.add_comment_form.remaining_characters_1", count: "%count%"),
+    other: t("decidim.components.add_comment_form.remaining_characters", count: "%count%")
+  }
+}
+external_link_messages = {
+  "externalLink": t("decidim.accessibility.external_link")
+}
+validator_messages = {
+  "correctErrors": t("forms.correct_errors")
+}
+%>
+
+<script>
+  window.Decidim.locale = "<%= I18n.locale.to_s.html_safe %>";
+  window.Decidim.locale_name = "<%= t("name", scope: "locale") %>";
+  window.Decidim.available_locales = <%= current_organization.available_locales.to_json.html_safe %>;
+  window.Decidim.translatable = <%= (!current_organization.deepl_api_key.blank? && current_organization.translatable_locales.count > 1).to_s %>;
+  window.Decidim.translatable_locales = <%= current_organization.translatable_locales.to_json.html_safe %>;
+
+  Decidim.config.set(<%== js_configs.to_json %>);
+  Decidim.InputCharacterCounter.configureMessages(<%== character_messages.to_json %>);
+  Decidim.ExternalLink.configureMessages(<%== external_link_messages.to_json %>);
+  Decidim.FormValidator.configureMessages(<%== validator_messages.to_json %>);
+</script>

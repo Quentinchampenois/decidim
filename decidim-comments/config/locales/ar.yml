@@ -24,7 +24,6 @@ ar:
         other: الأصوات
   decidim:
     comments:
-      comments: تعليقات
       last_activity:
         new_comment_at_html: "<span>تعليق جديد على %{link}</span>"
       votes:
@@ -63,7 +62,6 @@ ar:
             does_not_belong: يحتوي على نشاط غير قانوني أو تهديدات انتحارية أو معلومات شخصية أو أي شيء آخر تعتقد أنه لا ينتمي إلى %{organization_name}.
             offensive: يحتوي على العنصرية والتمييز الجنسي والتشهير والهجمات الشخصية والتهديدات بالقتل أو طلبات الانتحار أو أي شكل من أشكال خطاب الكراهية.
             spam: يحتوي على clickbait أو الإعلان أو الخدع أو روبوت البرامج النصية.
-          title: الإبلاغ عن مشكلة
         show_replies: اظهر الردود الـ %{replies_count}
         single_comment_link_title: الحصول على رابط نحو تعليق واحد
       comment_order_selector:
@@ -82,12 +80,14 @@ ar:
         loading: جارٍ تحميل التعليقات ...
         single_comment_warning: يمكنك الإطلاع على التعليقات المتبقية الأخرى <a href="%{url}">هنا</a>.
         single_comment_warning_title: إنك ترى تعليقا واحدا
-        title: "%{count} تعليقات"
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} ترك تعليق في %{resource_title}. يمكنك قراءتها في هذه الصفحة:"
           email_outro: لقد تلقيت هذا الإشعار لأنك تتابع %{author_name}. يمكنك إلغاء تتبع هذا المستخدم من صفحة ملفه الشخصي.
+          email_subject: هناك تعليق جديد مِن %{author_name} على %{resource_title}
+          notification_title: هناك تعليق جديد مِن <a href="%{author_path}">%{author_name} %{author_nickname}</a> على <a href="%{resource_path}">%{resource_title}</a>.
+        comment_by_followed_user_group:
           email_subject: هناك تعليق جديد مِن %{author_name} على %{resource_title}
           notification_title: هناك تعليق جديد مِن <a href="%{author_path}">%{author_name} %{author_nickname}</a> على <a href="%{resource_path}">%{resource_title}</a>.
         comment_created:

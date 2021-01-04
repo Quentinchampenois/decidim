@@ -4,6 +4,7 @@ module Decidim
   # The controller to handle the user's public profile page.
   class ProfilesController < Decidim::ApplicationController
     include UserGroups
+    include Flaggable
 
     helper Decidim::Messaging::ConversationHelper
 
@@ -22,16 +23,19 @@ module Decidim
 
     def following
       @content_cell = "decidim/following"
+      @title_key = "following"
       render :show
     end
 
     def followers
       @content_cell = "decidim/followers"
+      @title_key = "followers"
       render :show
     end
 
     def badges
       @content_cell = "decidim/badges"
+      @title_key = "badges"
       render :show
     end
 
@@ -39,6 +43,7 @@ module Decidim
       enforce_user_groups_enabled
 
       @content_cell = "decidim/groups"
+      @title_key = "groups"
       render :show
     end
 
@@ -46,11 +51,13 @@ module Decidim
       enforce_user_groups_enabled
 
       @content_cell = "decidim/members"
+      @title_key = "members"
       render :show
     end
 
     def activity
       @content_cell = "decidim/user_activity"
+      @title_key = "activity"
       render :show
     end
 

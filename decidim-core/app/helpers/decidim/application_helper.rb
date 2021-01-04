@@ -22,7 +22,7 @@ module Decidim
       options[:tail] = options.delete(:separator) || options[:tail] || "..."
       options[:count_tags] ||= false
       options[:count_tail] ||= false
-      options[:tail_before_final_tag] ||= true
+      options[:tail_before_final_tag] = true unless options.has_key?(:tail_before_final_tag)
 
       Truncato.truncate(text, options)
     end
@@ -34,12 +34,18 @@ module Decidim
     end
 
     def present(object, presenter_class: nil)
-      presenter_class ||= "#{object.class.name}Presenter".constantize
+      presenter_class ||= resolve_presenter_class(object, presenter_class: presenter_class)
       presenter = presenter_class.new(object)
 
       yield(presenter) if block_given?
 
       presenter
+    end
+
+    def resolve_presenter_class(object, presenter_class: nil)
+      presenter_class || "#{object.class.name}Presenter".constantize
+    rescue StandardError
+      ::Decidim::NilPresenter
     end
 
     # Generates a link to be added to the global Edit link so admins
@@ -98,7 +104,6 @@ module Decidim
     # Renders the cell contents.
     def cell(name, model, options = {}, &block)
       options = { context: { current_user: current_user } }.deep_merge(options)
-
       super(name, model, options, &block)
     end
 

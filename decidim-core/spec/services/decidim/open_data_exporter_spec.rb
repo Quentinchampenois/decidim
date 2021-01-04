@@ -20,12 +20,44 @@ describe Decidim::OpenDataExporter do
       let(:csv_file) { zip_contents.glob(csv_file_name).first }
       let(:csv_data) { csv_file.get_input_stream.read }
 
+      describe "election results" do
+        let(:csv_file_name) { "*open-data-elections.csv" }
+        let(:component) do
+          create(:elections_component, organization: organization, published_at: Time.current)
+        end
+        let!(:election) { create(:election, :results_published, component: component) }
+        let!(:question) { election.questions.first }
+        let!(:answer) { question.answers.first }
+
+        before do
+          subject.export
+        end
+
+        it "includes a CSV with election results" do
+          expect(csv_file).not_to be_nil
+        end
+
+        it "includes the election results data" do
+          expect(csv_data).to include(translated(answer.title))
+        end
+
+        context "with unpublished components" do
+          let(:component) do
+            create(:elections_component, organization: organization, published_at: nil)
+          end
+
+          it "includes the election results data" do
+            expect(csv_data).not_to include(translated(answer.title))
+          end
+        end
+      end
+
       describe "proposals" do
         let(:csv_file_name) { "*open-data-proposals.csv" }
         let(:component) do
           create(:proposal_component, organization: organization, published_at: Time.current)
         end
-        let!(:proposal) { create(:proposal, :published, component: component, title: "My super proposal") }
+        let!(:proposal) { create(:proposal, :published, component: component, title: { en: "My super proposal" }) }
 
         before do
           subject.export
@@ -36,7 +68,7 @@ describe Decidim::OpenDataExporter do
         end
 
         it "includes the proposals data" do
-          expect(csv_data).to include(proposal.title)
+          expect(csv_data).to include(translated(proposal.title))
         end
 
         context "with unpublished components" do
@@ -45,7 +77,7 @@ describe Decidim::OpenDataExporter do
           end
 
           it "includes the proposals data" do
-            expect(csv_data).not_to include(proposal.title)
+            expect(csv_data).not_to include(translated(proposal.title))
           end
         end
       end

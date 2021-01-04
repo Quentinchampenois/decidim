@@ -29,9 +29,7 @@ hu:
         title: Cím
         transparent: Átlátszó
       minutes:
-        audio_url: Audio url
         description: Leírás
-        video_url: Videó URL
         visible: Látható
     errors:
       models:
@@ -153,6 +151,10 @@ hu:
         confirm_destroy: Biztosan törölni szeretnéd ezt a találkozót?
         destroy: Törlés
         edit: Szerkesztés
+        invalid_destroy:
+          proposals_count:
+            one: 'A találkozót nem lehet megsemmisíteni, mert %{count} javaslat van társítva hozzá:'
+            other: 'A találkozót nem lehet megsemmisíteni, mert %{count} javaslat van társítva hozzá:'
         minutes: Jegyzőkönyvek
         new: Új találkozó
         preview: Előnézet
@@ -223,9 +225,6 @@ hu:
           edit:
             close: Bezárás
             title: Ttalálkozó lezárása
-        meeting_copies:
-          form:
-            select_organizer: Válassz szervezőt
         meetings:
           close:
             invalid: Probléma merült fel a találkozó lezárásakor
@@ -234,14 +233,16 @@ hu:
             invalid: Probléma történt a találkozó létrehozása során
             success: Találkozó létrehozása sikeres
           destroy:
+            invalid:
+              proposals_count:
+                one: A találkozót nem lehet megsemmisíteni, mert %{count} javaslat van társítva hozzá
+                other: A találkozót nem lehet megsemmisíteni, mert %{count} javaslat van társítva hozzá
             success: Találkozó törlése sikeres
           edit:
             update: Frissítés
           form:
             address_help: 'Cím: Geocoder használata a helymeghatározáshoz'
             location_help: 'Helyszín: üzenet az adott felhasználóknak a találkozó helyéről'
-            location_hints_help: 'Helymeghatározási tippek: további információk. Példa: az épület padlója'
-            select_organizer: Válassz szervezőt
           index:
             title: Találkozók
           new:
@@ -347,11 +348,8 @@ hu:
       meetings:
         filters:
           category: Kategória
-          category_prompt: Válassz kategóriát
           date: Dátum
-          past: Előzmények
           search: Keresés
-          upcoming: Közelgő
         filters_small_view:
           close_modal: Modal bezárása
           filter: Szűrő
@@ -368,6 +366,7 @@ hu:
           confirm: Megerősítés
         show:
           attendees: Résztvevők száma
+          back: Vissza a listához
           contributions: Hozzájárulások száma
           going: Halad
           join: Csatlakozz a találkozóhoz

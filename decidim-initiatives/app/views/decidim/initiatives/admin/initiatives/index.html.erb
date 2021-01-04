@@ -7,7 +7,7 @@
       </div>
     </h2>
   </div>
-  <%= admin_filter_selector %>
+  <%= admin_filter_selector(:initiatives) %>
   <div class="card-section">
     <div class="table-scroll">
       <table class="table-list">
@@ -47,6 +47,8 @@
                                  t(".preview"),
                                  class: "action-icon--preview",
                                  target: "_blank" %>
+              <% else %>
+               <span class="action-space icon"></span>
               <% end %>
 
               <% if allowed_to? :edit, :initiative, initiative: initiative %>
@@ -54,12 +56,14 @@
                                  decidim_admin_initiatives.edit_initiative_path(initiative.to_param),
                                  t("actions.configure", scope: "decidim.admin"),
                                  class: "action-icon--edit" %>
+              <% else %>
+               <span class="action-space icon"></span>
               <% end %>
 
               <% if allowed_to?(:answer, :initiative, initiative: initiative) %>
                 <%= icon_link_to "comment-square", edit_initiative_answer_path(initiative.slug), t("actions.answer", scope: "decidim.initiatives"), class: "action-icon action-icon--answer" %>
               <% else %>
-                <%= icon "comment-square", scope: "decidim.admin", class: "action-icon action-icon--disabled", role: "img" %>
+                <%= icon "comment-square", scope: "decidim.admin", class: "action-icon action-icon--disabled", role: "img", "aria-hidden": true %>
               <% end %>
 
               <% if allowed_to? :read, :initiative, initiative: initiative %>
@@ -67,6 +71,8 @@
                                  decidim_admin_initiatives.initiative_path(initiative.to_param),
                                  t(".print",),
                                  class: "action-icon--print" %>
+              <% else %>
+                <span class="action-space icon"></span>
               <% end %>
             </td>
           <% end %>

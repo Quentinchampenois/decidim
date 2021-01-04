@@ -3,14 +3,9 @@
 module Decidim
   module Meetings
     module Admin
-      # This class holds a Form to create/update meetings from Decidim's admin panel.
+      # This class holds a Form to create/update translatable meetings from Decidim's admin panel.
       class MeetingForm < Decidim::Form
         include TranslatableAttributes
-
-        translatable_attribute :title, String
-        translatable_attribute :description, String
-        translatable_attribute :location, String
-        translatable_attribute :location_hints, String
 
         attribute :address, String
         attribute :latitude, Float
@@ -22,34 +17,54 @@ module Decidim
         attribute :decidim_category_id, Integer
         attribute :private_meeting, Boolean
         attribute :transparent, Boolean
-        attribute :organizer_id, Integer
+        attribute :online_meeting_url, String
+        attribute :type_of_meeting, String
+        attribute :registration_type, String
+        attribute :registration_url, String
+        attribute :available_slots, Integer, default: 0
+
+        translatable_attribute :title, String
+        translatable_attribute :description, String
+        translatable_attribute :location, String
+        translatable_attribute :location_hints, String
 
         validates :title, translatable_presence: true
         validates :description, translatable_presence: true
-        validates :location, translatable_presence: true
-        validates :address, presence: true
-        validates :address, geocoding: true, if: -> { Decidim.geocoder.present? }
+        validates :registration_type, presence: true
+        validates :available_slots, numericality: { greater_than_or_equal_to: 0 }, presence: true, if: ->(form) { form.on_this_platform? }
+        validates :registration_url, presence: true, url: true, if: ->(form) { form.on_different_platform? }
+        validates :type_of_meeting, presence: true
+        validates :location, translatable_presence: true, if: ->(form) { form.in_person_meeting? }
+
+        validates :address, presence: true, if: ->(form) { form.needs_address? }
+        validates :address, geocoding: true, if: ->(form) { form.has_address? && !form.geocoded? && form.needs_address? }
+        validates :online_meeting_url, presence: true, url: true, if: ->(form) { form.online_meeting? }
         validates :start_time, presence: true, date: { before: :end_time }
         validates :end_time, presence: true, date: { after: :start_time }
 
         validates :current_component, presence: true
         validates :category, presence: true, if: ->(form) { form.decidim_category_id.present? }
         validates :scope, presence: true, if: ->(form) { form.decidim_scope_id.present? }
-        validates :organizer, presence: true, if: ->(form) { form.organizer_id.present? }
-
-        validate :scope_belongs_to_participatory_space_scope
+        validates :decidim_scope_id, scope_belongs_to_component: true, if: ->(form) { form.decidim_scope_id.present? }
+        validates :clean_type_of_meeting, presence: true
 
         delegate :categories, to: :current_component
 
         def map_model(model)
           self.services = model.services.map do |service|
-            MeetingServiceForm.new(service)
+            MeetingServiceForm.from_model(service)
           end
 
           self.decidim_category_id = model.categorization.decidim_category_id if model.categorization
           presenter = MeetingPresenter.new(model)
-          self.title = presenter.title(all_locales: true)
-          self.description = presenter.description(all_locales: true)
+
+          self.title = presenter.title(all_locales: title.is_a?(Hash))
+          self.description = presenter.description(all_locales: description.is_a?(Hash))
+          self.type_of_meeting = if model.online_meeting?
+                                   "online"
+                                 else
+                                   "in_person"
+                                 end
         end
 
         def services_to_persist
@@ -60,17 +75,13 @@ module Decidim
           services.size
         end
 
-        def organizer
-          @organizer ||= current_organization.users.find_by(id: organizer_id)
-        end
-
         alias component current_component
 
-        # Finds the Scope from the given decidim_scope_id, uses participatory space scope if missing.
+        # Finds the Scope from the given decidim_scope_id, uses component scope if missing.
         #
         # Returns a Decidim::Scope
         def scope
-          @scope ||= @decidim_scope_id ? current_participatory_space.scopes.find_by(id: @decidim_scope_id) : current_participatory_space.scope
+          @scope ||= @decidim_scope_id ? current_component.scopes.find_by(id: @decidim_scope_id) : current_component.scope
         end
 
         # Scope identifier
@@ -86,10 +97,58 @@ module Decidim
           @category ||= categories.find_by(id: decidim_category_id)
         end
 
-        private
+        def geocoding_enabled?
+          Decidim::Map.available?(:geocoding)
+        end
 
-        def scope_belongs_to_participatory_space_scope
-          errors.add(:decidim_scope_id, :invalid) if current_participatory_space.out_of_scope?(scope)
+        def has_address?
+          geocoding_enabled? && address.present?
+        end
+
+        def needs_address?
+          in_person_meeting?
+        end
+
+        def geocoded?
+          latitude.present? && longitude.present?
+        end
+
+        def online_meeting?
+          type_of_meeting == "online"
+        end
+
+        def in_person_meeting?
+          type_of_meeting == "in_person"
+        end
+
+        def clean_type_of_meeting
+          type_of_meeting.presence
+        end
+
+        def type_of_meeting_select
+          Decidim::Meetings::Meeting::TYPE_OF_MEETING.map do |type|
+            [
+              I18n.t("type_of_meeting.#{type}", scope: "decidim.meetings"),
+              type
+            ]
+          end
+        end
+
+        def on_this_platform?
+          registration_type == "on_this_platform"
+        end
+
+        def on_different_platform?
+          registration_type == "on_different_platform"
+        end
+
+        def registration_type_select
+          Decidim::Meetings::Meeting::REGISTRATION_TYPE.map do |type|
+            [
+              I18n.t("registration_type.#{type}", scope: "decidim.meetings"),
+              type
+            ]
+          end
         end
       end
     end

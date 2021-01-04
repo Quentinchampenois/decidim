@@ -17,39 +17,43 @@ module Decidim::Meetings
     let(:participatory_process) { create :participatory_process, organization: organization }
     let(:current_component) { create :component, participatory_space: participatory_process, manifest_name: "meetings" }
     let(:title) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:description) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:short_description) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:location) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:location_hints) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:services) do
-      [
-        { title: Decidim::Faker::Localized.sentence(2), description: Decidim::Faker::Localized.sentence(5) },
-        { title: Decidim::Faker::Localized.sentence(2), description: Decidim::Faker::Localized.sentence(5) }
-      ]
+      build_list(:service, 2)
+    end
+    let(:services_attributes) do
+      services.map(&:attributes)
     end
     let(:address) { "Carrer Pare Llaurador 113, baixos, 08224 Terrassa" }
     let(:latitude) { 40.1234 }
     let(:longitude) { 2.1234 }
     let(:start_time) { 2.days.from_now }
     let(:end_time) { 2.days.from_now + 4.hours }
-    let(:scope) { create :scope, organization: organization }
+    let(:parent_scope) { create(:scope, organization: organization) }
+    let(:scope) { create(:subscope, parent: parent_scope) }
     let(:scope_id) { scope.id }
     let(:category) { create :category, participatory_space: participatory_process }
     let(:category_id) { category.id }
-    let(:organizer) { create :user, organization: organization }
-    let(:organizer_id) { organizer.id }
     let(:private_meeting) { false }
     let(:transparent) { true }
+    let(:type_of_meeting) { "in_person" }
+    let(:online_meeting_url) { "http://decidim.org" }
+    let(:registration_url) { "http://decidim.org" }
+    let(:registration_type) { "on_this_platform" }
+    let(:available_slots) { 0 }
     let(:attributes) do
       {
         decidim_scope_id: scope_id,
@@ -64,14 +68,20 @@ module Decidim::Meetings
         end_time: end_time,
         private_meeting: private_meeting,
         transparent: transparent,
-        organizer_id: organizer_id,
-        services: services
+        services: services_attributes,
+        registration_type: registration_type,
+        available_slots: available_slots,
+        registration_url: registration_url,
+        type_of_meeting: type_of_meeting,
+        online_meeting_url: online_meeting_url
       }
     end
 
     before do
       stub_geocoding(address, [latitude, longitude])
     end
+
+    it_behaves_like "a scopable resource"
 
     it { is_expected.to be_valid }
 
@@ -87,7 +97,8 @@ module Decidim::Meetings
       it { is_expected.not_to be_valid }
     end
 
-    describe "when location is missing" do
+    describe "when location is missing and type of meeting is in_person" do
+      let(:type_of_meeting) { "in_person" }
       let(:location) { { en: nil } }
 
       it { is_expected.not_to be_valid }
@@ -129,12 +140,6 @@ module Decidim::Meetings
       it { is_expected.not_to be_valid }
     end
 
-    describe "when the scope does not exist" do
-      let(:scope_id) { scope.id + 10 }
-
-      it { is_expected.not_to be_valid }
-    end
-
     describe "when the category does not exist" do
       let(:category_id) { category.id + 10 }
 
@@ -148,7 +153,7 @@ module Decidim::Meetings
     end
 
     it "properly maps services from model" do
-      meeting = create(:meeting, services: services)
+      meeting = create(:meeting, :with_services, services: services)
 
       services = described_class.from_model(meeting).services
       expect(services).to all be_an(Admin::MeetingServiceForm)
@@ -164,7 +169,7 @@ module Decidim::Meetings
     describe "services_to_persist" do
       subject { form.services_to_persist }
 
-      let(:services) do
+      let(:services_attributes) do
         [
           { title: { en: "First service" }, description: { en: "First description" } },
           { title: { en: "Second service" }, description: { en: "Second description" }, deleted: true },
@@ -184,44 +189,37 @@ module Decidim::Meetings
       it { is_expected.to eq(services.size) }
     end
 
-    describe "scope" do
-      subject { form.scope }
+    describe "when online meeting link is missing and type of meeting is online" do
+      let(:type_of_meeting) { "online" }
+      let(:online_meeting_url) { nil }
 
-      context "when the scope exists" do
-        it { is_expected.to be_kind_of(Decidim::Scope) }
-      end
+      it { is_expected.not_to be_valid }
+    end
 
-      context "when the scope does not exist" do
-        let(:scope_id) { 3456 }
+    describe "when type of meeting is missing" do
+      let(:type_of_meeting) { nil }
 
-        it { is_expected.to eq(nil) }
-      end
+      it { is_expected.not_to be_valid }
+    end
 
-      context "when the scope is from another organization" do
-        let(:scope_id) { create(:scope).id }
+    describe "when registration type of meeting is missing" do
+      let(:registration_type) { nil }
 
-        it { is_expected.to eq(nil) }
-      end
+      it { is_expected.not_to be_valid }
+    end
 
-      context "when the participatory space has a scope" do
-        let(:parent_scope) { create(:scope, organization: organization) }
-        let(:participatory_process) { create(:participatory_process, organization: organization, scope: parent_scope) }
-        let(:scope) { create(:scope, organization: organization, parent: parent_scope) }
+    describe "when registration type is on this platform and available slots are missing" do
+      let(:available_slots) { nil }
+      let(:registration_type) { "on_this_platform" }
 
-        context "when the scope is descendant from participatory space scope" do
-          it { is_expected.to eq(scope) }
-        end
+      it { is_expected.not_to be_valid }
+    end
 
-        context "when the scope is not descendant from participatory space scope" do
-          let(:scope) { create(:scope, organization: organization) }
+    describe "when registration url is missing and registration type of meeting is on different platform" do
+      let(:registration_type) { "on_different_platform" }
+      let(:registration_url) { nil }
 
-          it { is_expected.to eq(scope) }
-
-          it "makes the form invalid" do
-            expect(form).to be_invalid
-          end
-        end
-      end
+      it { is_expected.not_to be_valid }
     end
   end
 end

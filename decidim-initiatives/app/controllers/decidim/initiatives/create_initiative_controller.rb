@@ -18,6 +18,7 @@ module Decidim
       helper InitiativeHelper
       helper_method :similar_initiatives
       helper_method :scopes
+      helper_method :areas
       helper_method :current_initiative
       helper_method :initiative_type
       helper_method :promotal_committee_required?
@@ -85,7 +86,6 @@ module Decidim
 
       def promotal_committee_step(parameters)
         @form = build_form(Decidim::Initiatives::InitiativeForm, parameters)
-
         unless @form.valid?
           redirect_to previous_wizard_path(validate_form: true)
           return

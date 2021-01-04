@@ -29,6 +29,7 @@ shared_context "when a simple event" do
   let(:resource_path) { resource_locator(resource).path }
   let(:resource_url) { resource_locator(resource).url }
   let(:resource_title) { resource.title["en"] }
+  # to be used when resource is a component resource, not a participatory space, in which case should be overriden
   let(:participatory_space) { resource.participatory_space }
   let(:participatory_space_title) { participatory_space.title["en"] }
   let(:participatory_space_path) { Decidim::ResourceLocatorPresenter.new(participatory_space).path }
@@ -85,6 +86,13 @@ shared_examples_for "a simple event" do |skip_space_checks|
     it "is generated correctly" do
       expect(subject.email_greeting).to be_kind_of(String)
       expect(subject.email_greeting).not_to include("translation missing")
+    end
+  end
+
+  describe "safe_resource_text" do
+    it "is generated correctly" do
+      expect(subject.safe_resource_text).to be_kind_of(String)
+      expect(subject.safe_resource_text).to be_html_safe
     end
   end
 

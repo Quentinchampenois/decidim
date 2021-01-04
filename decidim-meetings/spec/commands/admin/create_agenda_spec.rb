@@ -16,7 +16,7 @@ module Decidim::Meetings
       double(
         invalid?: invalid,
         title: { en: "title" },
-        visible: true,
+        visible: :visible,
         agenda_items: [
           double(
             title: { en: "title" },
@@ -70,7 +70,7 @@ module Decidim::Meetings
         subject.call
         expect(translated(agenda_item.title)).to eq("title")
         expect(agenda_item.agenda_item_children.size).to eq(2)
-        expect(agenda_item.agenda_item_children.order(:position).map(&:title)). to eq([{ "en" => "title child 1" }, { "en" => "title child 2" }])
+        expect(agenda_item.agenda_item_children.order(:position).map(&:title)).to eq([{ "en" => "title child 1" }, { "en" => "title child 2" }])
       end
 
       it "traces the action", versioning: true do

@@ -20,15 +20,15 @@ describe "Authorizations", type: :system, with_authorization_workflows: ["dummy_
         find(".sign-in-link").click
 
         within "form.new_user" do
-          fill_in :user_email, with: user.email
-          fill_in :user_password, with: "password1234"
+          fill_in :session_user_email, with: user.email
+          fill_in :session_user_password, with: "password1234"
           find("*[type=submit]").click
         end
       end
 
       it "redirects the user to the authorization form after the first sign in" do
         fill_in "Document number", with: "123456789X"
-        page.execute_script("$('#authorization_handler_date_of_birth').focus()")
+        page.execute_script("$('#authorization_handler_birthday').focus()")
         page.find(".datepicker-dropdown .day", text: "12").click
 
         click_button "Send"
@@ -50,8 +50,8 @@ describe "Authorizations", type: :system, with_authorization_workflows: ["dummy_
         find(".sign-in-link").click
 
         within "form.new_user" do
-          fill_in :user_email, with: user.email
-          fill_in :user_password, with: "password1234"
+          fill_in :session_user_email, with: user.email
+          fill_in :session_user_password, with: "password1234"
           find("*[type=submit]").click
         end
       end
@@ -83,8 +83,8 @@ describe "Authorizations", type: :system, with_authorization_workflows: ["dummy_
         click_link "Example authorization"
 
         fill_in "Document number", with: "123456789X"
-        page.execute_script("$('#authorization_handler_date_of_birth').focus()")
-        page.find(".datepicker-dropdown .day", text: "12").click
+        page.execute_script("$('#authorization_handler_birthday').focus()")
+        page.find(".datepicker-dropdown .datepicker-days", text: "12").click
         click_button "Send"
 
         expect(page).to have_content("You've been successfully authorized")
@@ -108,8 +108,8 @@ describe "Authorizations", type: :system, with_authorization_workflows: ["dummy_
         click_link "Example authorization"
 
         fill_in "Document number", with: "12345678"
-        page.execute_script("$('#authorization_handler_date_of_birth').focus()")
-        page.find(".datepicker-dropdown .day", text: "12").click
+        page.execute_script("$('#authorization_handler_birthday').focus()")
+        page.find(".datepicker-dropdown .datepicker-days", text: "12").click
         click_button "Send"
 
         expect(page).to have_content("There was a problem creating the authorization.")
@@ -135,6 +135,78 @@ describe "Authorizations", type: :system, with_authorization_workflows: ["dummy_
         end
       end
 
+      context "when the authorization is renewable" do
+        describe "and still not over the waiting period" do
+          let!(:authorization) do
+            create(:authorization, name: "dummy_authorization_handler", user: user, granted_at: 1.minute.ago)
+          end
+
+          it "can't be renewed yet" do
+            within_user_menu do
+              click_link "My account"
+            end
+
+            click_link "Authorizations"
+
+            within ".authorizations-list" do
+              expect(page).to have_no_link("Example authorization")
+              expect(page).to have_no_css(".authorization-renewable")
+            end
+          end
+        end
+
+        describe "and passed the time between renewals" do
+          let!(:authorization) do
+            create(:authorization, name: "dummy_authorization_handler", user: user, granted_at: 6.minutes.ago)
+          end
+
+          it "can be renewed" do
+            within_user_menu do
+              click_link "My account"
+            end
+
+            click_link "Authorizations"
+
+            within ".authorizations-list" do
+              expect(page).to have_link("Example authorization")
+              expect(page).to have_css(".authorization-renewable")
+            end
+          end
+
+          it "shows a modal with renew information" do
+            within_user_menu do
+              click_link "My account"
+            end
+
+            click_link "Authorizations"
+            click_link "Example authorization"
+
+            within "#renew-modal" do
+              expect(page).to have_content("Example authorization")
+              expect(page).to have_content("This is the data of the current verification:")
+              expect(page).to have_content("Continue")
+              expect(page).to have_content("Cancel")
+            end
+          end
+
+          describe "and clicks on the button to renew" do
+            it "shows the verification form to start again" do
+              within_user_menu do
+                click_link "My account"
+              end
+              click_link "Authorizations"
+              click_link "Example authorization"
+              within "#renew-modal" do
+                click_link "Continue"
+              end
+
+              expect(page).to have_content("Document number")
+              expect(page).to have_button "Send"
+            end
+          end
+        end
+      end
+
       context "when the authorization has not expired yet" do
         let!(:authorization) do
           create(:authorization, name: "dummy_authorization_handler", user: user, granted_at: 2.seconds.ago)
@@ -149,7 +221,7 @@ describe "Authorizations", type: :system, with_authorization_workflows: ["dummy_
 
           within ".authorizations-list" do
             expect(page).to have_no_link("Example authorization")
-            expect(page).to have_content(I18n.localize(authorization.granted_at, format: :long))
+            expect(page).to have_content(I18n.l(authorization.granted_at, format: :long))
           end
         end
       end

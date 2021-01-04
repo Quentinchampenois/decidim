@@ -1,4 +1,3 @@
----
 nl:
   activemodel:
     attributes:
@@ -17,22 +16,23 @@ nl:
         available_slots: Beschikbare plaatsen voor dit event
         decidim_category_id: Categorie
         decidim_scope_id: Scope
+        decidim_user_group_id: Gebruikers groep
         description: Beschrijving
         end_time: Eindtijd
         location: Plaats
         location_hints: Locatie hints
+        organizer_gid: Aanmaken als
         organizer_id: Organisator
         private_meeting: Privé vergadering
         registration_form_enabled: Inschrijvingsformulier ingeschakeld
         registration_terms: Registratievoorwaarden
+        registration_url: Registratie URL
         registrations_enabled: Registraties geactiveerd
         start_time: Starttijd
         title: Titel
         transparent: Transparant
       minutes:
-        audio_url: Audio-URL
         description: Beschrijving
-        video_url: Video URL
         visible: Is zichtbaar
     errors:
       models:
@@ -82,12 +82,18 @@ nl:
           global:
             announcement: Aankondiging
             comments_enabled: Reacties ingeschakeld
+            comments_max_length: Commentaar maximale lengte (laat 0 voor standaard waarde)
+            creation_enabled_for_participants: Deelnemers kunnen vergaderingen aanmaken
             default_registration_terms: Standaard registratievoorwaarden
             enable_pads_creation: Schakel het maken van pads in
             resources_permissions_enabled: Actiemachtigingen kunnen voor elke vergadering worden ingesteld
+            scope_id: Scope
+            scopes_enabled: Scopes ingeschakeld
           step:
             announcement: Aankondiging
             comments_blocked: Reacties geblokkeerd
+            creation_enabled_for_participants: Aanmaken van vergadering door deelnemers ingeschakeld
+            creation_enabled_for_user_groups: Aanmaken van vergadering door gebruikersgroepen ingeschakeld
     events:
       meetings:
         meeting_closed:
@@ -137,7 +143,7 @@ nl:
       badges:
         attended_meetings:
           conditions:
-          - Registreer u voor de vergaderingen die u wilt bijwonen
+            - Registreer u voor de vergaderingen die u wilt bijwonen
           description: Deze badge wordt toegekend wanneer u verschillende vergaderingen persoonlijk bijwoont.
           description_another: Deze gebruiker heeft %{score} vergaderingen bijgewoond.
           description_own: U hebt %{score} vergaderingen bijgewoond.
@@ -224,9 +230,6 @@ nl:
           edit:
             close: Sluiten
             title: Vergadering sluiten
-        meeting_copies:
-          form:
-            select_organizer: Selecteer de organisator
         meetings:
           close:
             invalid: Er is een probleem opgetreden bij het sluiten van deze vergadering
@@ -240,9 +243,11 @@ nl:
             update: Bijwerken
           form:
             address_help: 'Adres: gebruikt door Geocoder om de locatie te vinden'
+            available_slots_help: Laat op 0 staan als je onbeperkt aantal tijdsblokken beschikbaar hebt
+            disclaimer: 'Disclaimer: Door gebruik te maken van een extern registratiesysteem, ben je op de hoogte dat de organisatoren van %{organization} niet verantwoordelijk zijn voor de gegevens die door gebruikers aan de externe dienst worden verstrekt.'
             location_help: 'Locatie: bericht gericht aan de gebruikers die de locatie op een vergadering plaatsen'
-            location_hints_help: 'Locatie hint: extra info. Voorbeeld: de vloer van het gebouw'
-            select_organizer: Selecteer de organisator
+            registration_url_help: 'Link: verleen deelnemers toegang tot de externe dienst die je gebruikt voor registraties'
+            select_a_registration_type: Selecteer een registratietype
           index:
             title: Events
           new:
@@ -284,6 +289,7 @@ nl:
           form:
             available_slots_help: Laat het op 0 indien u onbeperkt beschikbare plaatsen hebt.
             invites: Uitnodigingen
+            recommendation_message: Om privacyredenen raden we je aan dit inscriptformulier te verwijderen als je het niet meer nodig hebt. Standaard is dit 3 maanden na afloop van de vergadering.
             registration_form: Registratieformulier
             registrations_count:
               one: Er is %{count} registratie geweest.
@@ -345,32 +351,74 @@ nl:
             subject: Registratie van uw vergadering is bevestigd
       meeting:
         not_allowed: U mag deze vergadering niet bekijken
+      meeting_closes:
+        edit:
+          back: Terug
+          close: Vergadering sluiten
+          title: Vergadering sluiten
       meetings:
+        count:
+          meetings_count:
+            one: "%{count} vergadering"
+            other: "%{count} vergaderingen"
+        create:
+          invalid: Er is een fout opgetreden bij het maken van deze vergadering.
+          success: U heeft de vergadering succesvol aangemaakt.
+        edit:
+          back: Achterzijde
+          title: Bewerk je vergadering
+          update: Vernieuwen
         filters:
           category: Categorie
-          category_prompt: Kies een categorie
           date: Datum
-          past: Archief
+          date_values:
+            all: Allemaal
+            past: Verleden
+            upcoming: Aankomende
+          origin: Oorsprong
+          origin_values:
+            all: Allemaal
+            citizens: Burgers
+            official: Officiële
+            user_groups: Groepen
+          scope: Bereik
           search: Zoeken
-          upcoming: Aankomend
         filters_small_view:
           close_modal: Sluit modaal
           filter: Filter
           filter_by: Filteren op
           unfold: Ontvouwen
+        form:
+          address_help: 'Adres: gebruikt door Geocoder om de locatie te vinden'
+          available_slots_help: Laat op 0 staan als je onbeperkt aantal tijdsblokken beschikbaar hebt
+          create_as: Maak vergadering als
+          disclaimer: 'Disclaimer: Door gebruik te maken van een extern registratiesysteem, ben je op de hoogte dat de organisatoren van %{organization} niet verantwoordelijk zijn voor de gegevens die door gebruikers aan de externe dienst worden verstrekt.'
+          location_help: 'Locatie: bericht gericht naar de gebruikers die de plek om elkaar te ontmoeten impliceren'
+          registration_url_help: 'Link: verleen deelnemers toegang tot de externe dienst die je gebruikt voor registraties'
+          select_a_category: Selecteer een categorie
+          select_a_registration_type: Selecteer een registratietype
+        index:
+          new_meeting: Nieuwe vergadering
         meeting_minutes:
           meeting_minutes: Verslag van de vergadering
           related_information: Gerelateerde informatie
         meetings:
           no_meetings_warning: Geen afspraken komen overeen met uw zoekcriteria of er is geen vergadering gepland.
           upcoming_meetings_warning: Momenteel zijn er geen geplande vergaderingen, maar hier vindt u alle afgelopen vergaderingen.
+        new:
+          back: Achterzijde
+          create: Aanmaken
+          title: Maak je vergadering
         registration_confirm:
           cancel: Annuleer
           confirm: Bevestigen
         show:
           attendees: Aantal deelnemers
-          back: Back to list
+          back: Terug naar het overzicht
+          close_meeting: Vergadering sluiten
           contributions: Aantal bijdragen
+          date: 'Datum:'
+          edit_meeting: Bewerk vergadering
           going: Gaat
           join: Deelnemen aan bijeenkomst
           meeting_report: Bijeenkomst verslag
@@ -384,6 +432,9 @@ nl:
             one: "%{count} resterende plaats"
             other: "%{count} slots over"
           view: Bekijk
+        update:
+          invalid: Er was een probleem bij het bijwerken van de vergadering.
+          success: U heeft de vergadering succesvol bijgewerkt.
       meetings_map:
         view_meeting: Bekijk vergadering
       models:
@@ -402,6 +453,7 @@ nl:
             closed: Gesloten
             end_time: Einddatum
             map: Kaart
+            official_meeting: Officiële vergadering
             start_time: Startdatum
             title: Titel
       read_more: "(Lees meer)"
@@ -410,6 +462,10 @@ nl:
           confirmed_html: Uw registratie voor de vergadering <a href="%{url}">%{title}</a> is bevestigd.
           details: In de bijlage vindt u de details van de vergadering.
           registration_code: Uw registratiecode is %{code}.
+      registration_type:
+        on_different_platform: Op een ander platform
+        on_this_platform: Op dit platform
+        registration_disabled: Registratie uitgeschakeld
       registrations:
         create:
           invalid: Er is een probleem opgetreden bij het deelnemen van deze vergadering.
@@ -423,6 +479,8 @@ nl:
       types:
         private_meeting: Privé vergadering
         transparent: Transparant
+      versions:
+        back_to_resource: Ga terug naar de vergadering
     metrics:
       meetings:
         description: Aantal gemaakte vergaderingen

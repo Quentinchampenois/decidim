@@ -10,6 +10,14 @@ FactoryBot.define do
     name { Decidim::Components::Namer.new(participatory_space.organization.available_locales, :meetings).i18n_name }
     manifest_name { :meetings }
     participatory_space { create(:participatory_process, :with_steps, organization: organization) }
+
+    trait :with_creation_enabled do
+      settings do
+        {
+          creation_enabled_for_participants: true
+        }
+      end
+    end
   end
 
   factory :meeting, class: "Decidim::Meetings::Meeting" do
@@ -17,25 +25,57 @@ FactoryBot.define do
     description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
     location { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
     location_hints { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
-    address { Faker::Lorem.sentence(3) }
+    address { Faker::Lorem.sentence(word_count: 3) }
     latitude { Faker::Address.latitude }
     longitude { Faker::Address.longitude }
     start_time { 1.day.from_now }
     end_time { start_time.advance(hours: 2) }
     private_meeting { false }
     transparent { true }
-    services do
-      [
-        { title: generate_localized_title, description: generate_localized_title },
-        { title: generate_localized_title, description: generate_localized_title }
-      ]
-    end
     questionnaire { build(:questionnaire) }
     registration_form_enabled { true }
+    registration_terms { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
+    registration_type { :on_this_platform }
+    type_of_meeting { :in_person }
     component { build(:component, manifest_name: "meetings") }
+    salt { SecureRandom.hex(32) }
 
-    organizer do
-      create(:user, organization: component.organization) if component
+    author do
+      component.try(:organization)
+    end
+
+    trait :online do
+      type_of_meeting { :online }
+      online_meeting_url { "https://decidim.org" }
+    end
+
+    trait :official do
+      author { component.organization if component }
+    end
+
+    trait :not_official do
+      author { create(:user, organization: component.organization) if component }
+    end
+
+    trait :with_services do
+      transient do
+        services do
+          nil
+        end
+      end
+
+      after(:build) do |meeting, evaluator|
+        meeting.services = evaluator.services || build_list(:service, 2, meeting: meeting)
+      end
+    end
+
+    trait :user_group_author do
+      author do
+        create(:user, organization: component.organization) if component
+      end
+      user_group do
+        create(:user_group, :verified, organization: component.organization, users: [author]) if component
+      end
     end
 
     trait :closed do
@@ -55,11 +95,11 @@ FactoryBot.define do
 
     trait :past do
       start_time { end_time.ago(2.hours) }
-      end_time { Faker::Time.between(10.days.ago, 1.day.ago) }
+      end_time { Faker::Time.between(from: 10.days.ago, to: 1.day.ago) }
     end
 
     trait :upcoming do
-      start_time { Faker::Time.between(1.day.from_now, 10.days.from_now) }
+      start_time { Faker::Time.between(from: 1.day.from_now, to: 10.days.from_now) }
     end
   end
 
@@ -120,5 +160,11 @@ FactoryBot.define do
     trait :rejected do
       rejected_at { Time.current }
     end
+  end
+
+  factory :service, class: "Decidim::Meetings::Service" do
+    meeting
+    title { generate_localized_title }
+    description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
   end
 end

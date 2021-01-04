@@ -48,6 +48,8 @@ sv:
             title: titel
       posts:
         show:
+          back: Tillbaka till listan
+          comments: Kommentarer
           view: Visa
         sidebar_blog:
           comments: kommentarer
@@ -60,9 +62,12 @@ sv:
           global:
             announcement: Meddelande
             comments_enabled: Kommentarer aktiverade
+            comments_max_length: Maximal längd för kommentarer (Lämna 0 för standardvärde)
           step:
             announcement: Meddelande
             comments_blocked: Kommentarer blockerade
+            endorsements_blocked: Instämmanden är blockerade
+            endorsements_enabled: Instämmanden tillåtna
     events:
       blogs:
         post_created:

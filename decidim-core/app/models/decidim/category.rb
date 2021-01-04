@@ -4,9 +4,13 @@ module Decidim
   # Categories serve as a taxonomy for components to use for while in the
   # context of a participatory process.
   class Category < ApplicationRecord
+    include Decidim::TranslatableResource
+
+    translatable_fields :name, :description
+
     belongs_to :participatory_space, foreign_key: "decidim_participatory_space_id", foreign_type: "decidim_participatory_space_type", polymorphic: true
     has_many :subcategories, foreign_key: "parent_id", class_name: "Decidim::Category", dependent: :destroy, inverse_of: :parent
-    belongs_to :parent, class_name: "Decidim::Category", foreign_key: "parent_id", inverse_of: :subcategories, optional: true
+    belongs_to :parent, class_name: "Decidim::Category", inverse_of: :subcategories, optional: true
     has_many :categorizations, foreign_key: "decidim_category_id", class_name: "Decidim::Categorization", dependent: :destroy
 
     default_scope { order(arel_table[:parent_id].asc, arel_table[:weight].asc) }

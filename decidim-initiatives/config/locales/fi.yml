@@ -5,6 +5,7 @@ fi:
         decidim_user_group_id: Laatija
         description: Kuvaus
         offline_votes: Palvelun ulkopuolella kerätyt kannatukset
+        offline_votes_for_scope: Fyysisesti kerätyt allekirjoitukset kohteelle %{scope_name}
         scope_id: Teema
         signature_end_date: Allekirjoitusten keräämisen viimeinen päivä
         signature_start_date: Allekirjoitusten keräämisen alkamispäivä
@@ -15,24 +16,21 @@ fi:
           online: Verkossa
         state: Tila
         title: Otsikko
-      initiative_author:
-        address: Osoite
-        city: Kaupunki
-        id_document: HETU
-        name: Nimi ja sukunimi
-        phone_number: Puhelinnumero
-        post_code: Postinumero
-        province: Maakunta
       initiatives_committee_member:
         user: Komitean jäsen
       initiatives_type:
+        area_enabled: Salli alueen valinta aloitteille
+        attachments_enabled: Salli liitteet
         banner_image: Bannerikuva
+        child_scope_threshold_enabled: Ota käyttöön alateemojen allekirjoitukset
         collect_user_extra_fields: Kerää käyttäjän henkilötietoja allekirjoituksen yhteydessä
+        custom_signature_end_date_enabled: Salli laatijoiden valita allekirjoitusten keräyksen loppumisaika
         description: Kuvaus
-        document_number_authorization_handler: Valtuutus asiakirjanumeron tarkistamiseen allekirjoitettaessa
+        document_number_authorization_handler: Vahvistustapa asiakirjanumeron tarkistamiseen allekirjoitettaessa
         extra_fields_legal_information: Oikeudelliset tiedot koskien henkilötietojen keräämistä
         minimum_committee_members: Komitean jäsenten vähimmäismäärä
         online_signature_enabled: Online-allekirjoitus on käytössä
+        only_global_scope_enabled: Salli aloitteiden luonti ainoastaan pääteemalle
         promoting_committee_enabled: Ota käyttöön kannatuskomitea
         title: Otsikko
         undo_online_signatures_enabled: Verkossa tehtyjen allekirjoitusten peruuttaminen käytössä
@@ -46,6 +44,14 @@ fi:
         address: Osoite
         id_document: Henkilöllisyyden todistamisen asiakirja
         name: Koko nimi
+    errors:
+      models:
+        initiative:
+          attributes:
+            attachment:
+              file: Tiedosto ei kelpaa
+              needs_to_be_reattached: Liitettävä uudelleen
+              title: Otsikko ei voi olla tyhjä
   activerecord:
     models:
       decidim/initiative:
@@ -62,17 +68,22 @@ fi:
       actions:
         new_initiative_type: Uusi aloitetyyppi
       filters:
+        initiatives:
+          decidim_area_id_eq:
+            label: Alue
+          state_eq:
+            label: Tila
+            values:
+              accepted: Tarpeeksi allekirjoituksia
+              created: Luotu
+              discarded: Hylätyt
+              published: Julkaistut
+              rejected: Liian vähän allekirjoituksia
+              validating: Teknisessä validoinnissa
+          type_id_eq:
+            label: Tyyppi
         search_placeholder:
-          title_or_description_cont: '%{collection}: Hae otsikon tai kuvauksen perusteella'
-        state_eq:
-          label: Tila
-          values:
-            accepted: Hyväksytty
-            created: Luotu
-            discarded: Peruutettu
-            published: Julkaistu
-            rejected: Hylätty
-            validating: Teknisessä validoinnissa
+          title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Etsi kohteita %{collection} otsikon, kuvauksen, ID-numeron tai laatijan nimellä.
       menu:
         initiatives: Aloitteet
         initiatives_types: Aloitetyypit
@@ -81,6 +92,7 @@ fi:
           fields:
             created_at: Luontiaika
             id: ID
+            published_at: Julkaisuaika
             state: Tila
             supports_count: Allekirjoitusta
             title: Aloitteet
@@ -106,6 +118,7 @@ fi:
             initiative_title: Aloitteen otsikko
             name_and_surname: Nimi ja sukunimi
             postal_code: Postinumero
+            scope: Teema
             time_and_date: Aika ja päivämäärä
             timestamp: Aikaleima
       titles:
@@ -113,11 +126,22 @@ fi:
         initiatives_types: Aloitetyypit
     events:
       initiatives:
+        admin:
+          initiative_sent_to_technical_validation:
+            email_intro: Aloite "%{resource_title}" on lähetetty tekniseen tarkastukseen. Tustustu siihen <a href="%{admin_initiative_url}">hallintapaneelin kautta</a>
+            email_outro: Tämä ilmoitus on lähetetty sinulle, koska olet palvelun hallintakäyttäjä.
+            email_subject: Aloitteelle "%{resource_title}" on pyydetty teknistä tarkastusta.
+            notification_title: Aloite "%{resource_title}" on lähetetty tekniseen tarkastukseen. Tustustu siihen <a href="%{admin_initiative_path}">hallintapaneelin kautta</a>
         initiative_extended:
           email_intro: Aloitteen %{resource_title} allekirjoitusten keräysaikaa on jatkettu!
           email_outro: Tämä ilmoitus on lähetetty sinulle, koska seuraat kohdetta %{resource_title}. Voit lopettaa ilmoitusten vastaanottamisen edellä esitetyn linkin kautta.
           email_subject: Aloitteen allekirjoitusten keräämisen aikaa on jatkettu!
           notification_title: Aloitteen <a href="%{resource_path}">%{resource_title}</a> allekirjoitusten keräysaikaa on jatkettu.
+        initiative_sent_to_technical_validation:
+          email_intro: Aloite "%{resource_title}" on lähetetty tekniseen tarkastukseen. Tustustu siihen <a href="%{admin_initiative_url}">hallintapaneelin kautta</a>
+          email_outro: Tämä ilmoitus on lähetetty sinulle, koska olet palvelun hallintakäyttäjä.
+          email_subject: Aloite "%{resource_title}" lähetettiin tekniseen tarkastukseen.
+          notification_title: Aloite "%{resource_title}" on lähetetty tekniseen tarkastukseen. Tustustu siihen <a href="%{admin_initiative_path}">hallintapaneelin kautta</a>
         milestone_completed:
           affected_user:
             email_intro: Aloitteesi %{resource_title} on saavuttanut %{percentage}% allekirjoituksista!
@@ -129,11 +153,16 @@ fi:
             email_outro: Tämä ilmoitus on lähetetty sinulle, koska seuraat %{resource_title}. Voit lopettaa ilmoitusten vastaanottamisen edellä esitetyn linkin kautta.
             email_subject: Uusi virstanpylväs saavutettu!
             notification_title: Aloite <a href="%{resource_path}">%{resource_title}</a> on saavuttanut %{percentage}% tarvituista allekirjoituksista.
+        support_threshold_reached:
+          email_intro: Aloite %{resource_title} on saavuttanut kannatuskynnyksen
+          email_outro: Tämä ilmoitus on lähetetty sinulle, koska olet palvelun hallintakäyttäjä.
+          email_subject: Kannatuskynnys saavutettu
+          notification_title: Aloite <a href="%{resource_path}">%{resource_title}</a> on saavuttanut kannatuskynnyksensä
     gamification:
       badges:
         initiatives:
           conditions:
-            - Siirry aloitteiden osallisuustilaan
+            - Siirry aloitteiden osallistumistilaan
             - Luo uusi aloite ohjeiden mukaisesti
           description: Tämä kunniamerkki myönnetään, kun laadit uusia aloitteita ja keräät verkoston ihmisiä toteuttamaan niitä.
           description_another: Tämä käyttäjä on julkaissut %{score} aloitetta.
@@ -145,8 +174,8 @@ fi:
     help:
       participatory_spaces:
         initiatives:
-          contextual: "<p><strong>Aloite</strong> on ehdotus, jota kuka tahansa voi itsenäisesti edistää ​​(muista kanavista tai osallisuustiloista riippumatta) kokoamalla (digitaaliset) tarvittavat allekirjoitukset organisaatiolle tietyn toimen toteuttamiseksi (asetuksen muuttaminen, hankkeen käynnistys, alueen tai kadun nimen muuttaminen, jne.).</p> <p>Aloitteen edistäjät voivat määritellä tavoitteet, kerätä tukijoukkoja, järjestää keskustelua, levittää aloitetta ja määritellä kohtaamispaikkoja, joissa allekirjoituksia voidaan kerätä osallistujilta tai keskustella avoimesti muiden osallistujien kanssa.</p> <p>Esimerkiksi, aloite voi: kerätä allekirjoituksia kutsuakseen koolle tietyn joukon organisaation edustajia, panna aluilleen ryhmän tai käynnistää prosessin määrärahojen lisäämisestä alueelle tai organisaatiolle. Allekirjoitusten keräysprosessin aikana useammat ihmiset voivat antaa panoksensa aloitteen vaatimuksille ja viedä sitä eteenpäin organisaatiossa.</p>\n"
-          page: "<p><strong>Aloite</strong> on ehdotus, jota kuka tahansa voi itsenäisesti edistää ​​(muista kanavista tai osallisuustiloista riippumatta) kokoamalla (digitaaliset) tarvittavat allekirjoitukset organisaatiolle tietyn toimen toteuttamiseksi (asetuksen muuttaminen, hankkeen käynnistys, alueen tai kadun nimen muuttaminen, jne.).</p> <p>Aloitteen edistäjät voivat määritellä tavoitteet, kerätä tukea, järjestää keskustelua, levittää aloitetta ja määritellä kohtaamispaikkoja, joissa allekirjoituksia voidaan kerätä osallistujilta tai keskustella avoimesti muiden osallistujien kanssa.</p> <p>Esimerkiksi, aloite voi: kerätä allekirjoituksia kutsuakseen koolle tietyn joukon organisaation edustajia, panna aluilleen ryhmän tai käynnistää prosessin määrärahojen lisäämisestä alueelle tai organisaatiolle. Allekirjoitusten keräysprosessin aikana useammat ihmiset voivat antaa panoksensa aloitteen vaatimuksille ja viedä sitä eteenpäin organisaatiossa.</p>\n"
+          contextual: "<p><strong>Aloite</strong> on ehdotus, jota kuka tahansa voi itsenäisesti edistää ​​(muista kanavista tai osallistumistiloista riippumatta) kokoamalla (digitaaliset) tarvittavat allekirjoitukset organisaatiolle tietyn toimen toteuttamiseksi (asetuksen muuttaminen, hankkeen käynnistys, alueen tai kadun nimen muuttaminen, jne.).</p> <p>Aloitteen edistäjät voivat määritellä tavoitteet, kerätä tukijoukkoja, järjestää keskustelua, levittää aloitetta ja määritellä kohtaamispaikkoja, joissa allekirjoituksia voidaan kerätä osallistujilta tai keskustella avoimesti muiden osallistujien kanssa.</p> <p>Esimerkiksi, aloite voi: kerätä allekirjoituksia kutsuakseen koolle tietyn joukon organisaation edustajia, panna aluilleen ryhmän tai käynnistää prosessin määrärahojen lisäämisestä alueelle tai organisaatiolle. Allekirjoitusten keräysprosessin aikana useammat ihmiset voivat antaa panoksensa aloitteen vaatimuksille ja viedä sitä eteenpäin organisaatiossa.</p>\n"
+          page: "<p><strong>Aloite</strong> on ehdotus, jota kuka tahansa voi itsenäisesti edistää ​​(muista kanavista tai osallistumistiloista riippumatta) kokoamalla (digitaaliset) tarvittavat allekirjoitukset organisaatiolle tietyn toimen toteuttamiseksi (asetuksen muuttaminen, hankkeen käynnistys, alueen tai kadun nimen muuttaminen, jne.).</p> <p>Aloitteen edistäjät voivat määritellä tavoitteet, kerätä tukea, järjestää keskustelua, levittää aloitetta ja määritellä kohtaamispaikkoja, joissa allekirjoituksia voidaan kerätä osallistujilta tai keskustella avoimesti muiden osallistujien kanssa.</p> <p>Esimerkiksi, aloite voi: kerätä allekirjoituksia kutsuakseen koolle tietyn joukon organisaation edustajia, panna aluilleen ryhmän tai käynnistää prosessin määrärahojen lisäämisestä alueelle tai organisaatiolle. Allekirjoitusten keräysprosessin aikana useammat ihmiset voivat antaa panoksensa aloitteen vaatimuksille ja viedä sitä eteenpäin organisaatiossa.</p>\n"
           title: Mitkä ovat aloitteet?
     initiatives:
       actions:
@@ -173,23 +202,33 @@ fi:
         content_blocks:
           highlighted_initiatives:
             max_results: Näytettävien elementtien enimmäismäärä
+        exports:
+          initiatives: Aloitteet
         initiatives:
           edit:
             accept: Hyväksy aloite
             confirm: Oletko varma?
+            confirm_send_to_technical_validation: Aloite lähetetään hallintakäyttäjän tarkastettavaksi ja julkaistavaksi. Julkaisun jälkeen et voi enää muokata aloitetta. Haluatko varmasti jatkaa?
             discard: Hylkää aloite
             export_pdf_signatures: Vie allekirjoitukset PDF-asiakirjaan
             export_votes: Lataa allekirjoitukset
             reject: Torju aloite
-            send_to_technical_validation: Lähetä tekniseen validointiin
-            success: Aloite on lähetetty tekniseen validointiin
+            send_to_technical_validation: Lähetä tekniseen tarkastukseen
+            success: Aloite on lähetetty tekniseen tarkastukseen
             update: Päivitä
           form:
+            attachments: Liitteet
+            settings: Asetukset
             title: Yleistä tietoa
           index:
             actions_title: Toiminnot
             preview: Esikatsele
             print: Tulosta
+          initiative_attachments:
+            documents: Asiakirjat
+            edit: Muokkaa
+            new: Uusi
+            photos: Kuvat
           show:
             print: Tulosta
           update:
@@ -200,7 +239,7 @@ fi:
             error: Tapahtui virhe
             success: Uusi teema aloitetyypille luotu
           destroy:
-            success: Teema poistettu onnistuneesti
+            success: Teeman poisto onnistui
           edit:
             back: Takaisin
             confirm_destroy: Oletko varma?
@@ -213,18 +252,22 @@ fi:
             title: Luo aloitetyypin teema
           update:
             error: Tapahtui virhe
-            success: Teemaa päivitetty onnistuneesti
+            success: Teeman päivitys onnistui
         initiatives_types:
           create:
             error: Tapahtui virhe
-            success: Uusi aloitetyyppi luotu onnistuneesti
+            success: Uuden aloitetyypin luonti onnistui
           destroy:
-            success: Aloitetyyppi poistettu onnistuneesti
+            success: Aloitetyypin poisto onnistui
           edit:
             confirm_destroy: Oletko varma?
             destroy: Poista
             update: Päivitä
           form:
+            authorizations: Varmennuksen asetukset
+            child_scope_threshold_enabled_help: 'Tämä asetus ei toimi fyysisesti kerätyille allekirjoituksille. Se mahdollistaa arvioinnit ja toimii sellaisten varmennusten kanssa, jotka määrittävät käyttäjälle tietyn teeman. Valitse kyseinen varmennustapa varmennuksen asetuksista alapuolelta. Toimiakseen, teemat tulee olla määritelty hierarkisesti: 1 yläteema - N alateemaa. Lisätietoja tästä ominaisuudesta löydät <a href="https://docs.decidim.org/admin-manual/en/initiatives/" target="_blank">hallinnointikäyttäjän ohjeista</a>.'
+            only_global_scope_enabled_help: Ota tämä asetus käyttöön, jos otit köyttöön "alateemojen allekirjoitukset" ja asetit järjestelmänlaajuisen yläteeman. Ottamalla tämän asetuksen käyttöön, aloitteen tyypin valinta sivuutetaan aloitteiden luontinäkymässä. Saat <a href="https://docs.decidim.org/admin-manual/en/initiatives/" target="_blank">lisätietoja tästä ominaisuudesta täältä</a>.
+            options: Valinnat
             title: Yleistä tietoa
           initiative_type_scopes:
             title: Aloitetyypin teemat
@@ -233,20 +276,34 @@ fi:
             title: Uusi aloitetyyppi
           update:
             error: Tapahtui virhe
-            success: Aloitetyyppiä päivitetty onnistuneesti
+            success: Aloitetyypin päivitys onnistui
       admin_log:
         initiative:
           publish: "%{user_name} julkaisi aloitteen %{resource_name}"
-          send_to_technical_validation: "%{user_name} lähetti aloitteen %{resource_name} tekniseen validointiin"
+          send_to_technical_validation: "%{user_name} lähetti aloitteen %{resource_name} tekniseen tarkastukseen"
           unpublish: "%{user_name} hylkäsi aloitteen %{resource_name}"
           update: "%{user_name} päivitti aloitetta %{resource_name}"
       admin_states:
-        accepted: Hyväksytty
+        accepted: Tarpeeksi allekirjoituksia
         created: Luotu
         discarded: Hylätty
         published: Julkaistu
-        rejected: Torjuttu
-        validating: Teknisessä validoinnissa
+        rejected: Liian vähän allekirjoituksia
+        validating: Teknisessä tarkastuksessa
+      application_helper:
+        filter_area_values:
+          all: Kaikki
+        filter_scope_values:
+          all: Kaikki
+        filter_state_values:
+          accepted: Tarpeeksi allekirjoituksia
+          all: Kaikki
+          answered: Vastattu
+          closed: Suljettu
+          open: Avaa
+          rejected: Liian vähän allekirjoituksia
+        filter_type_values:
+          all: Kaikki
       committee_requests:
         new:
           continue: Jatka
@@ -260,23 +317,23 @@ fi:
         fill_data:
           back: Takaisin
           continue: Jatka
-          fill_data_help: "<ul> <li>Tarkasta aloitteesi sisältö. Onko aloitteen otsikko helppo ymmärtää? Onko aloitteen tavoite selkeä?</li> <li>Sinun on valittava allekirjoitustapa. Palvelun ulkopuolella, verkossa tai molemmat</li> <li>Mikä on aloitteen maantieteellinen laajuus? Kaupunki, kunta, maakunta vai mikä?</li> </ul>"
+          fill_data_help: "<ul> <li>Tarkasta aloitteesi sisältö. Onko aloitteen otsikko helppo ymmärtää? Onko aloitteen tavoitteet tarpeeksi selkeästi kuvattu?</li> <li>Sinun on valittava allekirjoitustapa. Palvelun ulkopuolella, verkossa tai molemmat.</li> <li>Mikä on aloitteen maantieteellinen laajuus?</li> </ul>"
           initiative_type: Aloitteen tyyppi
           more_information: "(Lisää tietoa)"
+          select_area: Valitse alue
           select_scope: Valitse teema
         finish:
           back: Takaisin
           back_to_initiatives: Takaisin aloitteisiin
-          callout_text: Onnittelut! Kansalaisaloitteesi luonti onnistui.
+          callout_text: Onnittelut! Aloitteesi on luotu onnistuneesti.
+          confirm: Aloite lähetetään hallintakäyttäjän tarkastettavaksi ja julkaistavaksi. Julkaisun jälkeen et voi enää muokata aloitetta. Haluatko varmasti jatkaa?
+          edit_my_initiative: Muokkaa omia aloitteita
           go_to_my_initiatives: Siirry omiin aloitteisiini
           more_information: "(Lisää tietoa)"
+          send_my_initiative: Lähetä aloitteeni
         finish_help:
-          access_reminder: Muista, että pääset tarkastelemaan omia aloitteitasi käyttäjävalikon kautta.
-          help_for_organizations: Jos olet yhdistyksen jäsen, sinun on lähetettävä johtokunnan pöytäkirjat kaikista organisaatioista, jotka liittyvät muodostettavaan kannatuskomiteaan
-          help_in_person_signatures: Jos olet valinnut allekirjoitusten keräystavaksi palvelun ulkopuolisen keräyksen tai yhdistetyn keräyksen palvelussa ja sen ulkopuolella, sinun on lähetettävä vaaditut tiedot ja dokumentit.
-          help_text: Muista, että aloitteen asianmukainen käsittely edellyttää hallintapaneelin käyttämistä, mistä löydät käyttäjävalikon, voit ladata tarvittavat tiedot ja lähettää aloitteen käsittelyyn.
-          initiatives_page_link: Näet kaiken tämän tiedon osoitteesta %{link}, jonka tarkoitus on antaa tietoa aloitteista.
-          page: sivu
+          access_reminder: Pääset käsiksi aloitteisiin suodatuslinkin %{link} kautta aloitteiden sivulla.
+          publish_helper_text: Saadaksesi aloitteesi julkaistuksi, sinun tulee viimeistellä vaaditut tiedot ja <strong>lähettää aloite hallintakäyttäjän tekniseen tarkastukseen</strong>.
         previous_form:
           back: Takaisin
           continue: Jatka
@@ -284,14 +341,14 @@ fi:
           more_information: "(Lisää tietoa)"
         promotal_committee:
           back: Takaisin
-          individual_help_text: Tämäntyyppisen kansalaisaloite edellyttää, että kannatuskomitea koostuu vähintään %{committee_size} henkilöstä (todistajat). Sinun on jaettava seuraava linkki muiden tähän aloitteeseen osallistuvien ihmisten kanssa. Kun yhteyshenkilösi saavat tämän linkin, heidän on noudatettava esitettyjä ohjeita.
+          individual_help_text: Tämäntyyppinen aloite edellyttää, että kannatuskomitea koostuu vähintään %{committee_size} henkilöstä (todistajat). Sinun on jaettava seuraava linkki muiden tähän aloitteeseen osallistuvien ihmisten kanssa. Kun yhteyshenkilösi saavat tämän linkin, heidän on noudatettava esitettyjä ohjeita.
           more_information: "(Lisää tietoa)"
         select_initiative_type:
           back: Takaisin
           choose_html: Haluan luoda uuden <strong>%{title}</strong> aloitteen
           more_information: "(Lisää tietoa)"
           select: Haluan tukea tätä aloitetta
-          select_initiative_type_help: Kansalaisaloitteet ovat keino, jolla kansalaiset voivat osallistua viralliseen päätöksentekoon. Päättävät elimet, kuten kaupungin- tai kunnanvaltuusto, voivat tehdä toimenpiteitä, jotka vaikuttavat kansalaisten edun mukaisesti lainsäädäntöön. Millaisen aloitteen sinä haluat laatia?
+          select_initiative_type_help: Aloitteita käytetään vaikuttamiseen organisaation tarkoitusperien edistämiseksi. Millaisen aloitteen haluat aloittaa?
         share_committee_link:
           continue: Jatka
           invite_to_committee_help: Kutsulinkki lähetettäväksi kannatuskomitean jäsenille
@@ -300,6 +357,16 @@ fi:
           compare_help: Jos jokin seuraavista aloitteista on samankaltainen omasi kanssa, suosittelemme, että allekirjoitat sen. Tällä tavoin aloitteellasi on enemmän mahdollisuuksia toteutua.
           continue: Oma aloitteeni on erilainen
           more_information: "(Lisää tietoa)"
+      edit:
+        accept: Hyväksy aloite
+        back: Takaisin
+        confirm: Oletko varma?
+        discard: Peru aloite
+        export_pdf_signatures: Vie allekirjoitukset PDF-tiedostona
+        export_votes: Vie allekirjoitukset
+        reject: Hylkää aloite
+        title: Muokkaa aloitetta
+        update: Päivitä
       events:
         create_initiative_event:
           email_intro: "%{author_name} %{author_nickname}, jota seuraat, on luonut uuden aloitteen. Tutustu siihen ja osallistu:"
@@ -311,6 +378,10 @@ fi:
           email_outro: Tämä ilmoitus on lähetetty sinulle, koska seuraat käyttäjää %{author_nickname}. Voit lopettaa ilmoitusten vastaanottamisen edellä esitetyn linkin kautta.
           email_subject: '%{author_nickname} on suositellut aloitetta'
           notification_title: <a href="%{author_path}">%{author_name} %{author_nickname}</a> on suositellut aloitetta <a href="%{resource_path}">%{resource_title}</a>.
+      form:
+        add_attachments: Asiakirjat
+        attachment_legend: "(Vapaaehtoinen) Lisää liitteitä"
+        delete_attachment: Poista
       index:
         title: Aloitteet
       initiative_signatures:
@@ -335,11 +406,11 @@ fi:
           invalid: Aloitteen allekirjoittamiseen annetut tiedot ovat virheelliset
           success_html: Onnittelut! Aloitteen <strong>%{title}</strong> allekirjoitus onnistui
         personal_data:
-          invalid: Henkilötiedot eivät täsmää varmennusta varten annettujen tietojen kanssa.
+          invalid: Henkilötiedot eivät täsmää vahvistusta varten annettujen tietojen kanssa.
         sms_code:
           invalid: Vahvistuskoodi ei vastaa meidän koodiamme. Tarkista uudestaan lähettämämme tekstiviesti.
         sms_phone:
-          invalid: Puhelinnumero on virheellinen tai odottaa tarkastusta. Tarkista valtuutesi.
+          invalid: Puhelinnumero on virheellinen tai odottaa tarkastusta. Tarkista vahvistuksesi.
       initiatives:
         author:
           deleted: Poistettu
@@ -347,20 +418,26 @@ fi:
           hidden_authors_count:
             one: ja yksi muu henkilö
             other: ja %{count} muuta henkilöä
+        committee_members:
+          approve: Hyväksy
+          confirm_revoke: Oletko varma?
+          invite_to_committee_help: Jaa tämä linkki ja kutsu muita käyttäjiä kannatuskomiteaan
+          no_members_yet: Kannatuskomiteassa ei ole jäseniä
+          revoke: Peruuta
+          title: Komitean jäsenet
         count:
           title:
             one: "%{count} aloite"
             other: "%{count} aloitetta"
         filters:
           any: Minkä tahansa
+          area: Alue
           author: Laatija
-          closed: Suljettu
           myself: Omat aloitteeni
-          open: Avaa
+          scope: Teema
           search: Hae
           state: Tila
           type: Tyyppi
-          type_prompt: Valitse tyyppi
         filters_small_view:
           close_modal: Sulje ikkuna
           filter: Suodata
@@ -368,6 +445,14 @@ fi:
           unfold: Avaa
         index_header:
           new_initiative: Uusi aloite
+          not_authorized:
+            authorizations_page: Näytä vahvistukset
+            close: Sulje
+            explanation: Tilisi tulee vahvistaa luodaksesi uuden aloitteen.
+            title: Vahvistus vaaditaan
+        initiatives:
+          closed_initiatives_warning: Tällä hetkellä yhtään aloitetta ei ole avoimena, mutta tästä listasta löydät kaikki suljetut aloitteet.
+          no_initiatives_warning: Yhtään aloitetta ei löytynyt hakukriteereilläsi.
         interactions:
           comments_count:
             count:
@@ -379,6 +464,28 @@ fi:
           most_voted: Eniten allekirjoituksia sisältävät
           random: Satunnainen järjestys
           recent: Viimeisimmät
+          recently_published: Viimeisimmäksi julkaistut
+        print:
+          address: Osoite
+          author_title: Aloitteen laatija
+          city: Kaupunki
+          email: Sähköposti
+          full_name: Koko nimi
+          general_title: Aloitteen hyväksymistä koskeva hakemus
+          id_number: ID-numero
+          initiative:
+            attachments: Liitetyt asiakirjat (kirjoita jokaiselle asiakirjalle nimi)
+            description: 'Kuvaus:'
+            title: 'Otsikko:'
+            type: Aloitteen tyyppi
+          legal_text: Kerätyt henkilötiedot liitetään aloitteeseesi ja käsitellään luottamuksellisesti ajantasaisen lainsäädännön mukaisesti.
+          phone_number: Puhelinnumero
+          place_date: Paikka, Päivämäärä
+          postal_code: Postinumero
+          print: Tulosta
+          province: Lääni tai maakunta
+          section: 'Pyydettäessä tulostakaa ja täyttäkää tämä lomake lähettääksenne sen osoitettuun paikkaan:'
+          signature: Allekirjoitus
         result:
           answer_title:
             accepted: Tämä ehdotus on hyväksytty, koska
@@ -389,16 +496,16 @@ fi:
             validating: Tätä ehdotusta arvioidaan
           initiative_rejected_reason: Tämä aloite on hylätty, koska se ei kerännyt tarpeeksi allekirjoituksia.
         show:
-          any_vote_method: Tämä kansalaisaloite kerää allekirjoituksia verkossa ja palvelun ulkopuolella.
+          any_vote_method: Tämä aloite kerää allekirjoituksia verkossa ja palvelun ulkopuolella.
+          confirm: Aloite lähetetään hallintakäyttäjän tarkastettavaksi ja julkaistavaksi. Julkaisun jälkeen et voi enää muokata aloitetta. Haluatko varmasti jatkaa?
+          edit: Muokkaa
           follow_description: Vastaanota ilmoitus, kun tätä aloitetta koskevia uutisia julkaistaan
-          offline_method: Tämä kansalaisaloite kerää allekirjoituksia ainoastaan palvelun ulkopuolella.
-        signature_identities:
-          select_identity: Valitse käyttäjätunniste
+          offline_method: Tämä aloite kerää allekirjoituksia ainoastaan palvelun ulkopuolella.
+          print: Tulosta aloite
+          send_to_technical_validation: Lähetä tekniseen validointiin
         signatures_count:
           one: " allekirjoitus"
           other: " allekirjoitusta"
-        supports:
-          title: Allekirjoitusten luettelo
         vote_cabin:
           already_voted: Allekirjoitettu aikaisemmin
           supports_required: "%{total_supports} allekirjoitusta vaaditaan"
@@ -407,8 +514,8 @@ fi:
           votes_blocked: Allekirjoitus poistettu käytöstä
         votes_count:
           count:
-            one: ALLEKIRJOITUS
-            other: ALLEKIRJOITUSTA
+            one: Allekirjoitus
+            other: Allekirjoitusta
           most_popular_initiative: Suosituin aloite
           need_more_votes: Tarvitsee lisää allekirjoituksia
       initiatives_mailer:
@@ -422,8 +529,6 @@ fi:
         promotal_committee_help: Muista, että sinun täytyy kutsua vähintään %{member_count} henkilöä kannatuskomiteaan. Kutsu ihmisiä kannatuskomiteaan lähettämällä heille seuraava linkki
         status_change_body_for: 'Aloitteen %{title} tila on muuttunut, uusi tila: %{state}'
         status_change_for: Aloitteen %{title} tila on muuttunut
-        technical_validation_body_for: Aloitteelle %{title} on pyydetty teknistä validointia.
-        technical_validation_for: Aloitteelle %{title} on pyydetty teknistä validointia.
       last_activity:
         new_initiative: Uusi aloite
       pages:
@@ -431,10 +536,24 @@ fi:
           highlighted_initiatives:
             active_initiatives: Aktiiviset aloitteet
             see_all_initiatives: Katso kaikki aloitteet
+      show:
+        badge_name:
+          accepted: Tarpeeksi allekirjoituksia
+          created: Luotu
+          discarded: Hylätty
+          published: Julkaistu
+          rejected: Liian vähän allekirjoituksia
+          validating: Teknisessä tarkastuksessa
       states:
         accepted: Hyväksytyt
         expired: Vanhentuneet
       unavailable_scope: Teema ei ole saatavilla
+      update:
+        error: Tapahtui virhe
+        success: Aloitteen päivitys onnistui
+      versions:
+        shared:
+          back_to_resource: Takaisin aloitteeseen
     menu:
       initiatives: Aloitteet
     resources:
@@ -467,7 +586,7 @@ fi:
         fill_personal_data: Täydennä tietosi
         finish: Viimeistele
         finished: Allekirjoitus luotu aloitteelle
-        see_steps: katso vaiheet
+        see_steps: näytä vaiheet
         select_identity: Valitse identiteetti
         sms_code: Tekstiviestikoodin vahvistaminen
         sms_phone_number: Matkapuhelimen numero

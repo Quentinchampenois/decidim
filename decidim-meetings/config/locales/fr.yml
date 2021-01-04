@@ -1,4 +1,3 @@
----
 fr:
   activemodel:
     attributes:
@@ -17,10 +16,13 @@ fr:
         available_slots: Places disponibles pour cette rencontre
         decidim_category_id: Catégorie
         decidim_scope_id: Périmètre d'application
+        decidim_user_group_id: Groupe d'utilisateurs
         description: Description
         end_time: Date de fin
         location: Lieu
         location_hints: Indicateurs d’emplacement
+        online_meeting_url: URL de la réunion
+        organizer_gid: Créer en tant que
         organizer_id: Organisateur
         private_meeting: Rencontre privée
         registration_form_enabled: Formulaire d'inscription activé
@@ -29,10 +31,11 @@ fr:
         start_time: Heure de début
         title: Titre
         transparent: Visible par les non-membres
+        type_of_meeting: Type
       minutes:
-        audio_url: Lien vers l'audio
+        audio_url: URL de l'audio
         description: Description
-        video_url: Lien vers la vidéo
+        video_url: URL de la vidéo
         visible: Est visible
     errors:
       models:
@@ -82,12 +85,20 @@ fr:
           global:
             announcement: Annonce
             comments_enabled: Activer le module de commentaire
+            comments_max_length: Longueur max des commentaires (laisser 0 pour la valeur par défaut)
+            creation_enabled_for_participants: Les participants peuvent créer des rencontres
             default_registration_terms: Conditions d'inscription par défaut
             enable_pads_creation: Activer la création de pads
+            registration_code_enabled: Code d'enregistrement activé
             resources_permissions_enabled: Les autorisations d'actions peuvent être définies pour chaque réunion
+            scope_id: Secteur
+            scopes_enabled: Secteurs activés
+            terms_and_conditions_url_for_meeting_creators: URL des conditions générales pour les créateurs de réunion
           step:
             announcement: Annonce
             comments_blocked: Commentaires bloqués
+            creation_enabled_for_participants: La création de rencontre par les participants est activée
+            creation_enabled_for_user_groups: La création de rencontres par des groupes d'utilisateurs est activée
     events:
       meetings:
         meeting_closed:
@@ -137,7 +148,7 @@ fr:
       badges:
         attended_meetings:
           conditions:
-          - Inscrivez-vous aux rencontres auxquelles vous souhaitez participer
+            - Inscrivez-vous aux rencontres auxquelles vous souhaitez participer
           description: Ce badge est attribué lorsque vous participez à plusieurs rencontres en face à face.
           description_another: Cet utilisateur a participé à %{score} rencontres.
           description_own: Vous avez assisté à %{score} rencontres.
@@ -154,6 +165,10 @@ fr:
         confirm_destroy: Êtes-vous certain de vouloir supprimer cette rencontre ?
         destroy: Supprimer
         edit: Modifier
+        invalid_destroy:
+          proposals_count:
+            one: 'La rencontre ne peut être supprimée car %{count} proposition y est rattachée:'
+            other: 'La rencontre ne peut être supprimée car %{count} propositions y sont rattachées:'
         minutes: Compte rendu
         new: Nouvelle réunion
         preview: Aperçu
@@ -224,9 +239,6 @@ fr:
           edit:
             close: Clore
             title: Clore la rencontre
-        meeting_copies:
-          form:
-            select_organizer: Sélectionnez l'organisateur
         meetings:
           close:
             invalid: Il y a eu un problème au moment de clore cette rencontre
@@ -235,14 +247,19 @@ fr:
             invalid: Il y a eu un problème lors de la création de cette rencontre
             success: Rencontre créée avec succès
           destroy:
+            invalid:
+              proposals_count:
+                one: La rencontre ne peut être supprimée car %{count} proposition y est rattachée
+                other: La rencontre ne peut être supprimée car %{count} propositions y sont rattachées
             success: La rencontre a été supprimée avec succès
           edit:
             update: Mettre à jour
           form:
             address_help: 'L''adresse entrée est utilisée par le géocodage pour trouver l''emplacement et afficher la réunion sur la carte. Format accepté : [n°] [rue] [code postal] [ville]'
             location_help: 'Le lieu indique le nom de l''endroit qui accueille la réunion (ex : Maison de la citoyenneté)'
-            location_hints_help: 'Données de localisation : infos additionnelles (ex : 2ème étage, ...)'
-            select_organizer: Sélectionnez l'organisateur
+            location_hints_help: 'Indices de localisation : informations complémentaires. Exemple: l''étage du bâtiment s''il s''agit d''une réunion en personne, ou le mot de passe de la réunion s''il s''agit d''une réunion en ligne avec accès restreint.'
+            online_meeting_url_help: 'Lien : permettre aux participants de se connecter directement à votre réunion'
+            select_a_meeting_type: Veuillez sélectionner un type de réunion
           index:
             title: Rencontres
           new:
@@ -284,6 +301,7 @@ fr:
           form:
             available_slots_help: Laisser à 0 si le nombre de places disponibles est illimité.
             invites: Invitations
+            recommendation_message: Pour des raisons de confidentialité, nous vous recommandons de supprimer ce formulaire d'inscription lorsque vous n'en avez plus besoin. Par défaut, il le sera 3 mois après la fin de la réunion.
             registration_form: Formulaire d'inscription
             registrations_count:
               one: Il y a eu %{count} inscription.
@@ -345,32 +363,78 @@ fr:
             subject: Votre inscription a bien été enregistrée
       meeting:
         not_allowed: Vous n'êtes pas autorisé à voir cette rencontre
+      meeting_closes:
+        edit:
+          back: Retour
+          close: Clôturer la réunion
+          title: Clôturer la réunion
       meetings:
+        count:
+          meetings_count:
+            one: "%{count} rencontre"
+            other: "%{count} rencontres"
+        create:
+          invalid: Une erreur s'est produite lors de la création de cette rencontre.
+          success: La rencontre a été créée avec succès.
+        edit:
+          back: Retour
+          title: Modifier votre rencontre
+          update: Mettre à jour
         filters:
           category: Catégorie
-          category_prompt: Sélectionner une catégorie
           date: Date
-          past: Passées
+          date_values:
+            all: Toutes
+            past: Passées
+            upcoming: À venir
+          origin: Origine
+          origin_values:
+            all: Toutes
+            citizens: Citoyens
+            official: Officiel
+            user_groups: Groupes
+          scope: Secteur
           search: Rechercher
-          upcoming: À venir
+          type: Type
+          type_values:
+            all: Tous
+            in_person: En présentiel
+            online: En ligne
         filters_small_view:
           close_modal: Fermer la fenêtre de dialogue
           filter: Filtrer
           filter_by: Filtrer par
           unfold: Voir la suite
+        form:
+          address_help: 'Adresse : utilisée par le géocodeur pour trouver l''emplacement'
+          create_as: Créer une rencontre en tant que
+          location_help: 'Emplacement: message adressé aux utilisateurs impliquant le point de rencontre'
+          location_hints_help: 'Indices de localisation : informations complémentaires. Exemple: l''étage du bâtiment s''il s''agit d''une réunion en personne, ou le mot de passe de la réunion s''il s''agit d''une réunion en ligne avec accès restreint.'
+          online_meeting_url_help: 'Lien : permettre aux participants de se connecter directement à votre réunion'
+          select_a_category: Veuillez sélectionner une catégorie
+          select_a_meeting_type: Veuillez sélectionner un type de réunion
+        index:
+          new_meeting: Nouvelle rencontre
         meeting_minutes:
           meeting_minutes: Comptes rendus des rencontres
           related_information: Informations liées
         meetings:
           no_meetings_warning: Aucune rencontre ne correspond à vos critères de recherche ou aucune rencontre n'est prévue.
           upcoming_meetings_warning: À l'heure actuelle, il n'y a pas de rencontres planifiées. Ici vous trouverez une liste de toutes les rencontres passées.
+        new:
+          back: Précédent
+          create: Créer
+          title: Créez votre rencontre
         registration_confirm:
           cancel: Annuler
           confirm: Confirmer
         show:
           attendees: Nombre de participants
           back: Retour à la liste
+          close_meeting: Clôturer la réunion
           contributions: Décompte des contributions
+          date: Date
+          edit_meeting: Modifier la rencontre
           going: J'y vais
           join: Participer à la rencontre
           meeting_report: Compte rendu de la rencontre
@@ -381,9 +445,12 @@ fr:
             validated: Validé
             validation_pending: EN ATTENTE DE VALIDATION
           remaining_slots:
-            one: Il reste %{count} place
-            other: Il reste %{count} places
+            one: "Il reste %{count} place"
+            other: "Il reste %{count} places"
           view: Voir
+        update:
+          invalid: Une erreur s'est produite lors de la mise à jour de la rencontre.
+          success: La rencontre a été mise à jour avec succès.
       meetings_map:
         view_meeting: Voir la réunion
       models:
@@ -402,6 +469,7 @@ fr:
             closed: Fermée
             end_time: Date de fin
             map: Carte
+            official_meeting: Rencontre officielle
             start_time: Date de début
             title: Titre
       read_more: "(Voir la suite)"
@@ -420,9 +488,14 @@ fr:
         destroy:
           invalid: Il y a eu un problème lors de l'annulation de votre inscription.
           success: Vous avez annulé votre inscription avec succès.
+      type_of_meeting:
+        in_person: En présentiel
+        online: En ligne
       types:
         private_meeting: Rencontre privée
         transparent: Visible par les non-membres
+      versions:
+        back_to_resource: Revenir à la rencontre
     metrics:
       meetings:
         description: Nombre de rencontres créées

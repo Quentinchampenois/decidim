@@ -5,7 +5,7 @@
         <%= decidim_sanitize translated_attribute current_question.question_context %>
 
         <div class="show-more">
-          <button class="button button--muted small"><%= t "read_more", scope: "decidim.questions.show" %></button>
+          <button class="button hollow small"><%= t "read_more", scope: "decidim.questions.show" %></button>
         </div>
 
         <div class="hide show-more-panel">
@@ -36,7 +36,7 @@
 <%= content_for :question_header_details do %>
   <div id="question-header-details" class="row consultations-home-intro">
     <div class="columns medium-5">
-      <%= image_tag current_question.hero_image&.url, alt: t("question.hero_image", scope: "activemodel.attributes") %>
+      <%= image_tag current_question.hero_image&.url, alt: t("question.hero_image", scope: "activemodel.attributes") if current_question.hero_image&.url %>
     </div>
 
     <div class="columns medium-5">

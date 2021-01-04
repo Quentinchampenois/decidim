@@ -48,6 +48,8 @@ it:
             title: titolo
       posts:
         show:
+          back: Torna alla lista
+          comments: Commenti
           view: vista
         sidebar_blog:
           comments: Commenti
@@ -60,9 +62,12 @@ it:
           global:
             announcement: Annuncio
             comments_enabled: Commenti abilitati
+            comments_max_length: Lunghezza massima dei commenti (Lasciare 0 per il valore predefinito)
           step:
             announcement: Annuncio
             comments_blocked: Commenti bloccati
+            endorsements_blocked: Appoggi bloccati
+            endorsements_enabled: Appoggi abilitati
     events:
       blogs:
         post_created:

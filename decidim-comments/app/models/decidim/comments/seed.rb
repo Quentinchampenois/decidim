@@ -25,7 +25,7 @@ module Decidim
           params = {
             commentable: resource,
             root_commentable: resource,
-            body: ::Faker::Lorem.sentence(50),
+            body: { en: ::Faker::Lorem.sentence(word_count: 50) },
             author: author,
             user_group: user_group
           }

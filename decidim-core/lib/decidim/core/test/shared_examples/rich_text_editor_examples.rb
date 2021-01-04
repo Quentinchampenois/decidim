@@ -3,13 +3,13 @@
 shared_examples "having a rich text editor" do |css, toolbar|
   it "has a form with a rich text editor" do
     within "form.#{css}" do
-      expect(page).to have_selector("input[toolbar='#{toolbar}']", visible: false)
+      expect(page).to have_selector("div.editor-container[data-toolbar='#{toolbar}']", visible: :all)
     end
   end
 end
 
 shared_context "with rich text editor content" do
-  let(:content) { "<p>" + safe_tags + "</p>" + script }
+  let(:content) { "<p>#{safe_tags}</p>#{script}" }
   let(:safe_tags) { em + u + strong }
   let(:em) { "<em>em</em>" }
   let(:u) { "<u>u</u>" }
@@ -30,7 +30,7 @@ shared_examples "rendering safe content" do |css|
 
   it "sanitizes potentially malicious HTML tags" do
     within css do
-      expect(page).not_to have_selector("script", visible: false)
+      expect(page).not_to have_selector("script", visible: :all)
       expect(page).to have_content("alert('SCRIPT')")
     end
   end
@@ -52,7 +52,7 @@ shared_examples "rendering unsafe content" do |css|
 
   it "strips potentially malicious HTML tags" do
     within css do
-      expect(page).not_to have_selector("script", visible: false)
+      expect(page).not_to have_selector("script", visible: :all)
       expect(page).not_to have_content("alert('SCRIPT')")
     end
   end

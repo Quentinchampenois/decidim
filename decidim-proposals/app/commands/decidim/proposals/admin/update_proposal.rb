@@ -5,7 +5,7 @@ module Decidim
     module Admin
       # A command with all the business logic when a user updates a proposal.
       class UpdateProposal < Rectify::Command
-        include AttachmentMethods
+        include ::Decidim::AttachmentMethods
         include GalleryMethods
         include HashtagsMethods
 
@@ -56,11 +56,13 @@ module Decidim
         attr_reader :form, :proposal, :attachment, :gallery
 
         def update_proposal
+          parsed_title = Decidim::ContentProcessor.parse_with_processor(:hashtag, form.title, current_organization: form.current_organization).rewrite
+          parsed_body = Decidim::ContentProcessor.parse_with_processor(:hashtag, form.body, current_organization: form.current_organization).rewrite
           Decidim.traceability.update!(
             proposal,
             form.current_user,
-            title: title_with_hashtags,
-            body: body_with_hashtags,
+            title: parsed_title,
+            body: parsed_body,
             category: form.category,
             scope: form.scope,
             address: form.address,

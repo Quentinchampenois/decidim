@@ -1,4 +1,3 @@
----
 fr:
   activemodel:
     attributes:
@@ -23,12 +22,12 @@ fr:
         participatory_structure: Modalités de décision
         promoted: Mise en avant
         published_at: Publiée à
-        related_process_ids: Processus connexes
+        related_process_ids: Concertations liées
         scope_id: Périmètre d'application
-        scope_type_max_depth_id: Profondeur du filtre
+        scope_type_max_depth_id: Profondeur du filtre de portée
         scopes_enabled: Périmètres d'application activés
         short_description: Résumé
-        show_metrics: Afficher les mesures
+        show_metrics: Afficher les métriques
         show_statistics: Montrer les statistiques
         slug: Identifiant
         start_date: Date de début
@@ -95,6 +94,9 @@ fr:
         unpublish: Dépublier
       menu:
         participatory_process_groups: Groupes de concertations
+        participatory_process_groups_submenu:
+          info: Information
+          landing_page: Page d'accueil
         participatory_processes: Concertations
         participatory_processes_submenu:
           attachment_collections: Dossiers
@@ -136,7 +138,7 @@ fr:
             admin: Administrateur
             collaborator: Relecteur
             moderator: Modérateur
-            valuator: Valorisateur
+            valuator: Évaluateur
         user:
           fields:
             invitation_accepted_at: Invitation acceptée à
@@ -146,6 +148,13 @@ fr:
           copy: Copier
           select: Sélectionnez les données que vous souhaitez dupliquer
           title: Dupliquer la concertation
+      participatory_process_group_landing_page:
+        edit:
+          active_content_blocks: Blocs de contenu actifs
+          inactive_content_blocks: Blocs de contenu inactifs
+      participatory_process_group_landing_page_content_blocks:
+        edit:
+          update: Mettre à jour
       participatory_process_groups:
         destroy:
           error: Une erreur s'est produite lors de la suppression du groupe de concertations.
@@ -208,13 +217,13 @@ fr:
         destroy:
           success: Utilisateur supprimé avec succès de cette concertation.
         edit:
-          title: Mise à jour de l'administration du processus participatif
+          title: Mettre à jour l'administrateur du processus participatif
           update: Mettre à jour
         index:
           process_admins_title: Administrateurs de la concertation
         new:
           create: Créer
-          title: Nouvelle administration du processus participatif
+          title: Nouvel administrateur du processus participatif
         update:
           error: Une erreur s'est produite lors de la mise à jour d'un utilisateur pour cette concertation.
           success: L'utilisateur a été mis à jour avec succès pour cette concertation.
@@ -270,6 +279,11 @@ fr:
         update: "%{user_name} a changé le rôle de l'utilisateur %{resource_name} dans la concertation %{space_name}"
     events:
       participatory_process:
+        role_assigned:
+          email_intro: Vous avez été assigné en tant que %{role} pour le processus participatif "%{resource_title}".
+          email_outro: Vous avez reçu cette notification parce que vous êtes %{role} du processus participatif "%{resource_title}".
+          email_subject: Vous avez été assigné comme %{role} pour "%{resource_title}".
+          notification_title: Vous avez été assigné en tant que %{role} pour le processus participatif <a href="%{resource_url}">%{resource_title}</a>.
         step_activated:
           email_intro: 'L''étape %{resource_title} vient d''être activée pour %{participatory_space_title}. Vous pouvez désormais la consulter sur cette page :'
           email_outro: Vous venez de recevoir cette notification car vous suivez %{participatory_space_title}. Vous pouvez à tout moment arrêter de recevoir ces notifications en suivant le lien précédent.
@@ -293,6 +307,9 @@ fr:
         description: Nombre de concertations dans cette organisation
         object: concertations
         title: Concertations
+    participatory_process:
+      show:
+        related_assemblies: Assemblées associées
     participatory_process_groups:
       show:
         group_participatory_processes:
@@ -308,6 +325,9 @@ fr:
         content_blocks:
           highlighted_processes:
             max_results: Quantité maximale d'éléments à afficher
+        new_import:
+          accepted_types:
+            json: JSON
         participatory_process_copies:
           form:
             slug_help: 'Les identifiants d''URL sont utilisés pour générer les URL qui envoient vers cette concertation. Ils n''acceptent que des lettres, des chiffres et des tirets et doivent commencer par une lettre. Exemple : %{url}'
@@ -327,8 +347,8 @@ fr:
             images: Images
             metadata: Métadonnées
             other: Autre
-            related_processes: Processus connexes
-            scope_type_max_depth_help: Restreindre la profondeur du filtre du champ d'application ; le filtre affichera du général au type de champ d'application sélectionné.
+            related_processes: Concertations liées
+            scope_type_max_depth_help: Restreindre la profondeur du filtre de secteur; Le filtre s'affichera du secteur général au type de secteur sélectionné.
             select_an_area: Sélectionnez un secteur
             select_process_group: Sélectionnez un groupe de concertations
             slug_help: 'Les identifiants d''URL sont utilisés pour générer les URL qui envoient vers cette concertation. Ils n''acceptent que des lettres, des chiffres et des tirets et doivent commencer par une lettre. Exemple : %{url}'
@@ -348,7 +368,11 @@ fr:
             active_step: Étape active
             more_information: Plus d'informations
             participate: Participer
+            participate_in: Participer au processus %{resource_name}
             see_all_processes: Voir toutes les concertations
+      participatory_process_steps:
+        index:
+          back_to_process: Retour à la page du processus
       participatory_processes:
         filters:
           counters:
@@ -378,13 +402,14 @@ fr:
           loading: Chargement des résultats...
       show:
         area: Périmètre d'assemblée
+        dates: Dates
         developer_group: Organisateur
         end_date: Date de fin
         local_area: Espace d'organisation
         participatory_scope: Objectifs
         participatory_structure: Modalités de décision
         private_space: Ceci est une concertation privée
-        related_processes: Processus connexes
+        related_processes: Concertations liées
         scope: Périmètre d'application
         start_date: Date de début
         target: Participants
@@ -394,7 +419,7 @@ fr:
         comments_count: Commentaires
         debates_count: Débats
         endorsements_count: Soutiens
-        followers_count: Suiveurs
+        followers_count: Abonnés
         headline: Activité
         meetings_count: Rencontres
         no_stats: Il n'y a pas encore de statistiques.
@@ -413,6 +438,7 @@ fr:
       participatory_process_groups:
         participatory_process_group:
           browse: Parcourir
+          browse_resource: Parcourir le groupe de concertation %{resource_name}
           processes_count: 'Concertations :'
       participatory_process_widgets:
         show:
@@ -424,11 +450,15 @@ fr:
         participatory_process:
           active_step: 'Étape actuelle :'
           more_info: Plus d'informations
+          more_info_about: Plus d'infos sur la concertation %{resource_name}
           take_part: Participer
+          take_part_in: Participer à la concertation %{resource_name}
         promoted_process:
           active_step: 'Étape actuelle :'
           more_info: Plus d'informations
+          more_info_about: Plus d'infos sur la concertation %{resource_name}
           take_part: Participer
+          take_part_in: Participer à la concertation %{resource_name}
       process_header_steps:
         step: Étape %{current} sur %{total}
         view_steps: Voir les étapes

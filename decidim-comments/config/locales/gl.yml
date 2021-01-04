@@ -16,7 +16,6 @@ gl:
         other: Votos
   decidim:
     comments:
-      comments: Comentarios
       last_activity:
         new_comment_at_html: "<span>Novo comentario en %{link}</span>"
       votes:
@@ -54,7 +53,6 @@ gl:
             does_not_belong: Contén actividades ilegais, ameazas de suicidio, información persoal ou outra cousa que pensas que non pertence a %{organization_name}.
             offensive: Contén racismo, sexismo, abuso, ataques persoais, ameazas de morte, solicitudes de suicidio ou calquera tipo de discurso de odio.
             spam: Contén clic, publicidade, fraudes ou bots de script.
-          title: Informar dun problema
       comment_order_selector:
         order:
           best_rated: Mellor valorado
@@ -68,12 +66,14 @@ gl:
         blocked_comments_for_user_warning: Non podes comentar neste momento, pero podes ler os anteriores.
         blocked_comments_warning: Os comentarios están desactivados neste momento, pero podes ler os anteriores.
         loading: Cargando comentarios ...
-        title: "%{count} comentarios"
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} deixou un comentario en %{resource_title}. Podes lelo nesta páxina:"
           email_outro: Recibiches esta notificación porque estás seguindo %{author_name}. Podes deixar de seguir este usuario desde a súa páxina de perfil.
+          email_subject: Hai un novo comentario por %{author_name} en %{resource_title}
+          notification_title: Hai un novo comentario <a href="%{author_path}">%{author_name} %{author_nickname}</a> en <a href="%{resource_path}">%{resource_title}</a>.
+        comment_by_followed_user_group:
           email_subject: Hai un novo comentario por %{author_name} en %{resource_title}
           notification_title: Hai un novo comentario <a href="%{author_path}">%{author_name} %{author_nickname}</a> en <a href="%{resource_path}">%{resource_title}</a>.
         comment_created:

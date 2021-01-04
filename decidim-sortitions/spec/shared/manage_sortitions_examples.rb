@@ -53,8 +53,8 @@ shared_examples "manage sortitions" do
     end
 
     context "when creates a sortition" do
-      let(:sortition_dice) { ::Faker::Number.between(1, 6) }
-      let(:sortition_target_items) { ::Faker::Number.between(1, 10) }
+      let(:sortition_dice) { ::Faker::Number.between(from: 1, to: 6) }
+      let(:sortition_target_items) { ::Faker::Number.between(from: 1, to: 10) }
       let!(:proposal) { create :proposal, component: proposal_component }
 
       it "shows the sortition details" do
@@ -85,7 +85,7 @@ shared_examples "manage sortitions" do
             ca: "Títol"
           )
 
-          accept_alert { find("*[type=submit]").click }
+          accept_confirm { find("*[type=submit]").click }
         end
 
         expect(page).to have_admin_callout("successfully")
@@ -108,7 +108,7 @@ shared_examples "manage sortitions" do
           expect(page).to have_content(/Proposals selected for draw/i)
           expect(sortition.proposals).not_to be_empty
           sortition.proposals.each do |p|
-            expect(page).to have_content(p.title)
+            expect(page).to have_content(translated(p.title))
           end
         end
       end

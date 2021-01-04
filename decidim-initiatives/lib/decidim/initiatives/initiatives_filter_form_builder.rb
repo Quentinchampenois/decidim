@@ -21,9 +21,7 @@ module Decidim
           selected = [selected] unless selected.is_a?(Array)
         end
 
-        types = collection.all.map do |type|
-          [type.title[I18n.locale.to_s], type.id]
-        end
+        types = types_for_options_for_select(selected, collection)
 
         prompt = options.delete(:prompt)
         remote_path = options.delete(:remote_path) || false
@@ -36,6 +34,27 @@ module Decidim
         }
 
         select(name, @template.options_for_select(types, selected: selected), options, html_options)
+      end
+
+      private
+
+      def types_for_options_for_select(selected, collection)
+        if selected.present?
+          if selected == "all"
+            types = collection.all.map do |type|
+              [type.title[I18n.locale.to_s], type.id]
+            end
+          else
+            selected = selected.values if selected.is_a?(Hash)
+            selected = [selected] unless selected.is_a?(Array)
+            types = collection.where(id: selected.map(&:to_i)).map do |type|
+              [type.title[I18n.locale.to_s], type.id]
+            end
+          end
+        else
+          types = []
+        end
+        types
       end
     end
   end

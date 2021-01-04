@@ -29,20 +29,7 @@ module Decidim
         end
 
         it "renders the body" do
-          expect(mail.body.encoded).to match(initiative.title["en"])
-        end
-      end
-
-      context "when notifies validating request" do
-        let(:mail) { InitiativesMailer.notify_validating_request(initiative, initiative.author) }
-
-        it "renders the headers" do
-          expect(mail.subject).to eq("The initiative #{initiative.title["en"]} has requested its technical validation.")
-          expect(mail.to).to eq([initiative.author.email])
-        end
-
-        it "renders the body" do
-          expect(mail.body.encoded).to match(initiative.title["en"])
+          expect(mail.body).to match("The initiative #{initiative.title["en"]} has changed its status to: #{I18n.t(initiative.state, scope: "decidim.initiatives.admin_states")}")
         end
       end
 

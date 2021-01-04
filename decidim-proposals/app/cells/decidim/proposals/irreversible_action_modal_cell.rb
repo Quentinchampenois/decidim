@@ -29,7 +29,7 @@ module Decidim
       end
 
       def modal_id
-        "#{action}-irreversible-action-modal"
+        @modal_id ||= "#{SecureRandom.uuid}-#{action}-irreversible-action-modal"
       end
 
       def button_reveal_modal
@@ -60,7 +60,7 @@ module Decidim
       end
 
       def button_cancel
-        content_tag :div, class: "columns medium-6" do
+        tag.div(class: "columns medium-6") do
           button_tag type: "button", class: "clear button secondary expanded", "data-close": "" do
             close_label
           end

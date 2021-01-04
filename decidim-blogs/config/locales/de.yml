@@ -29,6 +29,7 @@ de:
             success: Beitrag wurde erfolgreich gelöscht
           edit:
             save: Aktualisieren
+            title: Post bearbeiten
           index:
             title: Beiträge
           new:
@@ -48,6 +49,8 @@ de:
             title: Titel
       posts:
         show:
+          back: Zurück zur Liste
+          comments: Kommentare
           view: Aussicht
         sidebar_blog:
           comments: Bemerkungen
@@ -60,9 +63,12 @@ de:
           global:
             announcement: Ankündigung
             comments_enabled: Kommentare aktiviert
+            comments_max_length: Maximale Länge der Kommentare (0 für Standardwert)
           step:
             announcement: Ankündigung
             comments_blocked: Kommentare blockiert
+            endorsements_blocked: Unterstützung deaktiviert
+            endorsements_enabled: Unterstützung aktiviert
     events:
       blogs:
         post_created:

@@ -307,9 +307,7 @@ gl:
           new_import:
             accepted_mime_types:
               md: Markdown
-              odt: Odt
             bottom_hint: "(Poderá ver e ordenar as seccións do documento)"
-            document_legend: 'Engada un documento inferior a 2 MB, cada sección até que se analizen 3 niveis de profundidade nas Propostas. Os formatos soportados son: %{valid_mime_types}'
             title: AGREGAR DOCUMENTOS
             upload_document: Cargar documento
           publish:
@@ -323,6 +321,10 @@ gl:
             success: Texto participativo actualizado con éxito.
         proposal_answers:
           form:
+            accepted: Aceptada
+            answer_proposal: Resposta
+            evaluating: Avaliación
+            rejected: Rexeitado
             title: Resposta á proposta %{title}
         proposal_notes:
           create:
@@ -367,7 +369,10 @@ gl:
           publish_answers:
             select_a_proposal: Selecciona unha proposta
           show:
+            authors: Autores
+            body: Corpo
             created_at: Data de creación
+            proposals: Propostas
             votes_count: Reconto de votos
           update_category:
             select_a_category: Selecciona unha categoría
@@ -405,16 +410,21 @@ gl:
         rejected: Rexeitado
         withdrawn: Retirada
       application_helper:
+        filter_category_values:
+          all: Todo
         filter_origin_values:
           all: Todo
           citizens: Cidadáns
           meetings: Reunións
           official: Oficial
           user_groups: Grupos de usuarios
+        filter_scope_values:
+          all: Todo
         filter_state_values:
           accepted: Aceptada
           all: Todo
           evaluating: Avaliación
+          not_answered: Non respondeu
           rejected: Rexeitado
         filter_type_values:
           all: Todo
@@ -466,6 +476,7 @@ gl:
           open: Aberto
           published: Publicado
           related_to: Relacionado con
+          scope: Alcance
           search: Busca
           state: Estado
           withdrawn: Retirada
@@ -507,14 +518,11 @@ gl:
             one: e %{count} persoas máis
             other: e %{count} persoas máis
           info-message: Este é un <strong>proxecto colaborativo</strong> a proposta. Isto significa que pode axudar aos seus autores a configurar a proposta usando a sección de comentarios a continuación ou mellorala directamente solicitando o acceso para editala. Unha vez que os autores te outorgan acceso, podes realizar cambios neste borrador.
-          of_versions: "(de %{number})"
           publish: Publicar
           publish_info: Publica esta versión do borrador ou
           published_proposal: proposta publicada
           request_access: Solicitar acceso
           requested_access: Acceso solicitado
-          see_other_versions: ver outras versións
-          version: Versión %{number}
           version_history: Consulte o historial de versións para esta proposta
           withdraw: retirar o borrador
         states:
@@ -567,7 +575,6 @@ gl:
           amend: Modificar
           comment: Comentario
           comments: Comentarios
-          endorse: Endosar
       proposal_votes:
         create:
           error: Houbo erros ao votar a proposta.
@@ -599,8 +606,10 @@ gl:
           category: Categoría
           origin: Orixe
           related_to: Relacionado con
+          scope: Alcance
           search: Busca
           state: Estado
+          type: Tipo
           voted: Votado
         filters_small_view:
           close_modal: Pechar modal
@@ -655,7 +664,6 @@ gl:
           proposal_rejected_reason: 'Esta proposta foi rexeitada porque:'
           report: Informe
           withdraw_btn_hint: Pode retirar a súa proposta se cambia de opinión, sempre que non teña recibido ningún apoio. A proposta non se elimina, aparecerá na lista de propostas retiradas.
-          withdraw_confirmation: '¿Estás seguro de retirar esta proposta?'
           withdraw_proposal: Retire a proposta
         vote_button:
           already_voted: Xa votou
@@ -706,20 +714,12 @@ gl:
         error: Produciuse un erro ao gardar o borrador da proposta.
         success: O proxecto de proposta actualizouse con éxito.
       versions:
-        changes_at_title: Cambios en "%{title}"
+        collaborative_drafts:
+          back_to_resource: Volve ao borrador colaborativo
         index:
           title: Versións
-        stats:
-          back_to_collaborative_draft: Volve ao borrador colaborativo
-          back_to_proposal: Volver á proposta
-          number_of_versions: Versións
-          show_all_versions: Mostrar todas as versións
-          version_author: Autor da versión
-          version_created_at: Versión creada en
-          version_number: Número de versión
-          version_number_out_of_total: "%{current_version} de %{total_count}"
-        version:
-          version_index: Versión %{index}
+        proposals:
+          back_to_resource: Volver á proposta
       withdraw:
         errors:
           has_supports: Esta proposta non pode ser retirada porque xa ten apoio.

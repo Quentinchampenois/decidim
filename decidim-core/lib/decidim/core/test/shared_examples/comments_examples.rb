@@ -9,16 +9,20 @@ shared_examples "comments" do
     switch_to_host(organization.host)
   end
 
+  after do
+    expect_no_js_errors
+  end
+
   it "shows the list of comments for the resource" do
     visit resource_path
 
     expect(page).to have_selector("#comments")
-    expect(page).to have_selector("article.comment", count: comments.length)
+    expect(page).to have_selector(".comment", count: comments.length)
 
     within "#comments" do
       comments.each do |comment|
         expect(page).to have_content comment.author.name
-        expect(page).to have_content comment.body
+        expect(page).to have_content comment.body.values.first
       end
     end
   end
@@ -34,7 +38,13 @@ shared_examples "comments" do
     expect(page).to have_css(".comment", minimum: 1)
     page.find(".order-by .dropdown.menu .is-dropdown-submenu-parent").hover
 
-    click_link "Best rated"
+    within ".comments" do
+      within ".order-by__dropdown" do
+        click_link "Older" # Opens the dropdown
+        click_link "Best rated"
+      end
+    end
+
     expect(page).to have_css(".comments > div:nth-child(2)", text: "Most Rated Comment")
   end
 
@@ -55,16 +65,46 @@ shared_examples "comments" do
       expect(page).to have_selector(".add-comment form")
     end
 
+    context "when no default comments length specified" do
+      it "displays the numbers of characters left" do
+        within ".add-comment form" do
+          expect(page).to have_content("1000 characters left")
+        end
+      end
+    end
+
+    context "when organization has a default comments length params" do
+      let!(:organization) { create(:organization, comments_max_length: 2000) }
+
+      it "displays the numbers of characters left" do
+        within ".add-comment form" do
+          expect(page).to have_content("2000 characters left")
+        end
+      end
+
+      context "when component has a default comments length params" do
+        it "displays the numbers of characters left" do
+          component.update!(settings: { comments_max_length: 3000 })
+          visit current_path
+
+          within ".add-comment form" do
+            expect(page).to have_content("3000 characters left")
+          end
+        end
+      end
+    end
+
     context "when user adds a new comment" do
       before do
         within ".add-comment form" do
-          fill_in "add-comment-#{commentable.commentable_type}-#{commentable.id}", with: "This is a new comment"
+          fill_in "add-comment-#{commentable.commentable_type.demodulize}-#{commentable.id}", with: "This is a new comment"
           click_button "Send"
         end
       end
 
-      it "shows comment to the user" do
+      it "shows comment to the user and updates the comments counter" do
         expect(page).to have_comment_from(user, "This is a new comment", wait: 20)
+        expect(page).to have_selector("span.comments-count", text: "#{commentable.comments.count} COMMENTS")
       end
     end
 
@@ -81,7 +121,7 @@ shared_examples "comments" do
         expect(page).to have_selector(".add-comment form")
 
         within ".add-comment form" do
-          fill_in "add-comment-#{commentable.commentable_type}-#{commentable.id}", with: "This is a new comment"
+          fill_in "add-comment-#{commentable.commentable_type.demodulize}-#{commentable.id}", with: "This is a new comment"
           select user_group.name, from: "Comment as"
           click_button "Send"
         end
@@ -105,7 +145,7 @@ shared_examples "comments" do
         end
 
         expect(page).to have_selector("#comment_#{comment.id} .add-comment")
-        fill_in "add-comment-Decidim::Comments::Comment-#{comment.id}", with: "This is a reply"
+        fill_in "add-comment-Comment-#{comment.id}", with: "This is a reply"
         within ".comment-thread .add-comment" do
           click_button "Send"
         end
@@ -113,6 +153,7 @@ shared_examples "comments" do
         expect(page).to have_selector(".comment-thread .comment--nested", wait: 20)
         expect(page).to have_selector(".comment__additionalreply")
         expect(page).to have_reply_to(comment, "This is a reply")
+        expect(page).to have_selector("span.comments-count", text: "#{commentable.comments.count} COMMENTS")
       end
     end
 
@@ -145,7 +186,7 @@ shared_examples "comments" do
             page.find(".opinion-toggle--ok").click
 
             within ".add-comment form" do
-              fill_in "add-comment-#{commentable.commentable_type}-#{commentable.id}", with: "I am in favor about this!"
+              fill_in "add-comment-#{commentable.commentable_type.demodulize}-#{commentable.id}", with: "I am in favor about this!"
               click_button "Send"
             end
 
@@ -198,7 +239,7 @@ shared_examples "comments" do
         visit resource_path
 
         within ".add-comment form" do
-          fill_in "add-comment-#{commentable.commentable_type}-#{commentable.id}", with: content
+          fill_in "add-comment-#{commentable.commentable_type.demodulize}-#{commentable.id}", with: content
         end
       end
 
@@ -245,7 +286,7 @@ shared_examples "comments" do
         visit resource_path
 
         within ".add-comment form" do
-          fill_in "add-comment-#{commentable.commentable_type}-#{commentable.id}", with: content
+          fill_in "add-comment-#{commentable.commentable_type.demodulize.demodulize}-#{commentable.id}", with: content
           click_button "Send"
         end
       end
@@ -257,7 +298,7 @@ shared_examples "comments" do
 
         it "replaces the mention with a link to the user's profile" do
           expect(page).to have_comment_from(user, "A valid user mention: @#{mentioned_user.nickname}", wait: 20)
-          expect(page).to have_link "@#{mentioned_user.nickname}", href: "/profiles/#{mentioned_user.nickname}"
+          expect(page).to have_link "@#{mentioned_user.nickname}", href: "http://#{mentioned_user.organization.host}/profiles/#{mentioned_user.nickname}"
         end
       end
 
@@ -278,6 +319,24 @@ shared_examples "comments" do
           expect(page).to have_comment_from(user, "This text mentions a @nonexistent user", wait: 20)
           expect(page).not_to have_link "@nonexistent"
         end
+      end
+    end
+
+    describe "hashtags", :slow do
+      let(:content) { "A comment with a hashtag #decidim" }
+
+      before do
+        visit resource_path
+
+        within ".add-comment form" do
+          fill_in "add-comment-#{commentable.commentable_type.demodulize}-#{commentable.id}", with: content
+          click_button "Send"
+        end
+      end
+
+      it "replaces the hashtag with a link to the hashtag search" do
+        expect(page).to have_comment_from(user, "A comment with a hashtag #decidim", wait: 20)
+        expect(page).to have_link "#decidim", href: "/search?term=%23decidim"
       end
     end
   end

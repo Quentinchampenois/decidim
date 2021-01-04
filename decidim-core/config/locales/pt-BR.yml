@@ -1,4 +1,4 @@
-pt-BR:
+pt:
   activemodel:
     attributes:
       account:
@@ -80,6 +80,9 @@ pt-BR:
         error: Ocorreu um erro ao actualizar a sua conta.
         success: A sua conta foi actualizada com sucesso.
         success_with_email_confirmation: A sua conta foi actualizada com sucesso. Irá receber um e-mail de confirmação do seu novo endereço.
+    admin:
+      actions:
+        cancel: Cancelar
     admin_log:
       area:
         create: "%{user_name} criou a área %{resource_name}"
@@ -194,6 +197,7 @@ pt-BR:
         explanation: Seja verificado introduzindo um número de passaporte começando com "A"
         fields:
           passport_number: Número de passaporte
+          postal_code: Código postal
         name: Outro exemplo de autorização
       dummy_authorization_handler:
         explanation: Seja verificado através da introdução de um número de documento que termina com "X"
@@ -340,7 +344,6 @@ pt-BR:
           buttons:
             check: Verificar e continuar
             close_modal: Fechar modal
-            uncheck: Manter desmarcado
           notice: |-
             <p>Tem certeza de que não quer receber uma newsletter?<br>
             Por favor, considere novamente marcar a caixa de seleção do boletim informativo abaixo.<br>
@@ -709,6 +712,7 @@ pt-BR:
         create:
           error: Conversa não iniciada. Tente mais tarde
         index:
+          close: Fechar modal
           no_conversations: Ainda não há conversas
           title: Conversas
         reply:
@@ -719,11 +723,7 @@ pt-BR:
         start:
           send: Enviar
           title: Comece uma conversa
-        update:
-          error: Mensagem não enviada. Tente mais tarde
     metrics:
-      download:
-        csv: Download de dados (csv)
       followers:
         description: Número de usuários que seguem este espaço de participação
         object: seguidores
@@ -844,7 +844,6 @@ pt-BR:
           error: Houve um erro ao aceitar os termos e condições.
           success: Ótimo! Você aceitou os termos e condições.
         form:
-          agreement: Eu concordo com estes termos
           legend: Concorde com os termos e condições de uso
         refuse:
           modal_body: Se recusar, você não será capaz de usar a plataforma, você pode <a href="%{data_portability_path}">baixar seus dados</a> e / ou <a href="%{delete_path}">excluir sua conta</a>.
@@ -898,7 +897,6 @@ pt-BR:
         subject: Um recurso foi escondido automaticamente
       report:
         hello: Olá %{name},
-        manage_moderations: Gerir moderações
         report_html: <p>O seguinte <a href="%{url}">content</a> foi reportado.</p>
         subject: Um recurso foi relatado
     reports:
@@ -961,7 +959,6 @@ pt-BR:
         sign_up: Inscrever-se
       participatory_space_filters:
         filters:
-          areas: Areas
           select_an_area: Selecione uma área
       reference:
         reference: 'Referência: %{reference}'
@@ -974,11 +971,12 @@ pt-BR:
         close_window: Fechar janela
         share: Compartilhar
         share_link: Partilhar link
-      version_author:
-        deleted: Usuário excluído
     user_activity:
       index:
         no_activities_warning: Este usuário ainda não possui nenhuma atividade.
+    user_conversations:
+      update:
+        error: Mensagem não enviada. Tente mais tarde
     user_interests:
       show:
         my_interests: Meus interesses
@@ -988,6 +986,9 @@ pt-BR:
       update:
         error: Ocorreu um erro ao atualizar seus interesses.
         success: Seus interesses foram atualizados com sucesso.
+    version_author:
+      show:
+        deleted: Usuário excluído
     welcome_notification:
       default_body: <p>Olá {{name}}, obrigado por se juntar a {{organization}} e seja bem-vindo!</p><ul><li>Se você quiser ter uma idéia rápida do que pode fazer aqui, dê uma olhada na seção <a href="{{help_url}}">Ajuda</a> .</li><li>Depois de ler, você receberá seu primeiro crachá. Aqui está uma <a href="{{badges_url}}">lista de todos os crachás</a> você pode começar como você participar de {{organization}}</li><li>Por último, mas não menos importante, se juntar a outras pessoas, compartilhar com eles a experiência de ser envolvido e participando de {{organization}}. Faça propostas, comentários, debata, pense em como contribuir para o bem comum, forneça argumentos para convencer, escute e leia para ser convencido, expresse suas idéias de maneira concreta e direta, responda com paciência e decisão, defenda suas ideias e mantenha uma mente aberta para colaborar e juntar-se às ideias de outras pessoas.</li></ul>
       default_subject: Obrigado por se juntar a {{organization}}!

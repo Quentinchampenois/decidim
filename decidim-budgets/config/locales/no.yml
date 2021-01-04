@@ -1,10 +1,15 @@
 "no":
   activemodel:
     attributes:
+      budget:
+        decidim_scope_id: Tema
+        description: Beskrivelse
+        title: Tittel
+        total_budget: Totalt budsjett
       project:
-        budget: Budsjett
+        budget_amount: Budsjettbeløp
         decidim_category_id: Kategori
-        decidim_scope_id: Omfang
+        decidim_scope_id: Tema
         description: Beskrivelse
         proposal_ids: Relaterte forslag
         title: Tittel
@@ -21,11 +26,15 @@
         confirm_destroy: Er du sikker på at du vil slette dette prosjektet?
         destroy: Slett
         edit: Editar
+        edit_projects: Administrer prosjekter
         import: Importer forslag til prosjekter
-        new: Nytt prosjekt
+        new: Ny %{name}
         preview: Forhåndsvis
         title: Handlinger
       admin:
+        budgets:
+          create:
+            invalid: Det oppsto et problem med å opprette dette budsjettet
         models:
           project:
             name: Prosjekt
@@ -65,18 +74,21 @@
         project:
           fields:
             title: Tittel
+      order_summary_mailer:
+        order_summary:
+          selected_projects: 'Prosjektene du har valgt er:'
+          subject: Du har stemt på %{space_name} i deltakelsesrommet
       projects:
         budget_confirm:
-          are_you_sure: Er du enig? Når du har bekrefter din stemme, kan du ikke endre den.
           cancel: Avbryt
           confirm: Bekreft
           description: Dette er prosjektene du har valgt å være en del av budsjettet.
           title: Bekreft stemme
         budget_excess:
+          budget_excess:
+            title: Maksimalt budsjett overskredet
           close: Lukk
-          description: Dette prosjektet overskrider det maksimale budsjettet og kan ikke bli lagt til. Hvis du ønsker, kan du slette et prosjekt du har allerede har valgt å legge til, eller avgi stemme på dine preferanser.
           ok: OK
-          title: Maksimalt budsjett overskredet
         budget_summary:
           are_you_sure: Er du sikker på at du vil avbryte din stemme?
           assigned: 'Tildelt:'
@@ -84,7 +96,6 @@
           checked_out:
             description: Du har allerede stemt for budsjettet. Hvis du har ombestemt deg, kan du %{cancel_link}.
             title: Budtjett avstemning fullført
-          description: Hvilke prosjekter tror du vi bør bevilge budsjett for? Tildel minst %{minimum_budget} til prosjektene du ønsker, og stem på dine preferanser for å definere budsjettet.
           title: Du bestemmer budsjettet
         count:
           projects_count:
@@ -92,7 +103,7 @@
             other: "%{count} prosjekter"
         filters:
           category: Kategori
-          scope: Omfang
+          scope: Tema
           search: Søk
         filters_small_view:
           close_modal: Lukk modal
@@ -107,16 +118,21 @@
             one: prosjekt valgt
             other: prosjekter valgt
           view: Vis
+        orders:
+          highest_cost: Høyeste kostnad
+          label: Sorter prosjekter etter
+          lowest_cost: Laveste kostnad
+          most_voted: Mest stemte
+          random: Tilfeldig rekkefølge
         project:
-          add: Legg til
-          count:
-            one: 1 støtte
-            other: "%{count} støttere"
-          remove: Fjern
+          add: Legg til prosjektet %{resource_name} til din stemme
+          remove: Fjern prosjektet %{resource_name} fra stemmen din
           view: Vis
         project_budget_button:
-          add: Legg til
-          added: Lagt til
+          add: Legg til i stemmen din
+          add_descriptive: Legg til prosjektet %{resource_name} til din stemme
+          added: Lagt til stemmen din
+          added_descriptive: Prosjektet %{resource_name} er lagt til din stemme
         show:
           budget: Budsjett
           view_all_projects: Vis alle prosjekter
@@ -129,15 +145,23 @@
           global:
             announcement: Kunngjøring
             comments_enabled: Kommentarer aktivert
+            comments_max_length: Maks lengde på kommentarer (Sett 0 for standardverdi)
+            form:
+              errors:
+                budget_voting_rule_only_one: Bare én regel for stemmegivning må være aktivert
+                budget_voting_rule_required: En avstemningsregel kreves
             projects_per_page: Prosjekter per side
-            resources_permissions_enabled: Handlings tillatelser kan settes for hvert møte
             total_budget: Totalt budsjett
+            vote_minimum_budget_projects_number: Minimum antall prosjekter å stemme på
+            vote_rule_minimum_budget_projects_enabled: 'Aktiver regel: Minimum antall prosjekter det skal stemmes på'
+            vote_rule_threshold_percent_enabled: 'Aktiver regel: Minimum budsjettprosent'
             vote_threshold_percent: Stemmeterskel prosent
           step:
             announcement: Kunngjøring
             comments_blocked: Kommentarer blokkert
             show_votes: Vis stemmer
-            votes_enabled: Stemming aktivert
+            votes_choices:
+              enabled: Stemming aktivert
     orders:
       checkout:
         error: Det oppstod et problem med å behandle din stemme
@@ -150,4 +174,3 @@
         project_proposal: 'Forslag inkludert i dette prosjektet:'
   index:
     confirmed_orders_count: Stemmer teller
-  total_budget: Totalt budsjett

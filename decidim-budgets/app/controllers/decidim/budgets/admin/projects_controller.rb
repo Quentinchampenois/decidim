@@ -5,23 +5,27 @@ module Decidim
     module Admin
       # This controller allows an admin to manage projects from a Participatory Process
       class ProjectsController < Admin::ApplicationController
-        helper_method :projects, :finished_orders, :pending_orders
+        include Decidim::ApplicationHelper
+        include Decidim::Proposals::Admin::Picker
+
+        helper_method :projects, :finished_orders, :pending_orders, :present
 
         def new
           enforce_permission_to :create, :project
-
-          @form = form(ProjectForm).instance
+          @form = form(ProjectForm).from_params(
+            attachment: form(AttachmentForm).instance
+          )
         end
 
         def create
           enforce_permission_to :create, :project
 
-          @form = form(ProjectForm).from_params(params)
+          @form = form(ProjectForm).from_params(params, budget: budget)
 
           CreateProject.call(@form) do
             on(:ok) do
               flash[:notice] = I18n.t("projects.create.success", scope: "decidim.budgets.admin")
-              redirect_to projects_path
+              redirect_to budget_projects_path(budget)
             end
 
             on(:invalid) do
@@ -33,19 +37,18 @@ module Decidim
 
         def edit
           enforce_permission_to :update, :project, project: project
-
           @form = form(ProjectForm).from_model(project)
+          @form.attachment = form(AttachmentForm).instance
         end
 
         def update
           enforce_permission_to :update, :project, project: project
-
-          @form = form(ProjectForm).from_params(params)
+          @form = form(ProjectForm).from_params(params, budget: budget)
 
           UpdateProject.call(@form, project) do
             on(:ok) do
               flash[:notice] = I18n.t("projects.update.success", scope: "decidim.budgets.admin")
-              redirect_to projects_path
+              redirect_to budget_projects_path(budget)
             end
 
             on(:invalid) do
@@ -61,7 +64,7 @@ module Decidim
           DestroyProject.call(project, current_user) do
             on(:ok) do
               flash[:notice] = I18n.t("projects.destroy.success", scope: "decidim.budgets.admin")
-              redirect_to projects_path
+              redirect_to budget_projects_path(budget)
             end
           end
         end
@@ -69,11 +72,11 @@ module Decidim
         private
 
         def projects
-          @projects ||= Project.where(component: current_component).page(params[:page]).per(15)
+          @projects ||= budget.projects.page(params[:page]).per(15)
         end
 
         def orders
-          @orders ||= Order.where(component: current_component)
+          @orders ||= Order.where(budget: budget)
         end
 
         def pending_orders

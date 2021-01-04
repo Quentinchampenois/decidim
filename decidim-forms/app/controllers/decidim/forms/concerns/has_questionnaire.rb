@@ -16,7 +16,7 @@ module Decidim
           helper Decidim::Forms::ApplicationHelper
           include FormFactory
 
-          helper_method :questionnaire_for, :questionnaire, :allow_answers?, :visitor_can_answer?, :visitor_already_answered?, :update_url
+          helper_method :questionnaire_for, :questionnaire, :allow_answers?, :visitor_can_answer?, :visitor_already_answered?, :update_url, :form_path
 
           invisible_captcha on_spam: :spam_detected
 
@@ -26,9 +26,9 @@ module Decidim
           end
 
           def answer
-            enforce_permission_to :answer, :questionnaire
+            enforce_permission_to_answer_questionnaire
 
-            @form = form(Decidim::Forms::QuestionnaireForm).from_params(params, session_token: session_token)
+            @form = form(Decidim::Forms::QuestionnaireForm).from_params(params, session_token: session_token, ip_hash: ip_hash)
 
             Decidim::Forms::AnswerQuestionnaire.call(@form, current_user, questionnaire) do
               on(:ok) do
@@ -78,7 +78,16 @@ module Decidim
           # You can implement this method in your controller to change the URL
           # where the questionnaire will be submitted.
           def update_url
-            url_for([questionnaire_for, action: :answer])
+            url_for([questionnaire_for, { action: :answer }])
+          end
+
+          # Points to the shortest path accessing the current form. This will be
+          # used to detect whether a user is leaving the form with some partial
+          # answers, so that we can warn them.
+          #
+          # Overwrite this method at the controller.
+          def form_path
+            url_for([questionnaire_for, { only_path: true }])
           end
 
           # Public: Method to be implemented at the controller. You need to
@@ -98,12 +107,18 @@ module Decidim
           end
 
           def spam_detected
-            enforce_permission_to :answer, :questionnaire
+            enforce_permission_to_answer_questionnaire
 
             @form = form(Decidim::Forms::QuestionnaireForm).from_params(params)
 
             flash.now[:alert] = I18n.t("answer.spam_detected", scope: i18n_flashes_scope)
             render template: "decidim/forms/questionnaires/show"
+          end
+
+          # You can implement this method in your controller to change the
+          # enforce_permission_to arguments.
+          def enforce_permission_to_answer_questionnaire
+            enforce_permission_to :answer, :questionnaire
           end
 
           def ip_hash
@@ -122,8 +137,9 @@ module Decidim
             @session_token ||= tokenize(id || session_id)
           end
 
-          def tokenize(id)
-            Digest::MD5.hexdigest("#{id}-#{Rails.application.secrets.secret_key_base}")
+          def tokenize(id, length: 10)
+            tokenizer = Decidim::Tokenizer.new(salt: questionnaire.salt || questionnaire.id, length: length)
+            tokenizer.int_digest(id).to_s
           end
         end
       end

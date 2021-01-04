@@ -1,11 +1,11 @@
 <div class="card__icondata">
   <ul class="card-data">
     <li class="card-data__item">
-      <%= icon "euro-outline", class: "icon--big", role: "img" %>
+      <%= icon "euro-outline", class: "icon--big", role: "img", "aria-hidden": true %>
     </li>
     <li class="card-data__item">
-      <div class="text-left text-uppercase">
-        <strong class="heading4"><%= budget_to_currency model.budget %></strong>
+      <div class="text-left">
+        <strong class="heading4"><%= budget_to_currency model.budget_amount %></strong>
       </div>
     </li>
   </ul>

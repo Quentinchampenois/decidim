@@ -13,9 +13,10 @@ ru:
             remove: Удалить
           edit:
             save: Сохранить
-            title: Заголовок
           form:
             add_question: Добавить вопрос
+          matrix_row:
+            remove: Удалить
           question:
             add_answer_option: Добавить вариант ответа
             any: Любые
@@ -25,7 +26,6 @@ ru:
             up: Вверх
           update:
             invalid: При попытке сохранить форму произошли ошибки.
-            success: Формы успешно сохранены.
       errors:
         answer:
           body: Основной текст не может быть пустым
@@ -42,4 +42,6 @@ ru:
           questionnaire_for_private_users:
             body: Форма доступна только для частных пользователей
             title: Форма закрыта
+      step_navigation:
+        show:
           submit: Отправить

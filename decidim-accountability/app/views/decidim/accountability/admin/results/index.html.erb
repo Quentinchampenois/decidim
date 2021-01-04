@@ -7,6 +7,7 @@
         <%= link_to t("actions.new", scope: "decidim.accountability", name: t("models.result.name", scope: "decidim.accountability.admin")), new_result_path(parent_id: parent_result), class: "button tiny button--simple" if allowed_to? :create, :result %>
         <%= render partial: "decidim/accountability/admin/shared/subnav" unless parent_result %>
         <%= export_dropdown %>
+        <%= link_to t("actions.import_csv", scope: "decidim.accountability"), import_results_path, class: "button tiny button--simple" if allowed_to? :create, :result %>
       </div>
     </h2>
   </div>
@@ -17,6 +18,7 @@
         <thead>
           <tr>
             <th><%= t("models.result.fields.title", scope: "decidim.accountability") %></th>
+            <%= th_resource_scope_label %>
             <th class="actions"><%= t("actions.title", scope: "decidim.accountability") %></th>
           </tr>
         </thead>
@@ -26,6 +28,7 @@
               <td>
                 <%= link_to translated_attribute(result.title), results_path(parent_id: result.id) %><br>
               </td>
+              <%= td_resource_scope_for(result.scope) %>
               <td class="table-list__actions">
                 <%= icon_link_to "eye", resource_locator(result).path, t("actions.preview", scope: "decidim.accountability"), class: "action-icon--preview", target: :blank %>
 

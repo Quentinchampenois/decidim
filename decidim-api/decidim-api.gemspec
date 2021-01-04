@@ -12,13 +12,13 @@ Gem::Specification.new do |s|
   s.email = ["josepjaume@gmail.com", "mrc2407@gmail.com", "oriolgual@gmail.com"]
   s.license = "AGPL-3.0"
   s.homepage = "https://github.com/decidim/decidim"
-  s.required_ruby_version = ">= 2.5"
+  s.required_ruby_version = ">= 2.7"
 
   s.name = "decidim-api"
   s.summary = "Decidim API module"
   s.description = "API engine for decidim"
 
-  s.files = Dir["{app,config,db,lib,vendor}/**/*", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,db,lib,vendor,docs}/**/*", "Rakefile", "README.md"]
 
   s.add_dependency "graphiql-rails", "~> 1.4", "< 1.5"
   s.add_dependency "graphql", "~> 1.9"

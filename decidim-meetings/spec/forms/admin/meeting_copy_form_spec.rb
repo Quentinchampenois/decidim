@@ -17,30 +17,28 @@ module Decidim::Meetings
     let(:participatory_process) { create :participatory_process, organization: organization }
     let(:current_component) { create :component, participatory_space: participatory_process, manifest_name: "meetings" }
     let(:title) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:description) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:location) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
     end
     let(:location_hints) do
-      Decidim::Faker::Localized.sentence(3)
+      Decidim::Faker::Localized.sentence(word_count: 3)
+    end
+    let(:service_objects) do
+      build_list(:service, 2)
     end
     let(:services) do
-      [
-        { title: { en: "First service" }, description: { en: "First description" } },
-        { title: { en: "Third service" }, description: { en: "Third description" } }
-      ]
+      service_objects.map(&:attributes)
     end
     let(:address) { "Carrer Pic de Peguera 15, 17003 Girona" }
     let(:latitude) { 40.1234 }
     let(:longitude) { 2.1234 }
     let(:start_time) { 2.days.from_now }
     let(:end_time) { 2.days.from_now + 4.hours }
-    let(:organizer) { create :user, organization: organization }
-    let(:organizer_id) { organizer.id }
     let(:private_meeting) { false }
     let(:transparent) { true }
     let(:attributes) do
@@ -54,7 +52,6 @@ module Decidim::Meetings
         end_time: end_time,
         private_meeting: private_meeting,
         transparent: transparent,
-        organizer_id: organizer_id,
         services: services
       }
     end
@@ -126,7 +123,7 @@ module Decidim::Meetings
     end
 
     it "properly maps services from model" do
-      meeting = create(:meeting, services: services)
+      meeting = create(:meeting, :with_services, services: service_objects)
 
       services = described_class.from_model(meeting).services
       expect(services).to all be_an(Admin::MeetingServiceForm)

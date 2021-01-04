@@ -6,6 +6,9 @@ module Decidim
   class Area < ApplicationRecord
     include Traceable
     include Loggable
+    include Decidim::TranslatableResource
+
+    translatable_fields :name
 
     belongs_to :organization,
                foreign_key: "decidim_organization_id",
@@ -13,7 +16,6 @@ module Decidim
                inverse_of: :areas
 
     belongs_to :area_type,
-               foreign_key: "area_type_id",
                class_name: "Decidim::AreaType",
                inverse_of: :areas,
                optional: true

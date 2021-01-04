@@ -5,6 +5,7 @@ module Decidim
   # mailers.
   class ApplicationMailer < ActionMailer::Base
     include LocalisedMailer
+    include MultitenantAssetHost
     after_action :set_smtp
 
     default from: Decidim.config.mailer_sender
@@ -17,7 +18,7 @@ module Decidim
       return if @organization.nil? || @organization.smtp_settings.blank?
 
       mail.from = @organization.smtp_settings["from"].presence || mail.from
-      mail.reply_to = Decidim.config.mailer_reply || mail.from
+      mail.reply_to = mail.from || Decidim.config.mailer_reply
       mail.delivery_method.settings.merge!(
         address: @organization.smtp_settings["address"],
         port: @organization.smtp_settings["port"],

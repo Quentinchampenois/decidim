@@ -82,6 +82,8 @@ gl:
         new:
           authorize: Enviar
           authorize_with: Verifica con %{authorizer}
+        renew_modal:
+          cancel: Cancelar
         skip_verification: Podes ignorar isto por agora e %{link}
         start_exploring: comezar a explorar
       csv_census:
@@ -101,7 +103,6 @@ gl:
             title: Datos censuais actuais
           instructions:
             body: Para iso debes ingresar na administración do sistema e engadir as autorizacións csv_census á organización
-            title: Debe activar o censo de csv para esta organización
           new:
             file: "Ficheiro .csv con datos de correo electrónico"
             submit: Cargar ficheiro
@@ -112,8 +113,9 @@ gl:
             success: Verificouse correctamente a túa conta.
       dummy_authorization:
         extra_explanation:
-          one: A participación está restrinxida aos usuarios co código postal %{postal_codes}.
-          other: 'A participación está restrinxida aos usuarios que conteñan algún dos seguintes códigos postais: %{postal_codes}.'
+          postal_codes:
+            one: A participación está restrinxida aos usuarios co código postal %{postal_codes}.
+            other: 'A participación está restrinxida aos usuarios que conteñan algún dos seguintes códigos postais: %{postal_codes}.'
       id_documents:
         admin:
           config:

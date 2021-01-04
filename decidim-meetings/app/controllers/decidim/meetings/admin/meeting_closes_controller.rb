@@ -5,18 +5,20 @@ module Decidim
     module Admin
       # This controller allows an admin to manage meetings from a Participatory Process
       class MeetingClosesController < Admin::ApplicationController
+        include Decidim::Proposals::Admin::Picker
+
         helper_method :meeting
 
         def edit
           enforce_permission_to :close, :meeting, meeting: meeting
 
-          @form = form(CloseMeetingForm).from_model(meeting)
+          @form = form(Admin::CloseMeetingForm).from_model(meeting)
         end
 
         def update
           enforce_permission_to :close, :meeting, meeting: meeting
 
-          @form = form(CloseMeetingForm).from_params(params.merge(proposals: meeting.sibling_scope(:proposals)))
+          @form = form(Admin::CloseMeetingForm).from_params(params.merge(proposals: meeting.sibling_scope(:proposals)))
 
           CloseMeeting.call(@form, meeting) do
             on(:ok) do

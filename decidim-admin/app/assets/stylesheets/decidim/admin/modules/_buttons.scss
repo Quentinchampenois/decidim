@@ -24,12 +24,22 @@
 
   &.reverse{
     @include modifiers(color);
-    @include modifiers(background-color, (primary: $white, secondary: $white, success: $white, warning: $white, alert: $white));
+    @include modifiers(
+      background-color,
+      (
+        primary: $white,
+        secondary: $white,
+        success: $white,
+        warning: $white,
+        alert: $white,
+      )
+    );
   }
 }
 
 .button.muted{
   background-color: $medium-gray;
+  color: $white;
 
   &:hover{
     background-color: darken($medium-gray, 10);

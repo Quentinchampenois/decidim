@@ -35,7 +35,7 @@ module Decidim
 
       class_option :edge, type: :boolean,
                           default: false,
-                          desc: "Use GitHub's edge version from master branch"
+                          desc: "Use GitHub's edge version from develop branch"
 
       class_option :branch, type: :string,
                             default: nil,
@@ -60,6 +60,10 @@ module Decidim
       class_option :demo, type: :boolean,
                           default: false,
                           desc: "Generate demo authorization handlers"
+
+      class_option :profiling, type: :boolean,
+                               default: false,
+                               desc: "Add the necessary gems to profile the app"
 
       def database_yml
         template "database.yml.erb", "config/database.yml", force: true
@@ -111,14 +115,12 @@ module Decidim
         if current_gem == "decidim"
           gsub_file "Gemfile", /gem "decidim-dev".*/, "gem \"decidim-dev\", #{gem_modifier}"
 
-          if options[:demo]
-            gsub_file "Gemfile", /gem "decidim-consultations".*/, "gem \"decidim-consultations\", #{gem_modifier}"
-            gsub_file "Gemfile", /gem "decidim-initiatives".*/, "gem \"decidim-initiatives\", #{gem_modifier}"
-            gsub_file "Gemfile", /gem "decidim-conferences".*/, "gem \"decidim-conferences\", #{gem_modifier}"
-          else
-            gsub_file "Gemfile", /gem "decidim-consultations".*/, "# gem \"decidim-consultations\", #{gem_modifier}"
-            gsub_file "Gemfile", /gem "decidim-initiatives".*/, "# gem \"decidim-initiatives\", #{gem_modifier}"
-            gsub_file "Gemfile", /gem "decidim-conferences".*/, "# gem \"decidim-conferences\", #{gem_modifier}"
+          %w(conferences consultations elections initiatives templates).each do |component|
+            if options[:demo]
+              gsub_file "Gemfile", /gem "decidim-#{component}".*/, "gem \"decidim-#{component}\", #{gem_modifier}"
+            else
+              gsub_file "Gemfile", /gem "decidim-#{component}".*/, "# gem \"decidim-#{component}\", #{gem_modifier}"
+            end
           end
         end
 
@@ -168,15 +170,24 @@ module Decidim
         return unless options[:demo]
 
         gsub_file "config/initializers/decidim.rb",
-                  /# config.sms_gateway_service = \"MySMSGatewayService\"/,
+                  /# config.sms_gateway_service = "MySMSGatewayService"/,
                   "config.sms_gateway_service = 'Decidim::Verifications::Sms::ExampleGateway'"
+      end
+
+      def budgets_workflows
+        return unless options[:demo]
+
+        copy_file "budgets_workflow_random.rb", "lib/budgets_workflow_random.rb"
+        copy_file "budgets_workflow_random.en.yml", "config/locales/budgets_workflow_random.en.yml"
+
+        copy_file "budgets_initializer.rb", "config/initializers/decidim_budgets.rb"
       end
 
       def timestamp_service
         return unless options[:demo]
 
         gsub_file "config/initializers/decidim.rb",
-                  /# config.timestamp_service = \"MyTimestampService\"/,
+                  /# config.timestamp_service = "MyTimestampService"/,
                   "config.timestamp_service = \"Decidim::Initiatives::DummyTimestamp\""
       end
 
@@ -184,8 +195,16 @@ module Decidim
         return unless options[:demo]
 
         gsub_file "config/initializers/decidim.rb",
-                  /# config.pdf_signature_service = \"MyPDFSignatureService\"/,
+                  /# config.pdf_signature_service = "MyPDFSignatureService"/,
                   "config.pdf_signature_service = \"Decidim::Initiatives::PdfSignatureExample\""
+      end
+
+      def machine_translation_service
+        return unless options[:demo]
+
+        gsub_file "config/initializers/decidim.rb",
+                  /# config.machine_translation_service = "MyTranslationService"/,
+                  "config.machine_translation_service = 'Decidim::Dev::DummyTranslator'"
       end
 
       def install
@@ -194,7 +213,8 @@ module Decidim
             "--recreate_db=#{options[:recreate_db]}",
             "--seed_db=#{options[:seed_db]}",
             "--skip_gemfile=#{options[:skip_gemfile]}",
-            "--app_name=#{app_name}"
+            "--app_name=#{app_name}",
+            "--profiling=#{options[:profiling]}"
           ]
         )
       end

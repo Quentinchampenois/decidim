@@ -36,9 +36,10 @@ module Decidim
       resource_title = resource.try(:resource_title) || resource.try(:title)
       return if resource_title.blank?
 
-      if resource_title.is_a?(String)
+      case resource_title
+      when String
         resource_title
-      elsif resource_title.is_a?(Hash)
+      when Hash
         translated_attribute(resource_title)
       end
     end
@@ -50,9 +51,10 @@ module Decidim
       resource_description = resource.try(:resource_description) || resource.try(:description)
       return if resource_description.blank?
 
-      resource_description = if resource_description.is_a?(String)
+      resource_description = case resource_description
+                             when String
                                resource_description
-                             elsif resource_description.is_a?(Hash)
+                             when Hash
                                translated_attribute(resource_description)
                              end
 
@@ -66,7 +68,7 @@ module Decidim
 
     # The text to show as the link to the resource.
     def resource_link_text
-      translated_attribute(resource.title)
+      decidim_html_escape(translated_attribute(resource.title))
     end
 
     def created_at
@@ -76,6 +78,8 @@ module Decidim
     def user
       return resource.normalized_author if resource.respond_to?(:normalized_author)
       return resource.author if resource.respond_to?(:author)
+      # As Proposals have Coauthorable concern instead of Authorable
+      return resource.identities.first if resource.respond_to?(:identities)
 
       model.user_lazy if resource.respond_to?(:user)
     end
@@ -99,9 +103,10 @@ module Decidim
     def author
       return unless show_author? && user.is_a?(UserBaseEntity)
 
-      presenter = if user.is_a?(Decidim::User)
+      presenter = case user
+                  when Decidim::User
                     UserPresenter.new(user)
-                  elsif user.is_a?(Decidim::UserGroup)
+                  when Decidim::UserGroup
                     UserGroupPresenter.new(user)
                   end
 
@@ -118,7 +123,7 @@ module Decidim
 
     def participatory_space_link
       link_to(
-        translated_attribute(participatory_space.title),
+        decidim_html_escape(translated_attribute(participatory_space.title)),
         resource_locator(participatory_space).path
       )
     end

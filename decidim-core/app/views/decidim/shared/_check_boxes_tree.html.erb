@@ -1,10 +1,11 @@
 <% cache "check_boxes_tree/#{Digest::MD5.hexdigest(collection.to_s)}" do %>
   <% if collection.leaf %>
+    <% options = options.map { |k, v| [k.to_sym, v] }.to_h if options.is_a?(Hash) %>
     <% data_checkboxes_tree_id = "#{check_boxes_tree_id}-#{collection.leaf.value}" %>
     <% hide_node = (hide_node.present? and hide_node == "true") ? true : false %>
     <% is_root_check_box = (collection.leaf.value == "") ? true : false %>
     <% if is_root_check_box %>
-      <%= hidden_field_tag "#{form.object_name}[#{attribute}][]", "" %>
+      <%= hidden_field_tag "#{form.object_name}[#{attribute}][]", "", id: "#{form.options[:namespace] rescue 'default'}_filter_#{attribute}_all" %>
     <% else %>
       <div class="filters__has-subfilters">
     <% end %>
@@ -12,11 +13,11 @@
                        check_boxes_tree_options(
                          collection.leaf.value,
                          collection.leaf.label,
-                         {
+                         **({
                            "data-checkboxes-tree": data_checkboxes_tree_id,
                            is_root_check_box: is_root_check_box
-                         }),
-                       collection.leaf.value.to_s, nil %>
+                         }.merge(options))),
+                         collection.leaf.value.to_s, nil %>
 
     <% unless is_root_check_box %>
       <% if collection.node.present? %>
@@ -43,11 +44,12 @@
                        options: options %>
           <% else %>
             <%= form.check_box attribute,
-                               check_boxes_tree_options(
-                                 item.value,
-                                 item.label
-                               ),
-                               item.value, nil %>
+                                check_boxes_tree_options(
+                                  item.value,
+                                  item.label,
+                                  **options
+                                ),
+                                item.value, nil %>
           <% end %>
         <% end %>
       </div>

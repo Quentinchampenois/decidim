@@ -48,13 +48,17 @@ module Decidim
     #
     # Returns a String.
     def to_partial_path
-      handler_name.sub!(/_handler$/, "") + "/form"
+      "#{handler_name.sub!(/_handler$/, "")}/form"
     end
 
     # Any data that the developer would like to inject to the `metadata` field
     # of an authorization when it's created. Can be useful if some of the
     # params the user sent with the authorization form want to be persisted for
     # future use.
+    #
+    # As a convention, an 'extras' key can be used to store information not
+    # directly related with authorization. Thus, when rendering previous
+    # verification data, on renewal, 'extras' is not rendered to the user.
     #
     # Returns a Hash.
     def metadata

@@ -16,9 +16,14 @@ ca:
         other: Vots
   decidim:
     comments:
-      comments: Comentaris
+      comments:
+        create:
+          error: S'ha produït un error en crear el comentari.
+      comments_count: Número de comentaris
+      comments_title: Comentaris
       last_activity:
         new_comment_at_html: "<span>Nou comentari a %{link}</span>"
+      view: Mostrar
       votes:
         create:
           error: S'ha produït un error en votar el comentari.
@@ -55,7 +60,7 @@ ca:
             does_not_belong: Conté activitat il·legal, amenaces de suïcidi, informació personal, o qualsevol altra cosa que creguis que no pertany a %{organization_name}.
             offensive: Conté racisme, sexisme, insults, atacs personals, amenaces de mort, peticions de suïcidi o qualsevol forma de discurs d'odi.
             spam: Conté "clickbait", publicitat o estafes.
-          title: Denúncia un problema
+          title: Notificar contingut inapropiat
         show_replies: Mostra %{replies_count} respostes
         single_comment_link_title: Aconsegueix l'enllaç al comentari
       comment_order_selector:
@@ -72,14 +77,25 @@ ca:
         blocked_comments_warning: Els comentaris estan desactivats en aquest moment, però pots llegir els anteriors.
         comment_details_title: Detalls del comentari
         loading: Carregant els comentaris ...
-        single_comment_warning: 'Pots revisar la resta de comentaris a: <a href="%{url}">here</a>.'
+        single_comment_warning: Pots revisar la resta de comentaris <a href="%{url}">aquí</a>.
         single_comment_warning_title: Estàs veient un sol comentari
-        title: "%{count} comentaris"
+        title:
+          one: "%{count} comentari"
+          other: "%{count} comentaris"
+      down_vote_button:
+        text: No estic d'acord amb aquest comentari
+      up_vote_button:
+        text: Estic d'acord amb aquest comentari
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} ha deixat un comentari a %{resource_title}. Podeu llegir-lo en aquesta pàgina:"
           email_outro: Has rebut aquesta notificació perquè estàs seguint %{author_name}. Pots deixar de seguir a aquesta participant des de la seva pàgina de perfil.
+          email_subject: Hi ha un nou comentari de %{author_name} en %{resource_title}
+          notification_title: Hi ha un nou comentari per <a href="%{author_path}">%{author_name} %{author_nickname}</a> a <a href="%{resource_path}">%{resource_title}</a>.
+        comment_by_followed_user_group:
+          email_intro: '%{author_name} ha deixat un comentari a%{resource_title}. Pots llegir-lo en aquesta pàgina:'
+          email_outro: Reps aquesta notificació perquè segueixes a %{author_name}. Pots deixar de seguir aquest grup des de la seva pàgina de perfil.
           email_subject: Hi ha un nou comentari de %{author_name} en %{resource_title}
           notification_title: Hi ha un nou comentari per <a href="%{author_path}">%{author_name} %{author_nickname}</a> a <a href="%{resource_path}">%{resource_title}</a>.
         comment_created:
@@ -92,6 +108,11 @@ ca:
           email_outro: Has rebut aquesta notificació perquè s'ha respost el teu comentari.
           email_subject: "%{author_name} ha respost el teu comentari a %{resource_title}"
           notification_title: <a href="%{author_path}">%{author_name} %{author_nickname}</a> ha respost el teu comentari a <a href="%{resource_path}">%{resource_title}</a>
+        user_group_mentioned:
+          email_intro: Un grup al qual pertanys ha estat esmentat
+          email_outro: Has rebut aquesta notificació perquè formes part del grup %{group_name} que ha estat esmentat a %{resource_title}.
+          email_subject: T'han esmentat a %{resource_title} com a membre de %{group_name}
+          notification_title: <a href="%{author_path}">%{author_name} %{author_nickname}</a> t'ha esmentat com a membre de <a href="%{group_path}">%{group_name} %{group_nickname}</a> a <a href="%{resource_path}">%{resource_title}</a>
         user_mentioned:
           email_intro: Has estat esmentada
           email_outro: Has rebut aquesta notificació perquè has estat esmentada a %{resource_title}.

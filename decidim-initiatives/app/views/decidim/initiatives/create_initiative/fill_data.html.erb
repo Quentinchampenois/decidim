@@ -1,6 +1,6 @@
 <% content_for :back_link do %>
   <%= link_to :back do %>
-    <%= icon "chevron-left", class: "icon--small", role: "img" %>
+    <%= icon "chevron-left", class: "icon--small", role: "img", "aria-hidden": true %>
     <%= t(".back") %>
   <% end %>
 <% end %>
@@ -18,6 +18,7 @@
     <div class="card">
       <div class="card__content">
         <%= decidim_form_for(@form, url: next_wizard_path, method: :put, html: { class: "form new_initiative_form" }) do |f| %>
+          <%= form_required_explanation %>
           <%= f.hidden_field :type_id %>
           <div class=section>
             <% unless single_initiative_type? %>
@@ -50,7 +51,7 @@
               <div class="field">
                 <%= f.select :scope_id,
                              scopes.map { |scope| [translated_attribute(scope.scope_name), scope&.scope&.id] },
-                             prompt: t(".select_scope") %>
+                             include_blank: t(".select_scope") %>
               </div>
             <% end %>
 
@@ -60,34 +61,27 @@
               </div>
             <% end %>
 
+            <% if initiative_type.area_enabled? %>
+              <div class="field">
+                <%= f.areas_select :area_id, areas_for_select(current_organization), prompt: t(".select_area") %>
+              </div>
+            <% end %>
+
             <% if Decidim::UserGroups::ManageableUserGroups.for(current_user).verified.any? %>
               <div class="field">
                 <%= f.select :decidim_user_group_id,
                              Decidim::UserGroups::ManageableUserGroups.for(current_user).verified.map { |g| [g.name, g.id] },
-                             prompt: current_user.name %>
+                             include_blank: current_user.name %>
               </div>
             <% end %>
 
             <% if initiative_type.attachments_enabled? %>
               <fieldset>
-                <legend><%= t("attachment_legend", scope: "decidim.proposals.proposals.edit") %></legend>
-                <%= f.fields_for :attachment, @form.attachment do |nested_form| %>
-                  <div class="field">
-                    <%= nested_form.text_field :title %>
-                  </div>
+                <legend><%= t("attachment_legend", scope: "decidim.initiatives.form") %></legend>
 
-                  <div class="field">
-                    <%= nested_form.upload :file, optional: false %>
-                  </div>
-
-                  <% if @form.errors[:attachment].present? %>
-                    <% @form.errors[:attachment].each do |message| %>
-                      <small class="form-error is-visible">
-                        <%= message %>
-                      </small>
-                    <% end %>
-                  <% end %>
-                <% end %>
+                <div class="row column">
+                  <%= f.file_field :add_documents, multiple: true, label: t("add_attachments", scope: "decidim.initiatives.form") %>
+                </div>
               </fieldset>
             <% end %>
           </div>

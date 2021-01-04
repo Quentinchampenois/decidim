@@ -54,15 +54,15 @@ Decidim.register_participatory_space(:initiatives) do |participatory_space|
     Decidim::ContentBlock.create(
       organization: organization,
       weight: 33,
-      scope: :homepage,
+      scope_name: :homepage,
       manifest_name: :highlighted_initiatives,
       published_at: Time.current
     )
 
     3.times do |n|
       type = Decidim::InitiativesType.create!(
-        title: Decidim::Faker::Localized.sentence(5),
-        description: Decidim::Faker::Localized.sentence(25),
+        title: Decidim::Faker::Localized.sentence(word_count: 5),
+        description: Decidim::Faker::Localized.sentence(word_count: 25),
         organization: organization,
         banner_image: File.new(File.join(seeds_root, "city2.jpeg"))
       )
@@ -81,8 +81,8 @@ Decidim.register_participatory_space(:initiatives) do |participatory_space|
       Decidim::Initiative.skip_callback(:create, :after, :notify_creation, raise: false)
 
       params = {
-        title: Decidim::Faker::Localized.sentence(3),
-        description: Decidim::Faker::Localized.sentence(25),
+        title: Decidim::Faker::Localized.sentence(word_count: 3),
+        description: Decidim::Faker::Localized.sentence(word_count: 25),
         scoped_type: Decidim::InitiativesTypeScope.reorder(Arel.sql("RANDOM()")).first,
         state: state,
         signature_type: "online",
@@ -104,6 +104,13 @@ Decidim.register_participatory_space(:initiatives) do |participatory_space|
       initiative.add_to_index_as_search_resource
 
       Decidim::Comments::Seed.comments_for(initiative)
+
+      Decidim::Attachment.create!(
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 5),
+        attached_to: initiative,
+        file: File.new(File.join(seeds_root, "city.jpeg"))
+      )
 
       Decidim::Initiatives.default_components.each do |component_name|
         component = Decidim::Component.create!(

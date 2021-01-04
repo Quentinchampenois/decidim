@@ -1,4 +1,3 @@
----
 fr:
   activemodel:
     models:
@@ -63,11 +62,12 @@ fr:
           global:
             announcement: Annonce
             comments_enabled: Activer le module de commentaire
+            comments_max_length: Longueur max des commentaires (laisser 0 pour la valeur par défaut)
           step:
             announcement: Annonce
             comments_blocked: Commentaires désactivés
-            endorsements_blocked: Approbations bloquées
-            endorsements_enabled: Approbations autorisées
+            endorsements_blocked: Soutiens bloqués
+            endorsements_enabled: Soutiens activés
     events:
       blogs:
         post_created:

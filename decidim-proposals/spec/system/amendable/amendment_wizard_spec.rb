@@ -4,12 +4,12 @@ require "spec_helper"
 
 describe "Amendment Wizard", type: :system do
   let!(:component) { create(:proposal_component, :with_amendments_enabled) }
-  let!(:proposal) { create(:proposal, title: "More roads and less sidewalks", component: component) }
+  let!(:proposal) { create(:proposal, title: { en: "More roads and less sidewalks" }, component: component) }
   let!(:user) { create :user, :confirmed, organization: component.organization }
   let(:proposal_path) { Decidim::ResourceLocatorPresenter.new(proposal).path }
 
-  let(:title) { "More sidewalks and less roads" }
-  let(:body) { "Cities need more people, not more cars" }
+  let(:title) { translated "More sidewalks and less roads" }
+  let(:body) { translated "Cities need more people, not more cars" }
 
   before do
     switch_to_host(component.organization.host)
@@ -50,7 +50,7 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "redirects to the proposal page" do
-          expect(page).to have_content(proposal.title)
+          expect(page).to have_content(translated(proposal.title))
           expect(page).to have_content("AMEND PROPOSAL")
         end
       end
@@ -58,7 +58,7 @@ describe "Amendment Wizard", type: :system do
 
     context "and in step_2: Compare your amendment" do
       context "with similar results" do
-        let!(:emendation) { create(:proposal, title: title, body: body, component: component) }
+        let!(:emendation) { create(:proposal, title: { en: title }, body: { en: body }, component: component) }
         let!(:amendment) { create :amendment, amendable: proposal, emendation: emendation }
 
         before do
@@ -142,12 +142,19 @@ describe "Amendment Wizard", type: :system do
       end
 
       it "shows the edit amendment form" do
+        # It seems that from version 83 of chromdriver, it gets really picky
+        # Content mus be inside the virtual window of test
+        # Got the idea from:
+        # https://stackoverflow.com/a/39103252
+        # https://stackoverflow.com/a/62003082
+        page.scroll_to(find(".section-heading"))
+
         within ".section-heading" do
           expect(page).to have_content("EDIT AMENDMENT DRAFT")
         end
 
         within ".edit_amendment" do
-          fill_in :amendment_emendation_params_title, with: title + "Edited"
+          fill_in :amendment_emendation_params_title, with: "#{title}Edited"
           fill_in :amendment_emendation_params_body, with: body
           find("*[type=submit]").click
         end
@@ -161,7 +168,7 @@ describe "Amendment Wizard", type: :system do
         before do
           within ".edit_amendment" do
             click_link "Discard this draft"
-            page.accept_alert
+            accept_confirm
           end
         end
 
@@ -178,7 +185,7 @@ describe "Amendment Wizard", type: :system do
 
       context "when the back button is clicked" do
         context "with similar results" do
-          let!(:emendation) { create(:proposal, title: title, body: body, component: component) }
+          let!(:emendation) { create(:proposal, title: { en: title }, body: { en: body }, component: component) }
           let!(:amendment) { create :amendment, amendable: proposal, emendation: emendation }
 
           before do
@@ -217,6 +224,12 @@ describe "Amendment Wizard", type: :system do
           fill_in :amendment_emendation_params_body, with: body
           find("*[type=submit]").click
         end
+
+        # It seems that from version 83 of chromdriver, it gets really picky
+        # Content mus be inside the virtual window of test
+        # Got the idea from:
+        # https://stackoverflow.com/a/39103252
+        page.scroll_to(find(".edit_amendment"))
         within ".edit_amendment" do
           find("*[type=submit]").click
         end
@@ -250,7 +263,7 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "publishes the amendment" do
-          expect(page).to have_css(".callout.warning", text: "This amendment for the proposal #{proposal.title} is being evaluated.")
+          expect(page).to have_css(".callout.warning", text: "This amendment for the proposal #{translated(proposal.title)} is being evaluated.")
 
           within ".flash.callout.success" do
             expect(page).to have_content("Amendment successfully published.")
@@ -295,8 +308,8 @@ describe "Amendment Wizard", type: :system do
         expect(page).to have_css("#amendments", text: "AMENDMENTS")
 
         within ".amendment-list" do
-          expect(page).to have_content(emendation.title)
-          expect(page).not_to have_content(emendation_draft.title)
+          expect(page).to have_content(translated(emendation.title))
+          expect(page).not_to have_content(translated(emendation_draft.title))
         end
       end
 

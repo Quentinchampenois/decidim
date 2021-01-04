@@ -9,9 +9,6 @@ module Decidim
         end
 
         def save
-          return @registry if @registry
-
-          @registry = []
           query.each do |key, results|
             cumulative_value = results[:cumulative]
             next if cumulative_value.zero?
@@ -23,10 +20,8 @@ module Decidim
                                                            organization: @organization, decidim_category_id: category_id,
                                                            related_object_type: related_object_type, related_object_id: related_object_id)
             record.assign_attributes(cumulative: cumulative_value, quantity: quantity_value)
-            @registry << record
+            record.save!
           end
-          @registry.each(&:save!)
-          @registry
         end
 
         private
@@ -85,12 +80,11 @@ module Decidim
 
         # Gets current ParticipatorySpace of a given 'related_object'
         def retrieve_participatory_space(related_object)
-          participatory_space = if related_object.respond_to?(:participatory_space)
-                                  related_object.participatory_space
-                                elsif related_object.is_a?(Decidim::Participable)
-                                  related_object
-                                end
-          participatory_space
+          if related_object.respond_to?(:participatory_space)
+            related_object.participatory_space
+          elsif related_object.is_a?(Decidim::Participable)
+            related_object
+          end
         end
       end
     end

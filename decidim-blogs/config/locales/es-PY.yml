@@ -48,6 +48,8 @@ es-PY:
             title: título
       posts:
         show:
+          back: Volver al listado
+          comments: Comentarios
           view: Ver
         sidebar_blog:
           comments: comentarios
@@ -60,9 +62,12 @@ es-PY:
           global:
             announcement: Anuncio
             comments_enabled: Comentarios habilitados
+            comments_max_length: Longitud máxima de los comentarios (deja 0 si quieres mantener la configuración por defecto)
           step:
             announcement: Anuncio
             comments_blocked: Comentarios bloqueados
+            endorsements_blocked: Adhesiones bloqueadas
+            endorsements_enabled: Adhesiones habilitadas
     events:
       blogs:
         post_created:

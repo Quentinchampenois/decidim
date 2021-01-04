@@ -18,11 +18,16 @@ Decidim.register_component(:debates) do |component|
   end
 
   component.settings(:global) do |settings|
+    settings.attribute :scopes_enabled, type: :boolean, default: false
+    settings.attribute :scope_id, type: :scope
     settings.attribute :comments_enabled, type: :boolean, default: true
+    settings.attribute :comments_max_length, type: :integer, required: false
     settings.attribute :announcement, type: :text, translated: true, editor: true
   end
 
   component.settings(:step) do |settings|
+    settings.attribute :endorsements_enabled, type: :boolean, default: true
+    settings.attribute :endorsements_blocked, type: :boolean
     settings.attribute :creation_enabled, type: :boolean, default: false
     settings.attribute :comments_blocked, type: :boolean, default: false
     settings.attribute :announcement, type: :text, translated: true, editor: true
@@ -37,18 +42,30 @@ Decidim.register_component(:debates) do |component|
     Decidim::Follow.where(decidim_followable_type: "Decidim::Debates::Debate", decidim_followable_id: debates_ids).count
   end
 
+  component.register_stat :endorsements_count, priority: Decidim::StatsRegistry::MEDIUM_PRIORITY do |components, _start_at, _end_at|
+    debates_ids = Decidim::Debates::Debate.where(component: components).not_hidden.pluck(:id)
+    Decidim::Endorsement.where(resource_id: debates_ids, resource_type: Decidim::Debates::Debate.name).count
+  end
+
   component.register_resource(:debate) do |resource|
     resource.model_class_name = "Decidim::Debates::Debate"
     resource.card = "decidim/debates/debate"
+    resource.reported_content_cell = "decidim/debates/reported_content"
     resource.searchable = true
+    resource.actions = %w(create endorse)
   end
 
-  component.actions = %w(create)
+  component.actions = %w(create endorse)
 
   component.seeds do |participatory_space|
     admin_user = Decidim::User.find_by(
       organization: participatory_space.organization,
       email: "admin@example.org"
+    )
+
+    user = Decidim::User.find_by(
+      organization: participatory_space.organization,
+      email: "user@example.org"
     )
 
     params = {
@@ -71,12 +88,12 @@ Decidim.register_component(:debates) do |component|
       params = {
         component: component,
         category: participatory_space.categories.sample,
-        title: Decidim::Faker::Localized.sentence(2),
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
         description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-          Decidim::Faker::Localized.paragraph(3)
+          Decidim::Faker::Localized.paragraph(sentence_count: 3)
         end,
         instructions: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-          Decidim::Faker::Localized.paragraph(3)
+          Decidim::Faker::Localized.paragraph(sentence_count: 3)
         end,
         start_time: 3.weeks.from_now,
         end_time: 3.weeks.from_now + 4.hours,
@@ -92,5 +109,32 @@ Decidim.register_component(:debates) do |component|
 
       Decidim::Comments::Seed.comments_for(debate)
     end
+
+    closed_debate = Decidim::Debates::Debate.last
+    closed_debate.conclusions = Decidim::Faker::Localized.wrapped("<p>", "</p>") do
+      Decidim::Faker::Localized.paragraph(sentence_count: 3)
+    end
+    closed_debate.closed_at = Time.current
+    closed_debate.save!
+
+    params = {
+      component: component,
+      category: participatory_space.categories.sample,
+      title: Decidim::Faker::Localized.sentence(word_count: 2),
+      description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
+        Decidim::Faker::Localized.paragraph(sentence_count: 3)
+      end,
+      instructions: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
+        Decidim::Faker::Localized.paragraph(sentence_count: 3)
+      end,
+      author: user
+    }
+
+    Decidim.traceability.create!(
+      Decidim::Debates::Debate,
+      user,
+      params,
+      visibility: "all"
+    )
   end
 end

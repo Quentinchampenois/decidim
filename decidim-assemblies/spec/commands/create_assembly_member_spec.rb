@@ -19,7 +19,7 @@ module Decidim::Assemblies
           weight: 0,
           full_name: "Full name",
           gender: Faker::Lorem.word,
-          birthday: Faker::Date.birthday(20, 65),
+          birthday: Faker::Date.birthday(min_age: 20, max_age: 65),
           birthplace: Faker::Demographic.demonym,
           ceased_date: nil,
           designation_date: Time.current,
@@ -72,6 +72,21 @@ module Decidim::Assemblies
         it "sets the user" do
           subject.call
           expect(assembly_member.user).to eq user
+        end
+
+        it "notifies the user" do
+          expect(Decidim::EventsManager)
+            .to receive(:publish)
+            .once
+            .with(
+              event: "decidim.events.assemblies.create_assembly_member",
+              event_class: Decidim::Assemblies::CreateAssemblyMemberEvent,
+              resource: assembly,
+              followers: a_collection_containing_exactly(user)
+            )
+
+          subject.call
+          expect(ActionMailer::DeliveryJob).to have_been_enqueued.on_queue("mailers")
         end
       end
     end

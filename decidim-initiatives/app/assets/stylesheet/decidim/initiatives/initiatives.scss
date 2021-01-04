@@ -50,20 +50,24 @@
   }
 }
 
-.pull-left{
-  float: left;
-}
-
-.pull-right{
-  float: right;
-}
-
 .lowercase{
   text-transform: lowercase !important;
 }
 
 .legal_text{
   font-size: 8pt;
+}
+
+.progress__bar--horizontal{
+  &:last-of-type{
+    margin-bottom: 1.5rem;
+  }
+}
+
+fieldset{
+  border: 1px solid #e8e8e8;
+  padding: .5em;
+  margin-bottom: 1em;
 }
 
 .area-header{

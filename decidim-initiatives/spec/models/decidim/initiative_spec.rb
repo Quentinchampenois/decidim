@@ -21,22 +21,6 @@ module Decidim
 
     include_examples "has reference"
 
-    describe ".states" do
-      it "returns the correct enumerator" do
-        expect(subject.class.states).to eq(
-          "created" => 0,
-          "validating" => 1,
-          "discarded" => 2,
-          "published" => 3,
-          "rejected" => 4,
-          "accepted" => 5,
-          "examinated" => 6,
-          "debatted" => 7,
-          "classified" => 8
-        )
-      end
-    end
-
     context "when created initiative" do
       let(:initiative) { create(:initiative, :created) }
       let(:administrator) { create(:user, :admin, organization: initiative.organization) }
@@ -58,14 +42,6 @@ module Decidim
 
         expect(online_initiative).to be_invalid
         expect(offline_initiative).to be_valid
-      end
-
-      it "technical revision request is notified by email" do
-        expect(administrator).not_to be_nil
-        expect(Decidim::Initiatives::InitiativesMailer).to receive(:notify_validating_request)
-          .at_least(:once)
-          .and_return(message_delivery)
-        initiative.validating!
       end
 
       it "Creation is notified by email" do
@@ -202,32 +178,37 @@ module Decidim
     context "when percentage" do
       context "and online initiatives" do
         let!(:initiative) { create(:initiative) }
+        let(:scope_id) { initiative.scope.id.to_s }
 
         it "ignores any value in offline_votes attribute" do
-          initiative.update(offline_votes: { "total" => 1000 }, online_votes: { "total" => initiative.scoped_type.supports_required / 2 })
+          initiative.update(offline_votes: { scope_id => 1000, "total" => 1000 },
+                            online_votes: { scope_id => initiative.scoped_type.supports_required / 2, "total" => initiative.scoped_type.supports_required / 2 })
           expect(initiative.percentage).to eq(50)
         end
 
         it "can't be greater than 100" do
-          initiative.update(online_votes: { "total" => initiative.scoped_type.supports_required * 2 })
+          initiative.update(online_votes: { scope_id => initiative.scoped_type.supports_required, "total" => initiative.scoped_type.supports_required * 2 })
           expect(initiative.percentage).to eq(100)
         end
       end
 
       context "and face-to-face support" do
         let!(:initiative) { create(:initiative, signature_type: "any") }
+        let(:scope_id) { initiative.scope.id.to_s }
 
         it "returns the percentage of votes reached" do
           online_votes = initiative.scoped_type.supports_required / 4
           offline_votes = initiative.scoped_type.supports_required / 4
-          initiative.update(offline_votes: { "total" => offline_votes }, online_votes: { "total" => online_votes })
+          initiative.update(offline_votes: { scope_id => offline_votes, "total" => offline_votes },
+                            online_votes: { scope_id => online_votes, "total" => online_votes })
           expect(initiative.percentage).to eq(50)
         end
 
         it "can't be greater than 100" do
           online_votes = initiative.scoped_type.supports_required * 4
           offline_votes = initiative.scoped_type.supports_required * 4
-          initiative.update(offline_votes: { "total" => offline_votes }, online_votes: { "total" => online_votes })
+          initiative.update(offline_votes: { scope_id => offline_votes, "total" => offline_votes },
+                            online_votes: { scope_id => online_votes, "total" => online_votes })
           expect(initiative.percentage).to eq(100)
         end
       end
@@ -278,64 +259,20 @@ module Decidim
     end
 
     describe "sorting" do
+      subject(:sorter) { described_class.ransack("s" => "supports_count desc") }
+
       before do
         create(:initiative, organization: organization, signature_type: "offline")
-        create(:initiative, organization: organization, signature_type: "offline", offline_votes: { "total": 4 })
-        create(:initiative, organization: organization, signature_type: "offline", offline_votes: { "total": 3 })
-        create(:initiative, organization: organization, signature_type: "online", online_votes: { "total": 4 })
-        create(:initiative, organization: organization, signature_type: "online", online_votes: { "total": 8 })
-        create(:initiative, organization: organization, signature_type: "online", online_votes: { "total": 2 })
+        create(:initiative, organization: organization, signature_type: "offline", offline_votes: { "total" => 4 })
+        create(:initiative, organization: organization, signature_type: "online", online_votes: { "total" => 5 })
+        create(:initiative, organization: organization, signature_type: "online", online_votes: { "total" => 3 })
+        create(:initiative, organization: organization, signature_type: "any", online_votes: { "total" => 1 })
+        create(:initiative, organization: organization, signature_type: "any", online_votes: { "total" => 5 }, offline_votes: { "total" => 3 })
       end
 
-      context "when sorts by order desc" do
-        subject(:sorter) { described_class.ransack("s" => "supports_count desc") }
-
-        it "sorts initiatives by supports count" do
-          expect(sorter.result.map(&:supports_count)).to eq([8, 4, 4, 3, 2, 0])
-        end
+      it "sorts initiatives by supports count" do
+        expect(sorter.result.map(&:supports_count)).to eq([8, 5, 4, 3, 1, 0])
       end
-
-      context "when sorts by order asc" do
-        subject(:sorter) { described_class.ransack("s" => "supports_count asc") }
-
-        it "sorts initiatives by supports count" do
-          expect(sorter.result.map(&:supports_count)).to eq([0, 2, 3, 4, 4, 8])
-        end
-      end
-    end
-
-    describe "#votes_enabled?" do
-      subject { initiative.votes_enabled? }
-
-      context "when published" do
-        let(:initiative) { build :initiative, :published }
-
-        it { is_expected.to be_truthy }
-      end
-
-      context "when examinated" do
-        let(:initiative) { build :initiative, :examinated }
-
-        it { is_expected.to be_truthy }
-      end
-
-      context "when debatted" do
-        let(:initiative) { build :initiative, :debatted }
-
-        it { is_expected.to be_truthy }
-      end
-
-      context "when classified" do
-        let(:initiative) { build :initiative, :classified }
-
-        it { is_expected.to be_falsy }
-      end
-    end
-
-    context "when linked to an area" do
-      let(:initiative) { build :initiative, :with_area }
-
-      it { is_expected.to be_truthy }
     end
   end
 end

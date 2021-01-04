@@ -58,7 +58,7 @@ textarea{
 }
 
 .legend{
-  @include smallcaps;
+  @include smallemphasis;
 
   margin-bottom: 1rem;
 }
@@ -67,6 +67,20 @@ textarea{
   background-color: $lighter-gray;
   padding: 1.5rem 1rem .5rem;
   margin-bottom: 1.5rem;
+}
+
+label,
+.field{
+  &.has-tribute{
+    position: relative;
+
+    .tribute-container{
+      top: auto;
+      margin-top: -$input-margin;
+      max-width: none;
+      width: 100%;
+    }
+  }
 }
 
 .form-submit .button{
@@ -130,7 +144,7 @@ textarea{
   }
 }
 
-.participatory_texts_disabled{
+.readonly_container{
   cursor: not-allowed;
   opacity: .5;
 }

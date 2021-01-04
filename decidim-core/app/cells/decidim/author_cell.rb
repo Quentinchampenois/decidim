@@ -18,6 +18,10 @@ module Decidim
 
     delegate :current_user, to: :controller, prefix: false
 
+    def author_name
+      options[:author_name_text] || model.name
+    end
+
     def show
       render
     end
@@ -34,8 +38,16 @@ module Decidim
       render
     end
 
+    def flag_user_modal
+      render
+    end
+
     def flag
       render
+    end
+
+    def flag_user
+      render unless current_user == model
     end
 
     def withdraw
@@ -51,12 +63,11 @@ module Decidim
     def withdraw_path
       return decidim.withdraw_amend_path(from_context.amendment) if from_context.emendation?
 
-      from_context_path + "/withdraw"
+      "#{from_context_path}/withdraw"
     end
 
     def creation_date?
       return unless from_context
-      return unless proposals_controller? || collaborative_drafts_controller?
       return unless show_action? && (from_context.respond_to?(:published_at) || from_context.respond_to?(:created_at))
 
       true
@@ -83,7 +94,7 @@ module Decidim
     def actionable?
       return false if options[:has_actions] == false
 
-      (user_author? && posts_controller?) || withdrawable? || flagable?
+      withdrawable? || flaggable?
     end
 
     def user_author?

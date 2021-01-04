@@ -7,7 +7,7 @@ module Decidim
       include Decidim::NewslettersHelper
       include Decidim::Admin::NewslettersHelper
       include Paginable
-      helper_method :newsletter, :recipients_count_query
+      helper_method :newsletter, :recipients_count_query, :content_block
 
       def index
         enforce_permission_to :index, :newsletter
@@ -17,7 +17,7 @@ module Decidim
 
       def new
         enforce_permission_to :create, :newsletter
-        @form = form(NewsletterForm).instance
+        @form = form(NewsletterForm).from_model(content_block)
       end
 
       def show
@@ -36,8 +36,9 @@ module Decidim
       def create
         enforce_permission_to :create, :newsletter
         @form = form(NewsletterForm).from_params(params)
+        @form.images = images_block_context unless has_images_block_context?
 
-        CreateNewsletter.call(@form, current_user) do
+        CreateNewsletter.call(@form, content_block, current_user) do
           on(:ok) do |newsletter|
             flash.now[:notice] = I18n.t("newsletters.create.success", scope: "decidim.admin")
             redirect_to action: :show, id: newsletter.id
@@ -53,12 +54,13 @@ module Decidim
 
       def edit
         enforce_permission_to :update, :newsletter, newsletter: newsletter
-        @form = form(NewsletterForm).from_model(newsletter)
+        @form = form(NewsletterForm).from_model(content_block)
       end
 
       def update
         enforce_permission_to :update, :newsletter, newsletter: newsletter
         @form = form(NewsletterForm).from_params(params)
+        @form.images = images_block_context unless has_images_block_context?
 
         UpdateNewsletter.call(newsletter, @form, current_user) do
           on(:ok) do |newsletter|
@@ -137,6 +139,32 @@ module Decidim
       def recipients_count_query
         @form ||= form(SelectiveNewsletterForm).instance
         NewsletterRecipients.for(@form).size
+      end
+
+      def content_block
+        @content_block ||= content_block_for_newsletter || content_block_from_manifest
+      end
+
+      def content_block_from_manifest
+        Decidim::ContentBlock.new(
+          organization: current_organization,
+          scope_name: :newsletter_template,
+          manifest_name: params[:newsletter_template_id]
+        )
+      end
+
+      def content_block_for_newsletter
+        return nil unless @newsletter
+
+        @content_block_for_newsletter ||= @newsletter.template
+      end
+
+      def images_block_context
+        form(NewsletterForm).from_model(content_block).images
+      end
+
+      def has_images_block_context?
+        @form.images && @form.valid?
       end
     end
   end

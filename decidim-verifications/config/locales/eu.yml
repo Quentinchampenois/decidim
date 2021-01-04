@@ -82,6 +82,8 @@ eu:
         new:
           authorize: Bidali
           authorize_with: Egiaztatu %{authorizer} rekin
+        renew_modal:
+          cancel: Utzi
         skip_verification: Hau saltatu dezakezu oraingoz eta %{link}
         start_exploring: Hasi esploratzen
       csv_census:
@@ -101,7 +103,6 @@ eu:
             title: Uneko erroldako datuak
           instructions:
             body: Horretarako, sistemaren administrazioa sartu behar duzu eta gehitu csv_census baimenak erakundeari
-            title: Erakunde honetarako Csv errolda aktibatu behar duzu
           new:
             file: ".csv fitxategia helbide elektronikoen datuekin"
             submit: Kargatu fitxategia
@@ -112,8 +113,9 @@ eu:
             success: Zure kontua ondo egiaztatu da.
       dummy_authorization:
         extra_explanation:
-          one: Partehartzea mugatua da %{postal_codes} kode postalarekin duten erabiltzaileentzat.
-          other: 'Parte-hartzea honako posta-kode hauetakoren bat duten erabiltzaileentzat mugatuta dago: %{postal_codes}.'
+          postal_codes:
+            one: Partehartzea mugatua da %{postal_codes} kode postalarekin duten erabiltzaileentzat.
+            other: 'Parte-hartzea honako posta-kode hauetakoren bat duten erabiltzaileentzat mugatuta dago: %{postal_codes}.'
       id_documents:
         admin:
           config:

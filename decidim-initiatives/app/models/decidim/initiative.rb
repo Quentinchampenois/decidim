@@ -7,7 +7,7 @@ module Decidim
     include Decidim::Authorable
     include Decidim::Participable
     include Decidim::Publicable
-    include Decidim::Scopable
+    include Decidim::ScopableParticipatorySpace
     include Decidim::Comments::Commentable
     include Decidim::Followable
     include Decidim::HasAttachments
@@ -20,15 +20,21 @@ module Decidim
     include Decidim::Randomable
     include Decidim::Searchable
     include Decidim::Initiatives::HasArea
+    include Decidim::TranslatableResource
+
+    translatable_fields :title, :description, :answer
 
     belongs_to :organization,
                foreign_key: "decidim_organization_id",
                class_name: "Decidim::Organization"
 
     belongs_to :scoped_type,
-               foreign_key: "scoped_type_id",
                class_name: "Decidim::InitiativesTypeScope",
                inverse_of: :initiatives
+
+    delegate :type, :scope, :scope_name, :supports_required, to: :scoped_type, allow_nil: true
+    delegate :attachments_enabled?, :promoting_committee_enabled?, :custom_signature_end_date_enabled?, :area_enabled?, to: :type
+    delegate :name, :color, to: :area, prefix: true, allow_nil: true
 
     has_many :votes,
              foreign_key: "decidim_initiative_id",
@@ -67,14 +73,16 @@ module Decidim
     validate :signature_type_allowed
 
     scope :open, lambda {
-      where.not(state: [:classified, :discarded, :rejected, :accepted, :created])
+      where.not(state: [:discarded, :rejected, :accepted, :created])
            .currently_signable
     }
     scope :closed, lambda {
-      where(state: [:classified, :discarded, :rejected, :accepted])
+      where(state: [:discarded, :rejected, :accepted])
         .or(currently_unsignable)
     }
-    scope :with_state, ->(state) { where(state: state) if state.present? }
+
+    scope :answered, -> { where.not(answered_at: nil) }
+    scope :published, -> { where.not(published_at: nil) }
 
     scope :currently_signable, lambda {
       where("signature_start_date <= ?", Date.current)
@@ -86,15 +94,14 @@ module Decidim
     }
 
     scope :answered, -> { where.not(answered_at: nil) }
-    scope :published, -> { where.not(published_at: nil) }
 
     scope :public_spaces, -> { published }
     scope :signature_type_updatable, -> { created }
 
     scope :order_by_answer_date, -> { order("answered_at DESC nulls last") }
     scope :order_by_most_recent, -> { order(created_at: :desc) }
+    scope :order_by_supports, -> { order(Arel.sql("(coalesce((online_votes->>'total')::int,0) + coalesce((offline_votes->>'total')::int,0)) DESC")) }
     scope :order_by_most_recently_published, -> { order(published_at: :desc) }
-    scope :order_by_supports, -> { order("(coalesce((online_votes->>'total')::int, 0) + coalesce((offline_votes->>'total')::int, 0)) DESC") }
     scope :order_by_most_commented, lambda {
       select("decidim_initiatives.*")
         .left_joins(:comments)
@@ -104,6 +111,7 @@ module Decidim
     scope :future_spaces, -> { none }
     scope :past_spaces, -> { closed }
 
+    before_update :set_offline_votes_total
     after_commit :notify_state_change
     after_create :notify_creation
 
@@ -116,14 +124,6 @@ module Decidim
                       index_on_create: ->(_initiative) { false },
                       # is Resourceable instead of ParticipatorySpaceResourceable so we can't use `visible?`
                       index_on_update: ->(initiative) { initiative.published? })
-
-    def self.future_spaces
-      none
-    end
-
-    def self.past_spaces
-      closed
-    end
 
     def self.log_presenter_class_for(_log)
       Decidim::Initiatives::AdminLog::InitiativePresenter
@@ -148,15 +148,7 @@ module Decidim
     #
     # RETURNS string
     delegate :banner_image, to: :type
-    delegate :name, :color, :logo, to: :area, prefix: true, allow_nil: true
-    delegate :attachments_enabled?,
-             :attachments_enabled,
-             :document_number_authorization_handler,
-             :promoting_committee_enabled?,
-             :custom_signature_end_date_enabled?,
-             :area_enabled?,
-             to: :type
-    delegate :type, :scope, :scope_name, to: :scoped_type, allow_nil: true
+    delegate :document_number_authorization_handler, :promoting_committee_enabled?, to: :type
 
     # PUBLIC
     #
@@ -283,19 +275,25 @@ module Decidim
       @hashtag ||= attributes["hashtag"].to_s.delete("#")
     end
 
-    # Public: Calculates the number of current supports.
+    # Public: Calculates the number of total current supports.
     #
     # Returns an Integer.
     def supports_count
       online_votes_count + offline_votes_count
     end
 
-    # Public: Calculates the number of supports required to accept the initiative
-    # across all votable scopes.
+    # Public: Calculates the number of current supports for a scope.
     #
     # Returns an Integer.
-    def supports_required
-      @supports_required ||= votable_initiative_type_scopes.sum(&:supports_required)
+    def supports_count_for(scope)
+      online_votes_count_for(scope) + offline_votes_count_for(scope)
+    end
+
+    # Public: Calculates the number of supports required to accept the initiative for a scope.
+    #
+    # Returns an Integer.
+    def supports_required_for(scope)
+      initiative_type_scopes.find_by(decidim_scopes_id: scope&.id).supports_required
     end
 
     # Public: Returns the percentage of required supports reached
@@ -307,7 +305,75 @@ module Decidim
 
     # Public: Whether the supports required objective has been reached
     def supports_goal_reached?
-      supports_count >= supports_required
+      initiative_type_scopes.map(&:scope).all? { |scope| supports_goal_reached_for?(scope) }
+    end
+
+    # Public: Whether the supports required objective has been reached for a scope
+    def supports_goal_reached_for?(scope)
+      supports_count_for(scope) >= supports_required_for(scope)
+    end
+
+    # Public: Calculates all the votes across all the scopes.
+    #
+    # Returns an Integer.
+    def online_votes_count
+      return 0 if offline_signature_type?
+
+      online_votes["total"].to_i
+    end
+
+    def offline_votes_count
+      return 0 if online_signature_type?
+
+      offline_votes["total"].to_i
+    end
+
+    def online_votes_count_for(scope)
+      return 0 if offline_signature_type?
+
+      scope_key = (scope&.id || "global").to_s
+
+      (online_votes || {}).fetch(scope_key, 0).to_i
+    end
+
+    def offline_votes_count_for(scope)
+      return 0 if online_signature_type?
+
+      scope_key = (scope&.id || "global").to_s
+
+      (offline_votes || {}).fetch(scope_key, 0).to_i
+    end
+
+    def update_online_votes_counters
+      online_votes = votes.group(:scope).count.each_with_object({}) do |(scope, count), counters|
+        counters[scope&.id || "global"] = count
+        counters["total"] ||= 0
+        counters["total"] += count
+      end
+
+      # rubocop:disable Rails/SkipsModelValidations
+      update_column("online_votes", online_votes)
+      # rubocop:enable Rails/SkipsModelValidations
+    end
+
+    def set_offline_votes_total
+      return if offline_votes.blank? || scope.nil?
+
+      offline_votes["total"] = offline_votes[scope.id.to_s]
+    end
+
+    # Public: Finds all the InitiativeTypeScopes that are eligible to be voted by a user.
+    # Usually this is only the `scoped_type` but voting on children of the scoped type is
+    # enabled we have to filter all the available scopes in the initiative type to select
+    # the ones that are a descendant of the initiative type.
+    #
+    # Returns an Array of Decidim::InitiativesScopeType.
+    def votable_initiative_type_scopes
+      return Array(scoped_type) unless type.child_scope_threshold_enabled?
+
+      initiative_type_scopes.select do |initiative_type_scope|
+        initiative_type_scope.scope.present? && (scoped_type.global_scope? || scoped_type.scope.ancestor_of?(initiative_type_scope.scope))
+      end.prepend(scoped_type).uniq
     end
 
     # Public: Calculates all the votes across all the scopes.
@@ -472,6 +538,15 @@ module Decidim
 
     # Allow ransacker to search on an Enum Field
     ransacker :state, formatter: proc { |int| states[int] }
+
+    ransacker :type_id do
+      Arel.sql("decidim_initiatives_type_scopes.decidim_initiatives_types_id")
+    end
+
+    # method for sort_link by number of supports
+    ransacker :supports_count do
+      Arel.sql("(coalesce((online_votes->>'total')::int,0) + coalesce((offline_votes->>'total')::int,0))")
+    end
 
     ransacker :id_string do
       Arel.sql(%{cast("decidim_initiatives"."id" as text)})

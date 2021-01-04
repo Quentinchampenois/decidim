@@ -1,5 +1,13 @@
----
 nl:
+  activemodel:
+    attributes:
+      organization:
+        address: SMTP hostname
+        from_email: E-mailadres
+        from_label: Label
+        password: Wachtwoord
+        port: Poort
+        user_name: Gebruikersnaam
   decidim:
     system:
       actions:
@@ -48,7 +56,7 @@ nl:
           fields:
             created_at: Gemaakt bij
             name: Naam
-            omniauth_settings: Omniauth settings
+            omniauth_settings: Omniauth instellingen
             smtp_settings: SMTP-instellingen
           name: Organisatie
       organizations:
@@ -64,18 +72,30 @@ nl:
           secondary_hosts_hint: Voer elk van hen op een nieuwe regel in
           title: Nieuwe organisatie
         omniauth_settings:
-          enabled: Enabled
+          decidim:
+            client_id: Klant ID
+            client_secret: Klant geheim
+            site_url: Website URL
+          enabled: Ingeschakeld
+          enabled_by_default: Deze provider is standaard ingeschakeld. Het kan worden bewerkt maar niet uitgeschakeld.
           facebook:
             app_id: App-ID
             app_secret: App secret
           google_oauth2:
             client_id: Client-ID
             client_secret: Client secret
-          icon: Icon
-          icon_path: Icon path
+          icon: Pictogram
+          icon_path: Icoon pad
           twitter:
             api_key: API key
             api_secret: API secret
+        smtp_settings:
+          fieldsets:
+            sender: Afzender
+          instructions:
+            from_label: 'E-mail afzender zal zijn: "jouw-organisatie naam <your-organization@example.org>". Laat leeg om ''E-mailadres'' te gebruiken als label'
+          placeholder:
+            from_label: jouw-organisatienaam
         update:
           error: Er is een fout opgetreden bij het bijwerken van deze organisatie.
           success: Organisatie is succesvol bijgewerkt.

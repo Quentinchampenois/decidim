@@ -13,7 +13,6 @@ eu:
         attachment_collection_id: karpeta
         description: Descripción
         file: Fitxategia
-        title: Titulua
       attachment_collection:
         description: deskribapena
         name: izena
@@ -29,12 +28,6 @@ eu:
       newsletter:
         body: Testua
         subject: Gaia
-      oauth_application:
-        name: izena
-        organization_logo: Erakundearen logotipoa (plaza)
-        organization_name: Erakundearen izena
-        organization_url: Erakundearen URLa
-        redirect_uri: Birbideratu URIa
       organization:
         alert_color: Alerta
         badges_enabled: Gaitu txapak
@@ -66,7 +59,6 @@ eu:
         primary_color: Lehen
         reference_prefix: Erreferentzia-aurrizkia
         secondary_color: Bigarren
-        show_statistics: Erakutsi estatistikak
         success_color: Arrakasta
         tos_version: Zerbitzu-baldintzak bertsioa
         twitter_handler: Twitter kudeatzailea
@@ -101,10 +93,6 @@ eu:
         file: file
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: Birbideratze URI SSL URI izan behar du
         organization:
           attributes:
             official_img_footer:
@@ -265,6 +253,15 @@ eu:
       exports:
         export_as: "%{name} honako hau gisa: %{export_format}"
         notice: Zure esportazioa bidean da. Mezu elektroniko bat jasoko duzu bukatutakoan.
+      filters:
+        category_id_eq:
+          label: Kategoria
+        officialized_at_null:
+          label: Egoera
+          values:
+            'false': Officialized
+            'true': Ez ofiziala
+        search_label: Search
       help_sections:
         error: Errore bat gertatu da laguntza-atalak eguneratuz
         form:
@@ -327,7 +324,6 @@ eu:
         homepage: Hasiera
         impersonations: impersonations
         newsletters: Buletinak
-        oauth_applications: OAuth aplikazioak
         participants: Parte-hartzaileak
         scope_types: Esparru motak
         scopes: Esparruak
@@ -370,11 +366,6 @@ eu:
             sent_at: ' Bidalketa-data: '
             subject: Gaia
           name: Buletina
-        oauth_application:
-          fields:
-            created_at: Sortutako at
-            name: izena
-          name: OAuth aplikazioa
         participatory_space_private_user:
           name: Partaidetza espazioa erabiltzaile pribatua
         scope:
@@ -417,6 +408,9 @@ eu:
             does_not_belong: Ez du zer ikusirik
             offensive: Iraingarria
             spam: Spam
+      newsletter_templates:
+        index:
+          preview_template: Aurreikusi
       newsletters:
         create:
           error: ' Errorea gertatu da buletin hau sortzean.'
@@ -430,8 +424,6 @@ eu:
         edit:
           save_and_preview: Gorde eta aurreikusi
           title: Editatu buletina
-        form:
-          interpolations_hint: 'Iradokizuna: "%{name}" erabil dezakezu gaiaren edo testuaren edozein tokitan, eta horren ordez hartzailearen izena agertuko da.'
         index:
           confirm_delete: Ziur zaude buletin hau deuseztatu nahi duzula?
           title: Buletinak
@@ -447,25 +439,6 @@ eu:
         update:
           error: Errorea gertatu da buletin hau eguneratzean.
           success: Buletina zuzen eguneratu da. Mesedez, berrikusi bidali baino lehen.
-      oauth_applications:
-        create:
-          error: Errore bat gertatu da aplikazio hau sortzean.
-          success: Aplikazioa zuzen sortu da.
-        destroy:
-          error: Errore bat gertatu da aplikazio hau suntsitzen.
-          success: Aplikazioa arrakastaz suntsitu da.
-        edit:
-          save: Save
-          title: Editatu aplikazioa
-        index:
-          confirm_delete: Ziur aplikazio hau ezabatu nahi duzula?
-          title: OAuth aplikazioak
-        new:
-          save: Save
-          title: Aplikazio berria
-        update:
-          error: Errore bat gertatu da aplikazio hau eguneratzean.
-          success: Aplikazioa behar bezala eguneratu da.
       officializations:
         create:
           success: Erabiltzailea arrakastatsua izan da
@@ -497,7 +470,6 @@ eu:
           instagram: Instagram
           social_handlers: Gizarte
           twitter: Twitter
-          url: Url
           youtube: YouTube
         update:
           error: Errorea gertatu da erakunde hau eguneratzean.
@@ -506,13 +478,15 @@ eu:
         edit:
           update: Eguneratu
         form:
-          colors_title: Antolaketa koloreak
+          colors:
+            colors_title: Antolaketa koloreak
+            header_snippets_help: Erabili eremu hau HTML goiburuari gauzak gehitzeko. Erabilerarik ohikoena da JavaScript edo CSS gehigarriak behar dituzten hirugarrenen zerbitzuak txertatzea. Gainera, HTMLari meta-etiketa gehigarriak gehitzeko erabil dezakezu. Kontuan hartu orri publikoetan baino ez dela erakutsiko, ez administrazio atalean.
           cta_button_path_help: 'Orrialde nagusira deitzeko dei-botoirako esteka gainidatzi dezakezu. Erabili bideak partzialak, ez URL osoak hemen. Letrak, zenbakiak, marrak eta barrak onartzen ditu eta gutun batekin hasi behar duzu. The Call To Action botoian hasierako orrian erakusten da ongietorri testua eta azalpena. Adibidea: %{url}'
           cta_button_text_help: Hasierako pantailako Call To Action botoian testua gainidatz dezakezu zure erakundeko hizkuntza bakoitzarentzat. Ezartzen bada, balio lehenetsia erabiliko da. The Call To Action botoian hasierako orrian erakusten da ongietorri testua eta azalpena.
-          header_snippets_help: Erabili eremu hau HTML goiburuari gauzak gehitzeko. Erabilerarik ohikoena da JavaScript edo CSS gehigarriak behar dituzten hirugarrenen zerbitzuak txertatzea. Gainera, HTMLari meta-etiketa gehigarriak gehitzeko erabil dezakezu. Kontuan hartu orri publikoetan baino ez dela erakutsiko, ez administrazio atalean.
           homepage_appearance_title: Editatu orriaren itxura
           homepage_highlighted_content_banner_title: Highligted edukien banner
-          layout_appearance_title: Editatu itxura diseinua
+          images:
+            layout_appearance_title: Editatu itxura diseinua
           omnipresent_banner_appearance_title: Editatu omnipresent banner
       organization_homepage:
         edit:
@@ -669,6 +643,10 @@ eu:
         new:
           create: Gonbit egin
           title: Gonbit egin erabiltzaile bati administratzaile gisa
+      users_statistics:
+        users_count:
+          admins: Administratzaileak
+          participants: Parte-hartzaileak
       view_public_page: Ikusi orri publikoa
     forms:
       errors:
@@ -698,7 +676,6 @@ eu:
           fields:
             hidden_at: Ezkutatze-data
             report_count: Zenbaketa
-            reportable: Mota
             reported_content_url: Emandako edukiaren URLa
             reports: Salaketak
             visit_url: Bisitatu URLa

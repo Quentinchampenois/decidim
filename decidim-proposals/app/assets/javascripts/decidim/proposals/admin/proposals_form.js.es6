@@ -1,4 +1,6 @@
 $(() => {
+  const { attachGeocoding } = window.Decidim;
+
   const $form = $(".proposal_form_admin");
 
   if ($form.length > 0) {
@@ -19,10 +21,6 @@ $(() => {
     $proposalCreatedInMeeting.on("change", toggleDisabledHiddenFields);
     toggleDisabledHiddenFields();
 
+    attachGeocoding($form.find("#proposal_address"));
   }
-
-  $(document).on("closed.zf.callout", (event) => {
-    $(event.target).remove();
-  });
-
 });

@@ -19,11 +19,11 @@ module Decidim
         attribute :signature_start_date, Decidim::Attributes::LocalizedDate
         attribute :signature_end_date, Decidim::Attributes::LocalizedDate
         attribute :hashtag, String
-        attribute :offline_votes, Hash
+        attribute :offline_votes, Hash[String => Integer]
         attribute :state, String
         attribute :attachment, AttachmentForm
 
-        validates :title, :description, presence: true
+        validates :title, :description, translatable_presence: true
         validates :area, presence: true, if: ->(form) { form.area_id.present? }
         validates :signature_type, presence: true, if: :signature_type_updatable?
         validates :signature_start_date, presence: true, if: ->(form) { form.context.initiative.published? }
@@ -31,13 +31,15 @@ module Decidim
         validates :signature_end_date, date: { after: :signature_start_date }, if: lambda { |form|
           form.signature_start_date.present? && form.signature_end_date.present?
         }
-        validate :area_is_not_removed
-
-        # TODO: Update this
-        # validates :offline_votes, numericality: { only_integer: true, greater_than: 0 }, allow_blank: true
+        validates :signature_end_date, date: { after: Date.current }, if: lambda { |form|
+          form.signature_start_date.blank? && form.signature_end_date.present?
+        }
 
         validate :notify_missing_attachment_if_errored
+        validate :area_is_not_removed
 
+        # rubocop:disable Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/PerceivedComplexity
         def map_model(model)
           self.type_id = model.type.id
           self.decidim_scope_id = model.scope&.id
@@ -53,26 +55,28 @@ module Decidim
               scope_name = model.votable_initiative_type_scopes.find do |initiative_scope_type|
                 initiative_scope_type.global_scope? && decidim_scope_id == "global" ||
                   initiative_scope_type.decidim_scopes_id == decidim_scope_id.to_i
-              end&.scope_name
+              end.scope_name
 
               all_votes[decidim_scope_id || "global"] = [votes, scope_name]
             end
           end
         end
-
-        def area_updatable?
-          @area_updatable ||= current_user.admin?
-        end
+        # rubocop:enable Metrics/CyclomaticComplexity
+        # rubocop:enable Metrics/PerceivedComplexity
 
         def signature_type_updatable?
           @signature_type_updatable ||= begin
-                                          state ||= context.initiative.state
-                                          state == "validating" && context.current_user.admin? || state == "created"
-                                        end
+            state ||= context.initiative.state
+            state == "validating" && context.current_user.admin? || state == "created"
+          end
         end
 
         def state_updatable?
           false
+        end
+
+        def area_updatable?
+          @area_updatable ||= current_user.admin? || context.initiative.created?
         end
 
         def scoped_type_id

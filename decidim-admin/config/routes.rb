@@ -23,6 +23,7 @@ Decidim::Admin::Engine.routes.draw do
     resources :scopes, except: [:show] do
       resources :scopes, except: [:show]
     end
+    resources :metrics, only: [:index]
     resources :logs, only: [:index]
     resources :area_types, except: [:show]
     resources :areas, except: [:show]
@@ -43,6 +44,12 @@ Decidim::Admin::Engine.routes.draw do
       get :show_email, on: :member
     end
 
+    resources :moderated_users, only: [:index] do
+      member do
+        put :ignore
+      end
+    end
+
     resources :impersonatable_users, only: [:index] do
       resources :promotions, controller: "managed_users/promotions", only: [:new, :create]
       resources :impersonation_logs, controller: "managed_users/impersonation_logs", only: [:index]
@@ -53,7 +60,15 @@ Decidim::Admin::Engine.routes.draw do
       end
     end
 
-    resources :newsletters do
+    resources :newsletter_templates, only: [:index, :show] do
+      resources :newsletters, only: [:new, :create]
+
+      member do
+        get :preview
+      end
+    end
+
+    resources :newsletters, except: [:new, :create] do
       member do
         get :recipients_count
         get :preview
@@ -79,7 +94,7 @@ Decidim::Admin::Engine.routes.draw do
       put :accept
     end
 
-    resources :oauth_applications
+    resources :share_tokens, only: :destroy
 
     root to: "dashboard#show"
   end

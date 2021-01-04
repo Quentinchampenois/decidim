@@ -88,6 +88,18 @@ describe Decidim::Admin::Permissions do
     end
   end
 
+  describe "metrics" do
+    let(:action_subject) { :metrics }
+
+    it_behaves_like "permission is not set"
+
+    context "when reading" do
+      let(:action_name) { :read }
+
+      it { is_expected.to eq true }
+    end
+  end
+
   describe "static pages" do
     let(:action_subject) { :static_page }
     let(:page) { build(:static_page, :default) }
@@ -126,6 +138,14 @@ describe Decidim::Admin::Permissions do
     end
 
     context "when any other action" do
+      it { is_expected.to eq true }
+    end
+  end
+
+  describe "share tokens" do
+    let(:action_subject) { :share_token }
+
+    context "when any action" do
       it { is_expected.to eq true }
     end
   end
@@ -297,7 +317,6 @@ describe Decidim::Admin::Permissions do
   it_behaves_like "can perform any action for", :area
   it_behaves_like "can perform any action for", :area_type
   it_behaves_like "can perform any action for", :newsletter
-  it_behaves_like "can perform any action for", :oauth_application
   it_behaves_like "can perform any action for", :user_group
   it_behaves_like "can perform any action for", :officialization
   it_behaves_like "can perform any action for", :authorization

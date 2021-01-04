@@ -12,7 +12,8 @@ module Decidim::Proposals
     let(:cell_html) { my_cell.call }
     let(:created_at) { Time.current - 1.month }
     let(:published_at) { Time.current }
-    let!(:proposal) { create(:proposal, created_at: created_at, published_at: published_at) }
+    let(:component) { create(:proposal_component, :with_attachments_allowed, :with_card_image_allowed) }
+    let!(:proposal) { create(:proposal, component: component, created_at: created_at, published_at: published_at) }
     let(:model) { proposal }
     let(:user) { create :user, organization: proposal.participatory_space.organization }
     let!(:emendation) { create(:proposal) }
@@ -55,6 +56,31 @@ module Decidim::Proposals
         it "renders the emendation state (evaluating by default)" do
           expect(subject).to have_css(".warning")
           expect(subject).to have_css(".card__text--status", text: emendation.state.capitalize)
+        end
+      end
+
+      context "when it is a proposal preview" do
+        subject { cell_html }
+
+        let(:my_cell) { cell("decidim/proposals/proposal_m", model, preview: true) }
+        let(:cell_html) { my_cell.call }
+
+        it "renders the card with no status info" do
+          expect(subject).to have_css(".card__header")
+          expect(subject).to have_css(".card__text")
+          expect(subject).to have_no_css(".card-data__item")
+        end
+      end
+
+      context "and has an image attachment" do
+        let!(:attachment_1_pdf) { create(:attachment, :with_pdf, attached_to: proposal) }
+        let!(:attachment_2_img) { create(:attachment, :with_image, attached_to: proposal) }
+        let!(:attachment_3_pdf) { create(:attachment, :with_pdf, attached_to: proposal) }
+        let!(:attachment_4_img) { create(:attachment, :with_image, attached_to: proposal) }
+
+        it "renders the first image in the card whatever the order between attachments" do
+          expect(subject).to have_css(".card__image")
+          expect(subject).to have_css("img[src=\"#{attachment_2_img.url}\"]")
         end
       end
     end

@@ -2,7 +2,6 @@ hu:
   activemodel:
     attributes:
       project:
-        budget: Költségvetés
         decidim_category_id: Kategória
         decidim_scope_id: Hatáskör
         description: Leírás
@@ -22,7 +21,6 @@ hu:
         destroy: Törlés
         edit: Szerkesztés
         import: Javaslatok importálása projektekhez
-        new: Új projekt
         preview: Előnézet
         title: Műveletek
       admin:
@@ -65,18 +63,20 @@ hu:
         project:
           fields:
             title: Cím
+      order_summary_mailer:
+        order_summary:
+          selected_projects: 'Az általad kiválasztott projektek a következők:'
       projects:
         budget_confirm:
-          are_you_sure: Egyetértesz? Ha megerősítetted a szavazatod, már nem változtathatod meg.
           cancel: Mégse
           confirm: Megerősítés
           description: Ezek azok a projektek, amelyek a költségvetés részét képezik.
           title: Szavazás megerősítése
         budget_excess:
+          budget_excess:
+            title: Maximális költségkeret túllépve
           close: Bezárás
-          description: Ez a projekt meghaladja a költségvetés maximumát és nem adható hozzá. Ha szeretnéd, törölheted az egyszer már kiválasztott projektet, vagy kedved szerint szavazhatsz róluk.
           ok: OK
-          title: Maximális költségkeret túllépve
         budget_summary:
           are_you_sure: Biztosan szeretnéd visszavonni a szavazatod?
           assigned: 'Hozzárendelve:'
@@ -84,7 +84,6 @@ hu:
           checked_out:
             description: 'Már szavaztál a költségvetésre. Ha meggondoltad magad, kattints ide: %{cancel_link}.'
             title: Költségvetési szavazás befejeződött
-          description: Milyen projektek finanszírozására használjuk a költségvetést? Rendelj hozzá legalább %{minimum_budget} a projektekhez és szavazz preferenciád szerint a költségvetésükről.
           title: Dönts a költségvetéstről
         count:
           projects_count:
@@ -107,16 +106,14 @@ hu:
             one: kiválasztott projekt
             other: kiválasztott projektek
           view: Nézet
+        orders:
+          highest_cost: Legmagasabb költség
+          label: Projektek rendezése
+          lowest_cost: Legalacsonyabb költség
+          most_voted: Legtöbb szavazattal
+          random: Véletlen sorrend
         project:
-          add: Hozzáad
-          count:
-            one: 1 támogató
-            other: "%{count} támogató"
-          remove: Eltávolítás
           view: Nézet
-        project_budget_button:
-          add: Hozzáad
-          added: Hozzáadva
         show:
           budget: Költségvetés
           view_all_projects: Összes projekt megtekintése
@@ -129,15 +126,22 @@ hu:
           global:
             announcement: Közlemény
             comments_enabled: Megjegyzések engedélyezve
+            form:
+              errors:
+                budget_voting_rule_only_one: Csak egy szavazási szabály állítható be
+                budget_voting_rule_required: Egy szavazási szabályra szükség van
             projects_per_page: Projektek oldalanként
-            resources_permissions_enabled: A műveletek engedélyei a találkozókra szabhatóak
             total_budget: Teljes költségvetés
+            vote_minimum_budget_projects_number: A szavazásban részt vevő projektek minimum száma
+            vote_rule_minimum_budget_projects_enabled: 'Szabály beállítása: A szavazható projektek minimum száma'
+            vote_rule_threshold_percent_enabled: 'Szabály beállítása: Költségvetési minimum százalék'
             vote_threshold_percent: Szavazati küszöb százalékban
           step:
             announcement: Közlemény
             comments_blocked: Megjegyzések letiltva
             show_votes: Szavazatok megjelenítése
-            votes_enabled: Szavazás engedélyezve
+            votes_choices:
+              enabled: Szavazás engedélyezve
     orders:
       checkout:
         error: Hiba történt a szavazatod feldolgozása során
@@ -150,4 +154,3 @@ hu:
         project_proposal: 'A projekthez kapcsolódó javaslatok:'
   index:
     confirmed_orders_count: Szavazatok száma
-  total_budget: Teljes költségvetés

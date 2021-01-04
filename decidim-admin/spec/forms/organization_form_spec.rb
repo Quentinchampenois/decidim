@@ -20,6 +20,7 @@ module Decidim
       let(:youtube_handler) { "My youtube awesome handler" }
       let(:github_handler) { "My github awesome handler" }
       let(:default_locale) { :en }
+      let(:translation_priority) { "original" }
       let(:admin_terms_of_use_body) do
         {
           ca: "",
@@ -41,6 +42,7 @@ module Decidim
             "instagram_handler" => instagram_handler,
             "youtube_handler" => youtube_handler,
             "github_handler" => github_handler,
+            "machine_translation_display_priority" => translation_priority,
             "admin_terms_of_use_body_ca" => admin_terms_of_use_body[:ca],
             "admin_terms_of_use_body_en" => admin_terms_of_use_body[:en],
             "admin_terms_of_use_body_es" => admin_terms_of_use_body[:es]
@@ -86,14 +88,6 @@ module Decidim
         it { is_expected.to be_invalid }
       end
 
-      context "when default_locale is missing" do
-        let(:default_locale) { nil }
-
-        before do
-          it { is_expected.to validate_inclusion_of(:default_locale).in_array(available_locales) }
-        end
-      end
-
       context "when reference_prefix is missing" do
         let(:reference_prefix) { nil }
 
@@ -106,12 +100,14 @@ module Decidim
         it { is_expected.to be_invalid }
       end
 
-      context "when default_locale is not an available locale" do
-        let!(:default_locale) { :de }
+      context "when machine_translation_display_priority is a weird value and machine translations are active" do
+        let(:translation_priority) { "foobar" }
 
         before do
-          it { is_expected.to validate_inclusion_of(:default_locale).in_array(available_locales) }
+          allow(Decidim.config).to receive(:enable_machine_translations).and_return(true)
         end
+
+        it { is_expected.to be_invalid }
       end
     end
   end

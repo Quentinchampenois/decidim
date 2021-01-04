@@ -13,13 +13,20 @@ def setup_provider_proc(provider, config_mapping = {})
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  omniauth_config = Rails.application.secrets.dig(:omniauth)
+  omniauth_config = Rails.application.secrets[:omniauth]
 
   if omniauth_config
     if omniauth_config[:developer].present?
       provider(
         :developer,
         fields: [:name, :nickname, :email]
+      )
+    end
+
+    if omniauth_config[:decidim].present?
+      provider(
+        :decidim,
+        setup: setup_provider_proc(:decidim, client_id: :client_id, client_secret: :client_secret, site: :site_url)
       )
     end
 

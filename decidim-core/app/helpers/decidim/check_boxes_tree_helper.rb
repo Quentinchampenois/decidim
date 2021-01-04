@@ -18,11 +18,10 @@ module Decidim
       }
       options.merge!(checkbox_options)
 
-      if options[:is_root_check_box] == true
+      if options.delete(:is_root_check_box) == true
         options[:label_options].merge!("data-global-checkbox": "")
         options[:label_options].delete(:"data-children-checkbox")
       end
-      options[:label_options].delete(:is_root_check_box)
 
       options
     end
@@ -41,17 +40,10 @@ module Decidim
       end
     end
 
+    # Overwrite this method in your component helper to define
+    # origin values.
     def filter_origin_values
-      origin_values = []
-      origin_values << TreePoint.new("official", t("decidim.proposals.application_helper.filter_origin_values.official")) if component_settings.official_proposals_enabled
-      origin_values << TreePoint.new("citizens", t("decidim.proposals.application_helper.filter_origin_values.citizens"))
-      origin_values << TreePoint.new("user_group", t("decidim.proposals.application_helper.filter_origin_values.user_groups")) if current_organization.user_groups_enabled?
-      origin_values << TreePoint.new("meeting", t("decidim.proposals.application_helper.filter_origin_values.meetings"))
-
-      TreeNode.new(
-        TreePoint.new("", t("decidim.proposals.application_helper.filter_origin_values.all")),
-        origin_values
-      )
+      raise StandardError, "Not implemented"
     end
 
     def filter_categories_values
@@ -62,7 +54,7 @@ module Decidim
       end
 
       categories_values = sorted_main_categories.flat_map do |category|
-        sorted_descendant_categories = category.descendants.sort_by do |subcategory|
+        sorted_descendant_categories = category.descendants.includes(:subcategories).sort_by do |subcategory|
           [subcategory.weight, translated_attribute(subcategory.name, organization)]
         end
 
@@ -82,10 +74,26 @@ module Decidim
       )
     end
 
-    def filter_scopes_values
-      main_scopes = current_participatory_space.scope.present? ? [current_participatory_space.scope] : current_participatory_space.scopes.top_level
+    def resource_filter_scope_values(resource)
+      if resource.is_a?(Scope)
+        filter_scopes_values_from([resource])
+      else
+        filter_scopes_values
+      end
+    end
 
-      scopes_values = main_scopes.flat_map do |scope|
+    def filter_scopes_values
+      main_scopes = if current_component.scope.present?
+                      [current_component.scope]
+                    else
+                      current_participatory_space.scopes.top_level
+                                                 .includes(:scope_type, :children)
+                    end
+      filter_scopes_values_from(main_scopes)
+    end
+
+    def filter_scopes_values_from(scopes)
+      scopes_values = scopes.compact.flat_map do |scope|
         TreeNode.new(
           TreePoint.new(scope.id.to_s, translated_attribute(scope.name, current_participatory_space.organization)),
           scope_children_to_tree(scope)
@@ -104,7 +112,7 @@ module Decidim
       return if scope.scope_type && scope.scope_type == current_participatory_space.try(:scope_type_max_depth)
       return unless scope.children.any?
 
-      scope.children.flat_map do |child|
+      scope.children.includes(:scope_type, :children).flat_map do |child|
         TreeNode.new(
           TreePoint.new(child.id.to_s, translated_attribute(child.name, current_participatory_space.organization)),
           scope_children_to_tree(child)

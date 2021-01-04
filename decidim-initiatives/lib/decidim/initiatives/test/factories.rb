@@ -7,8 +7,8 @@ FactoryBot.define do
   factory :initiatives_type, class: "Decidim::InitiativesType" do
     title { generate_localized_title }
     description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
-    banner_image { Decidim::Dev.test_file("city2.jpeg", "image/jpeg") }
     organization
+    banner_image { Decidim::Dev.test_file("city2.jpeg", "image/jpeg") } # Keep after organization
     signature_type { :online }
     attachments_enabled { true }
     undo_online_signatures_enabled { true }
@@ -71,6 +71,7 @@ FactoryBot.define do
     trait :with_user_extra_fields_collection do
       collect_user_extra_fields { true }
       extra_fields_legal_information { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
+      document_number_authorization_handler { "dummy_authorization_handler" }
     end
 
     trait :with_sms_code_validation do
@@ -106,10 +107,6 @@ FactoryBot.define do
     signature_type { "online" }
     signature_start_date { Date.current - 1.day }
     signature_end_date { Date.current + 120.days }
-    online_votes { { "total": 0 } }
-    offline_votes { { "total": 0 } }
-    answer_date {}
-    area {}
 
     scoped_type do
       create(:initiatives_type_scope,
@@ -121,16 +118,6 @@ FactoryBot.define do
         create(:authorization, user: initiative.author, granted_at: Time.now.utc)
       end
       create_list(:initiatives_committee_member, 3, initiative: initiative)
-    end
-
-    trait :with_area do
-      area { create(:area, organization: organization) }
-    end
-
-    trait :with_answer do
-      answer { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
-      answer_url { ::Faker::Internet.url }
-      answered_at { Time.current }
     end
 
     trait :created do
@@ -167,21 +154,6 @@ FactoryBot.define do
       state { "rejected" }
     end
 
-    trait :examinated do
-      state { "examinated" }
-      answer_date { Date.current - 3.days }
-    end
-
-    trait :debatted do
-      state { "debatted" }
-      answer_date { Date.current - 3.days }
-    end
-
-    trait :classified do
-      state { "classified" }
-      answer_date { Date.current - 3.days }
-    end
-
     trait :online do
       signature_type { "online" }
     end
@@ -196,6 +168,7 @@ FactoryBot.define do
       signature_type { "online" }
 
       after(:build) do |initiative|
+        initiative.online_votes[initiative.scope.id.to_s] = initiative.supports_required + 1
         initiative.online_votes["total"] = initiative.supports_required + 1
       end
     end
@@ -206,6 +179,7 @@ FactoryBot.define do
       signature_type { "online" }
 
       after(:build) do |initiative|
+        initiative.online_votes[initiative.scope.id.to_s] = 0
         initiative.online_votes["total"] = 0
       end
     end
@@ -221,6 +195,11 @@ FactoryBot.define do
   factory :initiative_user_vote, class: "Decidim::InitiativesVote" do
     initiative { create(:initiative) }
     author { create(:user, :confirmed, organization: initiative.organization) }
+    hash_id { SecureRandom.uuid }
+    scope { initiative.scope }
+    after(:create) do |vote|
+      vote.initiative.update_online_votes_counters
+    end
   end
 
   factory :organization_user_vote, class: "Decidim::InitiativesVote" do

@@ -21,14 +21,14 @@ module Decidim
       attribute :encrypted_metadata, String
       attribute :hash_id, String
 
-      attribute :initiative, Integer
-      attribute :signer, Integer
-      attribute :group_id, Integer
+      attribute :initiative, Decidim::Initiative
+      attribute :signer, Decidim::User
 
       validates :initiative, :signer, presence: true
 
       with_options if: :required_personal_data? do
-        validates :encrypted_metadata, :hash_id, :resident, presence: true
+        validates :name_and_surname, :document_number, :date_of_birth, :postal_code, :encrypted_metadata, :hash_id, presence: true
+        validate :document_number_authorized?
         validate :already_voted?
         validate :user_scope_belongs_to_organization?
         validates :resident, acceptance: true
@@ -39,7 +39,7 @@ module Decidim
       def encrypted_metadata
         return unless required_personal_data?
 
-        @encrypted_metadata ||= encryptor.encrypt(user_scope_id: user_scope_id)
+        @encrypted_metadata ||= encryptor.encrypt(metadata)
       end
 
       # Public: The hash to uniquely identify an initiative vote. It uses the
@@ -93,13 +93,8 @@ module Decidim
         return scope if handler_name.blank?
         return unless authorized?
 
-        manifest = Decidim::Verifications.workflows.find { |m| m.name == handler_name }
-        return unless manifest
-
-        @user_authorized_scope ||= authorized_scope_candidates.find do |candidates|
-          return false unless candidates
-
-          authorization.metadata.symbolize_keys.dig(:scope_id) == candidates&.id
+        @user_authorized_scope ||= authorized_scope_candidates.find do |scope|
+          scope&.id == authorization.metadata.symbolize_keys[:scope_id]
         end
       end
 
@@ -111,13 +106,21 @@ module Decidim
       #
       # Returns an array of Decidim::Scopes.
       def authorized_scope_candidates
-        return initiative.organization.scopes if scope.blank?
-
-        initiative.scope.descendants
+        authorized_scope_candidates = [initiative.scope]
+        authorized_scope_candidates += if initiative.scope.present?
+                                         initiative.scope.descendants
+                                       else
+                                         initiative.organization.scopes
+                                       end
+        authorized_scope_candidates.uniq
       end
 
       def metadata
         {
+          name_and_surname: name_and_surname,
+          document_number: document_number,
+          date_of_birth: date_of_birth,
+          postal_code: postal_code,
           user_scope_id: user_scope_id,
           resident: resident
         }
@@ -146,15 +149,19 @@ module Decidim
 
       # Private: Checks if there's any existing vote that matches the user's data.
       def already_voted?
-        errors.add(:document_number, :taken) if initiative.votes.where(hash_id: hash_id, scope: scope).exists?
+        errors.add(:document_number, :taken) if initiative.votes.exists?(hash_id: hash_id, scope: scope)
       end
 
-      # Private: Checks if the data given at the vote form matches the same data
-      # we have at the authorization.
-      def personal_data_consistent_with_metadata
-        return if initiative.document_number_authorization_handler.blank?
+      # Private: Finds an authorization for the user signing the initiative and
+      # the configured handler.
+      def authorization
+        return unless signer && handler_name
 
-        errors.add(:base, :invalid) unless authorized? && authorization_handler && user_authorized_scope
+        @authorization ||= Verifications::Authorizations.new(
+          organization: signer.organization,
+          user: signer,
+          name: handler_name
+        ).first
       end
 
       # Private: Finds an authorization for the user signing the initiative and
@@ -190,7 +197,11 @@ module Decidim
       def authorization_handler
         return unless document_number && handler_name
 
-        @authorization_handler ||= Decidim::AuthorizationHandler.handler_for(handler_name)
+        @authorization_handler ||= Decidim::AuthorizationHandler.handler_for(handler_name,
+                                                                             document_number: document_number,
+                                                                             name_and_surname: name_and_surname,
+                                                                             date_of_birth: date_of_birth,
+                                                                             postal_code: postal_code)
       end
 
       # Private: The AuthorizationHandler name used to verify the user's
@@ -204,21 +215,11 @@ module Decidim
       def authorization_status
         return unless authorization
 
-        Decidim::Verifications::Adapter.from_element(handler_name).authorize(authorization, {}, nil, nil, nil)
+        Decidim::Verifications::Adapter.from_element(handler_name).authorize(authorization, {}, nil, nil)
       end
 
       def encryptor
         @encryptor ||= DataEncryptor.new(secret: "personal user metadata")
-      end
-
-      def user_scope_belongs_to_organization?
-        return if user_scope_id.blank?
-
-        current_organization.scopes.include? user_scope
-      end
-
-      def user_scope
-        @user_scope ||= Decidim::Scope.find(user_scope_id) if user_scope_id.present?
       end
     end
   end

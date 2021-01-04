@@ -36,7 +36,6 @@ require "kaminari"
 require "doorkeeper"
 require "doorkeeper-i18n"
 require "nobspw"
-require "kaminari"
 require "batch-loader"
 require "etherpad-lite"
 require "diffy"
@@ -59,6 +58,7 @@ module Decidim
 
       initializer "decidim.middleware" do |app|
         app.config.middleware.insert_before Warden::Manager, Decidim::CurrentOrganization
+        app.config.middleware.insert_before Warden::Manager, Decidim::StripXForwardedHost
         app.config.middleware.use BatchLoader::Middleware
       end
 
@@ -99,28 +99,67 @@ module Decidim
         ActionView::Base.raise_on_missing_translations = true unless Rails.env.production?
       end
 
-      initializer "decidim.geocoding" do
-        if Decidim.geocoder.present?
-          config = {
-            # geocoding service (see below for supported options):
-            lookup: :here
-            # IP address geocoding service (see below for supported options):
-            # :ip_lookup => :maxmind,
-            # geocoding service request timeout, in seconds (default 3):
-            # :timeout => 5,
-            # set default units to kilometers:
-            # :units => :km,
-            # caching (see below for details):
-            # :cache => Redis.new,
-            # :cache_prefix => "..."
+      initializer "decidim.geocoding", after: :load_config_initializers do
+        Geocoder.configure(Decidim.geocoder) if Decidim.geocoder.present?
+      end
+
+      initializer "decidim.geocoding_extensions", after: "geocoder.insert_into_active_record" do
+        # Include it in ActiveRecord base in order to apply it to all models
+        # that may be using the `geocoded_by` or `reverse_geocoded_by` class
+        # methods injected by the Geocoder gem.
+        ActiveSupport.on_load :active_record do
+          ActiveRecord::Base.include Decidim::Geocodable
+        end
+      end
+
+      initializer "decidim.maps" do
+        Decidim::Map.register_category(:dynamic, Decidim::Map::Provider::DynamicMap)
+        Decidim::Map.register_category(:static, Decidim::Map::Provider::StaticMap)
+        Decidim::Map.register_category(:geocoding, Decidim::Map::Provider::Geocoding)
+        Decidim::Map.register_category(:autocomplete, Decidim::Map::Provider::Autocomplete)
+      end
+
+      # This keeps backwards compatibility with the old style of map
+      # configuration through Decidim.geocoder.
+      initializer "decidim.maps_legacysupport", after: :load_config_initializers do
+        next if Decidim.maps.present?
+        next if Decidim.geocoder.blank?
+
+        legacy_api_key ||= begin
+          if Decidim.geocoder[:here_api_key].present?
+            Decidim.geocoder.fetch(:here_api_key)
+          elsif Decidim.geocoder[:here_app_id].present?
+            [
+              Decidim.geocoder.fetch(:here_app_id),
+              Decidim.geocoder.fetch(:here_app_code)
+            ]
+          end
+        end
+        next unless legacy_api_key
+
+        ActiveSupport::Deprecation.warn(
+          <<~DEPRECATION.strip
+            Configuring maps functionality has changed.
+
+            Please update your current Decidim.geocoder configurations to the following format:
+
+              Decidim.configure do |config|
+                config.maps = {
+                  provider: :here,
+                  api_key: Rails.application.secrets.maps[:api_key],
+                  static: { url: "#{Decidim.geocoder.fetch(:static_map_url)}" }
+                }
+              end
+          DEPRECATION
+        )
+        Decidim.configure do |config|
+          config.maps = {
+            provider: :here,
+            api_key: legacy_api_key,
+            static: {
+              url: Decidim.geocoder.fetch(:static_map_url)
+            }
           }
-          # to use an API key:
-          config[:api_key] = if Decidim.geocoder[:here_api_key].present?
-                               Decidim.geocoder.fetch(:here_api_key)
-                             else
-                               [Decidim.geocoder.fetch(:here_app_id), Decidim.geocoder.fetch(:here_app_code)]
-                             end
-          Geocoder.configure(config)
         end
       end
 
@@ -241,9 +280,7 @@ module Decidim
           # #call can be used in order to allow conditional checks (to allow non-SSL
           # redirects to localhost for example).
           #
-          # force_ssl_in_redirect_uri !Rails.env.development?
-          #
-          force_ssl_in_redirect_uri true
+          force_ssl_in_redirect_uri !Rails.env.development?
 
           # WWW-Authenticate Realm (default "Doorkeeper").
           realm "Decidim"
@@ -319,7 +356,7 @@ module Decidim
         end
       end
 
-      initializer "decidim.core.content_blocks" do
+      initializer "decidim.core.homepage_content_blocks" do
         Decidim.content_blocks.register(:homepage, :hero) do |content_block|
           content_block.cell = "decidim/content_blocks/hero"
           content_block.settings_form_cell = "decidim/content_blocks/hero_settings_form"
@@ -391,6 +428,68 @@ module Decidim
         end
       end
 
+      initializer "decidim.core.newsletter_templates" do
+        Decidim.content_blocks.register(:newsletter_template, :basic_only_text) do |content_block|
+          content_block.cell = "decidim/newsletter_templates/basic_only_text"
+          content_block.settings_form_cell = "decidim/newsletter_templates/basic_only_text_settings_form"
+          content_block.public_name_key = "decidim.newsletter_templates.basic_only_text.name"
+
+          content_block.settings do |settings|
+            settings.attribute(
+              :body,
+              type: :text,
+              translated: true,
+              preview: -> { I18n.t("decidim.newsletter_templates.basic_only_text.body_preview") }
+            )
+          end
+
+          content_block.default!
+        end
+
+        Decidim.content_blocks.register(:newsletter_template, :image_text_cta) do |content_block|
+          content_block.cell = "decidim/newsletter_templates/image_text_cta"
+          content_block.settings_form_cell = "decidim/newsletter_templates/image_text_cta_settings_form"
+          content_block.public_name_key = "decidim.newsletter_templates.image_text_cta.name"
+
+          content_block.images = [
+            {
+              name: :main_image,
+              uploader: "Decidim::NewsletterTemplateImageUploader",
+              preview: -> { ActionController::Base.helpers.asset_path("decidim/placeholder.jpg") }
+            }
+          ]
+
+          content_block.settings do |settings|
+            settings.attribute(
+              :introduction,
+              type: :text,
+              translated: true,
+              preview: -> { I18n.t("decidim.newsletter_templates.image_text_cta.introduction_preview") }
+            )
+            settings.attribute(
+              :body,
+              type: :text,
+              translated: true,
+              preview: -> { I18n.t("decidim.newsletter_templates.image_text_cta.body_preview") }
+            )
+            settings.attribute(
+              :cta_text,
+              type: :text,
+              translated: true,
+              preview: -> { I18n.t("decidim.newsletter_templates.image_text_cta.cta_text_preview") }
+            )
+            settings.attribute(
+              :cta_url,
+              type: :text,
+              translated: true,
+              preview: -> { "http://decidim.org" }
+            )
+          end
+
+          content_block.default!
+        end
+      end
+
       initializer "decidim.core.add_badges" do
         Decidim::Gamification.register_badge(:invitations) do |badge|
           badge.levels = [1, 5, 10, 30, 50]
@@ -405,6 +504,10 @@ module Decidim
 
       initializer "nbspw" do
         NOBSPW.configuration.use_ruby_grep = true
+      end
+
+      config.to_prepare do
+        FoundationRailsHelper::FlashHelper.include Decidim::FlashHelperExtensions
       end
     end
   end

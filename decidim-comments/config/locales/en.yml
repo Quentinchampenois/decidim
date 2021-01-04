@@ -17,9 +17,14 @@ en:
         other: Votes
   decidim:
     comments:
-      comments: Comments
+      comments:
+        create:
+          error: There was a problem creating the comment.
+      comments_count: Comments count
+      comments_title: Comments
       last_activity:
         new_comment_at_html: "<span>New comment at %{link}</span>"
+      view: View
       votes:
         create:
           error: There was a problem voting the comment.
@@ -56,7 +61,7 @@ en:
             does_not_belong: Contains illegal activity, suicide threats, personal information, or something else you think doesn't belong on %{organization_name}.
             offensive: Contains racism, sexism, slurs, personal attacks, death threats, suicide requests or any form of hate speech.
             spam: Contains clickbait, advertising, scams or script bots.
-          title: Report a problem
+          title: Report inappropriate content
         show_replies: Show %{replies_count} replies
         single_comment_link_title: Get link to single comment
       comment_order_selector:
@@ -75,12 +80,23 @@ en:
         loading: Loading comments ...
         single_comment_warning: You can check the rest of the comments <a href="%{url}">here</a>.
         single_comment_warning_title: You are seeing a single comment
-        title: "%{count} comments"
+        title:
+          one: "%{count} comment"
+          other: "%{count} comments"
+      down_vote_button:
+        text: I disagree with this comment
+      up_vote_button:
+        text: I agree with this comment
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} has left a comment in %{resource_title}. You can read it in this page:"
           email_outro: You have received this notification because you are following %{author_name}. You can unfollow this user from their profile page.
+          email_subject: There is a new comment by %{author_name} in %{resource_title}
+          notification_title: There is a new comment by <a href="%{author_path}">%{author_name} %{author_nickname}</a> in <a href="%{resource_path}">%{resource_title}</a>.
+        comment_by_followed_user_group:
+          email_intro: 'The group %{author_name} has left a comment in %{resource_title}. You can read it in this page:'
+          email_outro: You have received this notification because you are following %{author_name}. You can unfollow this group from its profile page.
           email_subject: There is a new comment by %{author_name} in %{resource_title}
           notification_title: There is a new comment by <a href="%{author_path}">%{author_name} %{author_nickname}</a> in <a href="%{resource_path}">%{resource_title}</a>.
         comment_created:

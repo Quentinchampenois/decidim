@@ -32,7 +32,7 @@ module Decidim
         resources :participatory_processes, only: [:index, :show], param: :slug, path: "processes" do
           get "all-metrics", on: :member
           resources :participatory_process_steps, only: [:index], path: "steps"
-          resource :participatory_process_widget, only: :show, path: "embed"
+          resource :widget, only: :show, path: "embed"
         end
 
         scope "/processes/:participatory_process_slug/f/:component_id" do
@@ -67,7 +67,7 @@ module Decidim
                     decidim_participatory_processes.participatory_processes_path,
                     position: 2,
                     if: Decidim::ParticipatoryProcess.where(organization: current_organization).published.any?,
-                    active: %r{^\/process(es|_groups)}
+                    active: %r{^/process(es|_groups)}
         end
       end
 
@@ -80,6 +80,25 @@ module Decidim
           content_block.settings do |settings|
             settings.attribute :max_results, type: :integer, default: 4
           end
+        end
+
+        Decidim.content_blocks.register(:participatory_process_group_homepage, :hero) do |content_block|
+          content_block.cell = "decidim/content_blocks/hero"
+          content_block.settings_form_cell = "decidim/content_blocks/hero_settings_form"
+          content_block.public_name_key = "decidim.content_blocks.hero.name"
+
+          content_block.images = [
+            {
+              name: :background_image,
+              uploader: "Decidim::HomepageImageUploader"
+            }
+          ]
+
+          content_block.settings do |settings|
+            settings.attribute :welcome_text, type: :text, translated: true
+          end
+
+          content_block.default!
         end
       end
 

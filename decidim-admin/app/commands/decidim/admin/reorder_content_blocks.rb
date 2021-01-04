@@ -10,10 +10,12 @@ module Decidim
       # organization - the Organization where the content blocks reside
       # scope - the scope applied to the content blocks
       # order - an Array holding the order of IDs of published content blocks.
-      def initialize(organization, scope, order)
+      # scoped_resource_id - (optional) The id of the resource the content blocks belongs to.
+      def initialize(organization, scope, order, scoped_resource_id = nil)
         @organization = organization
         @scope = scope
         @order = order
+        @scoped_resource_id = scoped_resource_id
       end
 
       # Executes the command. Broadcasts these events:
@@ -31,7 +33,7 @@ module Decidim
 
       private
 
-      attr_reader :organization, :scope
+      attr_reader :organization, :scope, :scoped_resource_id
 
       def reorder_steps
         transaction do
@@ -77,7 +79,8 @@ module Decidim
       def create_content_block(manifest_name, weight)
         Decidim::ContentBlock.create!(
           organization: organization,
-          scope: scope,
+          scope_name: scope,
+          scoped_resource_id: scoped_resource_id.presence,
           weight: weight,
           manifest_name: manifest_name
         )
@@ -90,7 +93,7 @@ module Decidim
       end
 
       def collection
-        @collection ||= Decidim::ContentBlock.for_scope(scope, organization: organization)
+        @collection ||= Decidim::ContentBlock.for_scope(scope, organization: organization).where(scoped_resource_id: scoped_resource_id)
       end
     end
   end

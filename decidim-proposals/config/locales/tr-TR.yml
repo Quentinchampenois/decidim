@@ -313,9 +313,7 @@ tr:
           new_import:
             accepted_mime_types:
               md: Markdown
-              odt: odt
             bottom_hint: "(Belge bölümlerini önizleyebilir ve sıralayabilirsiniz)"
-            document_legend: '2 MB''tan küçük bir belge ekleyin, her bölüm 3 seviye derinliğinde Teklifler''e ayrıştırılıncaya kadar Gösterilen biçimler: %{valid_mime_types}'
             title: BELGE EKLE
             upload_document: Belge yükle
           publish:
@@ -329,6 +327,10 @@ tr:
             success: Katılımcı metin başarıyla güncellendi.
         proposal_answers:
           form:
+            accepted: Kabul edilmiş
+            answer_proposal: Cevap
+            evaluating: değerlendirilmesi
+            rejected: Reddedilen
             title: Teklifin cevabı %{title}
         proposal_notes:
           create:
@@ -373,7 +375,10 @@ tr:
           publish_answers:
             select_a_proposal: Lütfen bir teklif seçin
           show:
+            authors: Yazarlar
+            body: Vücut
             created_at: Oluşturulma tarihi
+            proposals: Teklif
             votes_count: Oy sayısı
           update_category:
             select_a_category: Lütfen bir kategori seçin
@@ -411,16 +416,21 @@ tr:
         rejected: Reddedilen
         withdrawn: çekilmiş
       application_helper:
+        filter_category_values:
+          all: Herşey
         filter_origin_values:
           all: Herşey
           citizens: Vatandaşlar
           meetings: Toplantılar
           official: Resmi
           user_groups: Kullanıcı Grupları
+        filter_scope_values:
+          all: Herşey
         filter_state_values:
           accepted: Kabul edilmiş
           all: Herşey
           evaluating: değerlendirilmesi
+          not_answered: Cevaplanmadı
           rejected: Reddedilen
         filter_type_values:
           all: Herşey
@@ -472,6 +482,7 @@ tr:
           open: Açık
           published: Yayınlanan
           related_to: İle ilgili
+          scope: kapsam
           search: Arama
           state: Belirtmek, bildirmek
           withdrawn: çekilmiş
@@ -513,14 +524,11 @@ tr:
             one: ve %{count} kişi daha
             other: ve %{count} kişi daha
           info-message: Bu, bir teklif için <strong>ortak çalışma taslağı</strong> . Bu, yazarlarının aşağıdaki yorum bölümünü kullanarak teklifi şekillendirmesine yardımcı olabilir veya düzenleme için erişim isteğinde bulunarak doğrudan iyileştirebilirsiniz. Yazarlar size erişim izni verdiğinde, bu taslakta değişiklikler yapabileceksiniz.
-          of_versions: "( %{number})"
           publish: Yayınla
           publish_info: Taslak bu sürümünü yayınlayın veya
           published_proposal: yayınlanan teklif
           request_access: Erişim talep etmek
           requested_access: Erişim istendi
-          see_other_versions: diğer versiyonları gör
-          version: Sürüm %{number}
           version_history: bu teklifin sürüm geçmişini gör
           withdraw: taslağı geri çekmek
         states:
@@ -573,7 +581,6 @@ tr:
           amend: değiştirmek
           comment: Yorum Yap
           comments: Yorumlar
-          endorse: desteklemek
       proposal_votes:
         create:
           error: Teklif oylanırken hatalar oluştu.
@@ -605,8 +612,10 @@ tr:
           category: Kategori
           origin: Menşei
           related_to: İle ilgili
+          scope: kapsam
           search: Arama
           state: Belirtmek, bildirmek
+          type: tip
           voted: oy
         filters_small_view:
           close_modal: Yakın kalıcı
@@ -662,7 +671,6 @@ tr:
           proposal_rejected_reason: 'Bu teklif reddedildi çünkü:'
           report: Rapor
           withdraw_btn_hint: Herhangi bir destek almadığınız sürece fikrinizi değiştirirseniz teklifinizi geri çekebilirsiniz. Teklif silinmemiş, iptal edilen teklifler listesinde görünecektir.
-          withdraw_confirmation: Bu teklifi geri çektiğinizden emin misiniz?
           withdraw_proposal: Teklifi geri çek
         vote_button:
           already_voted: Çoktan oy verildi
@@ -713,20 +721,12 @@ tr:
         error: Teklif taslağını kaydederken hatalar oluştu.
         success: Teklif taslağı başarıyla güncellendi.
       versions:
-        changes_at_title: '"%{title}" daki değişiklikler'
+        collaborative_drafts:
+          back_to_resource: İşbirliği taslağına geri dönün
         index:
           title: Sürümler
-        stats:
-          back_to_collaborative_draft: İşbirliği taslağına geri dönün
-          back_to_proposal: Teklife geri dön
-          number_of_versions: Sürümler
-          show_all_versions: Tüm versiyonları göster
-          version_author: Sürüm yazarı
-          version_created_at: Sürümde oluşturuldu
-          version_number: Versiyon numarası
-          version_number_out_of_total: "%{current_version} üzerinden %{total_count}"
-        version:
-          version_index: Sürüm %{index}
+        proposals:
+          back_to_resource: Teklife geri dön
       withdraw:
         errors:
           has_supports: Zaten destekleri olduğu için bu teklif geri çekilemez.

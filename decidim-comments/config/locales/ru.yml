@@ -20,7 +20,6 @@ ru:
         other: Голосов
   decidim:
     comments:
-      comments: Комментарии
       last_activity:
         new_comment_at_html: "<span>Новый комментарий в %{link}</span>"
       votes:
@@ -58,7 +57,6 @@ ru:
             does_not_belong: Содержит незаконную деятельность, угрозы самоубийства, личные сведения или что-то еще, недопустимое, на ваш взгляд, для %{organization_name}.
             offensive: Содержит расизм, сексизм, оскорбления, личные нападки, угрозы убийства, заявления о самоубийстве, или любую форму разжигания ненависти.
             spam: Содержит кликоловки (манипулятивно-сенсационные заголовки), рекламу, мошенничество или лохотроны.
-          title: Пожаловаться на проблему
       comment_order_selector:
         order:
           best_rated: С наивысшим рейтингом
@@ -72,12 +70,14 @@ ru:
         blocked_comments_for_user_warning: Сейчас вам недоступно комментирование, но вы можете прочесть предыдущие комментарии.
         blocked_comments_warning: Комментарии сейчас отключены, но вы можете прочитать предыдущие.
         loading: Загрузка комментариев ...
-        title: "%{count} комментариев"
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} оставил комментарий в %{resource_title}. Вы можете прочитать его на странице:"
           email_outro: Вы получили это уведомление, потому что вы следите за %{author_name}. Вы можете отписаться от таких уведомлений, перейдя на страницу профиля этого участника.
+          email_subject: В %{resource_title} появился новый комментарий от %{author_name}
+          notification_title: В <a href="%{resource_path}">%{resource_title}</a> появился новый комментарий от <a href="%{author_path}">%{author_name} %{author_nickname}</a>.
+        comment_by_followed_user_group:
           email_subject: В %{resource_title} появился новый комментарий от %{author_name}
           notification_title: В <a href="%{resource_path}">%{resource_title}</a> появился новый комментарий от <a href="%{author_path}">%{author_name} %{author_nickname}</a>.
         comment_created:

@@ -13,7 +13,6 @@ gl:
         attachment_collection_id: Cartafol
         description: Descrición
         file: Arquivo
-        title: Título
       attachment_collection:
         description: Descrición
         name: Nome
@@ -29,12 +28,6 @@ gl:
       newsletter:
         body: Corpo
         subject: Asunto
-      oauth_application:
-        name: Nome
-        organization_logo: Logo da organización (cadrado)
-        organization_name: Nome da Organización
-        organization_url: URL da organización
-        redirect_uri: Redirixir URI
       organization:
         alert_color: Alerta
         badges_enabled: Activar emblemas
@@ -66,7 +59,6 @@ gl:
         primary_color: Primaria
         reference_prefix: Prefijo de referencia
         secondary_color: Secundaria
-        show_statistics: Amosar estatísticas
         success_color: Éxito
         tos_version: Versión de condicións de servizo
         twitter_handler: Xestor de Twitter
@@ -101,10 +93,6 @@ gl:
         file: Arquivo
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: O URI de redirección debe ser un URI de SSL
         organization:
           attributes:
             official_img_footer:
@@ -265,6 +253,15 @@ gl:
       exports:
         export_as: "%{name} como %{export_format}"
         notice: A súa exportación está en progreso. Recibirás un correo electrónico cando finalice.
+      filters:
+        category_id_eq:
+          label: Categoría
+        officialized_at_null:
+          label: Estado
+          values:
+            'false': Oficializado
+            'true': Non oficializado
+        search_label: Busca
       help_sections:
         error: Produciuse un erro ao actualizar as seccións de axuda
         form:
@@ -327,7 +324,6 @@ gl:
         homepage: Páxina de inicio
         impersonations: Impersonacións
         newsletters: Boletíns informativos
-        oauth_applications: Aplicacións OAuth
         participants: Participantes
         scope_types: Tipos de alcance
         scopes: Ámbitos
@@ -370,11 +366,6 @@ gl:
             sent_at: Enviado en
             subject: Asunto
           name: Boletín informativo
-        oauth_application:
-          fields:
-            created_at: Creado en
-            name: Nome
-          name: Aplicación de OAuth
         participatory_space_private_user:
           name: Espazo participativo usuario privado
         scope:
@@ -417,6 +408,9 @@ gl:
             does_not_belong: Non pertence
             offensive: Ofensivo
             spam: Correo non desexado
+      newsletter_templates:
+        index:
+          preview_template: Vista previa
       newsletters:
         create:
           error: Produciuse un erro ao crear este boletín informativo.
@@ -430,8 +424,6 @@ gl:
         edit:
           save_and_preview: Gardar e previsualizar
           title: Editar boletín informativo
-        form:
-          interpolations_hint: 'Consello: podes usar "%{name}" en calquera parte do corpo ou asunto e será substituído polo nome do destinatario.'
         index:
           confirm_delete: '¿Estás seguro de que queres eliminar este boletín informativo?'
           title: Boletíns informativos
@@ -447,25 +439,6 @@ gl:
         update:
           error: Produciuse un erro ao actualizar este boletín informativo.
           success: Boletín informativo actualizado con éxito. Revisa isto antes de enviar.
-      oauth_applications:
-        create:
-          error: Produciuse un erro ao crear esta aplicación.
-          success: Aplicación creada con éxito.
-        destroy:
-          error: Produciuse un erro ao destruír esta aplicación.
-          success: Aplicación destruída con éxito.
-        edit:
-          save: Gardar
-          title: Editar a aplicación
-        index:
-          confirm_delete: Estás seguro de que queres eliminar esta aplicación?
-          title: Aplicacións OAuth
-        new:
-          save: Gardar
-          title: Nova aplicación
-        update:
-          error: Produciuse un erro ao actualizar esta aplicación.
-          success: A aplicación actualizouse con éxito.
       officializations:
         create:
           success: O usuario oficializouse con éxito
@@ -497,7 +470,6 @@ gl:
           instagram: Instagram
           social_handlers: Social
           twitter: Twitter
-          url: Url
           youtube: YouTube
         update:
           error: Produciuse un erro ao actualizar esta organización.
@@ -506,13 +478,15 @@ gl:
         edit:
           update: Actualización
         form:
-          colors_title: Cores da organización
+          colors:
+            colors_title: Cores da organización
+            header_snippets_help: Use este campo para engadir cousas ao título HTML. O uso máis común é integrar servizos de terceiros que requiren algún JavaScript ou CSS adicional. Ademais, podes usalo para engadir etiquetas metais extra ao HTML. Ten en conta que isto só se renderá en páxinas públicas, non na sección de administración.
           cta_button_path_help: 'Pode sobrescribir onde se enlaza o botón de chamada a acción na páxina de inicio. Use aquí rutas parciais, non URL completo. Acepta letras, números, guións e barras, e debe comezar cunha letra. O botón de chamada a acción amósase na páxina de inicio entre o texto de benvida ea descrición. Exemplo: %{url}'
           cta_button_text_help: Pode sobrescribir o texto do botón de chamada a acción na páxina de inicio para cada idioma dispoñible na súa organización. Se non se establece, empregarase o valor predeterminado. O botón de chamada a acción amósase na páxina de inicio entre o texto de benvida ea descrición.
-          header_snippets_help: Use este campo para engadir cousas ao título HTML. O uso máis común é integrar servizos de terceiros que requiren algún JavaScript ou CSS adicional. Ademais, podes usalo para engadir etiquetas metais extra ao HTML. Ten en conta que isto só se renderá en páxinas públicas, non na sección de administración.
           homepage_appearance_title: Editar o aspecto da páxina de inicio
           homepage_highlighted_content_banner_title: Banner de contido de alto nivel
-          layout_appearance_title: Editar aspecto de deseño
+          images:
+            layout_appearance_title: Editar aspecto de deseño
           omnipresent_banner_appearance_title: Editar o banner omnipresente
       organization_homepage:
         edit:
@@ -669,6 +643,10 @@ gl:
         new:
           create: Invitar
           title: Convidar ao usuario como administrador
+      users_statistics:
+        users_count:
+          admins: Administradores
+          participants: Participantes
       view_public_page: Ver páxina pública
     forms:
       errors:
@@ -698,7 +676,6 @@ gl:
           fields:
             hidden_at: Oculto en
             report_count: Conde
-            reportable: Reportable
             reported_content_url: URL de contido reportado
             reports: Informes
             visit_url: Visita o URL

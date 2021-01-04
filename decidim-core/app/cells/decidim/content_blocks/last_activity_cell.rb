@@ -34,7 +34,7 @@ module Decidim
         valid_activities_count = 0
         @valid_activities = []
 
-        activities.each do |activity|
+        activities.includes([:user]).each do |activity|
           break if valid_activities_count == activities_to_show
 
           if activity.visible_for?(current_user)
@@ -47,6 +47,17 @@ module Decidim
       end
 
       private
+
+      # A MD5 hash of model attributes because is needed because
+      # it ensures the cache version value will always be the same size
+      def cache_hash
+        hash = []
+        hash << "decidim/content_blocks/last_activity"
+        hash << Digest::MD5.hexdigest(valid_activities.map(&:updated_at).to_s)
+        hash << I18n.locale.to_s
+
+        hash.join("/")
+      end
 
       def activities
         @activities ||= HomeActivitySearch.new(

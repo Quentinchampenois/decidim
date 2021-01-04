@@ -10,6 +10,7 @@ module Decidim
     include Decidim::DataPortability
     include Decidim::Searchable
     include Decidim::ActsAsAuthor
+    include Decidim::UserReportable
 
     class Roles
       def self.all
@@ -53,9 +54,19 @@ module Decidim
     scope :not_confirmed, -> { where(confirmed_at: nil) }
 
     scope :interested_in_scopes, lambda { |scope_ids|
-      ids = scope_ids.map { |i| "%#{i}%" }.join(",")
-      where("extended_data->>'interested_scopes' ~~ ANY('{#{ids}}')")
+      actual_ids = scope_ids.select(&:presence)
+      if actual_ids.count.positive?
+        ids = actual_ids.map(&:to_i).join(",")
+        where("extended_data->'interested_scopes' @> ANY('{#{ids}}')")
+      else
+        # Do not apply the scope filter when there are scope ids available. Note
+        # that the active record scope must always return an active record
+        # collection.
+        self
+      end
     }
+
+    scope :org_admins_except_me, ->(user) { where(organization: user.organization, admin: true).where.not(id: user.id) }
 
     attr_accessor :newsletter_notifications
 
@@ -141,6 +152,10 @@ module Decidim
       Decidim::Messaging::Conversation.unread_by(self)
     end
 
+    def unread_messages_count
+      @unread_messages_count ||= Decidim::Messaging::Receipt.unread_count(self)
+    end
+
     # Check if the user exists with the given email and the current organization
     #
     # warden_conditions - A hash with the authentication conditions
@@ -188,7 +203,7 @@ module Decidim
     end
 
     def being_impersonated?
-      ImpersonationLog.active.where(user: self).exists?
+      ImpersonationLog.active.exists?(user: self)
     end
 
     def interested_scopes_ids
@@ -231,6 +246,11 @@ module Decidim
     # return the groups where this user has been accepted
     def accepted_user_groups
       UserGroups::AcceptedUserGroups.for(self)
+    end
+
+    # return the groups where this user has admin permissions
+    def manageable_user_groups
+      UserGroups::ManageableUserGroups.for(self)
     end
 
     def authenticatable_salt

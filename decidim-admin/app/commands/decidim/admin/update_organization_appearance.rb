@@ -68,8 +68,7 @@ module Decidim
           remove_official_img_header: form.remove_official_img_header,
           official_img_footer: form.official_img_footer,
           remove_official_img_footer: form.remove_official_img_footer,
-          official_url: form.official_url,
-          show_statistics: form.show_statistics
+          official_url: form.official_url
         }
       end
 
@@ -102,7 +101,9 @@ module Decidim
             secondary: form.secondary_color,
             success: form.success_color,
             warning: form.warning_color,
-            alert: form.alert_color
+            alert: form.alert_color,
+            highlight: form.highlight_color,
+            "highlight-alternative": form.highlight_alternative_color
           }
         }
       end

@@ -15,10 +15,14 @@ describe "Explore Collaborative Drafts", versioning: true, type: :system do
   let!(:component) do
     create(:proposal_component,
            :with_creation_enabled,
-           :with_collaborative_drafts_enabled,
            manifest: manifest,
            participatory_space: participatory_process,
-           organization: organization)
+           organization: organization,
+           settings: {
+             collaborative_drafts_enabled: true,
+             scopes_enabled: true,
+             scope_id: participatory_process.scope&.id
+           })
   end
   let!(:category) { create :category, participatory_space: participatory_process }
   let!(:category2) { create :category, participatory_space: participatory_process }
@@ -55,7 +59,7 @@ describe "Explore Collaborative Drafts", versioning: true, type: :system do
         expect(page).to have_css(".card.card--collaborative_draft.success", count: collaborative_drafts_count)
         expect(page).to have_css(".card__button.button", count: collaborative_drafts_count)
         first ".card__support" do
-          expect(page).to have_css(".card__button.button", text: "View Collaborative Draft")
+          expect(page).to have_css(".card__button.button", text: "VIEW COLLABORATIVE DRAFT")
         end
       end
 
@@ -94,17 +98,22 @@ describe "Explore Collaborative Drafts", versioning: true, type: :system do
       end
 
       it "shows the state" do
-        expect(page).to have_css(".label.collaborative-draft-status", text: translated(collaborative_draft.state))
+        expect(page).to have_css(".label.collaborative-draft-status", text: "Open")
       end
 
       context "when geocoding is enabled" do
         let!(:component) do
           create(:proposal_component,
                  :with_creation_enabled,
-                 :with_geocoding_and_collaborative_drafts_enabled,
                  manifest: manifest,
                  participatory_space: participatory_process,
-                 organization: organization)
+                 organization: organization,
+                 settings: {
+                   collaborative_drafts_enabled: true,
+                   geocoding_enabled: true,
+                   scopes_enabled: true,
+                   scope_id: participatory_process.scope&.id
+                 })
         end
         let!(:collaborative_draft) { create(:collaborative_draft, :open, component: component, address: address, category: category, scope: scope, users: [author]) }
         let(:address) { "Carrer Pare Llaurador 113, baixos, 08224 Terrassa" }
@@ -170,7 +179,7 @@ describe "Explore Collaborative Drafts", versioning: true, type: :system do
 
         it "shows the comments" do
           comments.each do |comment|
-            expect(page).to have_content(comment.body)
+            expect(page).to have_content(comment.body.values.first)
           end
         end
       end
@@ -198,7 +207,7 @@ describe "Explore Collaborative Drafts", versioning: true, type: :system do
           end
 
           it "shows the a modal" do
-            within "#publish-irreversible-action-modal" do
+            within "[id$='publish-irreversible-action-modal'" do
               expect(page).to have_css("h3", text: "The following action is irreversible")
               expect(page).to have_css("button", text: "Publish as a Proposal")
             end
@@ -252,7 +261,7 @@ describe "Explore Collaborative Drafts", versioning: true, type: :system do
 
           it "shows that acces has been requested" do
             within ".view-side" do
-              expect(page).to have_css(".button.secondary.light.expanded.button--sc.mt-s", text: "ACCESS REQUESTED")
+              expect(page).to have_css(".button.expanded.button--sc.mt-s", text: "ACCESS REQUESTED")
             end
           end
 

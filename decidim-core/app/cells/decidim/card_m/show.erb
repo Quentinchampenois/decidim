@@ -1,10 +1,10 @@
 <div class="column" id="<%= dom_id(model) %>">
-  <article class="card <%= card_classes %>">
+  <div class="card <%= card_classes %>">
     <%= render :label if has_label? %>
     <%= render :top if render_top? %>
     <%= render :image if has_image? %>
     <div class="card__content">
-      <%= render :header %>
+      <%= render :header if has_header? %>
 
       <div class="card__text">
         <div class="card__text--paragraph">
@@ -24,5 +24,5 @@
     <%= render :data %>
     <%= render :status %>
     <%= render :footer %>
-  </article>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-pt-BR:
+pt:
   activemodel:
     models:
       decidim/comments/comment_by_followed_user_event: Comente
@@ -16,7 +16,6 @@ pt-BR:
         other: Votos
   decidim:
     comments:
-      comments: Comentários
       last_activity:
         new_comment_at_html: "<span>Novo comentário em %{link}</span>"
       votes:
@@ -54,7 +53,6 @@ pt-BR:
             does_not_belong: Contém atividades ilegais, ameaças suicidas, informações pessoais ou qualquer outra coisa que você acha que não pertence ao %{organization_name}.
             offensive: Contém racismo, sexismo, insultos, ataques pessoais, ameaças de morte, pedidos de suicídio ou qualquer tipo de discurso de ódio.
             spam: Contém clickbait, publicidade, fraudes ou script bots.
-          title: Reportar um problema
       comment_order_selector:
         order:
           best_rated: Melhores avaliações
@@ -68,12 +66,14 @@ pt-BR:
         blocked_comments_for_user_warning: Você não pode comentar neste momento, mas pode ler os anteriores.
         blocked_comments_warning: Os comentários estão desativados neste momento, mas você pode ler os anteriores.
         loading: Carregando comentários ...
-        title: "%{count} comentários"
     events:
       comments:
         comment_by_followed_user:
           email_intro: "%{author_name} deixou um comentário em %{resource_title}. Você pode lê-lo nesta página:"
           email_outro: Você recebeu esta notificação porque está seguindo %{author_name}. Você pode deixar de seguir esse usuário em sua página de perfil.
+          email_subject: Há um novo comentário por %{author_name} em %{resource_title}
+          notification_title: Há um novo comentário por <a href="%{author_path}">%{author_name} %{author_nickname}</a> em <a href="%{resource_path}">%{resource_title}</a>.
+        comment_by_followed_user_group:
           email_subject: Há um novo comentário por %{author_name} em %{resource_title}
           notification_title: Há um novo comentário por <a href="%{author_path}">%{author_name} %{author_nickname}</a> em <a href="%{resource_path}">%{resource_title}</a>.
         comment_created:

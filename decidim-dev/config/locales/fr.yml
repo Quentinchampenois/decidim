@@ -1,9 +1,9 @@
----
 fr:
   activemodel:
     attributes:
       dummy_resource:
         created_at: Créé le
+        decidim_scope_id: Secteur
         field: Champ
         start_date: Date de début
         title: Titre
@@ -13,9 +13,17 @@ fr:
     components:
       dummy:
         settings:
+          global:
+            readonly_attribute: Attribut en lecture seule
+            test: Un test
+            test_choices:
+              a: Choix A
+              b: Choix B
+              c: Choix C
           step:
-            endorsements_blocked: Approbations bloquées
-            endorsements_enabled: Approbations autorisées
+            endorsements_blocked: Bloquer les soutiens
+            endorsements_enabled: Soutiens activés
+            readonly_step_attribute: Attribut étape en lecture seule
     dummy:
       admin:
         exports:
@@ -24,7 +32,7 @@ fr:
       badges:
         test:
           conditions:
-          - Utilisez un environnement de test pour decidim.
+            - Utilisez un environnement de test pour decidim.
           description: Les utilisateurs obtiennent ce badge en créant des tests.
           description_another: Cet utilisateur a créé %{score} tests.
           description_own: Vous avez créé %{score} tests.

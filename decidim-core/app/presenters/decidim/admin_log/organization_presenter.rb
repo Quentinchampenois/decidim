@@ -67,8 +67,7 @@ module Decidim
           favicon: :string,
           official_img_header: :string,
           official_img_footer: :string,
-          official_url: :string,
-          show_statistics: :boolean
+          official_url: :string
         }
       end
 
@@ -89,8 +88,8 @@ module Decidim
         "activemodel.attributes.organization"
       end
 
-      def has_diff?
-        action == "update_id_documents_config" || super
+      def diff_actions
+        super + %w(update_id_documents_config)
       end
     end
   end

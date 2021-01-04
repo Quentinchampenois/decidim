@@ -55,18 +55,9 @@ module Decidim
           let(:commented_initiative) { create(:initiative, organization: organization) }
           let!(:comment) { create(:comment, commentable: commented_initiative) }
 
-          it "most commented appears first" do
+          it "most commented appears fisrt" do
             get :index, params: { order: "most_commented" }
             expect(subject.helpers.initiatives.first).to eq(commented_initiative)
-          end
-        end
-
-        context "when order by answer date" do
-          let!(:answered_initiative) { create(:initiative, :with_answer, organization: organization) }
-
-          it "most recently answered appears first" do
-            get :index, params: { order: "answer_date" }
-            expect(subject.helpers.initiatives.first).to eq(answered_initiative)
           end
         end
       end
@@ -93,6 +84,53 @@ module Decidim
           it "Unpublished initiatives are shown too" do
             get :show, params: { slug: created_initiative.slug }
             expect(subject.helpers.current_initiative).to eq(created_initiative)
+          end
+        end
+      end
+
+      describe "Edit initiative as promoter" do
+        before do
+          sign_in created_initiative.author, scope: :user
+        end
+
+        let(:valid_attributes) do
+          attrs = attributes_for(:initiative, organization: organization)
+          attrs[:signature_end_date] = I18n.l(attrs[:signature_end_date], format: :decidim_short)
+          attrs[:signature_start_date] = I18n.l(attrs[:signature_start_date], format: :decidim_short)
+          attrs[:type_id] = created_initiative.type.id
+          attrs
+        end
+
+        it "edit when user is allowed" do
+          get :edit, params: { slug: created_initiative.slug }
+          expect(flash[:alert]).to be_nil
+          expect(response).to have_http_status(:ok)
+        end
+
+        context "and update an initiative" do
+          it "are allowed" do
+            put :update,
+                params: {
+                  slug: created_initiative.to_param,
+                  initiative: valid_attributes
+                }
+            expect(flash[:alert]).to be_nil
+            expect(response).to have_http_status(:found)
+          end
+        end
+
+        context "when initiative is invalid" do
+          it "does not update when title is nil" do
+            invalid_attributes = valid_attributes.merge(title: nil)
+
+            put :update,
+                params: {
+                  slug: created_initiative.to_param,
+                  initiative: invalid_attributes
+                }
+
+            expect(flash[:alert]).not_to be_empty
+            expect(response).to have_http_status(:ok)
           end
         end
       end

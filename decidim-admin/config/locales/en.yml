@@ -14,7 +14,7 @@ en:
         attachment_collection_id: Folder
         description: Description
         file: File
-        title: Title
+        title: Attachment or image name
       attachment_collection:
         description: Description
         name: Name
@@ -30,15 +30,10 @@ en:
       newsletter:
         body: Body
         subject: Subject
-      oauth_application:
-        name: Name
-        organization_logo: Organization logo (square)
-        organization_name: Organization name
-        organization_url: Organization URL
-        redirect_uri: Redirect URI
       organization:
         alert_color: Alert
         badges_enabled: Enable badges
+        comments_max_length: Comments max length (Leave 0 for default value)
         cta_button_path: Call To Action button path
         cta_button_text: Call To Action button text
         customize_welcome_notification: Customize welcome notification
@@ -50,6 +45,8 @@ en:
         from: From email address
         github_handler: GitHub handler
         header_snippets: Header snippets
+        highlight_alternative_color: Highlight, alternative
+        highlight_color: Highlight
         highlighted_content_banner_action_subtitle: Action button subtitle
         highlighted_content_banner_action_title: Action button title
         highlighted_content_banner_action_url: Action button URL
@@ -59,6 +56,9 @@ en:
         highlighted_content_banner_title: Title
         instagram_handler: Instagram handler
         logo: Logo
+        machine_translation_display_priority: Machine translation display priority
+        machine_translation_display_priority_original: Original text first
+        machine_translation_display_priority_translation: Translated text first
         name: Name
         official_img_footer: Official logo footer
         official_img_header: Official logo header
@@ -71,7 +71,6 @@ en:
         rich_text_editor_in_public_views: Enable rich text editor for participants
         secondary_color: Secondary
         send_welcome_notification: Send welcome notification
-        show_statistics: Show statistics
         success_color: Success
         time_zone: Time Zone
         tos_version: Terms of service version
@@ -109,10 +108,6 @@ en:
         file: File
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: The redirect URI must be a SSL URI
         organization:
           attributes:
             official_img_footer:
@@ -144,6 +139,7 @@ en:
         per_page: Per page
         permissions: Permissions
         reject: Reject
+        share: Share
         verify: Verify
       admin_terms_of_use:
         accept:
@@ -273,6 +269,7 @@ en:
           headers:
             actions: Actions
             name: Component name
+            scope: Component scope
             type: Component type
         new:
           add: Add component
@@ -291,11 +288,19 @@ en:
           welcome: Welcome to the Decidim Admin Panel.
       exports:
         export_as: "%{name} as %{export_format}"
+        formats:
+          CSV: CSV
+          Excel: Excel
+          FormPDF: PDF
+          JSON: JSON
         notice: Your export is currently in progress. You'll receive an email when it's complete.
       filters:
         category_id_eq:
           label: Category
         filter_label: Filter
+        moderations:
+          reportable_type_string_eq:
+            label: Type
         officialized_at_null:
           label: State
           values:
@@ -316,6 +321,7 @@ en:
         search_label: Search
         search_placeholder:
           name_or_nickname_or_email_cont: Search %{collection} by email, name or nickname.
+          reported_id_string_or_reported_content_cont: Search %{collection} by reportable id or content.
           title_cont: Search %{collection} by title.
         state_eq:
           label: State
@@ -381,14 +387,17 @@ en:
         homepage: Homepage
         impersonations: Impersonations
         newsletters: Newsletters
-        oauth_applications: OAuth applications
         participants: Participants
+        reported_users: Reported Users
         scope_types: Scope types
         scopes: Scopes
         settings: Settings
         static_pages: Pages
         user_groups: Groups
         users: Participants
+      metrics:
+        metrics:
+          see_more_metrics: See more metrics
       models:
         area:
           fields:
@@ -425,11 +434,6 @@ en:
             sent_to: Sent to
             subject: Subject
           name: Newsletter
-        oauth_application:
-          fields:
-            created_at: Created at
-            name: Name
-          name: OAuth application
         participatory_space_private_user:
           name: Participatory space private participant
         scope:
@@ -440,6 +444,14 @@ en:
           fields:
             name: Name
             plural: Plural
+        share_token:
+          fields:
+            created_at: Created at
+            expires_at: Expires at
+            last_used_at: Last time used
+            times_used: Times used
+            token: Token
+            user: Created by
         static_page:
           fields:
             created_at: Created at
@@ -464,6 +476,20 @@ en:
             phone: Phone
             state: State
             users_count: Participants count
+      moderated_users:
+        index:
+          actions:
+            title: Actions
+            unreport: Unreport
+          name: Name
+          nickname: Nickname
+          reason: Reason
+          title: Listing reported users
+        report:
+          reasons:
+            does_not_belong: Does not belong
+            offensive: Offensive
+            spam: Spam
       moderations:
         index:
           title: Moderations
@@ -472,6 +498,29 @@ en:
             does_not_belong: Does not belong
             offensive: Offensive
             spam: Spam
+        reports:
+          index:
+            author: Author(s)
+            callout_html: A content appears in the moderation panel when it has been signaled by a user (can be anyone with a registered account) by clicking on the %{icon} flag next to the item.
+            content_original_language: Content original language
+            participatory_space: Participatory space
+            reported_content: Reported content
+            see_current: See current
+            see_original: See original
+            title: Moderation reports
+          show:
+            report_details: Reason details
+            report_language: Report language
+            report_reason: Reason
+            title: Report details
+      newsletter_templates:
+        index:
+          preview_template: Preview
+          title: Newsletter templates
+          use_template: Use this template
+        show:
+          preview: 'Preview template: %{template_name}'
+          use_template: Use this template
       newsletters:
         create:
           error: There was a problem creating this newsletter.
@@ -485,8 +534,6 @@ en:
         edit:
           save_and_preview: Save and preview
           title: Edit newsletter
-        form:
-          interpolations_hint: 'Hint: You can use "%{name}" anywhere in the body or subject and it will be replaced by the recipient''s name.'
         index:
           all: all
           all_users: 'All users '
@@ -530,25 +577,6 @@ en:
         update:
           error: There was a problem updating this newsletter.
           success: Newsletter updated successfully. Please review it before sending.
-      oauth_applications:
-        create:
-          error: There was a problem creating this application.
-          success: Application created successfully.
-        destroy:
-          error: There was a problem destroying this application.
-          success: Application destroyed successfully.
-        edit:
-          save: Save
-          title: Edit application
-        index:
-          confirm_delete: Are you sure you want to delete this application?
-          title: OAuth applications
-        new:
-          save: Save
-          title: New application
-        update:
-          error: There was a problem updating this application.
-          success: Application updated successfully.
       officializations:
         create:
           success: Participant successfully officialized
@@ -569,6 +597,7 @@ en:
           officialize: Officialize
           officialized: Officialized
           reofficialize: Reofficialize
+          reports: Reports
           search: Search
           show_email: Show email address
           status: Status
@@ -578,6 +607,7 @@ en:
           officialize: Officialize
           title: Officialize participant "%{name}"
         show_email_modal:
+          close_modal: Close modal
           description: If you need to contact a participant directly you can click on the Show button to see the email address. This action will be logged.
           email_address: Email address
           full_name: Full name
@@ -595,7 +625,7 @@ en:
           rich_text_editor_in_public_views_help: In some text areas, participants will be able to insert some HTML tags by using the rich text editor.
           social_handlers: Social
           twitter: Twitter
-          url: Url
+          url: URL
           youtube: YouTube
         update:
           error: There was a problem updating this organization.
@@ -604,13 +634,16 @@ en:
         edit:
           update: Update
         form:
-          colors_title: Organization colors
+          colors:
+            colors_title: Organization colors
+            header_snippets_help: Use this field to add things to the HTML head. The most common use is to integrate third-party services that require some extra JavaScript or CSS. Also, you can use it to add extra meta tags to the HTML. Note that this will only be rendered in public pages, not in the admin section.
           cta_button_path_help: 'You can overwrite where the Call To Action button in the homepage links to. Use partial paths, not full URLs here. Accepts letters, numbers, dashes and slashes, and must start with a letter. The Call To Action button is shown in the homepage between the welcome text and the description. Example: %{url}'
           cta_button_text_help: You can overwrite the Call To Action button text in the homepage for each available language in your organization. If not set, the default value will be used. The Call To Action button is shown in the homepage between the welcome text and the description.
-          header_snippets_help: Use this field to add things to the HTML head. The most common use is to integrate third-party services that require some extra JavaScript or CSS. Also, you can use it to add extra meta tags to the HTML. Note that this will only be rendered in public pages, not in the admin section.
           homepage_appearance_title: Edit homepage appearance
           homepage_highlighted_content_banner_title: Highligted content banner
-          layout_appearance_title: Edit layout appearance
+          images:
+            layout_appearance_title: Edit layout appearance
+            preview: Preview
           omnipresent_banner_appearance_title: Edit omnipresent banner
       organization_homepage:
         edit:
@@ -627,7 +660,7 @@ en:
           error: There was a problem deleting a private participant for this participatory space.
           success: Participatory space private participant access successfully destroyed.
         index:
-          import_via_csv: Import via csv
+          import_via_csv: Import via CSV
           title: Participatory space private participant
         new:
           create: Create
@@ -637,7 +670,7 @@ en:
           invalid: There was a problem reading the CSV file.
           success: CSV file uploaded successfully, we're sending an invitation email to participants. This might take a while.
         new:
-          explanation: Upload your CSV file. It must have two columns with email in the first column of the file and name in the last column of the file (email, name) of the users that you want to add to the participatory space, without headers.
+          explanation: Upload your CSV file. It must have two columns with email in the first column of the file and name in the last column of the file (email, name) of the users that you want to add to the participatory space, without headers. Avoid using invalid chars like `<>?%&^*#@()[]=+:;"{}\|` in user name.
           title: Upload your CSV file
           upload: Upload
       resource_permissions:
@@ -646,6 +679,10 @@ en:
           title: Edit permissions
         update:
           success: Permissions updated successfully.
+      resources:
+        index:
+          headers:
+            scope: Scope
       scope_types:
         create:
           error: There was a problem creating a new scope type.
@@ -677,6 +714,23 @@ en:
         update:
           error: There was a problem updating this scope.
           success: Scope updated successfully
+      share_tokens:
+        actions:
+          confirm_destroy: Are you sure you want to delete this token?
+          destroy: Delete
+          share: Share
+        destroy:
+          error: There was a problem destroying the token.
+          success: Token destroyed successfully.
+        share_tokens:
+          empty: There are no active tokens
+          help: These tokens are used to publicly share this unpublished resource to any user. They will be hidden when the resource is published. Click on the token's share icon to visit the shareable URL.
+          title: Share tokens
+      shared:
+        gallery:
+          add_images: Add images
+          delete_image: Delete Image
+          gallery_legend: Add an image gallery (Optional)
       static_page_topics:
         create:
           error: There was a problem creating a new topic.
@@ -728,10 +782,13 @@ en:
         dashboard: Dashboard
         impersonatable_users: Manageable participants
         impersonations: Participants management
+        metrics: Metrics
+        panel: Admin
         participants: Participants
         scope_types: Scope types
         scopes: Scopes
         static_pages: Pages
+        statistics: Activity
         user_groups: Groups
         users: Participants
       user_group:
@@ -777,6 +834,14 @@ en:
         new:
           create: Invite
           title: Invite participant as administrator
+      users_statistics:
+        users_count:
+          admins: Admins
+          last_day: Last day
+          last_month: Last month
+          last_week: Last week
+          no_users_count_statistics_yet: There are no users count statistics yet
+          participants: Participants
       view_public_page: View public page
     forms:
       errors:
@@ -784,6 +849,7 @@ en:
           reason: You need to provide a reason when managing a non managed participant
     moderations:
       actions:
+        expand: Expand
         hidden: Hidden
         hide: Hide
         not_hidden: Not hidden
@@ -804,12 +870,19 @@ en:
       models:
         moderation:
           fields:
+            created_at: Creation date
             hidden_at: Hidden at
             report_count: Count
-            reportable: Reportable
+            reportable_id: Id
+            reportable_type: Type
             reported_content_url: Reported content URL
             reports: Reports
             visit_url: Visit URL
+        report:
+          fields:
+            details: Reason details
+            locale: Language
+            reason: Reason
   errors:
     messages:
       invalid_json: Invalid JSON

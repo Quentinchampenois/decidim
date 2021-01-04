@@ -13,7 +13,10 @@ module TranslationHelpers
   # It is intended to be used to avoid the implementation details, so that the
   # translated attributes implementation can change more easily.
   def translated(field, locale: I18n.locale)
-    field.try(:[], locale.to_s)
+    return field if field.is_a?(String)
+    return if field.nil?
+
+    field[locale.to_s] || field.dig("machine_translations", locale.to_s)
   end
 
   # Checks that the current page has some translated content. It strips the

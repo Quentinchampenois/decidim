@@ -1,0 +1,411 @@
+cs:
+  activemodel:
+    attributes:
+      answer:
+        description: Popis
+        image: Obrázek
+        proposals: Související návrhy
+        title: Název
+      election:
+        description: Popis
+        end_time: Hlasování končí v
+        start_time: Hlasování začíná v
+        title: Název
+      question:
+        description: Popis
+        max_selections: Maximální počet výběrů
+        min_selections: Žádná z výše uvedených možností
+        title: Název
+    errors:
+      models:
+        answer:
+          attributes:
+            attachment:
+              needs_to_be_reattached: Potřebuje být znovu připojen
+        election:
+          attributes:
+            attachment:
+              needs_to_be_reattached: Potřebuje být znovu připojen
+        trustee:
+          attributes:
+            public_key:
+              cant_be_changed: nelze změnit
+  activerecord:
+    models:
+      decidim/elections/answer:
+        one: Odpověď
+        few: Odpovědí
+        many: Odpovědí
+        other: Odpovědi
+      decidim/elections/election:
+        one: Volby
+        few: Voleb
+        many: Voleb
+        other: Volby
+      decidim/elections/question:
+        one: Otázka
+        few: Otázek
+        many: Otázek
+        other: Otázek
+  decidim:
+    components:
+      elections:
+        actions:
+          vote: Hlasovat
+        name: Volby
+        settings:
+          global:
+            announcement: Oznámení
+          step:
+            announcement: Oznámení
+    elections:
+      actions:
+        confirm_destroy: Jste si jisti?
+        destroy: Zničit
+        edit: Upravit
+        feedback: Zpětná vazba voličů
+        import: Importovat návrhy na odpovědi
+        manage_answers: Spravovat odpovědi
+        manage_questions: Spravovat otázky
+        new: Nový %{name}
+        preview: Náhled
+        publish: Publikovat
+        setup: Nastavení
+        title: Akce
+        unpublish: Zrušit publikování
+      admin:
+        answers:
+          create:
+            invalid: Při vytváření této odpovědi došlo k chybě
+            success: Odpověď byla úspěšně vytvořena
+          destroy:
+            invalid: Při odstraňování této odpovědi došlo k potížím
+            success: Odpověď byla úspěšně odstraněna
+          edit:
+            title: Upravit odpověď
+            update: Aktualizovat odpověď
+          index:
+            invalid_max_selections: Potřebujete ještě %{missing_answers} odpověd/í, aby počet odpovídal maximálnímu počtu výběrů
+            title: Odpovědi
+          new:
+            create: Vytvořit odpověď
+            title: Nová odpověď
+          select:
+            disable: Zrušit výběr odpovědi
+            enable: Označit odpověď jako vybranou
+            invalid: Při výběru této odpovědi došlo k potížím
+            success: Odpověď byla úspěšně vybrána
+          unselect:
+            invalid: Při zrušení výběru této odpovědi došlo k chybě
+            success: Odpovědi byl úspěšně zrušen výběr
+          update:
+            invalid: Při aktualizaci této odpovědi došlo k chybě
+            success: Odpověď byla úspěšně aktualizována
+        elections:
+          create:
+            invalid: Při vytváření těchto voleb došlo k chybě
+            success: Volba byla úspěšně vytvořena
+          destroy:
+            invalid: Při mazání této volby došlo k chybě
+            success: Volba byla úspěšně odstraněna
+          edit:
+            title: Upravit volbu
+            update: Aktualizovat volby
+          index:
+            no_bulletin_board: Není nastaven žádný <a href="https://github.com/decidim/decidim-bulletin-board">Bulletin Board server</a>, který je potřebný pro použití tohoto modulu. Tento úkol by měl provést správce systému.
+            title: Volby
+          new:
+            create: Vytvořit volbu
+            title: Nové volby
+          publish:
+            success: Volba byla úspěšně publikována.
+          setup:
+            invalid: Při zřizování těchto voleb došlo k chybě
+            success: Volba byla úspěšně odeslána do Bulletin Board
+          unpublish:
+            success: Volba byla úspěšně odebrána ze zveřejnění.
+          update:
+            invalid: Při aktualizaci těchto voleb došlo k chybě
+            success: Volba byla úspěšně aktualizována
+        exports:
+          elections: Volby
+          feedback_form_answers: Odpovědi na formulář zpětné vazby
+        models:
+          answer:
+            name: Odpověď
+          election:
+            name: Volby
+          question:
+            name: Otázka
+          trustee:
+            name: Správce
+        proposals_imports:
+          create:
+            invalid: Při importu návrhů do odpovědí došlo k potížím
+            success: "%{number} návrhů bylo úspěšně importováno do odpovědí"
+          new:
+            create: Importovat návrhy na odpovědi
+            no_components: V tomto participačním prostoru nejsou žádné další prvky návrhu, které by mohly do odpovědí importovat návrhy.
+            select_component: Vyberte komponentu
+            title: Importovat návrhy
+        questions:
+          create:
+            invalid: Při vytváření této otázky došlo k chybě
+            success: Otázka byla úspěšně vytvořena
+          destroy:
+            invalid: Při odstraňování této otázky došlo k chybě
+            success: Otázka byla úspěšně odstraněna
+          edit:
+            title: Upravit otázku
+            update: Aktualizovat otázku
+          index:
+            title: Otázky
+          new:
+            create: Vytvořit otázku
+            title: Nová otázka
+          update:
+            invalid: Při aktualizaci této otázky došlo k chybě
+            success: Otázka byla úspěšně aktualizována
+        setup:
+          errors:
+            max_selections: Otázky nemají <strong>správnou hodnotu pro množství odpovědí</strong>
+            minimum_answers: Otázky musí mít <strong>alespoň jednu odpověď</strong>.
+            minimum_questions: Volby <strong>musí mít alespoň jednu otázku</strong>.
+            published: Volby <strong>nejsou publikovány</strong>
+            time_before: Počáteční čas je za <strong>méně než 3 hodiny</strong> před zahájením voleb
+            trustee_public_key: nemá <strong>platný veřejný klíč</strong>
+            trustees_quorum: Množství správců <strong>neodpovídá požadovanému počtu usnášeníschopných správců</strong>
+          requirements:
+            max_selections: Všechny otázky mají správnou hodnotu pro <strong>maximum odpovědí</strong>
+            minimum_answers: Každá otázka má <strong>alespoň 2 odpovědi</strong>
+            minimum_questions: Volba má <strong>alespoň jednu otázku</strong>
+            published: Volby jsou <strong>publikovány</strong>
+            time_before: Nastavení se provádí <strong>nejméně 3 hodiny</strong> před zahájením voleb
+            trustee_public_key: má <strong>platný veřejný klíč</strong>
+            trustees_quorum: Velikost tohoto seznamu správců je správná a k provedení procesu bude potřeba <strong>alespoň %{quorum} správců </strong>
+          show:
+            setup: Nastavení voleb
+            title: Nastavení voleb
+          update:
+            setup: Nastavení voleb
+            title: Nastavení voleb
+        trustees_participatory_spaces:
+          actions:
+            disable: Zakázat
+            enable: Zvážit
+          create:
+            exists: Správce existuje pro tento participační prostor
+            invalid: Při vytváření správce došlo k chybě
+            success: Správce úspěšně vytvořen
+          delete:
+            invalid: Při odstraňování tohoto správce došlo k chybě
+            success: Správce byl úspěšně odstraněn
+          form:
+            select_user: Vybrat uživatele
+          index:
+            title: Správci
+          new:
+            create: Vytvořit správce
+            title: Nový správce
+          update:
+            invalid: Při aktualizaci správce %{trustee} došlo k chybě
+            success: Správce %{trustee} úspěšně aktualizován
+      admin_log:
+        election:
+          publish: "%{user_name} zveřejnil volby %{resource_name}"
+          unpublish: "%{user_name} zrušil zveřejnění volby %{resource_name}"
+      election_m:
+        badge_name:
+          finished: Dokončeno
+          ongoing: Aktivní
+          upcoming: Nadcházející
+        end_date: Končí
+        footer:
+          view: Zobrazit
+          vote: Hlasovat
+        label:
+          date: Data
+        questions: Otázky %{count}
+        start_date: Začíná
+        unspecified: Nespecifikováno
+      elections:
+        count:
+          elections_count:
+            one: "%{count} zvolení"
+            few: "%{count} zvolení"
+            many: "%{count} zvolení"
+            other: "%{count} voleb"
+        filters:
+          active: Aktivní
+          all: Vše
+          finished: Dokončeno
+          search: Hledat
+          state: Stav
+          upcoming: Nadcházející
+        filters_small_view:
+          close_modal: Zavřít okno
+          filter: Filtr
+          filter_by: Filtrovat podle
+          unfold: Rozbalit
+        preview:
+          available_answers: Dostupné odpovědi
+          description: Toto jsou otázky, které najdete v procesu hlasování
+          title: Volební otázky
+        results:
+          description: To jsou výsledky hlasování, pro každou otázku
+          selected: Vybrané
+          title: Výsledky voleb
+          votes:
+            one: "%{count} hlas"
+            few: "%{count} hlasy"
+            many: "%{count} hlasů"
+            other: "%{count} hlasů"
+        show:
+          back: Dostupné volby
+          preview: Náhled
+          vote: Hlasování
+          voting_period_status:
+            finished: Hlasování začalo %{start_time} a skončilo %{end_time}
+            ongoing: Hlasování končí %{end_time}
+            upcoming: Hlasování začíná %{start_time}
+      feedback:
+        answer:
+          invalid: Při odesílání vaší zpětné vazby došlo k chybě.
+          spam_detected: Vyskytl se problém s odpovědí na formulář. Možná jste byl příliš rychlý, můžete to zkusit znovu?
+          success: Zpětná vazba byla úspěšně odeslána.
+      models:
+        answer:
+          fields:
+            proposals: Návrhy
+            title: Název
+        election:
+          fields:
+            end_time: Končí v
+            start_time: Začíná v
+            title: Název
+        question:
+          fields:
+            answers: Odpovědi
+            max_selections: Max. výběr
+            title: Název
+        trustees_participatory_space:
+          fields:
+            considered: uváženo
+            email: E-mail
+            inactive: neaktivní
+            name: Jméno
+            notification: Oznámení odesláno
+            public_key: Veřejný klíč
+            status: Stav
+      orders:
+        label: Seřadit volby podle
+        older: Starší
+        recent: Nedávné
+      trustee_zone:
+        menu:
+          trustee_zone: Zóna správce
+        trustees:
+          show:
+            elections:
+              list:
+                election: Volby
+                status: Stav
+                voting_period: Hlasovací období
+              no_elections: Neexistují žádné volby, ve kterých byste jednal jako správce.
+              title: Volby
+            identification_keys:
+              cancel: Zrušit
+              generate: Generovat identifikační klíče
+              generate_error: Při generování identifikačních klíčů došlo k chybě.
+              generate_legend: Musíte vytvořit pár identifikačních klíčů pro účast ve volbách jako správce.
+              generate_legend_1: Po stisknutí tlačítka byste měli stáhnout soubor s vygenerovanými identifikačními klíči.
+              generate_legend_2: Kopírovat stažený soubor do čistého USB zařízení
+              generate_legend_3: Ujistěte se, že váš počítač nemá kopii souboru (např. zkontrolujte složky Stahování a plocha).
+              generate_legend_4: Vytvořit další kopii souboru na jiném externím zařízení a uložit jej na velmi bezpečném místě.
+              submit: Odeslat
+              submit_legend: Po splnění všech výše uvedených kroků dokončete proces odesílání veřejného identifikačního klíče na server Decidim.
+              submit_title: Odeslat veřejný identifikační klíč
+              title: Identifikační klíče správce
+              upload: Nahrajte své identifikační klíče
+              upload_error:
+                invalid_format: Nahraný soubor neobsahuje žádný identifikační klíč.
+                invalid_key: Identifikační klíče v nahraném souboru nelze načíst.
+                invalid_public_key: Identifikační klíče v nahraném souboru neodpovídají veřejnému identifikačnímu klíči uloženému v Decidim.
+              upload_legend: Decidim má vaše veřejné identifikační klíče, ale váš prohlížeč jej stále nemá. Je třeba importovat soubor s identifikačními klíči do počítače ze zálohy, kterou jste vytvořili po jejich vygenerování.
+            not_supported_browser_description: Vypadá to, že používáte webový prohlížeč, který nelze použít jako správce. Ujistěte se, že používáte nejnovější verzi prohlížeče, nebo zkuste použít některý z nejpopulárnějších prohlížečů, abyste mohli dokončit své úkoly správce.
+            not_supported_browser_title: Upgradujte prohlížeč abyste mohl fungovat jako správce
+            trustee_role_description: Byl jste pověřen, abyste v některých volbách, které na této platformě probíhají, jednal jako správce.
+          update:
+            success: Váš identifikační veřejný klíč byl úspěšně uložen.
+      votes:
+        confirm:
+          answer: Odpověď
+          answer_number: odpověď %{number}
+          confirm: Potvrdit
+          edit: upravit
+          header: Potvrďte svůj hlas
+          intro: Zde je shrnutí hlasů, které se chystáte odeslat. <br> Prosím potvrďte svůj hlas nebo upravte své odpovědi.
+          nota_option: Prázdné
+          question: Otázka %{count}
+        confirmed:
+          back: Zpět k volbám
+          experience: Jaká byla vaše zkušenost?
+          feedback: Dejte nám zpětnou vazbu
+          header: Hlasování potvrzeno
+          lead: Váš hlas již byl odeslán!
+          text: 'Můžete zkontrolovat, že váš hlas byl úspěšně přidán do volební urny s následujícím identifikátorem: <strong class="evote__poll-id">%{e_vote_poll_id}</strong>'
+          verify_text: Chcete-li jej zkontrolovat, zkopírujte identifikátor a vložte jej na <a href="evote-verify">stránku pro ověření hlasování</a>
+        encrypting:
+          header: Zakódování hlasů...
+          text: Váš hlas je šifrován, abyste ho mohli anonymně posílat.
+        header:
+          confirm: Potvrďte svůj hlas
+          confirmed: Hlasování potvrzeno
+          encrypting: Potvrzení hlasování
+        messages:
+          not_allowed: V tuto chvíli vám není dovoleno hlasovat o těchto volbách.
+        modal:
+          close: Zavřít
+          proposal_header: 'Návrhy:'
+        new:
+          answer_choices: Můžete vybrat až %{choices} odpovědí
+          more_information: Více informací
+          nota_option: Prázdná/Nic z výše uvedených
+          preview_alert: To je náhled hlasovacího pultu.
+          question_steps: Otázka %{current_step} z %{total_steps}
+          selections: "%{selected} z %{max_selections}<br> výběrů"
+        voting_step:
+          back: Zpět
+          continue: Další
+      warnings:
+        no_elections_warning: Žádné volby neodpovídají zadaným kritériím nebo nejsou naplánovány žádné volby.
+        no_scheduled_elections_warning: V současné době nejsou žádné plánované volby, ale zde najdete všechny minulé volby na seznamu.
+    events:
+      elections:
+        election_published:
+          email_intro: 'Volba %{resource_title} je nyní aktivní pro %{participatory_space_title}. Můžete ji vidět z této stránky:'
+          email_outro: Obdrželi jste toto oznámení, protože sledujete %{participatory_space_title}. Můžete přestat přijímat oznámení kliknutím na následující odkaz.
+          email_subject: Volba %{resource_title} je nyní aktivní pro %{participatory_space_title}.
+          notification_title: Volba <a href="%{resource_path}">%{resource_title}</a> je nyní aktivní pro %{participatory_space_title}.
+        trustees:
+          new_election:
+            email_intro: Přidali jste jako správce pro volby %{resource_title}.
+            email_outro: Obdrželi jste toto oznámení, protože jste byli přidáni jako správce pro %{resource_title} volby.
+            email_subject: Jste správcem pro %{resource_title} volby..
+            notification_title: Jste správcem volby <a href="%{resource_path}">%{resource_title}</a>.
+          new_trustee:
+            email_intro: Administrátor vás přidal jako správce pro %{resource_name}. Měli byste vytvořit váš veřejný klíč <a href='%{trustee_zone_url}'>ve vaší správcovské zóně</a>
+            email_outro: Obdrželi jste toto oznámení, protože jste byli přidáni jako správce %{resource_name}.
+            email_subject: Jste správcem %{resource_name}.
+            notification_title: Jste správce pro <a href="%{participatory_space_url}">%{resource_name}</a>.
+    pages:
+      home:
+        statistics:
+          elections_count: Volby
+    participatory_processes:
+      statistics:
+        elections_count: Volby
+  layouts:
+    decidim:
+      election_votes_header:
+        exit: Ukončit

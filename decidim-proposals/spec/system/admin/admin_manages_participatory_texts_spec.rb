@@ -19,12 +19,12 @@ describe "Admin manages participatory texts", type: :system do
   def visit_participatory_texts
     visit_component_admin
     find("#js-other-actions-wrapper a#participatory_texts").click
-    expect(page).to have_content "PREVIEW PARTICIPATORY TEXT"
+    expect(page).to have_content "Preview participatory text"
   end
 
   def import_document
     find("a#import-doc").click
-    expect(page).to have_content "ADD DOCUMENT"
+    expect(page).to have_content "Add document"
 
     fill_in_i18n(
       :import_participatory_text_title,
@@ -43,7 +43,8 @@ describe "Admin manages participatory texts", type: :system do
     attach_file :import_participatory_text_document, Decidim::Dev.asset("participatory_text.md")
     click_button "Upload document"
     expect(page).to have_content "The following sections have been converted to proposals. Now you can review and adjust them before publishing."
-    expect(page).to have_content "PREVIEW PARTICIPATORY TEXT"
+    expect(page).to have_content "Preview participatory text"
+    validate_proposals
   end
 
   def validate_occurrences(sections: nil, subsections: nil, articles: nil)
@@ -78,7 +79,15 @@ describe "Admin manages participatory texts", type: :system do
     ]
     expect(proposals.count).to eq(titles.size)
     expect(proposals.published.count).to eq(titles.size)
-    expect(proposals.published.order(:position).pluck(:title)).to eq(titles)
+    expect(proposals.published.order(:position).pluck(:title).map(&:values).map(&:first)).to eq(titles)
+  end
+
+  def validate_proposals
+    proposals = Decidim::Proposals::Proposal.where(component: current_component)
+    proposals.each do |proposal|
+      expect(proposal.title).to be_kind_of(Hash)
+      expect(proposal.body).to be_kind_of(Hash)
+    end
   end
 
   def edit_participatory_text_body(index, new_body)
@@ -91,15 +100,15 @@ describe "Admin manages participatory texts", type: :system do
   def save_participatory_text_drafts
     click_button "Save draft"
     expect(page).to have_content "Participatory text successfully updated."
-    expect(page).to have_content "PREVIEW PARTICIPATORY TEXT"
+    expect(page).to have_content "Preview participatory text"
   end
 
   def discard_participatory_text_drafts
-    page.accept_alert "Are you sure to discard the whole participatory text draft?" do
+    accept_confirm "Are you sure to discard the whole participatory text draft?" do
       click_link "Discard all"
     end
     expect(page).to have_content "All participatory text drafts have been discarded."
-    expect(page).to have_content "PREVIEW PARTICIPATORY TEXT"
+    expect(page).to have_content "Preview participatory text"
   end
 
   describe "importing participatory texts from a document" do
@@ -135,7 +144,7 @@ describe "Admin manages participatory texts", type: :system do
 
   describe "updating participatory texts in draft mode" do
     let!(:proposal) { create :proposal, :draft, component: current_component, participatory_text_level: "article" }
-    let!(:new_body) { Faker::Lorem.unique.sentences(3).join("\n") }
+    let!(:new_body) { Faker::Lorem.unique.sentences(number: 3).join("\n") }
 
     it "persists changes and all proposals remain as drafts" do
       visit_participatory_texts
@@ -144,13 +153,13 @@ describe "Admin manages participatory texts", type: :system do
       save_participatory_text_drafts
       validate_occurrences(sections: 0, subsections: 0, articles: 1)
       proposal.reload
-      expect(proposal.body.delete("\r")).to eq(new_body)
+      expect(translated(proposal.body).delete("\r")).to eq(new_body)
     end
   end
 
   describe "updating participatory texts in draft mode" do
     let!(:proposal) { create :proposal, :draft, component: current_component, participatory_text_level: "article" }
-    let!(:new_body) { Faker::Lorem.unique.sentences(3).join("\n") }
+    let!(:new_body) { Faker::Lorem.unique.sentences(number: 3).join("\n") }
 
     it "persists changes and all proposals remain as drafts" do
       visit_participatory_texts
@@ -159,7 +168,7 @@ describe "Admin manages participatory texts", type: :system do
       save_participatory_text_drafts
       validate_occurrences(sections: 0, subsections: 0, articles: 1)
       proposal.reload
-      expect(proposal.body.delete("\r")).to eq(new_body)
+      expect(translated(proposal.body).delete("\r")).to eq(new_body)
     end
   end
 end

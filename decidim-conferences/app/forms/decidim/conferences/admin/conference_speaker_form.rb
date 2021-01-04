@@ -26,13 +26,24 @@ module Decidim
         validates :full_name, presence: true, unless: proc { |object| object.existing_user }
         validates :user, presence: true, if: proc { |object| object.existing_user }
         validates :position, :affiliation, presence: true
-        validates :avatar, file_size: { less_than_or_equal_to: ->(_record) { Decidim.maximum_avatar_size } }
+        validates :avatar, passthru: {
+          to: Decidim::ConferenceSpeaker,
+          with: {
+            # The speaker gets its organization context through the conference
+            # object which is why we need to create a dummy conference in order
+            # to pass the correct organization context to the file upload
+            # validators.
+            conference: lambda do |form|
+              Decidim::Conference.new(organization: form.current_organization)
+            end
+          }
+        }
         validate :personal_url_format
 
         def personal_url
           return if super.blank?
 
-          return "http://" + super unless super.match?(%r{\A(http|https)://}i)
+          return "http://#{super}" unless super.match?(%r{\A(http|https)://}i)
 
           super
         end

@@ -33,7 +33,6 @@ fr:
         scope: Périmètre d'application
         slug: Identifiant
         subtitle: Sous-titre
-        title: Titre
         vote: Système de vote externe
         what_is_decided: Objectifs
       response:
@@ -238,6 +237,8 @@ fr:
           label: 'Trier les votations par :'
           random: Aléatoire
           recent: Les plus récentes
+        show:
+          dates: Dates
       content_blocks:
         highlighted_consultations:
           name: Votations mises en avant
@@ -294,7 +295,7 @@ fr:
           vote_limit:
             description: Vous pouvez voter jusqu'à %{limit} options.
             left: Restant
-            votes: Voix
+            votes: Votes
       question_votes:
         create:
           error: Il y a eu des erreurs lors du vote sur la question
@@ -318,8 +319,8 @@ fr:
     help:
       participatory_spaces:
         consultations:
-          contextual: "<p> Les <strong>Consultations</strong> sont un espace qui vous permet de poser une question claire à toutes les personnes qui forment une organisation, de lancer un appel à participer à la consultation, de susciter et d’organiser le débat pour ou contre une réponse. Lorsque la date de consultation arrive, vous pouvez voter et publier les résultats des votes.</p> <p>Exemples: Les consultations peuvent porter sur presque tous les aspects touchant une organisation: certains exemples changent le nom ou le logo de l’organisation offrant plusieurs alternatives, décidant par oui ou non de faire partie d’une organisation plus grande, validant ou rejetant une nouvelle stratégie. plan ou le résultat d’un groupe de travail, ou de définir si les postes doivent rester au maximum d’un, deux ou trois mandats.</p>\n"
-          page: "<p> Les <strong>Consultations</strong> sont un espace qui vous permet de poser une question claire à toutes les personnes qui forment une organisation, de lancer un appel à participer à la consultation, de susciter et d’organiser le débat pour ou contre une réponse. Lorsque la date de consultation arrive, vous pouvez voter et publier les résultats des votes.</p> <p>Exemples: Les consultations peuvent porter sur presque tous les aspects touchant une organisation: certains exemples changent le nom ou le logo de l’organisation offrant plusieurs alternatives, décidant par oui ou non de faire partie d’une organisation plus grande, validant ou rejetant une nouvelle stratégie. plan ou le résultat d’un groupe de travail, ou de définir si les postes doivent rester au maximum d’un, deux ou trois mandats dans l'organisation.</p>\n"
+          contextual: "<p><strong>Une consultation</strong> est un espace qui vous permet de poser une question claire à toutes les personnes qui forment une organisation, appeler à participer à la consultation, à faire décoller et à ordonner le débat. Lorsque la date de la consultation arrive, vous pouvez voter et publier les résultats des votes.</p> <p>Exemples : Les consultations peuvent porter sur presque tous les aspects qui affectent une organisation : changer le nom ou le logo de l'organisation en offrant plusieurs alternatives, décider ou non de faire partie d'une organisation plus grande, valider ou rejeter un nouveau plan stratégique ou le résultat d'un groupe de travail, etc.</p>\n"
+          page: "<p><strong>Une consultation</strong> est un espace qui vous permet de poser une question claire à toutes les personnes qui forment une organisation, appeler à participer à la consultation, à faire décoller et à ordonner le débat. Lorsque la date de la consultation arrive, vous pouvez voter et publier les résultats des votes.</p> <p>Exemples : Les consultations peuvent porter sur presque tous les aspects qui affectent une organisation : changer le nom ou le logo de l'organisation en offrant plusieurs alternatives, décider ou non de faire partie d'une organisation plus grande, valider ou rejeter un nouveau plan stratégique ou le résultat d'un groupe de travail, etc.</p>\n"
           title: Que sont les consultations?
     menu:
       consultations: Votations
@@ -348,10 +349,12 @@ fr:
         verification_required: Vérifier votre compte pour voter
         vote: Voter
       vote_modal:
+        close_modal: Fermer la fenêtre de dialogue
         contextual_help: Veuillez sélectionner une option.
         title: 'Votation : soutien aux questions'
       vote_modal_confirm:
         change: Modifier
+        close_modal: Fermer la fenêtre de dialogue
         confirm: Confirmer
         contextual_help: Veuillez confirmer l'option sélectionnée.
         title: 'Consultation : confirmer le soutien'

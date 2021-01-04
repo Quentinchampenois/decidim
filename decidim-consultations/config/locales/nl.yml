@@ -33,7 +33,6 @@ nl:
         scope: Gemeentelijk thema
         slug: URL pad
         subtitle: Ondertitel
-        title: Titel
         vote: Extern stemsysteem
         what_is_decided: Wat besloten werd
       response:
@@ -238,6 +237,8 @@ nl:
           label: 'Sorteer door:'
           random: Willekeurig
           recent: Meest recent
+        show:
+          dates: Datums
       content_blocks:
         highlighted_consultations:
           name: Gemarkeerde raadplegingen
@@ -318,8 +319,6 @@ nl:
     help:
       participatory_spaces:
         consultations:
-          contextual: "<p><strong>Raadplegingen</strong> is een ruimte die u toelaat om een duidelijke vraag te stellen aan alle mensen die een organisatie vormen, een oproep doen om deel te nemen aan de raadpleging en het debat voor of tegen een reactie te faciliteren. Wanneer de raadplegingsdatum bereikt wordt, kunt u stemmen en de resultaten van de stemmen publiceren.</p> <p>Voorbeelden: de raadplegingen kunnen bijna elk aspect van een organisatie betreffen: bijvoorbeeld een discussie over het veranderen van naam of het logo van de organisatie met verschillende alternatieven; beslissen Ja of Nee om deel uit te maken van een grotere organisatie; een nieuwe strategische plan; het resultaat van een werkgroep valideren; ...</p>\n"
-          page: "<p>Overleg is een ruimte waarin u een duidelijke vraag kunt stellen aan alle mensen die een organisatie vormen, een oproep doen om deel te nemen aan de raadpleging, een vonk kunt opzetten en het debat voor of tegen een reactie kunt bestellen. Wanneer de consultatiedatum arriveert, kunt u stemmen en de resultaten van de stemmen publiceren.</p> <p>Voorbeelden: het overleg kan gaan over bijna elk aspect dat een organisatie raakt: sommige voorbeelden veranderen de naam of het logo van de organisatie met verschillende alternatieven, beslissen Ja of Nee om deel uit te maken van een grotere organisatie, een nieuwe strategische validatie of afwijzing plan of het resultaat van een werkgroep, of definiëren of de posities maximaal 1, 2 of 3 mandaten in de organisatie moeten blijven.</p>\n"
           title: Wat zijn raadplegingen?
     menu:
       consultations: Burgerinspraak
@@ -348,10 +347,12 @@ nl:
         verification_required: Verifieer je account om te kunnen stemmen
         vote: Stem
       vote_modal:
+        close_modal: Sluit venster
         contextual_help: Maak een keuze a.u.b.
         title: 'Raadpleging: vraag stemming'
       vote_modal_confirm:
         change: Wijzigen
+        close_modal: Sluit venster
         confirm: Bevestig
         contextual_help: Bevestig de geselecteerde optie.
         title: 'Raadpleging: bevestig stem'

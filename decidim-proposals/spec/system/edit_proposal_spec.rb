@@ -9,6 +9,7 @@ describe "Edit proposals", type: :system do
   let!(:user) { create :user, :confirmed, organization: participatory_process.organization }
   let!(:another_user) { create :user, :confirmed, organization: participatory_process.organization }
   let!(:proposal) { create :proposal, users: [user], component: component }
+  let!(:proposal_title) { translated(proposal.title) }
 
   before do
     switch_to_host user.organization.host
@@ -25,7 +26,7 @@ describe "Edit proposals", type: :system do
     it "can be updated" do
       visit_component
 
-      click_link proposal.title
+      click_link proposal_title
       click_link "Edit proposal"
 
       expect(page).to have_content "EDIT PROPOSAL"
@@ -40,13 +41,43 @@ describe "Edit proposals", type: :system do
       expect(page).to have_content(new_body)
     end
 
+    context "with geocoding enabled" do
+      let(:component) { create(:proposal_component, :with_geocoding_enabled, participatory_space: participatory_process) }
+      let(:address) { "6 Villa des Nymphéas 75020 Paris" }
+      let(:new_address) { "6 rue Sorbier 75020 Paris" }
+      let!(:proposal) { create :proposal, address: address, users: [user], component: component }
+      let(:latitude) { 48.8682538 }
+      let(:longitude) { 2.389643 }
+
+      before do
+        stub_geocoding(new_address, [latitude, longitude])
+      end
+
+      it "can be updated with address", :serves_geocoding_autocomplete do
+        visit_component
+
+        click_link translated(proposal.title)
+        click_link "Edit proposal"
+        check "proposal_has_address"
+
+        expect(page).to have_field("Title", with: translated(proposal.title))
+        expect(page).to have_field("Body", with: translated(proposal.body))
+        expect(page).to have_field("Address", with: proposal.address)
+
+        fill_in_geocoding :proposal_address, with: new_address
+
+        click_button "Send"
+        expect(page).to have_content(new_address)
+      end
+    end
+
     context "when updating with wrong data" do
       let(:component) { create(:proposal_component, :with_creation_enabled, :with_attachments_allowed, participatory_space: participatory_process) }
 
       it "returns an error message" do
         visit_component
 
-        click_link proposal.title
+        click_link proposal_title
         click_link "Edit proposal"
 
         expect(page).to have_content "EDIT PROPOSAL"
@@ -56,25 +87,32 @@ describe "Edit proposals", type: :system do
           click_button "Send"
         end
 
-        expect(page).to have_content("is using too many capital letters (over 25% of the text), is too short (under 15 characters)")
+        expect(page).to have_content("at least 15 characters", count: 2)
+
+        within "form.edit_proposal" do
+          fill_in :proposal_body, with: "WE DO NOT WANT TO SHOUT IN THE PROPOSAL BODY TEXT!"
+          click_button "Send"
+        end
+
+        expect(page).to have_content("is using too many capital letters (over 25% of the text)")
       end
 
       it "keeps the submitted values" do
         visit_component
 
-        click_link proposal.title
+        click_link proposal_title
         click_link "Edit proposal"
 
         expect(page).to have_content "EDIT PROPOSAL"
 
         within "form.edit_proposal" do
           fill_in :proposal_title, with: "A title with a #hashtag"
-          fill_in :proposal_body, with: "Ỳü"
+          fill_in :proposal_body, with: "ỲÓÜ WÄNTt TÙ ÚPDÀTÉ À PRÖPÔSÁL"
         end
         click_button "Send"
 
         expect(page).to have_selector("input[value='A title with a #hashtag']")
-        expect(page).to have_content("Ỳü")
+        expect(page).to have_content("ỲÓÜ WÄNTt TÙ ÚPDÀTÉ À PRÖPÔSÁL")
       end
     end
   end
@@ -87,9 +125,9 @@ describe "Edit proposals", type: :system do
     it "renders an error" do
       visit_component
 
-      click_link proposal.title
+      click_link proposal_title
       expect(page).to have_no_content("Edit proposal")
-      visit current_path + "/edit"
+      visit "#{current_path}/edit"
 
       expect(page).to have_content("not authorized")
     end
@@ -105,9 +143,9 @@ describe "Edit proposals", type: :system do
     it "renders an error" do
       visit_component
 
-      click_link proposal.title
+      click_link proposal_title
       expect(page).to have_no_content("Edit proposal")
-      visit current_path + "/edit"
+      visit "#{current_path}/edit"
 
       expect(page).to have_content("not authorized")
     end

@@ -5,6 +5,16 @@ require "spec_helper"
 describe "Admin manages initiatives", type: :system do
   STATES = Decidim::Initiative.states.keys.map(&:to_sym)
 
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user, :admin, organization: organization) }
+  let(:model_name) { Decidim::Initiative.model_name }
+  let(:type1) { create :initiatives_type, organization: organization }
+  let(:type2) { create :initiatives_type, organization: organization }
+  let(:scoped_type1) { create :initiatives_type_scope, type: type1 }
+  let(:scoped_type2) { create :initiatives_type_scope, type: type2 }
+  let(:area1) { create :area, organization: organization }
+  let(:area2) { create :area, organization: organization }
+
   def create_initiative_with_trait(trait)
     create(:initiative, trait, organization: organization)
   end
@@ -35,18 +45,8 @@ describe "Admin manages initiatives", type: :system do
 
   include_context "with filterable context"
 
-  let(:organization) { create(:organization) }
-  let(:user) { create(:user, :admin, organization: organization) }
-  let(:model_name) { Decidim::Initiative.model_name }
-  let(:type1) { create :initiatives_type, organization: organization }
-  let(:type2) { create :initiatives_type, organization: organization }
-  let(:scoped_type1) { create :initiatives_type_scope, type: type1 }
-  let(:scoped_type2) { create :initiatives_type_scope, type: type2 }
-  let(:area1) { create :area, organization: organization }
-  let(:area2) { create :area, organization: organization }
-
   STATES.each do |state|
-    let!("#{state}_initiative") { create_initiative_with_trait(state) }
+    let!("#{state}_initiative".to_sym) { create_initiative_with_trait(state) }
   end
 
   before do
@@ -57,7 +57,7 @@ describe "Admin manages initiatives", type: :system do
 
   describe "listing initiatives" do
     STATES.each do |state|
-      i18n_state = I18n.t(state, scope: "decidim.admin.filters.state_eq.values")
+      i18n_state = I18n.t(state, scope: "decidim.admin.filters.initiatives.state_eq.values")
 
       context "filtering collection by state: #{i18n_state}" do
         it_behaves_like "a filtered collection", options: "State", filter: i18n_state do
@@ -65,12 +65,6 @@ describe "Admin manages initiatives", type: :system do
           let(:not_in_filter) { translated(initiative_without_state(state).title) }
         end
       end
-    end
-
-    it "can be searched by title" do
-      search_by_text(translated(published_initiative.title))
-
-      expect(page).to have_content(translated(published_initiative.title))
     end
 
     Decidim::InitiativesTypeScope.all.each do |scoped_type|
@@ -88,6 +82,12 @@ describe "Admin manages initiatives", type: :system do
           let(:not_in_filter) { translated(initiative_without_type(type).title) }
         end
       end
+    end
+
+    it "can be searched by title" do
+      search_by_text(translated(published_initiative.title))
+
+      expect(page).to have_content(translated(published_initiative.title))
     end
 
     Decidim::Area.all.each do |area|

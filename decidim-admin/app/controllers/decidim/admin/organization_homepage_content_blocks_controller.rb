@@ -22,6 +22,7 @@ module Decidim
             redirect_to edit_organization_homepage_path
           end
           on(:invalid) do
+            edit # Sets the model to the view so that it can render the form
             render :edit
           end
         end
@@ -55,7 +56,7 @@ module Decidim
       def content_block_from_manifest
         Decidim::ContentBlock.create!(
           organization: current_organization,
-          scope: :homepage,
+          scope_name: :homepage,
           manifest_name: params[:id]
         )
       end

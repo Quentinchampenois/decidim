@@ -12,15 +12,22 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :projects do
-          resources :attachment_collections
-          resources :attachments
-          collection do
-            resource :proposals_import, only: [:new, :create]
+        resources :budgets do
+          resources :projects do
+            collection do
+              resource :proposals_import, only: [:new, :create]
+            end
           end
         end
 
-        root to: "projects#index"
+        resources :projects, exclude: [:index, :new, :create, :edit, :update, :destroy] do
+          get :proposals_picker, on: :collection
+
+          resources :attachment_collections
+          resources :attachments
+        end
+
+        root to: "budgets#index"
       end
 
       def load_seed

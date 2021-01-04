@@ -13,7 +13,6 @@ ar:
         attachment_collection_id: المجلد
         description: الوصف
         file: ملف
-        title: العنوان
       attachment_collection:
         description: الوصف
         name: اسم
@@ -29,14 +28,7 @@ ar:
       newsletter:
         body: المحتوى
         subject: الموضوع
-      oauth_application:
-        name: الاسم
-        organization_logo: شعار المنظمة (مربع)
-        organization_name: اسم المنظمة
-        organization_url: عنوان URL للمؤسسة
-        redirect_uri: إعادة توجيه URI
       organization:
-        address: خادم SMTP
         alert_color: تنبيه
         badges_enabled: تمكين الشارات
         cta_button_path: دعوة إلى العمل مسار زر
@@ -66,20 +58,16 @@ ar:
         omnipresent_banner_short_description: وصف قصير
         omnipresent_banner_title: العنوان
         omnipresent_banner_url: العنوان الشبكي
-        password: الكلمة السرية
-        port: المَنفذ
         primary_color: ابتدائي
         reference_prefix: بادئة المرجع
         rich_text_editor_in_public_views: إتاحة محرر النص الغني للمشارِكين
         secondary_color: ثانوي
         send_welcome_notification: إرسال إشعار بالترحيب
-        show_statistics: عرض الإحصائيات
         success_color: نجاح
         time_zone: المنطقة الزمنية
         tos_version: شروط وأحكام الخدمة
         twitter_handler: مُعرّف حساب تويتر
         user_groups_enabled: تمكين المجموعات
-        user_name: اسم المستخدم
         warning_color: تحذير
         welcome_notification_body: محتوى إشعار الترحيب
         welcome_notification_subject: موضوع إشعار الترحيب
@@ -112,10 +100,6 @@ ar:
         file: ملف
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: يجب أن يكون URI لإعادة التوجيه SSL URI
         organization:
           attributes:
             official_img_footer:
@@ -293,10 +277,10 @@ ar:
           label: الفئة
         filter_label: تصفية
         officialized_at_null:
-          label: الحالة
+          label: حالة
           values:
-            'false': تم جعله رسمي
-            'true': لم يُصبِح رسميا
+            'false': Officialized
+            'true': غير رسمي
         private_space_eq:
           label: خاص
           values:
@@ -309,7 +293,7 @@ ar:
             'true': لم يُنشَر
         scope_id_eq:
           label: النطاق
-        search_label: البحث
+        search_label: بحث
         search_placeholder:
           name_or_nickname_or_email_cont: البحث عن %{collection} بحسب عنوان البريد الإكتروني أو الإسم أو الإسم المستعار.
           title_cont: البحث عن %{collection} بحسب العنوان.
@@ -375,7 +359,6 @@ ar:
         homepage: الصفحة الرئيسية
         impersonations: التقليد
         newsletters: الرسائل الإخبارية
-        oauth_applications: تطبيقات OAuth
         participants: المشاركون
         scope_types: أنواع النطاق
         scopes: نطاقات
@@ -419,11 +402,6 @@ ar:
             sent_to: أُرسِلت إلى
             subject: موضوع
           name: النشرة الإخبارية
-        oauth_application:
-          fields:
-            created_at: أنشئت في
-            name: اسم
-          name: تطبيق OAuth
         participatory_space_private_user:
           name: المشاركة الفضاء المشارك الخاص
         scope:
@@ -466,6 +444,9 @@ ar:
             does_not_belong: لا ينتمي
             offensive: هجومي
             spam: بريد مؤذي
+      newsletter_templates:
+        index:
+          preview_template: معاينة
       newsletters:
         create:
           error: كانت هناك مشكلة في إنشاء هذه الرسالة الإخبارية.
@@ -479,8 +460,6 @@ ar:
         edit:
           save_and_preview: حفظ والمعاينة
           title: تحرير النشرة الإخبارية
-        form:
-          interpolations_hint: 'تلميح: يمكنك استخدام "%{name}" في أي مكان في الجسم أو الموضوع وسيتم استبداله باسم المستلم.'
         index:
           all: الكل
           all_users: 'كافة المستخدمين '
@@ -511,25 +490,6 @@ ar:
         update:
           error: حدثت مشكلة أثناء تحديث هذه الرسالة الإخبارية.
           success: تم تحديث النشرة الإخبارية بنجاح. يرجى مراجعته قبل الإرسال.
-      oauth_applications:
-        create:
-          error: حدثت مشكلة أثناء إنشاء هذا التطبيق.
-          success: تم إنشاء التطبيق بنجاح.
-        destroy:
-          error: حدثت مشكلة أثناء تدمير هذا التطبيق.
-          success: تم تدمير التطبيق بنجاح.
-        edit:
-          save: حفظ
-          title: تحرير التطبيق
-        index:
-          confirm_delete: هل أنت متأكد أنك تريد حذف هذا التطبيق؟
-          title: تطبيقات OAuth
-        new:
-          save: حفظ
-          title: تطبيق جديد
-        update:
-          error: حدثت مشكلة أثناء تحديث هذا التطبيق.
-          success: تم تحديث التطبيق بنجاح.
       officializations:
         create:
           success: مشارك رسمي بنجاح
@@ -561,7 +521,6 @@ ar:
           instagram: إينستاجرام
           social_handlers: التواصل الاجتماعي
           twitter: تويتر
-          url: العنوان الشبكي
           youtube: يوتيوب
         update:
           error: حدثت مشكلة أثناء تحديث هذه المؤسسة.
@@ -570,13 +529,15 @@ ar:
         edit:
           update: تحديث
         form:
-          colors_title: ألوان المنظمة
+          colors:
+            colors_title: ألوان المنظمة
+            header_snippets_help: استخدم هذا الحقل لإضافة أشياء إلى رأس HTML. الاستخدام الأكثر شيوعًا هو دمج خدمات الجهات الخارجية التي تتطلب بعض JavaScript أو CSS إضافية. أيضًا ، يمكنك استخدامه لإضافة علامات وصفية إضافية إلى HTML. لاحظ أنه سيتم عرض هذا فقط في الصفحات العامة ، وليس في قسم المسؤول.
           cta_button_path_help: 'يمكنك الكتابة فوق المكان الذي يرتبط به زر Call To Action في الصفحة الرئيسية. استخدم المسارات الجزئية ، وليس عناوين URL الكاملة هنا. يقبل الحروف والأرقام والشرطات والمائلة ، ويجب أن يبدأ بحرف. يظهر زر Call To Action في الصفحة الرئيسية بين نص الترحيب والوصف. مثال: %{url}'
           cta_button_text_help: يمكنك الكتابة فوق نص زر Call To Action في الصفحة الرئيسية لكل لغة متاحة في مؤسستك. إذا لم يتم تعيينها ، سيتم استخدام القيمة الافتراضية. يظهر زر Call To Action في الصفحة الرئيسية بين نص الترحيب والوصف.
-          header_snippets_help: استخدم هذا الحقل لإضافة أشياء إلى رأس HTML. الاستخدام الأكثر شيوعًا هو دمج خدمات الجهات الخارجية التي تتطلب بعض JavaScript أو CSS إضافية. أيضًا ، يمكنك استخدامه لإضافة علامات وصفية إضافية إلى HTML. لاحظ أنه سيتم عرض هذا فقط في الصفحات العامة ، وليس في قسم المسؤول.
           homepage_appearance_title: تحرير مظهر الصفحة الرئيسية
           homepage_highlighted_content_banner_title: لافتة المحتوى الراقي
-          layout_appearance_title: تحرير مظهر التخطيط
+          images:
+            layout_appearance_title: تحرير مظهر التخطيط
           omnipresent_banner_appearance_title: تحرير لافتة في كل مكان
       organization_homepage:
         edit:
@@ -593,7 +554,6 @@ ar:
           error: حدثت مشكلة في حذف مشارك خاص لهذه المساحة التشاركية.
           success: المشاركة الفضاء الفضاء وصول المشاركين دمرت بنجاح.
         index:
-          import_via_csv: استيراد عبر ملف csv
           title: المشاركة الفضاء المشارك الخاص
         new:
           create: إنشاء
@@ -740,6 +700,10 @@ ar:
         new:
           create: دعا
           title: دعوة مشارك كمسؤول
+      users_statistics:
+        users_count:
+          admins: المدراء
+          participants: المشاركون
       view_public_page: عرض الصفحة العامة
     forms:
       errors:
@@ -769,7 +733,6 @@ ar:
           fields:
             hidden_at: مخبأة في
             report_count: عد
-            reportable: الإبلاغ عنها
             reported_content_url: تم الإبلاغ عن عنوان URL للمحتوى
             reports: تقارير
             visit_url: زيارة العنوان الشبكي

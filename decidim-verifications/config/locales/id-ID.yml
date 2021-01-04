@@ -82,6 +82,8 @@ id:
         new:
           authorize: Kirim
           authorize_with: Verifikasi dengan %{authorizer}
+        renew_modal:
+          cancel: Membatalkan
         skip_verification: Anda dapat melewati ini untuk sekarang dan %{link}
         start_exploring: mulai menjelajah
       csv_census:
@@ -101,7 +103,6 @@ id:
             title: Data sensus saat ini
           instructions:
             body: Untuk melakukan ini, Anda harus memasukkan administrasi sistem dan menambahkan otorisasi csv_census ke organisasi
-            title: Anda perlu mengaktifkan sensus csv untuk organisasi ini
           new:
             file: "File .csv dengan data email"
             submit: Unggah data
@@ -112,7 +113,8 @@ id:
             success: Akun Anda telah berhasil diverifikasi.
       dummy_authorization:
         extra_explanation:
-          other: 'Partisipasi dibatasi untuk pengguna dengan salah satu kode pos berikut: %{postal_codes}.'
+          postal_codes:
+            other: 'Partisipasi dibatasi untuk pengguna dengan salah satu kode pos berikut: %{postal_codes}.'
       id_documents:
         admin:
           config:

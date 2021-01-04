@@ -82,6 +82,8 @@ tr:
         new:
           authorize: göndermek
           authorize_with: '%{authorizer}ile doğrulayın'
+        renew_modal:
+          cancel: İptal etmek
         skip_verification: Bunu şimdilik ve %{link}için atlayabilirsiniz.
         start_exploring: keşfetmeye başla
       csv_census:
@@ -101,7 +103,6 @@ tr:
             title: Mevcut nüfus sayımı verileri
           instructions:
             body: Bunu yapmak için sistem yönetimine girmeli ve csv_census yetkilerini kuruluşa eklemelisiniz.
-            title: Bu kuruluş için csv sayımını etkinleştirmeniz gerekir
           new:
             file: "e-posta verileri içeren .csv dosyası"
             submit: Dosya yükleme
@@ -112,8 +113,9 @@ tr:
             success: Hesabınız başarıyla doğrulandı.
       dummy_authorization:
         extra_explanation:
-          one: Katılım, posta kodu %{postal_codes}olan kullanıcılarla sınırlıdır.
-          other: 'Katılım, aşağıdaki posta kodlarından herhangi biriyle kullanıcılarla sınırlıdır: %{postal_codes}.'
+          postal_codes:
+            one: Katılım, posta kodu %{postal_codes}olan kullanıcılarla sınırlıdır.
+            other: 'Katılım, aşağıdaki posta kodlarından herhangi biriyle kullanıcılarla sınırlıdır: %{postal_codes}.'
       id_documents:
         admin:
           config:

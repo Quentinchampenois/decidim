@@ -4,14 +4,14 @@
       <%= translated_attribute(model.name) %> - <%= t("decidim.participatory_spaces.highlighted_meetings.upcoming_meetings") %> <a href="<%= main_component_path(model) %>" class="text-small"><%= t("decidim.participatory_spaces.highlighted_meetings.see_all", count: meetings_count) %></a>
     </h3>
     <div class="card card--list">
-      <% upcoming_meetings.each do |meeting| %>
+      <% upcoming_meetings.includes(:component).each do |meeting| %>
         <%= card_for meeting, size: :list_item %>
       <% end %>
     </div>
     <%= link_to(
       t("decidim.participatory_spaces.highlighted_meetings.see_all", count: meetings_count),
       main_component_path(model),
-      class: "button button--sc light secondary button--right"
+      class: "button button--sc hollow button--right"
     ) %>
   </div>
 <% elsif past_meetings.any? %>
@@ -27,7 +27,7 @@
     <%= link_to(
       t("decidim.participatory_spaces.highlighted_meetings.see_all", count: meetings_count),
       main_component_path(model),
-      class: "button button--sc light secondary button--right"
+      class: "button button--sc hollow button--right"
     ) %>
   </div>
 <% end %>

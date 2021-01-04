@@ -2,6 +2,9 @@
 
 require "spec_helper"
 
+class ::TestPermissions
+end
+
 module Decidim
   describe ParticipatorySpaceManifest do
     subject { described_class.new }
@@ -24,8 +27,6 @@ module Decidim
     describe "permissions_class" do
       context "when permissions_class_name is set" do
         it "finds the permissions class from its name" do
-          class ::TestPermissions
-          end
           subject.permissions_class_name = "TestPermissions"
 
           expect(subject.permissions_class).to eq(TestPermissions)
@@ -46,6 +47,24 @@ module Decidim
 
           expect { subject.permissions_class }.to raise_error(NameError)
         end
+      end
+    end
+
+    describe "on_destroy_account" do
+      let(:user) { Decidim::User.new }
+
+      it "can be invoked even when is nil" do
+        subject.invoke_on_destroy_account(user)
+      end
+
+      it "can be setted and invoked" do
+        expected_name = "on account destroyed was invoked"
+        subject.register_on_destroy_account do |user|
+          user.name = expected_name
+        end
+
+        subject.invoke_on_destroy_account(user)
+        expect(user.name).to eq(expected_name)
       end
     end
   end

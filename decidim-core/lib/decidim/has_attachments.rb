@@ -26,7 +26,7 @@ module Decidim
       #
       # Returns an Array<Attachment>
       def documents
-        @documents ||= attachments.select(&:document?)
+        @documents ||= attachments.includes(:attachment_collection).select(&:document?)
       end
 
       # All the attachments that are documents for this process that has a collection.
@@ -42,6 +42,16 @@ module Decidim
       def documents_without_collection
         documents.reject(&:attachment_collection_id?)
       end
+    end
+
+    # Attachment context for the file uploaders checks (e.g. which kind of files
+    # the user is allowed to upload in this context).
+    #
+    # Override this in the model class if it is for a different context.
+    #
+    # Returns a Symbol.
+    def attachment_context
+      :participant
     end
   end
 end

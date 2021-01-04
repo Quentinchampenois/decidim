@@ -9,6 +9,7 @@ module Decidim
     include Decidim::Traceable
     include Decidim::DataPortability
     include Decidim::ActsAsAuthor
+    include Decidim::UserReportable
 
     has_many :memberships, class_name: "Decidim::UserGroupMembership", foreign_key: :decidim_user_group_id, dependent: :destroy
     has_many :users, through: :memberships, class_name: "Decidim::User", foreign_key: :decidim_user_id
@@ -105,6 +106,19 @@ module Decidim
     # easy way to return all the users accepted in this group
     def accepted_users
       accepted_memberships.map(&:user)
+    end
+
+    # Currently, groups always accept conversations from anyone.
+    # This may change in the future in case the desired behaviour
+    # is to check if all (or any) of the administrators accepts conversations
+    # or there's simply and option for this in the group preferences.
+    def accepts_conversation?(_user)
+      true
+    end
+
+    def unread_messages_count_for(user)
+      @unread_messages_count_for ||= {}
+      @unread_messages_count_for[user.id] ||= Decidim::Messaging::Conversation.user_collection(self).unread_messages_by(user).count
     end
 
     private

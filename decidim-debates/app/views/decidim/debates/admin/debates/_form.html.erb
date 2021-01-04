@@ -4,12 +4,12 @@
   </div>
 
   <div class="card-section">
-    <div class="row column">
-      <%= form.translated :text_field, :title, autofocus: true %>
+     <div class="row column hashtags__container">
+      <%= form.translated :text_field, :title, autofocus: true, class: "js-hashtags", hashtaggable: true %>
     </div>
 
-    <div class="row column">
-      <%= form.translated :editor, :description %>
+     <div class="row column hashtags__container">
+      <%= form.translated :editor, :description, hashtaggable: true %>
     </div>
 
     <div class="row column">
@@ -30,7 +30,7 @@
     </div>
 
     <div class="row column">
-      <%= form.categories_select :decidim_category_id, current_participatory_space.categories, prompt: "", disable_parents: false %>
+      <%= form.categories_select :decidim_category_id, current_participatory_space.categories, include_blank: "", disable_parents: false %>
     </div>
   </div>
 </div>

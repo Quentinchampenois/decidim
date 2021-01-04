@@ -58,6 +58,7 @@ module Decidim
             member do
               put :publish
               put :unpublish
+              get :share
             end
             resources :exports, only: :create
           end
@@ -68,6 +69,7 @@ module Decidim
               put :hide
               put :unhide
             end
+            resources :reports, controller: "moderations/reports", only: [:index, :show]
           end
         end
 

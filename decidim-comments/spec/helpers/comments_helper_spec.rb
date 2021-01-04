@@ -6,17 +6,33 @@ module Decidim
   module Comments
     describe CommentsHelper do
       let(:dummy_resource) { create(:dummy_resource) }
+      let(:machine_translations_toggled?) { false }
+
+      before do
+        allow(helper)
+          .to receive(:machine_translations_toggled?)
+          .and_return(machine_translations_toggled?)
+      end
 
       describe "comments_for" do
-        it "renders the react component `Comments` with the correct data" do
+        let(:cell) { double }
+
+        it "renders the comments cell with the correct data" do
+          allow(helper)
+            .to receive(:machine_translations_toggled?)
+            .and_return(machine_translations_toggled?)
+
+          expect(cell).to receive(:to_s)
+
           expect(helper)
-            .to receive(:react_comments_component)
+            .to receive(:cell)
             .with(
-              "comments-for-DummyResource-#{dummy_resource.id}",
-              commentableType: "Decidim::DummyResources::DummyResource",
-              commentableId: dummy_resource.id.to_s,
-              locale: I18n.locale
-            ).and_call_original
+              "decidim/comments/comments",
+              dummy_resource,
+              machine_translations: machine_translations_toggled?,
+              single_comment: nil,
+              order: nil
+            ).and_return(cell)
 
           helper.comments_for(dummy_resource)
         end

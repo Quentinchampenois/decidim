@@ -16,6 +16,10 @@ module Decidim
     def switch_to_default_host
       Capybara.app_host = nil
     end
+
+    def switch_to_secure_context_host
+      Capybara.app_host = "http://localhost"
+    end
   end
 end
 
@@ -23,7 +27,11 @@ Capybara.register_driver :headless_chrome do |app|
   options = ::Selenium::WebDriver::Chrome::Options.new
   options.args << "--headless"
   options.args << "--no-sandbox"
-  options.args << "--window-size=1024,768"
+  options.args << if ENV["BIG_SCREEN_SIZE"].present?
+                    "--window-size=1920,3000"
+                  else
+                    "--window-size=1024,768"
+                  end
 
   Capybara::Selenium::Driver.new(
     app,

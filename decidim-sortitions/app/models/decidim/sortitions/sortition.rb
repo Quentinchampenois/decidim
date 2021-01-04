@@ -13,15 +13,16 @@ module Decidim
       include Decidim::Loggable
       include Decidim::Comments::Commentable
       include Decidim::Randomable
+      include Decidim::TranslatableResource
 
       component_manifest_name "sortitions"
 
+      translatable_fields :title, :witnesses, :additional_info, :cancel_reason
+
       belongs_to :decidim_proposals_component,
-                 foreign_key: "decidim_proposals_component_id",
                  class_name: "Decidim::Component"
 
       belongs_to :cancelled_by_user,
-                 foreign_key: "cancelled_by_user_id",
                  class_name: "Decidim::User",
                  optional: true
 

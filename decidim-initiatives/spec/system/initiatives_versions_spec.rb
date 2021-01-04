@@ -30,7 +30,7 @@ describe "Explore versions", versioning: true, type: :system do
     it "has only one version" do
       visit initiative_path
 
-      expect(page).to have_content("VERSION 1 (of 1)")
+      expect(page).to have_content("Version number 1 (of 1)")
     end
 
     it "shows the versions index" do
@@ -47,7 +47,7 @@ describe "Explore versions", versioning: true, type: :system do
       it "creates a new version" do
         visit initiative_path
 
-        expect(page).to have_content("VERSION 2 (of 2)")
+        expect(page).to have_content("Version number 2 (of 2)")
       end
     end
   end
@@ -70,7 +70,7 @@ describe "Explore versions", versioning: true, type: :system do
 
     it "allows going back to the initiative" do
       click_link "Go back to initiative"
-      expect(page).to have_current_path initiative_path
+      expect(page).to have_current_path initiative_path, ignore_query: true
     end
 
     it "shows the creation date" do
@@ -87,7 +87,7 @@ describe "Explore versions", versioning: true, type: :system do
       click_link "see other versions"
 
       within ".card--list__item:last-child" do
-        click_link("Version 2")
+        first(:link, "Version 2").click
       end
     end
 
@@ -97,12 +97,12 @@ describe "Explore versions", versioning: true, type: :system do
 
     it "allows going back to the initiative" do
       click_link "Go back to initiative"
-      expect(page).to have_current_path initiative_path
+      expect(page).to have_current_path initiative_path, ignore_query: true
     end
 
     it "allows going back to the versions list" do
       click_link "Show all versions"
-      expect(page).to have_current_path initiative_path + "/versions"
+      expect(page).to have_current_path "#{initiative_path}/versions"
     end
 
     it "shows the creation date" do

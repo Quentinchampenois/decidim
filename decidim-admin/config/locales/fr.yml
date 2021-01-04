@@ -14,7 +14,7 @@ fr:
         attachment_collection_id: Dossier
         description: Description
         file: Fichier
-        title: Titre du document lié
+        title: Nom de la pièce jointe ou de l'image
       attachment_collection:
         description: Description
         name: Titre
@@ -30,16 +30,10 @@ fr:
       newsletter:
         body: Corps de texte
         subject: Objet
-      oauth_application:
-        name: Titre
-        organization_logo: Logo de l'organisation (carré)
-        organization_name: Nom de l'organisation
-        organization_url: URL de l'organisation
-        redirect_uri: Rediriger l'URI
       organization:
-        address: Nom de l'hôte SMTP
         alert_color: Alerte
         badges_enabled: Activer les badges
+        comments_max_length: Longueur max des commentaires (laisser 0 pour la valeur par défaut)
         cta_button_path: Chemin du bouton d'action
         cta_button_text: Texte du bouton d'action
         customize_welcome_notification: Personnaliser le mail de bienvenue
@@ -51,6 +45,8 @@ fr:
         from: Adresse e-mail de l’expéditeur
         github_handler: Gestionnaire GitHub
         header_snippets: Éléments à ajouter entre les balises HTML
+        highlight_alternative_color: Surligner, alternative
+        highlight_color: Surbrillance
         highlighted_content_banner_action_subtitle: Sous-titre du bouton d'action
         highlighted_content_banner_action_title: Titre du bouton d'action
         highlighted_content_banner_action_url: URL du bouton d'action
@@ -60,6 +56,9 @@ fr:
         highlighted_content_banner_title: Titre
         instagram_handler: Gestionnaire Instagram
         logo: Logo
+        machine_translation_display_priority: Priorité de l'affichage de la traduction automatique
+        machine_translation_display_priority_original: Texte original en premier
+        machine_translation_display_priority_translation: Texte traduit en premier
         name: Nom
         official_img_footer: Logo officiel - pied de page
         official_img_header: Logo officiel - barre de navigation
@@ -67,20 +66,16 @@ fr:
         omnipresent_banner_short_description: Brève description
         omnipresent_banner_title: Titre
         omnipresent_banner_url: URL
-        password: Mot de passe
-        port: Port
         primary_color: Primaire
         reference_prefix: Préfixe de référence
-        rich_text_editor_in_public_views: Activer l'éditeur de texte enrichi pour les participants
+        rich_text_editor_in_public_views: Activer l'éditeur de texte avancé pour les participants
         secondary_color: Secondaire
         send_welcome_notification: Envoyer un mail de bienvenue
-        show_statistics: Montrer les statistiques
         success_color: Succès
         time_zone: Fuseau horaire
         tos_version: Version des conditions d'utilisation
         twitter_handler: Gestionnaire Twitter
         user_groups_enabled: Activer les groupes d'utilisateurs
-        user_name: Nom d'utilisateur
         warning_color: Attention
         welcome_notification_body: Corps du mail de bienvenue
         welcome_notification_subject: Objet du mail de bienvenue
@@ -103,20 +98,16 @@ fr:
         show_in_footer: Montrer dans le pied de page
         slug: Identifiant
         title: Titre
-        weight: Poids
+        weight: Rang d'affichage
       static_page_topic:
         description: La description
         show_in_footer: Montrer dans le pied de page
         title: Titre
-        weight: Poids
+        weight: Rang d'affichage
       user_group_csv_verification:
         file: Fichier
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: L'URI de redirection doit être un URI SSL
         organization:
           attributes:
             official_img_footer:
@@ -144,10 +135,11 @@ fr:
         browse: Parcourir
         export: Exporter
         manage: Gérer
-        new: Nouvelle %{name}
+        new: + %{name}
         per_page: Par page
         permissions: Autorisations
         reject: Rejeter
+        share: Partager
         verify: Vérifier
       admin_terms_of_use:
         accept:
@@ -254,7 +246,7 @@ fr:
           success: Catégorie mise à jour avec succès.
       component_permissions:
         update:
-          error: Il y a eu un problème de mise à jour des autorisations de cette composante.
+          error: Un problème est survenu lors de la mise à jour des permissions de ce composant.
           success: Autorisations mises à jour avec succès.
       components:
         create:
@@ -275,6 +267,7 @@ fr:
           headers:
             actions: Actions
             name: Nom de la fonctionnalité
+            scope: Secteur de la fonctionnalité
             type: Type de fonctionnalité
         new:
           add: Ajouter une fonctionnalité
@@ -293,16 +286,24 @@ fr:
           welcome: Bienvenue dans l'espace d'administration de Decidim.
       exports:
         export_as: "%{name} en format %{export_format}"
+        formats:
+          CSV: CSV
+          Excel: Excel
+          FormPDF: PDF
+          JSON: JSON
         notice: Votre exportation est en cours. Vous recevrez un e-mail quand elle sera terminée.
       filters:
         category_id_eq:
           label: Catégorie
-        filter_label: Filtrez
+        filter_label: Filtre
+        moderations:
+          reportable_type_string_eq:
+            label: Type
         officialized_at_null:
           label: État
           values:
-            'false': Officialisé
-            'true': Non officialisé
+            'false': Validé
+            'true': Non validé
         private_space_eq:
           label: Privé
           values:
@@ -330,7 +331,7 @@ fr:
       help_sections:
         error: Une erreur s'est produite lors de la mise à jour des sections d'aide.
         form:
-          save: sauvegarder
+          save: Sauvegarder
         success: Les sections d'aide ont été mises à jour avec succès
       impersonatable_users:
         index:
@@ -389,14 +390,17 @@ fr:
         homepage: Page d'accueil
         impersonations: Utilisateurs représentés
         newsletters: Bulletins d'information (newsletter)
-        oauth_applications: Applications OAuth
         participants: Participants
+        reported_users: Utilisateurs signalés
         scope_types: Types de secteur
         scopes: Périmètres d’application
         settings: Paramètres
         static_pages: Pages
         user_groups: Groupes d'utilisateurs
         users: Utilisateurs
+      metrics:
+        metrics:
+          see_more_metrics: Voir plus d'indicateurs
       models:
         area:
           fields:
@@ -433,11 +437,6 @@ fr:
             sent_to: Envoyé à
             subject: Objet
           name: Bulletin d'information (newsletter)
-        oauth_application:
-          fields:
-            created_at: Créée le
-            name: Titre
-          name: Application OAuth
         participatory_space_private_user:
           name: Utilisateur de l'espace participatif
         scope:
@@ -448,6 +447,14 @@ fr:
           fields:
             name: Titre
             plural: Pluriel
+        share_token:
+          fields:
+            created_at: Créée le
+            expires_at: Expire le
+            last_used_at: Dernière utilisation
+            times_used: Nombre d'utilisations
+            token: Jeton
+            user: Créé par
         static_page:
           fields:
             created_at: Créée le
@@ -472,6 +479,20 @@ fr:
             phone: Téléphone
             state: État
             users_count: Nombre d'utilisateurs
+      moderated_users:
+        index:
+          actions:
+            title: Actions
+            unreport: Annuler le signalement
+          name: Nom
+          nickname: Pseudonyme
+          reason: Raison
+          title: Liste des utilisateurs signalés
+        report:
+          reasons:
+            does_not_belong: N'appartient pas
+            offensive: Offensant
+            spam: Spam
       moderations:
         index:
           title: Modérations
@@ -480,6 +501,29 @@ fr:
             does_not_belong: N'appartient pas
             offensive: Agressif
             spam: Spam
+        reports:
+          index:
+            author: Auteur(s)
+            callout_html: Un contenu apparaît dans le panneau de modération quand il a été signalé par un utilisateur (personne ayant un compte enregistré) en cliquant sur le drapeau %{icon} à côté de l'élément.
+            content_original_language: Langue d'origine du contenu
+            participatory_space: Espace participatif
+            reported_content: Contenu signalé
+            see_current: Voir en cours
+            see_original: Voir l'original
+            title: Signalements
+          show:
+            report_details: Motif du signalement
+            report_language: Langue d'origine du signalement
+            report_reason: Motif
+            title: Détails du signalement
+      newsletter_templates:
+        index:
+          preview_template: Aperçu
+          title: Modèles de newsletter
+          use_template: Utiliser ce modèle
+        show:
+          preview: 'Prévisualiser le modèle: %{template_name}'
+          use_template: Utiliser ce modèle
       newsletters:
         create:
           error: Il y a eu une erreur lors de la création de cette newsletter.
@@ -493,8 +537,6 @@ fr:
         edit:
           save_and_preview: Enregistrer et prévisualiser
           title: Modifier la newsletter
-        form:
-          interpolations_hint: 'Astuce : Vous pouvez utiliser "%{name}" (sans les guillemets) n''importe où dans le corps ou le sujet et il sera remplacé par le nom du destinataire.'
         index:
           all: tous
           all_users: 'Tous les utilisateurs '
@@ -538,25 +580,6 @@ fr:
         update:
           error: Erreur lors de la mise à jour de la newsletter.
           success: Newsletter mise à jour avec succès. Veuillez la vérifier avant de l'envoyer.
-      oauth_applications:
-        create:
-          error: Une erreur s'est produite lors de la création de cette application.
-          success: Application créée avec succès.
-        destroy:
-          error: Une erreur s'est produite lors de la suppression de cette application.
-          success: Application supprimée avec succès.
-        edit:
-          save: Sauvegarder
-          title: Modifier l'application
-        index:
-          confirm_delete: Êtes-vous sûr de vouloir supprimer cette application ?
-          title: Applications OAuth
-        new:
-          save: Sauvegarder
-          title: Nouvelle application
-        update:
-          error: Une erreur est survenue lors de la mise à jour de cette application.
-          success: Application mise à jour avec succès.
       officializations:
         create:
           success: Utilisateur validé avec succès
@@ -586,12 +609,13 @@ fr:
           officialize: Valider
           title: Valider l'utilisateur "%{name}"
         show_email_modal:
-          description: Si vous devez contacter directement un participant, vous pouvez cliquer sur le bouton Afficher pour voir l'adresse électronique. Cette action sera enregistrée.
-          email_address: Adresse électronique
-          full_name: Nom et prénom
-          hidden: caché
-          show: Voir
-          title: Afficher l'adresse électronique du participant
+          close_modal: Fermer la fenêtre de dialogue
+          description: Si vous avez besoin de contacter directement un participant, vous pouvez cliquer sur le bouton Afficher pour voir l'adresse e-mail. Cette action sera enregistrée.
+          email_address: Adresse e-mail
+          full_name: Nom complet
+          hidden: masqués
+          show: Afficher
+          title: Afficher l'adresse e-mail des participants
       organization:
         edit:
           title: Modifier l'organisation
@@ -600,10 +624,10 @@ fr:
           facebook: Facebook
           github: GitHub
           instagram: Instagram
-          rich_text_editor_in_public_views_help: Dans certaines zones de texte, les participants pourront insérer des balises HTML en utilisant l'éditeur de texte enrichi.
+          rich_text_editor_in_public_views_help: Dans certains champs textuels, les participants pourront insérer des balises HTML en utilisant l'éditeur de texte avancé.
           social_handlers: Liens des réseaux sociaux
           twitter: Twitter
-          url: Url
+          url: URL
           youtube: YouTube
         update:
           error: Erreur lors de la mise à jour de cette organisation.
@@ -612,13 +636,16 @@ fr:
         edit:
           update: Mettre à jour
         form:
-          colors_title: Couleurs de l'organisation
+          colors:
+            colors_title: Couleurs de l'organisation
+            header_snippets_help: Utilisez ce champ pour ajouter des éléments entre les balises HTML <head> </head>. L'utilisation la plus courante de champs consiste à intégrer des services tiers nécessitant du JavaScript ou du CSS supplémentaire. Vous pouvez aussi l'utiliser pour ajouter des méta-tags supplémentaires au code HTML. Notez que cela ne fonctionnera que dans sur les pages publiques, et non dans la section admin.
           cta_button_path_help: 'Vous pouvez remplacer le lien vers lequel renvoie le bouton de la page d''accueil. Utilisez ici des chemins partiels et non des URL complets. Il accepte les lettres, les chiffres, les tirets et les barres obliques, et doit commencer par une lettre. Le bouton apparaît sur la page d''accueil entre le texte de bienvenue et la description. Exemple : %{url}'
           cta_button_text_help: Vous pouvez remplacer le texte du bouton dans la page d'accueil pour chaque langue disponible dans votre organisation. Si elle n'est pas définie, la valeur par défaut sera utilisée. Le bouton apparaît sur la page d'accueil entre le texte de bienvenue et la description.
-          header_snippets_help: Utilisez ce champ pour ajouter des éléments entre les balises HTML <head> </head>. L'utilisation la plus courante de champs consiste à intégrer des services tiers nécessitant du JavaScript ou du CSS supplémentaire. Vous pouvez aussi l'utiliser pour ajouter des méta-tags supplémentaires au code HTML. Notez que cela ne fonctionnera que dans sur les pages publiques, et non dans la section admin.
           homepage_appearance_title: Modifier l'apparence de la page d'accueil
           homepage_highlighted_content_banner_title: Bannière de contenu mis en valeur
-          layout_appearance_title: Modifier l’aspect de la mise en page
+          images:
+            layout_appearance_title: Modifier l’aspect de la mise en page
+            preview: Aperçu
           omnipresent_banner_appearance_title: Modifier la bannière permanente
       organization_homepage:
         edit:
@@ -645,7 +672,7 @@ fr:
           invalid: Il y a eu un problème de lecture du fichier CSV.
           success: Fichier CSV a été transféré avec succès, nous envoyons un courriel d'invitation aux participants. Cela peut prendre un certain temps.
         new:
-          explanation: Téléchargez votre fichier CSV. Il doit comprendre deux colonnes avec l'email dans la première colonne du fichier et le nom dans la dernière colonne du fichier (email, nom) des utilisateurs que vous souhaitez ajouter à l'espace participatif, sans en-tête.
+          explanation: 'Téléchargez votre fichier CSV. Il doit avoir deux colonnes avec dans la première colonne les emails, et dans la deuxième colonne les noms (email, nom) des utilisateurs que vous souhaitez ajouter à l''espace participatif, sans en-tête. Évitez les caractères spéciaux comme `<>?%&^*#@()[]=+:;"{}\|` dans les noms des utilisateurs.'
           title: Téléchargez votre fichier CSV
           upload: Télécharger
       resource_permissions:
@@ -654,6 +681,10 @@ fr:
           title: Modifier les autorisations
         update:
           success: Autorisations mises à jour avec succès.
+      resources:
+        index:
+          headers:
+            scope: Secteur
       scope_types:
         create:
           error: Une erreur s'est produite lors de la création d'un nouveau type de secteur.
@@ -685,6 +716,23 @@ fr:
         update:
           error: Une erreur s'est produite lors de la mise à jour de ce périmètre d'application.
           success: Périmètre d'application mis à jour avec succès
+      share_tokens:
+        actions:
+          confirm_destroy: Souhaitez-vous vraiment supprimer ce jeton?
+          destroy: Supprimer
+          share: Partager
+        destroy:
+          error: Une erreur s'est produite lors de la destruction du jeton.
+          success: Jeton détruit avec succès.
+        share_tokens:
+          empty: Il n'y a pas de jeton actif
+          help: Ces jetons sont utilisés pour partager cette ressource non publiée à n'importe quel utilisateur. Ils seront cachés dès que la ressource sera publiée. Cliquez sur l'icône du jeton pour visiter l'URL partageable.
+          title: Partager les jetons
+      shared:
+        gallery:
+          add_images: Ajouter des images
+          delete_image: Supprimer l'image
+          gallery_legend: Ajouter une galerie d'images (facultatif)
       static_page_topics:
         create:
           error: Une erreur s'est produite lors de la création d'un nouveau sujet.
@@ -734,12 +782,14 @@ fr:
         areas: Zones d'application
         authorization_workflows: Méthodes de vérification
         dashboard: Tableau de bord
-        impersonatable_users: Utilisateurs gérables
+        impersonatable_users: Utilisateurs pouvant être représentés
         impersonations: Gestion des utilisateurs
+        metrics: Indicateurs
         participants: Utilisateurs
         scope_types: Types de secteur
         scopes: Périmètres d'application
         static_pages: Pages
+        statistics: Activité
         user_groups: Groupes d'utilisateurs
         users: Utilisateurs
       user_group:
@@ -785,6 +835,14 @@ fr:
         new:
           create: Inviter
           title: Inviter l'utilisateur en tant qu'administrateur
+      users_statistics:
+        users_count:
+          admins: Administrateurs
+          last_day: Hier
+          last_month: Le mois dernier
+          last_week: La semaine dernière
+          no_users_count_statistics_yet: Il n'y a pas encore de statistiques du nombre d'utilisateurs
+          participants: Participants
       view_public_page: Voir la page publique
     forms:
       errors:
@@ -792,6 +850,7 @@ fr:
           reason: Vous devez fournir une raison lors de l'emprunt d'identité d'un utilisateur standard
     moderations:
       actions:
+        expand: Agrandir
         hidden: Masqués
         hide: Masquer
         not_hidden: Visibles
@@ -812,12 +871,19 @@ fr:
       models:
         moderation:
           fields:
+            created_at: Date de création
             hidden_at: Masqué le
             report_count: Compteur
-            reportable: Contenu
+            reportable_id: ID
+            reportable_type: Type
             reported_content_url: URL
             reports: Motif
             visit_url: Visitez l'URL
+        report:
+          fields:
+            details: Détails du signalement
+            locale: Langue
+            reason: Motif
   errors:
     messages:
       invalid_json: JSON non valide

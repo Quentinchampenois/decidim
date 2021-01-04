@@ -10,7 +10,7 @@ module Decidim
       # Public: Render a collection of primary stats.
       def highlighted
         highlighted_stats = component_stats(priority: StatsRegistry::HIGH_PRIORITY)
-        highlighted_stats = highlighted_stats.concat(component_stats(priority: StatsRegistry::MEDIUM_PRIORITY))
+        highlighted_stats.concat(component_stats(priority: StatsRegistry::MEDIUM_PRIORITY))
         highlighted_stats = highlighted_stats.reject(&:empty?)
         highlighted_stats = highlighted_stats.reject { |_manifest, _name, data| data.zero? }
         grouped_highlighted_stats = highlighted_stats.group_by { |stats| stats.first.name }
@@ -38,7 +38,7 @@ module Decidim
 
       def render_stats_data(component_manifest, name, data, index)
         safe_join([
-                    index.zero? ? manifest_icon(component_manifest, role: "img") : " /&nbsp".html_safe,
+                    index.zero? ? manifest_icon(component_manifest, role: "img", "aria-hidden": true) : " /&nbsp".html_safe,
                     content_tag(:span, "#{number_with_delimiter(data)} " + I18n.t(name, scope: "decidim.conferences.statistics"),
                                 class: "#{name} process_stats-text")
                   ])

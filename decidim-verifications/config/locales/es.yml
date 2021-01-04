@@ -1,4 +1,3 @@
----
 es:
   activemodel:
     attributes:
@@ -28,17 +27,17 @@ es:
     admin:
       menu:
         authorization_revocation:
-          before_date_info: Es útil si el procedimiento ya ha comenzado y desea revocar las autorizaciones del procedimiento anterior.
-          button: Revoca todo
+          before_date_info: Útil si el proceso ya ha comenzado y quieres revocar los permisos del proceso anterior.
+          button: Revocar todo
           button_before: Revocar antes de la fecha
           destroy:
-            confirm: Las autorizaciones para revocar antes de la fecha no pueden ser canceladas. ¿Estás seguro de que quieres continuar?
-            confirm_all: La revocación de todas las autorizaciones no puede ser revocada. ¿Estás seguro de que quieres continuar?
-          destroy_nok: Había un problema con la revocación de las autorizaciones.
-          destroy_ok: "¡Todas las autorizaciones correspondientes han sido revocadas con éxito!"
-          info: Hay un total de %{conteo} participantes verificados.
-          no_data: No hay participantes verificados
-          title: Revocación de las auditorías
+            confirm: La revocación de las autorizaciones anteriores a esta fecha no se puede deshacer. ¿Seguro que quieres continuar?
+            confirm_all: La revocación de todas las autorizaciones no se puede deshacer. ¿Seguro que quieres continuar?
+          destroy_nok: Ha habido un problema al revocar las autorizaciones.
+          destroy_ok: Todas las autorizaciones coincidentes se han revocado correctamente
+          info: Hay un total de %{count} participantes verificadas.
+          no_data: No hay participantes verificadas
+          title: Revocación de las autorizaciones
         authorization_workflows: Verificaciones
     admin_log:
       organization:
@@ -49,23 +48,20 @@ es:
       admin:
         csv_census:
           help:
-          - Las administradoras cargan un CSV con los correos electrónicos de las participantes aceptadas
-          - Solamente se puedan verificar las participantes con un correo electrónico que figure en este fichero CSV
+            - Las administradoras cargan un CSV con los correos electrónicos de las participantes aceptadas
+            - Solamente se puedan verificar las participantes con un correo electrónico que figure en este fichero CSV
         id_documents:
           help:
-          - Las participantes rellenan la información de su identidad y suben una copia de su documento.
-          - Rellenas la información presente en la imagen subida.
-          - La información tiene que coincidir con lo que haya rellenado la persona participante.
-          - Si no puedes ver la información con claridad o no la puedes verificar, puedes rechazar la solicitud para que la participante la pueda corregir.
-        omniauth:
-          help:
-          - Confirmar con una cuenta externa de OmniAuth
+            - Las participantes rellenan la información de su identidad y suben una copia de su documento.
+            - Rellenas la información presente en la imagen subida.
+            - La información tiene que coincidir con lo que haya rellenado la persona participante.
+            - Si no puedes ver la información con claridad o no la puedes verificar, puedes rechazar la solicitud para que la participante la pueda corregir.
         postal_letter:
           help:
-          - Las participantes solicitan un código de verificación que se enviará a su dirección.
-          - Enviar la carta a su dirección con el código de verificación.
-          - Marcar la carta como enviada.
-          - Una vez hayas marcado la carta como enviada, la participante podrá introducir el código y ser verificada.
+            - Las participantes solicitan un código de verificación que se enviará a su dirección.
+            - Enviar la carta a su dirección con el código de verificación.
+            - Marcar la carta como enviada.
+            - Una vez hayas marcado la carta como enviada, la participante podrá introducir el código y ser verificada.
       csv_census:
         explanation: Verifícate utilizando el censo de la organización
         name: Censo de la organización
@@ -76,19 +72,21 @@ es:
         name: Documentos de identidad
       multistep: Con varios pasos
       name: Nombre
-      omniauth_anti_affinity:
-        explanation: Debe iniciar sesión con otra cuenta para validar esta autorización.
-      omniauth_decidim_handler:
-        name: Omniauth Decide
       postal_letter:
         explanation: Te enviaremos una carta postal con un código que deberás ingresar para que podamos verificar tu dirección
         name: Código por carta postal
     verifications:
       authorizations:
+        authorization_metadata:
+          info: 'Estos son los datos de la verificación actual:'
+          no_data_stored: No hay datos almacenados.
         create:
           error: Se ha producido un error al crear la autorización.
           success: Has sido autorizada correctamente.
           unconfirmed: Necesitas confirmar tu correo electrónico para poder autorizarte.
+        destroy:
+          error: Se ha producido un error al borrar la autorización.
+          success: Has eliminado correctamente la autorización.
         first_login:
           actions:
             another_dummy_authorization_handler: Verificar contra otro ejemplo de controlador de autorización
@@ -97,12 +95,23 @@ es:
             dummy_authorization_workflow: Verifícate contra el flujo de autorización de ejemplo
             id_documents: Verifícate subiendo tu documento de identidad
             postal_letter: Verifícate recibiendo un código de verificación a través de correo postal
-            sms: sms
+            sms: Verifícate a través de un código enviado por SMS
           title: Verifica tu identidad
           verify_with_these_options: 'Estas son las opciones disponibles para verificar tu identidad:'
+        index:
+          expired_verification: La verificación ha caducado
+          pending_verification: Pendiente de verificación
+          show_renew_info: Haz click aquí para renovar la verificación
+          unauthorized_verification: Nueva verificación
         new:
           authorize: Enviar
           authorize_with: Verificar con %{authorizer}
+        renew_modal:
+          cancel: Cancelar
+          close: cerrar
+          continue: Continuar
+          info_renew: Si quieres actualizar los datos, continua con la renovación
+          title: Renovar la verificación
         skip_verification: Puedes saltarte este paso por ahora y %{link}
         start_exploring: empezar a explorar
       csv_census:
@@ -110,7 +119,7 @@ es:
           census:
             create:
               error: Se ha producido un error al importar el censo.
-              success: "%{count} ítems importados correctamente (%{errors} errores)"
+              success: '%{count} ítems importados correctamente (%{errors} errores)'
             destroy_all:
               success: Todos los datos del censo han sido eliminados
           destroy:
@@ -122,9 +131,8 @@ es:
             title: Datos censales actuales
           instructions:
             body: Para ello, debes acceder a la administración del sistema y añadir las autorizaciones csv_census a la organización
-            title: Necesitas activar el censo csv para esta organización.
           new:
-            file: archivo .csv con datos de correos electrónicos
+            file: "archivo .csv con datos de correos electrónicos"
             info: 'Debe ser un archivo en formato CSV con sólo una columna con la dirección de correo electrónico:'
             submit: Subir archivo
             title: Subir un nuevo censo
@@ -134,8 +142,10 @@ es:
             success: Tu cuenta se ha verificado correctamente.
       dummy_authorization:
         extra_explanation:
-          one: La participación está restringida a las personas adscritas al código postal %{postal_codes}.
-          other: 'La participación está restringida a personas adscritas a cualquiera de los siguientes códigos postales: %{postal_codes}.'
+          postal_codes:
+            one: La participación está restringida a las personas adscritas al código postal %{postal_codes}.
+            other: 'La participación está restringida a personas adscritas a cualquiera de los siguientes códigos postales: %{postal_codes}.'
+          scope: La participación está restringida a las personas verificadas en el ámbito de %{scope_name}.
       id_documents:
         admin:
           config:
@@ -196,27 +206,6 @@ es:
         dni: DNI
         nie: NIE
         passport: Pasaporte
-      metadata:
-        content:
-          title: Datos de autorización
-      omniauth:
-        admin:
-          authorizations:
-            index:
-              actions:
-                metadata: Vea la información
-              fields:
-                granted_at: Autorizado el
-                name: Usuario
-                uid: UID
-              title: Permisos para %{handler_name}
-        authorizations:
-          new:
-            error: No se puede confirmar su cuenta con este servicio externo.
-            success: Su cuenta ha sido confirmada con éxito.
-        errors:
-          anti_affinity: 'No puedes estar conectado con ambas identidades al mismo tiempo: %{anti_afinidad}'
-          minimum_age: Debe tener al menos %{minimum_age} para confirmar su cuenta.
       postal_letter:
         admin:
           pending_authorizations:
@@ -235,7 +224,7 @@ es:
         authorizations:
           create:
             error: Se ha producido un problema com tu solicitud
-            success: "¡Gracias! Te enviaremos un código de verificación a tu dirección"
+            success: '¡Gracias! Te enviaremos un código de verificación a tu dirección'
           edit:
             send: Confirmar
             title: Introduce el código de verificación que recibiste
@@ -250,13 +239,13 @@ es:
         authorizations:
           create:
             error: Se ha producido un problema con tu solicitud
-            success: "¡Gracias! Hemos enviado un SMS a tu teléfono."
+            success: '¡Gracias! Hemos enviado un SMS a tu teléfono.'
           destroy:
             success: Código de verificación restablecido correctamente. Por favor vuelve a introducir tu número de teléfono.
           edit:
-            confirm_destroy: "¿Seguro que quieres restablecer el código de verificación?"
+            confirm_destroy: '¿Seguro que quieres restablecer el código de verificación?'
             destroy: Restablecer código de verificación
-            resend: "¿No has recibido el código de verificación?"
+            resend: '¿No has recibido el código de verificación?'
             send: Confirmar
             title: Introduce el código de verificación que has recibido
           new:

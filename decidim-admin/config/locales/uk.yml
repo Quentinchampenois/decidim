@@ -13,7 +13,6 @@ uk:
         attachment_collection_id: Тека
         description: Опис
         file: Файл
-        title: Назва
       attachment_collection:
         description: Опис
         name: Назва
@@ -29,12 +28,6 @@ uk:
       newsletter:
         body: Основний текст
         subject: Тема
-      oauth_application:
-        name: Ім'я
-        organization_logo: Логотип організації (квадрат)
-        organization_name: Назва організації
-        organization_url: Адреса сайту організації
-        redirect_uri: URI перенаправлення
       organization:
         cta_button_path: Шлях до кнопки "Закликати до дії"
         cta_button_text: Текст кнопки "Закликати до дії"
@@ -62,7 +55,6 @@ uk:
         omnipresent_banner_title: Заголовок
         omnipresent_banner_url: Веб-адреса
         reference_prefix: Довідковий префікс
-        show_statistics: Показувати статистику
         tos_version: Версія умов участі
         twitter_handler: Адреса Twitter
         youtube_handler: Адреса YouTube
@@ -83,12 +75,6 @@ uk:
         organization: Організація
         slug: Скорочена веб-адреса
         title: Назва
-    errors:
-      models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: URI перенаправлення має бути SSL URI
   activerecord:
     attributes:
       decidim/static_page:
@@ -243,6 +229,15 @@ uk:
       exports:
         export_as: "%{name} як %{export_format}"
         notice: Зараз відбувається збереження у вигляді файлу. Ви отримаєте електронного листа після його завершення.
+      filters:
+        category_id_eq:
+          label: Категорія
+        officialized_at_null:
+          label: Стан
+          values:
+            'false': Має службовий статус
+            'true': Не має службового статусу
+        search_label: Шукати
       impersonatable_users:
         index:
           filter:
@@ -299,7 +294,6 @@ uk:
         homepage: Домашня сторінка
         impersonations: Виступи в ролі учасника
         newsletters: Розсилання новин
-        oauth_applications: Додатки OAuth
         scope_types: Різновиди обсягу
         scopes: Обсяги
         settings: Налаштування
@@ -341,11 +335,6 @@ uk:
             sent_at: 'Надіслане:'
             subject: Тема
           name: Розсилання новин
-        oauth_application:
-          fields:
-            created_at: 'Створено:'
-            name: Ім'я
-          name: Додаток OAuth
         participatory_space_private_user:
           name: Приватний учасник простору співучасті
         scope:
@@ -388,6 +377,9 @@ uk:
             does_not_belong: Неприйнятно
             offensive: Образливе
             spam: Спам
+      newsletter_templates:
+        index:
+          preview_template: Попередній перегляд
       newsletters:
         create:
           error: При спробі створити це розсилання новин сталася помилка.
@@ -401,8 +393,6 @@ uk:
         edit:
           save_and_preview: Зберегти та попередньо переглянути
           title: Редагувати розсилання новин
-        form:
-          interpolations_hint: 'Підказка: Ви можете використовувати "%{name}" будь-де в основному тексті або темі, і воно буде замінене на ім''я одержувача.'
         index:
           confirm_delete: Ви дійсно бажаєте видалити це розсилання новин?
           title: Розсилання новин
@@ -418,25 +408,6 @@ uk:
         update:
           error: При спробі оновити це розсилання новин сталася помилка.
           success: Випуск новин успішно оновлено. Будь ласка, перегляньте його перед відправленням.
-      oauth_applications:
-        create:
-          error: При спробі створити цей додаток сталася помилка.
-          success: Додаток успішно створено.
-        destroy:
-          error: При спробі видалити цей додаток сталася помилка.
-          success: Додаток успішно видалено.
-        edit:
-          save: Зберегти
-          title: Редагувати додаток
-        index:
-          confirm_delete: Ви дійсно бажаєте видалити цей додаток?
-          title: Додатки OAuth
-        new:
-          save: Зберегти
-          title: Додати додаток
-        update:
-          error: При спробі оновити цей додаток сталася помилка.
-          success: Додаток успішно оновлено.
       officializations:
         create:
           success: Учаснику успішно надано службовий статус
@@ -468,7 +439,6 @@ uk:
           instagram: Інстаграм
           social_handlers: Соціальні мережі
           twitter: Твіттер
-          url: Веб-адреса
           youtube: ЮТуб
         update:
           error: При спробі оновити цю організацію сталася помилка.
@@ -477,12 +447,14 @@ uk:
         edit:
           update: Оновити
         form:
+          colors:
+            header_snippets_help: Використовуйте це поле, щоб додавати щось до заголовку HTML. Найпоширенішим використанням є інтеграція сторонніх служб, які потребують додаткового JavaScript або CSS. Також ви можете використовувати його для додавання додаткових метатегів до HTML. Зверніть увагу, що це буде показано лише на загальнодоступних сторінках, а не в розділі адміністратора.
           cta_button_path_help: 'Ви можете змінити те, куди веде натискання кнопки "Закликати до дії" на головній сторінці. Використовуйте тут часткові шляхи, а не повні веб-адреси. Прийнятні літери, цифри, дефіс та скісна риска. Першою має бути літера. Кнопка "Закликати до дії" відображається на головній сторінці між привітальним текстом та описом. Приклад: %{url}'
           cta_button_text_help: Ви можете змінити текст кнопки "Закликати до дії" на головній сторінці для кожної доступної мови вашої організації. Якщо ви не задасте цей текст, буде використане значення за замовчуванням. Кнопка "Закликати до дії" відображається на домашній сторінці між привітальним текстом та описом.
-          header_snippets_help: Використовуйте це поле, щоб додавати щось до заголовку HTML. Найпоширенішим використанням є інтеграція сторонніх служб, які потребують додаткового JavaScript або CSS. Також ви можете використовувати його для додавання додаткових метатегів до HTML. Зверніть увагу, що це буде показано лише на загальнодоступних сторінках, а не в розділі адміністратора.
           homepage_appearance_title: Редагувати вигляд головної сторінки
           homepage_highlighted_content_banner_title: Банер висвітленого вмісту
-          layout_appearance_title: Редагувати зовнішній вигляд шаблону
+          images:
+            layout_appearance_title: Редагувати зовнішній вигляд шаблону
           omnipresent_banner_appearance_title: Редагувати всюдисущий банер
       organization_homepage:
         edit:
@@ -597,6 +569,9 @@ uk:
         new:
           create: Запросити
           title: Запросити учасника в якості адміністратора
+      users_statistics:
+        users_count:
+          admins: Адміністратори
     forms:
       errors:
         impersonate_user:
@@ -621,7 +596,6 @@ uk:
           fields:
             hidden_at: 'Приховано:'
             report_count: Кількість
-            reportable: Різновид скарги
             reported_content_url: Веб-адреса оскарженого вмісту
             reports: Скарги
             visit_url: Відвідайте веб-адресу

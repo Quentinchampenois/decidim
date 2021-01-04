@@ -13,7 +13,6 @@ id:
         attachment_collection_id: Map
         description: Deskripsi
         file: Mengajukan
-        title: Judul
       attachment_collection:
         description: Deskripsi
         name: Nama
@@ -29,12 +28,6 @@ id:
       newsletter:
         body: Tubuh
         subject: Subyek
-      oauth_application:
-        name: Nama
-        organization_logo: Logo organisasi (persegi)
-        organization_name: Nama Organisasi
-        organization_url: URL Organisasi
-        redirect_uri: Alihkan URI
       organization:
         alert_color: Waspada
         badges_enabled: Aktifkan lencana
@@ -66,7 +59,6 @@ id:
         primary_color: Utama
         reference_prefix: Awalan referensi
         secondary_color: Sekunder
-        show_statistics: Tampilkan statistik
         success_color: Keberhasilan
         tos_version: Versi persyaratan layanan
         twitter_handler: Penangan Twitter
@@ -101,10 +93,6 @@ id:
         file: Mengajukan
     errors:
       models:
-        oauth_application:
-          attributes:
-            redirect_uri:
-              must_be_ssl: URI pengalihan harus berupa URI SSL
         organization:
           attributes:
             official_img_footer:
@@ -265,6 +253,15 @@ id:
       exports:
         export_as: "%{name} sebagai %{export_format}"
         notice: Ekspor Anda sedang dalam proses. Anda akan menerima email setelah selesai.
+      filters:
+        category_id_eq:
+          label: Kategori
+        officialized_at_null:
+          label: Negara
+          values:
+            'false': Diresmikan
+            'true': Tidak resmi
+        search_label: Pencarian
       help_sections:
         error: Terjadi kesalahan saat memperbarui bagian bantuan
         form:
@@ -327,7 +324,6 @@ id:
         homepage: Homepage
         impersonations: Peniruan identitas
         newsletters: Nawala
-        oauth_applications: Aplikasi OAuth
         participants: Peserta
         scope_types: Tipe lingkup
         scopes: Scopes
@@ -370,11 +366,6 @@ id:
             sent_at: Dikirim pada
             subject: Subyek
           name: Newsletter
-        oauth_application:
-          fields:
-            created_at: Dibuat di
-            name: Nama
-          name: Aplikasi OAuth
         participatory_space_private_user:
           name: Ruang partisipatif pengguna pribadi
         scope:
@@ -417,6 +408,9 @@ id:
             does_not_belong: Bukan milik
             offensive: Serangan
             spam: Spam
+      newsletter_templates:
+        index:
+          preview_template: Preview
       newsletters:
         create:
           error: Terjadi kesalahan saat membuat buletin ini.
@@ -430,8 +424,6 @@ id:
         edit:
           save_and_preview: Simpan dan pratinjau
           title: Edit buletin
-        form:
-          interpolations_hint: 'Petunjuk: Anda dapat menggunakan "%{name}" di mana saja di dalam tubuh atau subjek dan itu akan diganti dengan nama penerima.'
         index:
           confirm_delete: Anda yakin ingin menghapus buletin ini?
           title: Nawala
@@ -447,25 +439,6 @@ id:
         update:
           error: Terjadi kesalahan saat memperbarui buletin ini.
           success: Buletin berhasil diperbarui. Harap tinjau sebelum mengirim.
-      oauth_applications:
-        create:
-          error: Terjadi kesalahan saat membuat aplikasi ini.
-          success: Aplikasi berhasil dibuat.
-        destroy:
-          error: Terjadi kesalahan saat menghancurkan aplikasi ini.
-          success: Aplikasi berhasil dihancurkan.
-        edit:
-          save: Menyimpan
-          title: Edit aplikasi
-        index:
-          confirm_delete: Anda yakin ingin menghapus aplikasi ini?
-          title: Aplikasi OAuth
-        new:
-          save: Menyimpan
-          title: Aplikasi baru
-        update:
-          error: Terjadi kesalahan saat memperbarui aplikasi ini.
-          success: Aplikasi berhasil diperbarui.
       officializations:
         create:
           success: Pengguna resmi berhasil
@@ -497,7 +470,6 @@ id:
           instagram: Instagram
           social_handlers: Sosial
           twitter: Kericau
-          url: Url
           youtube: Youtube
         update:
           error: Terjadi kesalahan saat memperbarui organisasi ini.
@@ -506,13 +478,15 @@ id:
         edit:
           update: Memperbarui
         form:
-          colors_title: Warna organisasi
+          colors:
+            colors_title: Warna organisasi
+            header_snippets_help: Gunakan bidang ini untuk menambahkan sesuatu ke kepala HTML. Penggunaan yang paling umum adalah mengintegrasikan layanan pihak ketiga yang memerlukan beberapa JavaScript atau CSS tambahan. Juga, Anda dapat menggunakannya untuk menambahkan meta tag ekstra ke HTML. Perhatikan bahwa ini hanya akan ditampilkan di halaman publik, bukan di bagian admin.
           cta_button_path_help: 'Anda dapat menimpa tempat tombol Ajakan Bertindak di tautan beranda ke. Gunakan jalur parsial, bukan URL lengkap di sini. Menerima surat, angka, tanda pisah dan garis miring, dan harus dimulai dengan huruf. Tombol Ajakan Bertindak ditampilkan di homepage antara teks selamat datang dan deskripsi. Contoh: %{url}'
           cta_button_text_help: Anda dapat menimpa teks tombol Ajakan Bertindak di beranda untuk setiap bahasa yang tersedia di organisasi Anda. Jika tidak disetel, nilai default akan digunakan. Tombol Ajakan Bertindak ditampilkan di homepage antara teks selamat datang dan deskripsi.
-          header_snippets_help: Gunakan bidang ini untuk menambahkan sesuatu ke kepala HTML. Penggunaan yang paling umum adalah mengintegrasikan layanan pihak ketiga yang memerlukan beberapa JavaScript atau CSS tambahan. Juga, Anda dapat menggunakannya untuk menambahkan meta tag ekstra ke HTML. Perhatikan bahwa ini hanya akan ditampilkan di halaman publik, bukan di bagian admin.
           homepage_appearance_title: Edit tampilan homepage
           homepage_highlighted_content_banner_title: Spanduk konten berkecepatan tinggi
-          layout_appearance_title: Edit tampilan tata letak
+          images:
+            layout_appearance_title: Edit tampilan tata letak
           omnipresent_banner_appearance_title: Edit spanduk yang ada di mana-mana
       organization_homepage:
         edit:
@@ -669,6 +643,10 @@ id:
         new:
           create: Undang
           title: Undang pengguna sebagai administrator
+      users_statistics:
+        users_count:
+          admins: Admin
+          participants: Peserta
       view_public_page: Lihat halaman publik
     forms:
       errors:
@@ -698,7 +676,6 @@ id:
           fields:
             hidden_at: Tersembunyi di
             report_count: Menghitung
-            reportable: Dapat dilaporkan
             reported_content_url: URL konten yang dilaporkan
             reports: Laporan
             visit_url: Kunjungi URL

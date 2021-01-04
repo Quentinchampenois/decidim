@@ -5,7 +5,12 @@ require "decidim/dev"
 
 FactoryBot.define do
   sequence(:assembly_slug) do |n|
-    "#{Faker::Internet.slug(nil, "-")}-#{n}"
+    "#{Decidim::Faker::Internet.slug(words: nil, glue: "-")}-#{n}"
+  end
+
+  factory :assemblies_setting, class: "Decidim::AssembliesSetting" do
+    enable_organization_chart { true }
+    organization
   end
 
   factory :assemblies_type, class: "Decidim::AssembliesType" do
@@ -19,10 +24,10 @@ FactoryBot.define do
     subtitle { generate_localized_title }
     short_description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
     description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
-    hero_image { Decidim::Dev.test_file("city.jpeg", "image/jpeg") }
-    banner_image { Decidim::Dev.test_file("city2.jpeg", "image/jpeg") }
-    published_at { Time.current }
     organization
+    hero_image { Decidim::Dev.test_file("city.jpeg", "image/jpeg") } # Keep after organization
+    banner_image { Decidim::Dev.test_file("city2.jpeg", "image/jpeg") } # Keep after organization
+    published_at { Time.current }
     meta_scope { Decidim::Faker::Localized.word }
     developer_group { generate_localized_title }
     local_area { generate_localized_title }
@@ -157,14 +162,14 @@ FactoryBot.define do
 
     full_name { Faker::Name.name }
     gender { Faker::Lorem.word }
-    birthday { Faker::Date.birthday(18, 65) }
+    birthday { Faker::Date.birthday(min_age: 18, max_age: 65) }
     birthplace { Faker::Lorem.word }
     position { Decidim::AssemblyMember::POSITIONS.first }
-    designation_date { Faker::Date.between(1.year.ago, 1.month.ago) }
+    designation_date { Faker::Date.between(from: 1.year.ago, to: 1.month.ago) }
     designation_mode { Faker::Lorem.word }
 
     trait :ceased do
-      ceased_date { Faker::Date.between(1.day.ago, 5.days.ago) }
+      ceased_date { Faker::Date.between(from: 1.day.ago, to: 5.days.ago) }
     end
 
     trait :with_user do

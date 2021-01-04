@@ -28,7 +28,7 @@ module Decidim
         {
           name_and_surname: ::Faker::Name.name,
           document_number: ::Faker::IDNumber.spanish_citizen_number,
-          date_of_birth: ::Faker::Date.birthday(18, 40),
+          date_of_birth: ::Faker::Date.birthday(min_age: 18, max_age: 40),
           postal_code: ::Faker::Address.zip_code
         }
       end
@@ -123,12 +123,11 @@ module Decidim
             create(:initiative_user_vote, initiative: initiative)
             create(:initiative_user_vote, initiative: initiative)
             create(:initiative_user_vote, initiative: initiative)
-            create(:initiative_user_vote, initiative: initiative)
           end
 
           it "notifies the admins" do
             expect(Decidim::EventsManager).to receive(:publish)
-              .with(kind_of(Hash))
+              .with(kind_of(Hash)).twice
 
             expect(Decidim::EventsManager)
               .to receive(:publish)
@@ -140,6 +139,28 @@ module Decidim
               )
 
             command.call
+          end
+
+          context "when more votes are added" do
+            before do
+              create(:initiative_user_vote, initiative: initiative)
+            end
+
+            it "doesn't notifies the admins" do
+              expect(Decidim::EventsManager).to receive(:publish)
+                .with(kind_of(Hash)).once
+
+              expect(Decidim::EventsManager)
+                .not_to receive(:publish)
+                .with(
+                  event: "decidim.events.initiatives.support_threshold_reached",
+                  event_class: Decidim::Initiatives::Admin::SupportThresholdReachedEvent,
+                  resource: initiative,
+                  followers: [admin]
+                )
+
+              command.call
+            end
           end
         end
 
@@ -162,17 +183,6 @@ module Decidim
             expect { invalid_command.call }.to broadcast :invalid
           end
 
-          it "broadcasts ok when form contains personal data" do
-            expect { command_with_personal_data.call }.to broadcast :ok
-          end
-
-          it "stores encrypted user personal data in vote" do
-            command_with_personal_data.call
-            vote = InitiativesVote.last
-            expect(vote.encrypted_metadata).to be_present
-            expect(vote.decrypted_metadata).to eq personal_data_params
-          end
-
           context "when another signature exists with the same hash_id" do
             before do
               create(:initiative_user_vote, initiative: initiative, hash_id: form_with_personal_data.hash_id)
@@ -186,7 +196,12 @@ module Decidim
           context "when initiative type has document number authorization handler" do
             let(:handler_name) { "dummy_authorization_handler" }
             let(:unique_id) { "test_digest" }
-            let(:metadata) { { test: "dummy" } }
+            let(:metadata) do
+              {
+                test: "dummy",
+                scope_id: initiative.scoped_type.scope.id
+              }
+            end
             let!(:authorization_handler) { Decidim::AuthorizationHandler.handler_for(handler_name) }
 
             before do
@@ -212,18 +227,17 @@ module Decidim
                 it "broadcasts ok" do
                   expect { command_with_personal_data.call }.to broadcast :ok
                 end
+
+                it "stores encrypted user personal data in vote" do
+                  command_with_personal_data.call
+                  vote = InitiativesVote.last
+                  expect(vote.encrypted_metadata).to be_present
+                  expect(vote.decrypted_metadata).to eq personal_data_params
+                end
               end
 
               context "when authorization unique_id is different of handler unique_id" do
                 let(:authorization_unique_id) { "other" }
-
-                it "broadcasts invalid" do
-                  expect { command_with_personal_data.call }.to broadcast :invalid
-                end
-              end
-
-              context "when authorization metadata is different of handler metadata" do
-                let(:authorization_metadata) { { test: "other" } }
 
                 it "broadcasts invalid" do
                   expect { command_with_personal_data.call }.to broadcast :invalid

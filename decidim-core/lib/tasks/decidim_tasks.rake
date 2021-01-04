@@ -17,6 +17,7 @@ namespace :decidim do
       decidim_conferences
       decidim_consultations
       decidim_debates
+      decidim_elections
       decidim_forms
       decidim_initiatives
       decidim_meetings
@@ -26,6 +27,7 @@ namespace :decidim do
       decidim_sortitions
       decidim_surveys
       decidim_system
+      decidim_templates
       decidim_verifications
     ).join(",")
   end

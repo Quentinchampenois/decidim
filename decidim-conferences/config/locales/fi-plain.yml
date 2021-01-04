@@ -462,6 +462,9 @@ fi-pl:
             active_conferences: Aktiiviset konferenssit
             see_all_conferences: Katso kaikki konferenssit
       photo:
+        image:
+          attributes:
+            alt: Kuvan vaihtoehtoisteksti
         show:
           close_modal: Sulje ikkuna
           photo: Kuva
@@ -472,6 +475,7 @@ fi-pl:
         index:
           choose_an_option: 'Valitse ilmoittautumisvaihtoehto:'
           login_as: Olet kirjautunut sisään henkilönä %{name} <%{email}>
+          no_registrations: Ei ilmoittautumisia
           register: Ilmoittaudu
           title: Ilmoittautumistyypit
       shared:
@@ -525,11 +529,22 @@ fi-pl:
           email_outro: Tämä ilmoitus on lähetetty sinulle, koska seuraat "%{resource_title}" -konferenssia. Voit lopettaa ilmoitusten vastaanottamisen edellä esitetyn linkin kautta.
           email_subject: '"%{resource_title}" -konferenssin ilmoittautumiset on avattu.'
           notification_title: <a href="%{resource_path}">%{resource_title}</a> -konferenssin ilmoittautumiset on avattu.
+        role_assigned:
+          email_intro: Sinulle on myönnetty rooli %{role} konferenssissa "%{resource_title}".
+          email_outro: Tämä viesti on lähetetty sinulle, koska roolisi on %{role} konferenssissa "%{resource_title}".
+          email_subject: Sinulle on myönnetty rooli %{role} kohteessa "%{resource_title}".
+          notification_title: Sinulle on myönnetty rooli %{role} konferenssissa <a href="%{resource_url}">%{resource_title}</a>.
         upcoming_conference:
           email_intro: 'Konferenssi "%{resource_title}" järjestetään kahden päivän päästä. Voit lukea kuvauksen sivulta:'
           email_outro: Tämä ilmoitus on lähetetty sinulle, koska seuraat konferenssia "%{resource_title}". Voit lopettaa ilmoitusten vastaanottamisen edellä esitetyn linkin kautta.
           email_subject: Konferenssi "%{resource_title}" on tulossa!
           notification_title: Konferenssi <a href="%{resource_path}">%{resource_title}</a> on tulossa kahden päivän päästä.
+    help:
+      participatory_spaces:
+        conferences:
+          contextual: "<p><strong>Konferenssi</strong> on useiden tapahtumien sarja, mihin kutsutaan puhujia ja jolle määritetään useita tietotyyppejä, jotka ovat tyypillisä suurille kongresseille tai sosiaalisille tapahtumille (ilmoittautumiset, kannatusorganisaatioiden tai rahoittajien listat, jne.).</p><p>Esimerkkejä: Konferenssi voidaan järjestää organisaatiolle ja sen jäsenille tai se voi olla jonkin osallistumisprosessin yksi osa tai kuulemisen jälkeinen tapahtuma.</p>\n"
+          page: "<p><strong>Konferenssi</strong> on useiden tapahtumien sarja, mihin kutsutaan puhujia ja jolle määritetään useita tietotyyppejä, jotka ovat tyypillisä suurille kongresseille tai sosiaalisille tapahtumille (ilmoittautumiset, kannatusorganisaatioiden tai rahoittajien listat, jne.).</p><p>Esimerkkejä: Konferenssi voidaan järjestää organisaatiolle ja sen jäsenille tai se voi olla jonkin osallistumisprosessin yksi osa tai kuulemisen jälkeinen tapahtuma.</p>\n"
+          title: Mitä konferenssit ovat?
     log:
       value_types:
         conference_presenter:
