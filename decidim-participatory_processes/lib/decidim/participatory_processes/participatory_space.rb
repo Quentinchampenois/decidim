@@ -48,6 +48,10 @@ Decidim.register_participatory_space(:participatory_processes) do |participatory
     export.serializer Decidim::ParticipatoryProcesses::ParticipatoryProcessSerializer
   end
 
+  participatory_space.register_on_destroy_account do |user|
+    Decidim::ParticipatoryProcessUserRole.where(user: user).destroy_all
+  end
+
   participatory_space.seeds do
     organization = Decidim::Organization.first
     seeds_root = File.join(__dir__, "..", "..", "..", "db", "seeds")
@@ -55,7 +59,7 @@ Decidim.register_participatory_space(:participatory_processes) do |participatory
     Decidim::ContentBlock.create(
       organization: organization,
       weight: 31,
-      scope: :homepage,
+      scope_name: :homepage,
       manifest_name: :highlighted_processes,
       published_at: Time.current
     )
@@ -65,7 +69,7 @@ Decidim.register_participatory_space(:participatory_processes) do |participatory
       process_groups << Decidim::ParticipatoryProcessGroup.create!(
         title: Decidim::Faker::Localized.sentence(word_count: 3),
         description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-          Decidim::Faker::Localized.paragraph(3)
+          Decidim::Faker::Localized.paragraph(sentence_count: 3)
         end,
         hashtag: Faker::Internet.slug,
         group_url: Faker::Internet.url,
@@ -82,27 +86,27 @@ Decidim.register_participatory_space(:participatory_processes) do |participatory
 
     2.times do |n|
       params = {
-        title: Decidim::Faker::Localized.sentence(5),
-        slug: Faker::Internet.unique.slug(nil, "-"),
-        subtitle: Decidim::Faker::Localized.sentence(2),
+        title: Decidim::Faker::Localized.sentence(word_count: 5),
+        slug: Decidim::Faker::Internet.unique.slug(words: nil, glue: "-"),
+        subtitle: Decidim::Faker::Localized.sentence(word_count: 2),
         hashtag: "##{Faker::Lorem.word}",
         short_description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-          Decidim::Faker::Localized.sentence(3)
+          Decidim::Faker::Localized.sentence(word_count: 3)
         end,
         description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-          Decidim::Faker::Localized.paragraph(3)
+          Decidim::Faker::Localized.paragraph(sentence_count: 3)
         end,
-        hero_image: File.new(File.join(seeds_root, "city.jpeg")),
-        banner_image: File.new(File.join(seeds_root, "city2.jpeg")),
+        organization: organization,
+        hero_image: File.new(File.join(seeds_root, "city.jpeg")), # Keep after organization
+        banner_image: File.new(File.join(seeds_root, "city2.jpeg")), # Keep after organization
         promoted: true,
         published_at: 2.weeks.ago,
-        organization: organization,
         meta_scope: Decidim::Faker::Localized.word,
-        developer_group: Decidim::Faker::Localized.sentence(1),
-        local_area: Decidim::Faker::Localized.sentence(2),
-        target: Decidim::Faker::Localized.sentence(3),
-        participatory_scope: Decidim::Faker::Localized.sentence(1),
-        participatory_structure: Decidim::Faker::Localized.sentence(2),
+        developer_group: Decidim::Faker::Localized.sentence(word_count: 1),
+        local_area: Decidim::Faker::Localized.sentence(word_count: 2),
+        target: Decidim::Faker::Localized.sentence(word_count: 3),
+        participatory_scope: Decidim::Faker::Localized.sentence(word_count: 1),
+        participatory_structure: Decidim::Faker::Localized.sentence(word_count: 2),
         start_date: Date.current,
         end_date: 2.months.from_now,
         participatory_process_group: process_groups.sample,
@@ -123,9 +127,9 @@ Decidim.register_participatory_space(:participatory_processes) do |participatory
         participatory_process: process,
         active: true
       ).update!(
-        title: Decidim::Faker::Localized.sentence(1, false, 2),
+        title: Decidim::Faker::Localized.sentence(word_count: 1, supplemental: false, random_words_to_add: 2),
         description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-          Decidim::Faker::Localized.paragraph(3)
+          Decidim::Faker::Localized.paragraph(sentence_count: 3)
         end,
         start_date: 1.month.ago,
         end_date: 2.months.from_now
@@ -156,37 +160,37 @@ Decidim.register_participatory_space(:participatory_processes) do |participatory
 
       attachment_collection = Decidim::AttachmentCollection.create!(
         name: Decidim::Faker::Localized.word,
-        description: Decidim::Faker::Localized.sentence(5),
+        description: Decidim::Faker::Localized.sentence(word_count: 5),
         collection_for: process
       )
 
       Decidim::Attachment.create!(
-        title: Decidim::Faker::Localized.sentence(2),
-        description: Decidim::Faker::Localized.sentence(5),
-        file: File.new(File.join(seeds_root, "Exampledocument.pdf")),
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 5),
         attachment_collection: attachment_collection,
-        attached_to: process
+        attached_to: process,
+        file: File.new(File.join(seeds_root, "Exampledocument.pdf")) # Keep after attached_to
       )
 
       Decidim::Attachment.create!(
-        title: Decidim::Faker::Localized.sentence(2),
-        description: Decidim::Faker::Localized.sentence(5),
-        file: File.new(File.join(seeds_root, "Exampledocument.pdf")),
-        attached_to: process
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 5),
+        attached_to: process,
+        file: File.new(File.join(seeds_root, "city.jpeg")) # Keep after attached_to
       )
 
       Decidim::Attachment.create!(
-        title: Decidim::Faker::Localized.sentence(2),
-        description: Decidim::Faker::Localized.sentence(5),
-        file: File.new(File.join(seeds_root, "Exampledocument.pdf")),
-        attached_to: process
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 5),
+        attached_to: process,
+        file: File.new(File.join(seeds_root, "Exampledocument.pdf")) # Keep after attached_to
       )
 
       2.times do
         Decidim::Category.create!(
-          name: Decidim::Faker::Localized.sentence(5),
+          name: Decidim::Faker::Localized.sentence(word_count: 5),
           description: Decidim::Faker::Localized.wrapped("<p>", "</p>") do
-            Decidim::Faker::Localized.paragraph(3)
+            Decidim::Faker::Localized.paragraph(sentence_count: 3)
           end,
           participatory_space: process
         )
