@@ -38,6 +38,14 @@ module Decidim
       before_validation :compute_depth
 
       delegate :organization, to: :commentable
+      translatable_fields :body
+      searchable_fields({
+                          participatory_space: :itself,
+                          A: :body,
+                          datetime: :created_at
+                        },
+                        index_on_create: true,
+                        index_on_update: ->(comment) { comment.visible? })
 
       def self.positive
         where(alignment: 1)
@@ -49,6 +57,10 @@ module Decidim
 
       def self.negative
         where(alignment: -1)
+      end
+
+      def visible?
+        participatory_space.try(:visible?) && component.try(:published?)
       end
 
       def participatory_space

@@ -66,6 +66,22 @@ module Decidim
             end.to change(Decidim::Proposals::Proposal, :count).by(1)
           end
 
+          it "sets the body and title as i18n" do
+            command.call
+            proposal = Decidim::Proposals::Proposal.last
+
+            expect(proposal.title).to be_kind_of(Hash)
+            expect(proposal.title[I18n.locale.to_s]).to eq form_params[:title]
+            expect(proposal.body).to be_kind_of(Hash)
+            expect(proposal.body[I18n.locale.to_s]).to eq form_params[:body]
+          end
+
+          it "doesn't create a searchable resource" do
+            command.call
+
+            expect { command.call }.not_to change(Decidim::SearchableResource, :count)
+          end
+
           it "traces the action", versioning: true do
             expect(Decidim.traceability)
               .to receive(:perform_action!)
