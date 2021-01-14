@@ -116,7 +116,7 @@ module Decidim
       end
 
       def fetched_initiatives
-        initiatives = search.results.includes(:scoped_type)
+        initiatives = search.results
         initiatives = reorder(initiatives)
         paginate(initiatives)
       end

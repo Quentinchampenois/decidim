@@ -5,7 +5,7 @@ require "spec_helper"
 describe "Initiative widget", type: :system do
   let(:organization) { create(:organization) }
   let(:initiative) { create(:initiative, organization: organization) }
-  let(:widget_path) { decidim_initiatives.initiative_initiative_widget_path(initiative.slug) }
+  let(:widget_path) { decidim_initiatives.initiative_widget_path(initiative.slug) }
 
   before do
     switch_to_host(organization.host)

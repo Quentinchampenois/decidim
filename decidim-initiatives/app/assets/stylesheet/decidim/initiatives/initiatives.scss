@@ -64,6 +64,10 @@
   }
 }
 
+.initiative .progress__bar--vertical {
+  margin-bottom: 1.5rem;
+}
+
 fieldset{
   border: 1px solid #e8e8e8;
   padding: .5em;
@@ -71,6 +75,11 @@ fieldset{
 }
 
 .area-header{
+  &.row {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   span{
     padding: 1rem 1rem;
     display: flex;

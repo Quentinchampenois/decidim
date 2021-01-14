@@ -20,28 +20,32 @@ module Decidim
 
       # GET /initiatives/:initiative_id/initiative_signatures/:step
       def show
+        group_id = params[:group_id] || (session[:initiative_vote_form] ||= {})["group_id"]
         if params[:id] == "finish"
-          enforce_permission_to :vote, :initiative, initiative: current_initiative
+          enforce_permission_to :vote, :initiative, initiative: current_initiative, group_id: group_id
         else
-          enforce_permission_to :sign_initiative, :initiative, initiative: current_initiative, signature_has_steps: signature_has_steps?
+          enforce_permission_to :sign_initiative, :initiative, initiative: current_initiative, group_id: group_id, signature_has_steps: signature_has_steps?
         end
         send("#{step}_step", initiative_vote_form: session[:initiative_vote_form])
       end
 
       # PUT /initiatives/:initiative_id/initiative_signatures/:step
       def update
-        enforce_permission_to :sign_initiative, :initiative, initiative: current_initiative, signature_has_steps: signature_has_steps?
+        group_id = params.dig(:initiatives_vote, :group_id) || session[:initiative_vote_form]["group_id"]
+        enforce_permission_to :sign_initiative, :initiative, initiative: current_initiative, group_id: group_id, signature_has_steps: signature_has_steps?
         send("#{step}_step", params)
       end
 
       # POST /initiatives/:initiative_id/initiative_signatures
       def create
-        enforce_permission_to :vote, :initiative, initiative: current_initiative
+        group_id = params[:group_id] || session[:initiative_vote_form]&.dig("group_id")
+        enforce_permission_to :vote, :initiative, initiative: current_initiative, group_id: group_id
 
         @form = form(Decidim::Initiatives::VoteForm)
                 .from_params(
                   initiative: current_initiative,
-                  signer: current_user
+                  signer: current_user,
+                  group_id: group_id
                 )
 
         VoteInitiative.call(@form) do
@@ -64,10 +68,11 @@ module Decidim
         @form = form(Decidim::Initiatives::VoteForm)
                 .from_params(
                   initiative: current_initiative,
-                  signer: current_user
+                  signer: current_user,
+                  group_id: params[:group_id]
                 )
 
-        session[:initiative_vote_form] = {}
+        session[:initiative_vote_form] = { group_id: @form.group_id }
         skip_step unless initiative_type.collect_user_extra_fields
         render_wizard
       end
@@ -150,14 +155,16 @@ module Decidim
           form.signer = current_user
         end
 
-        session[:initiative_vote_form] ||= {}
-        session[:initiative_vote_form] = session[:initiative_vote_form].merge(@vote_form.attributes_with_values.except(:initiative, :signer))
+        session[:initiative_vote_form] = session[:initiative_vote_form].merge(@vote_form.attributes_with_values)
       end
 
       def session_vote_form
-        attributes = session[:initiative_vote_form].merge(initiative: current_initiative, signer: current_user)
+        raw_birth_date = session[:initiative_vote_form]["date_of_birth"]
+        return unless raw_birth_date
 
-        @vote_form = form(Decidim::Initiatives::VoteForm).from_params(attributes)
+        @vote_form = form(Decidim::Initiatives::VoteForm).from_params(
+          session[:initiative_vote_form].merge("date_of_birth" => Date.parse(raw_birth_date))
+        )
       end
 
       def initiative_type

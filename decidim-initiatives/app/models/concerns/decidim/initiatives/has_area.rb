@@ -18,6 +18,14 @@ module Decidim
         validate :area_belongs_to_organization
       end
 
+      def area_logo
+        area.logo
+      end
+
+      def area_color
+        area.color
+      end
+
       private
 
       def area_belongs_to_organization
