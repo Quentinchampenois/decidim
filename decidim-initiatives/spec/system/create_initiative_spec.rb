@@ -350,7 +350,9 @@ describe "Initiative", type: :system do
 
           it "displays a send to technical validation link" do
             within ".column.actions" do
-              expect(page).to have_link("Send my initiative")
+              expect(page).to have_link("Send my initiative", href: /initiatives\/i-\d+\/send_to_technical_validation/)
+              expect(page).not_to have_link("Send my initiative", href: /admin\/initiatives\/i-\d+\/send_to_technical_validation/)
+
               expect(page).to have_selector "a[data-confirm='Confirm']"
             end
           end
