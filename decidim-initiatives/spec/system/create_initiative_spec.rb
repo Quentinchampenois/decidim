@@ -342,6 +342,18 @@ describe "Initiative", type: :system do
               expect(page).to have_link("Edit my initiative", href: /initiatives\/i-\d+\/edit/)
             end
           end
+
+          it "displays go to my initiatives link" do
+            within ".column.actions" do
+              expect(page).to have_link("Go to my initiatives", href: /initiatives\?filter%5Bauthor%5D=myself/)
+            end
+          end
+
+          it "displays back to my initiatives link" do
+            within ".column.actions" do
+              expect(page).to have_link("Back to initiatives", href: /initiatives$/)
+            end
+          end
         end
 
         context "when minimum committee size is zero" do
