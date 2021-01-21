@@ -339,7 +339,7 @@ describe "Initiative", type: :system do
 
           it "displays an edit link" do
             within ".column.actions" do
-              expect(page).to have_link("Edit my initiative")
+              expect(page).to have_link("Edit my initiative", href: /initiatives\/i-\d+\/edit/)
             end
           end
         end
