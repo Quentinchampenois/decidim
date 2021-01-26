@@ -337,6 +337,7 @@ describe Decidim::Initiatives::Permissions do
       context "when user is not a member" do
         let(:initiative) { create :initiative, :discarded, organization: organization }
 
+        # TODO: Check again this test, maybe it should be equal to falsey
         it "restricts join committee request on creation" do
           expect(subject).to be_truthy
         end

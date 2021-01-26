@@ -127,7 +127,7 @@ module Decidim
           !initiative.has_authorship?(user) &&
           (
             Decidim::Initiatives.do_not_require_authorization ||
-            ActionAuthorizer.new(user, :create, initiative_type, initiative_type).authorize.ok? ||
+            ActionAuthorizer.new(user, :create, initiative, initiative_type).authorize.ok? ||
             Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
           )
       end
