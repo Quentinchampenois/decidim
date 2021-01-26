@@ -3,8 +3,10 @@
 require "spec_helper"
 
 describe "Initiative", type: :system do
-  let(:organization) { create(:organization) }
-  let(:authorized_user) { create(:user, :confirmed, organization: organization) }
+  let(:organization) { create :organization, available_authorizations: ["dummy_authorization_handler"] }
+  let!(:authorized_user) { create(:user, :confirmed, organization: organization) }
+  let!(:authorization) { create(:authorization, user: authorized_user) }
+  let(:login) { true }
 
   shared_examples "initiatives path redirection" do
     it "redirects to initiatives path" do
@@ -16,31 +18,77 @@ describe "Initiative", type: :system do
     end
   end
 
-  context "when access to functionality" do
-    before do
-      switch_to_host(organization.host)
+  before do
+    switch_to_host(organization.host)
+    login_as(authorized_user, scope: :user) if authorized_user && login
+    visit decidim_initiatives.initiatives_path
+  end
 
-      create(:authorization, user: authorized_user)
-      login_as authorized_user, scope: :user
+  describe "create initiative verification" do
+    context "when the user is logged in" do
+      context "and they're verified" do
+        it "they are taken to the initiative form" do
+          click_link "New initiative"
+          expect(page).to have_content("Which initiative do you want to launch")
+        end
+      end
 
-      visit decidim_initiatives.initiatives_path
+      context "and they aren't verified" do
+        let(:authorization) {}
+
+        it "they need to verify" do
+          click_button "New initiative"
+          expect(page).to have_content("Authorization required")
+        end
+
+        it "they are redirected to the initiative form after verifying" do
+          click_button "New initiative"
+          click_link "View authorizations"
+          click_link "Example authorization"
+          fill_in "Document number", with: "123456789X"
+          click_button "Send"
+          expect(page).to have_content("Which initiative do you want to launch")
+        end
+      end
     end
 
-    it "Initiatives page contains a create initiative button" do
-      expect(page).to have_content("New initiative")
+    context "when they aren't logged in" do
+      let(:login) { false }
+
+      it "they need to login in" do
+        click_button "New initiative"
+        expect(page).to have_content("Please sign in")
+      end
+
+      context "when they are verified" do
+        it "they are redirected to the initiative form after log in" do
+          click_button "New initiative"
+          fill_in "Email", with: authorized_user.email
+          fill_in "Password", with: "password1234"
+          click_button "Log in"
+
+          expect(page).to have_content("Which initiative do you want to launch")
+        end
+      end
+
+      context "when they aren't verified" do
+        before do
+          Decidim::Authorization.delete_all
+        end
+
+        it "they are shown an error" do
+          click_button "New initiative"
+          fill_in "Email", with: authorized_user.email
+          fill_in "Password", with: "password1234"
+          click_button "Log in"
+
+          expect(page).to have_content("You are not authorized to perform this action")
+        end
+      end
     end
   end
 
-  context "when creates an initiative" do
-    before do
-      switch_to_host(organization.host)
-
-      create(:authorization, user: authorized_user)
-      login_as authorized_user, scope: :user
-
-      visit decidim_initiatives.initiatives_path
-    end
-
+  describe "creating an initiative" do
     context "without validation" do
       let(:initiative_type_minimum_committee_members) { 2 }
       let(:signature_type) { "any" }
@@ -57,17 +105,13 @@ describe "Initiative", type: :system do
       let!(:other_initiative_type_scope) { create(:initiatives_type_scope, type: initiative_type) }
 
       before do
-        switch_to_host(organization.host)
-        create(:authorization, user: authorized_user)
-        login_as authorized_user, scope: :user
-
-        visit decidim_initiatives.create_initiative_path(id: :select_initiative_type)
+        click_link "New initiative"
       end
 
       context "and select initiative type" do
         it "Offers contextual help" do
           within ".callout.secondary" do
-            expect(page).to have_content("Citizen initiatives are a means by which the citizenship can intervene so that the City Council can undertake actions in defence of the general interest that are within fields of municipal jurisdiction. Which initiative do you want to launch?")
+            expect(page).to have_content("Initiatives are a means by which the participants can intervene so that the organization can undertake actions in defence of the general interest. Which initiative do you want to launch?")
           end
         end
 
@@ -92,13 +136,13 @@ describe "Initiative", type: :system do
         end
 
         it "Has a hidden field with the selected initiative type" do
-          expect(page).to have_xpath("//input[@id='initiative_type_id']", visible: false)
-          expect(find(:xpath, "//input[@id='initiative_type_id']", visible: false).value).to eq(initiative_type.id.to_s)
+          expect(page).to have_xpath("//input[@id='initiative_type_id']", visible: :all)
+          expect(find(:xpath, "//input[@id='initiative_type_id']", visible: :all).value).to eq(initiative_type.id.to_s)
         end
 
         it "Have fields for title and description" do
           expect(page).to have_xpath("//input[@id='initiative_title']")
-          expect(page).to have_xpath("//input[@id='initiative_description']", visible: false)
+          expect(page).to have_xpath("//input[@id='initiative_description']", visible: :all)
         end
 
         it "Offers contextual help" do
@@ -122,13 +166,13 @@ describe "Initiative", type: :system do
         end
 
         it "Has a hidden field with the selected initiative type" do
-          expect(page).to have_xpath("//input[@id='initiative_type_id']", visible: false)
-          expect(find(:xpath, "//input[@id='initiative_type_id']", visible: false).value).to eq(initiative_type.id.to_s)
+          expect(page).to have_xpath("//input[@id='initiative_type_id']", visible: :all)
+          expect(find(:xpath, "//input[@id='initiative_type_id']", visible: :all).value).to eq(initiative_type.id.to_s)
         end
 
         it "Have fields for title and description" do
           expect(page).to have_xpath("//input[@id='initiative_title']")
-          expect(page).to have_xpath("//input[@id='initiative_description']", visible: false)
+          expect(page).to have_xpath("//input[@id='initiative_description']", visible: :all)
         end
 
         it "Offers contextual help" do
@@ -170,6 +214,21 @@ describe "Initiative", type: :system do
       context "when Create initiative" do
         let(:initiative) { build(:initiative) }
 
+        context "when there is only one initiative type" do
+          let!(:other_initiative_type) { nil }
+
+          before do
+            fill_in "Title", with: translated(initiative.title, locale: :en)
+            fill_in_editor "initiative_description", with: translated(initiative.description, locale: :en)
+            find_button("Continue").click
+          end
+
+          it "have no 'Initiative type' grey field" do
+            expect(page).not_to have_content("Initiative type")
+            expect(page).not_to have_css("#type_description")
+          end
+        end
+
         context "when there is several initiatives type" do
           before do
             find_button("I want to promote this initiative").click
@@ -186,14 +245,14 @@ describe "Initiative", type: :system do
             within ".callout.secondary" do
               expect(page).to have_content("Review the content of your initiative. Is your title easy to understand? Is the objective of your initiative clear?")
               expect(page).to have_content("You have to choose the type of signature. In-person, online or a combination of both")
-              expect(page).to have_content("Which is the geographic scope of the initiative? City, district?")
+              expect(page).to have_content("Which is the geographic scope of the initiative?")
             end
           end
 
           it "Information collected in previous steps is already filled" do
-            expect(find(:xpath, "//input[@id='initiative_type_id']", visible: false).value).to eq(initiative_type.id.to_s)
+            expect(find(:xpath, "//input[@id='initiative_type_id']", visible: :all).value).to eq(initiative_type.id.to_s)
             expect(find(:xpath, "//input[@id='initiative_title']").value).to eq(translated(initiative.title, locale: :en))
-            expect(find(:xpath, "//input[@id='initiative_description']", visible: false).value).to eq(translated(initiative.description, locale: :en))
+            expect(find(:xpath, "//input[@id='initiative_description']", visible: :all).value).to eq(translated(initiative.description, locale: :en))
           end
 
           context "when only one signature collection and scope are available" do
@@ -203,8 +262,8 @@ describe "Initiative", type: :system do
             it "hides and automatically selects the values" do
               expect(page).not_to have_content("Signature collection type")
               expect(page).not_to have_content("Scope")
-              expect(find(:xpath, "//input[@id='initiative_type_id']", visible: false).value).to eq(initiative_type.id.to_s)
-              expect(find(:xpath, "//input[@id='initiative_signature_type']", visible: false).value).to eq("offline")
+              expect(find(:xpath, "//input[@id='initiative_type_id']", visible: :all).value).to eq(initiative_type.id.to_s)
+              expect(find(:xpath, "//input[@id='initiative_signature_type']", visible: :all).value).to eq("offline")
             end
           end
 
@@ -232,8 +291,7 @@ describe "Initiative", type: :system do
             let(:initiative_type) { create(:initiatives_type, :area_enabled, organization: organization, minimum_committee_members: initiative_type_minimum_committee_members, signature_type: "offline") }
 
             it "shows the area" do
-              # Update test according to commit : 4e180fdf2b7c1a9994dbbaf185646777f3735d21
-              expect(page).not_to have_content("Area")
+              expect(page).to have_content("Area")
             end
           end
         end
@@ -275,7 +333,7 @@ describe "Initiative", type: :system do
 
         it "Offers contextual help" do
           within ".callout.secondary" do
-            expect(page).to have_content("This kind of citizen initiative requires a Promoting Commission consisting of at least #{initiative_type_minimum_committee_members} people (attestors). You must share the following link with the other people that are part of this initiative. When your contacts receive this link they will have to follow the indicated steps.")
+            expect(page).to have_content("This kind of initiative requires a Promoting Commission consisting of at least #{initiative_type_minimum_committee_members} people (attestors). You must share the following link with the other people that are part of this initiative. When your contacts receive this link they will have to follow the indicated steps.")
           end
         end
 
@@ -308,7 +366,7 @@ describe "Initiative", type: :system do
         end
       end
 
-      context "when Finish" do
+      context "when Finish", processing_uploads_for: Decidim::AttachmentUploader do
         let(:initiative) { build(:initiative) }
 
         before do
@@ -320,6 +378,7 @@ describe "Initiative", type: :system do
 
           select(translated(initiative_type_scope.scope.name, locale: :en), from: "Scope")
           select("Online", from: "Signature collection type")
+          attach_file :initiative_add_documents, Decidim::Dev.asset("Exampledocument.pdf")
           find_button("Continue").click
         end
 
@@ -339,7 +398,7 @@ describe "Initiative", type: :system do
           end
 
           it "displays an edit link" do
-            within ".column.actions" do
+            within ".actions" do
               expect(page).to have_link("Edit my initiative")
             end
           end
@@ -350,9 +409,10 @@ describe "Initiative", type: :system do
           let(:initiative_type_minimum_committee_members) { 0 }
 
           it "displays a send to technical validation link" do
-            within ".column.actions" do
+            expected_message = "You are going to send the initiative for an admin to review it and publish it. Once published you will not be able to edit it. Are you sure?"
+            within ".actions" do
               expect(page).to have_link("Send my initiative")
-              expect(page).to have_selector "a[data-confirm='Confirm']"
+              expect(page).to have_selector "a[data-confirm='#{expected_message}']"
             end
           end
 
@@ -364,10 +424,12 @@ describe "Initiative", type: :system do
           let(:initiative_type_promoting_committee_enabled) { false }
           let(:initiative_type_minimum_committee_members) { 0 }
 
+          expected_message = "You are going to send the initiative for an admin to review it and publish it. Once published you will not be able to edit it. Are you sure?"
+
           it "displays a send to technical validation link" do
-            within ".column.actions" do
+            within ".actions" do
               expect(page).to have_link("Send my initiative")
-              expect(page).to have_selector "a[data-confirm='Confirm']"
+              expect(page).to have_selector "a[data-confirm='#{expected_message}']"
             end
           end
 

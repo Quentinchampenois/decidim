@@ -4,11 +4,6 @@ module Decidim
   module Initiatives
     class Permissions < Decidim::DefaultPermissions
       def permissions
-        if read_admin_dashboard_action?
-          user_can_read_admin_dashboard?
-          return permission_action
-        end
-
         # Delegate the admin permission checks to the admin permissions class
         return Decidim::Initiatives::Admin::Permissions.new(user, permission_action, context).permissions if permission_action.scope == :admin
         return permission_action if permission_action.scope != :public
@@ -23,6 +18,8 @@ module Decidim
         return permission_action unless user
 
         create_initiative?
+        edit_public_initiative?
+        update_public_initiative?
         create_initiative_with_type?
 
         vote_initiative?
@@ -30,6 +27,9 @@ module Decidim
         unvote_initiative?
 
         initiative_attachment?
+
+        initiative_committee_action?
+        send_to_technical_validation?
 
         permission_action
       end
@@ -41,7 +41,7 @@ module Decidim
       end
 
       def initiative_type
-        @initiative_type ||= context.fetch(:initiative_type, nil) || initiative.type
+        @initiative_type ||= context[:initiative_type]
       end
 
       def list_public_initiatives?
@@ -71,6 +71,18 @@ module Decidim
                       permission_action.action == :create
 
         toggle_allow(creation_enabled?)
+      end
+
+      def edit_public_initiative?
+        allow! if permission_action.subject == :initiative &&
+                  permission_action.action == :edit
+      end
+
+      def update_public_initiative?
+        return unless permission_action.subject == :initiative &&
+                      permission_action.action == :update
+
+        toggle_allow(initiative.created?)
       end
 
       def creation_enabled?
@@ -118,21 +130,6 @@ module Decidim
             ActionAuthorizer.new(user, :create, initiative_type, initiative_type).authorize.ok? ||
             Decidim::UserGroups::ManageableUserGroups.for(user).verified.any?
           )
-      end
-
-      def has_initiatives?
-        (InitiativesCreated.by(user) | InitiativesPromoted.by(user)).any?
-      end
-
-      def read_admin_dashboard_action?
-        permission_action.action == :read &&
-          permission_action.subject == :admin_dashboard
-      end
-
-      def user_can_read_admin_dashboard?
-        return unless user
-
-        allow! if has_initiatives?
       end
 
       def vote_initiative?
@@ -213,13 +210,43 @@ module Decidim
 
       def can_user_support?(initiative)
         !initiative.offline_signature_type? && (
-        Decidim::Initiatives.do_not_require_authorization ||
-            UserAuthorizations.for(user).any?
-      )
+          Decidim::Initiatives.do_not_require_authorization ||
+          UserAuthorizations.for(user).any?
+        )
       end
 
       def readable?(initiative)
         initiative.published? || initiative.rejected? || initiative.accepted? || initiative.debatted? || initiative.examinated? || initiative.classified?
+      end
+
+      def initiative_committee_action?
+        return unless permission_action.subject == :initiative_committee_member
+
+        request = context.fetch(:request, nil)
+        return unless user.admin? || initiative&.has_authorship?(user)
+
+        case permission_action.action
+        when :index
+          allow!
+        when :approve
+          toggle_allow(!request&.accepted?)
+        when :revoke
+          toggle_allow(!request&.rejected?)
+        end
+      end
+
+      def send_to_technical_validation?
+        return unless permission_action.action == :send_to_technical_validation &&
+                      permission_action.subject == :initiative
+
+        toggle_allow(allowed_to_send_to_technical_validation?)
+      end
+
+      def allowed_to_send_to_technical_validation?
+        initiative.created? && (
+          !initiative.created_by_individual? ||
+          initiative.enough_committee_members?
+        )
       end
     end
   end
