@@ -617,6 +617,7 @@ en:
           number_of_versions: Versions
           title: Versions
         shared:
+          back_to_initiative: Go back to initiative
           back_to_resource: Go back to initiative
           changes_at_title: Changes at "%{title}"
         show:
