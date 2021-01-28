@@ -183,7 +183,7 @@ describe "Filter Initiatives", :slow, type: :system do
     end
 
     context "when selecting the published state" do
-      it "lists the published initiatives" do
+      it "lists the published initiatives", :slow do
         within ".filters .state_check_boxes_tree_filter" do
           uncheck "Open"
         end
@@ -193,6 +193,7 @@ describe "Filter Initiatives", :slow, type: :system do
           check "Published"
         end
 
+        expect(page).to have_css(".card--initiative", count: 8)
         expect(page).to have_css(".card--initiative", count: 8)
         expect(page).to have_content("8 INITIATIVES")
       end
