@@ -178,6 +178,8 @@ module Decidim
       # Private: Returns an array with checked area ids, handling area_types which are coded as its
       # areas ids joined by _.
       def area_ids
+        return [area_id] if area_id.is_a? String
+
         area_id.map { |id| id.split("_") }.flatten.uniq
       end
     end
