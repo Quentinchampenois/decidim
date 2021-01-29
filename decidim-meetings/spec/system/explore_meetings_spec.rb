@@ -55,7 +55,7 @@ describe "Explore meetings", type: :system do
         expect(page).to have_content(translated(meetings.first.title))
       end
 
-      it "allows filtering by date" do
+      it "allows filtering by date", :slow do
         past_meeting = create(:meeting, component: component, start_time: 1.day.ago)
         visit_component
 

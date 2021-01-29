@@ -226,7 +226,7 @@ describe "Collaborative drafts", type: :system do
             component.update!(permissions: permissions)
           end
 
-          it "shows a modal dialog" do
+          it "shows a modal dialog", :slow do
             visit_component
             click_link "Access collaborative drafts"
             click_link "New collaborative draft"
