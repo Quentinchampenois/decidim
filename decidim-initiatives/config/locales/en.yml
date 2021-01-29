@@ -535,11 +535,11 @@ en:
           confirm: You are going to send the initiative for an admin to review it and publish it. Once published you will not be able to edit it. Are you sure?
           edit: Edit
           follow_description: Receive a notification when there are news in this initiative
+          of_versions: "(of %{number})"
           offline_method: This initiative only collects in-person signatures.
           print: Print Initiative
-          send_to_technical_validation: Send to technical validation
-          of_versions: "(of %{number})"
           see_other_versions: see other versions
+          send_to_technical_validation: Send to technical validation
           version: Version %{number}
         signature_identities:
           select_identity: Select participant identifier
