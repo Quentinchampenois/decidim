@@ -232,8 +232,6 @@ en:
             success: The initiative has been sent to technical validation
             update: Update
           form:
-            attachments: Attachments
-            settings: Settings
             title: General information
           index:
             actions_title: Action
@@ -280,8 +278,6 @@ en:
             update: Update
           form:
             authorizations: Authorization settings
-            child_scope_threshold_enabled_help: 'This config flag doesn''t support offline votes, it enables sub-jauges and works with an authorization handler that associates a scope to the user, make sure you select that authorization, bellow in authorization settings. For it to work scopes need to be configured in hierarchical way : 1 Parent - N Child. For more info on how this configuration works, see this <a href="https://docs.decidim.org/admin-manual/en/initiatives/" target="_blank">link</a>.'
-            only_global_scope_enabled_help: Tick this flag if you enabled "Child scope signature" and configured the global scope as your parent scope. By enabling this, initiative type selection will be skipped in the initiative creation wizard. For more info on how this configuration works, see this <a href="https://docs.decidim.org/admin-manual/en/initiatives/" target="_blank">link</a>.
             options: Options
             title: General information
           initiative_type_scopes:
@@ -344,7 +340,6 @@ en:
           fill_data_help: "<ul> <li>Review the content of your initiative. Is your title easy to understand? Is the objective of your initiative clear?</li> <li>You have to choose the type of signature. In-person, online or a combination of both</li> <li>Which is the geographic scope of the initiative? City, district?</li> </ul>"
           initiative_type: Initiative type
           more_information: "(More information)"
-          select_area: Select an area
           select_scope: Select a scope
         finish:
           back: Back
@@ -476,14 +471,6 @@ en:
           unfold: Unfold
         index_header:
           new_initiative: New initiative
-          not_authorized:
-            authorizations_page: View authorizations
-            close: Close
-            explanation: You need to be verified in order to create a new initiative.
-            title: Authorization required
-        initiatives:
-          closed_initiatives_warning: Currently, there are no open initiatives, but here you can find all the closed initiatives listed.
-          no_initiatives_warning: No initiatives match your search criteria.
         interactions:
           comments_count:
             count:
@@ -575,9 +562,6 @@ en:
         new_initiative: New initiative
       pages:
         home:
-          answered_initiatives:
-            active_initiatives: Answered initiatives
-            see_all_initiatives: See all initiatives
           highlighted_initiatives:
             active_initiatives: Active initiatives
             see_all_initiatives: See all initiatives
@@ -618,7 +602,6 @@ en:
           title: Versions
         shared:
           back_to_initiative: Go back to initiative
-          back_to_resource: Go back to initiative
           changes_at_title: Changes at "%{title}"
         show:
           show_all_versions: Show all versions
