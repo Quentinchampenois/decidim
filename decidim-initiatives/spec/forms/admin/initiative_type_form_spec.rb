@@ -21,6 +21,8 @@ module Decidim
             attachments_enabled: true,
             custom_signature_end_date_enabled: true,
             undo_online_signatures_enabled: false,
+            area_enabled: false,
+            comments_enabled: false,
             promoting_committee_enabled: promoting_committee_enabled,
             minimum_committee_members: minimum_committee_members,
             banner_image: Decidim::Dev.test_file("city2.jpeg", "image/jpeg")
@@ -40,8 +42,8 @@ module Decidim
         context "when minimum_committee_members is blank" do
           let(:minimum_committee_members) { " " }
 
-          it "is nullified" do
-            expect(subject.minimum_committee_members).to be_nil
+          it "is 2" do
+            expect(subject.minimum_committee_members).to eq(2)
           end
         end
 

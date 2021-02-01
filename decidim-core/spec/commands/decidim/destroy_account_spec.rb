@@ -58,8 +58,8 @@ module Decidim
         command.call
 
         expect(DestroyAccountMailer)
-            .to have_received(:notify)
-                    .with(admin)
+          .to have_received(:notify)
+          .with(admin)
       end
 
       it "destroys the current user avatar" do

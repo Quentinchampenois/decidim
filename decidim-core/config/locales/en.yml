@@ -1,5 +1,4 @@
 ---
-
 en:
   activemodel:
     attributes:
@@ -76,12 +75,6 @@ en:
       decidim_with_month_name: "%d %B %Y"
       decidim_with_month_name_short: "%d %b"
   decidim:
-    destroy_account_mailer:
-      notify:
-        hello: Hello %{name}
-        subject: A user has deleted his account.
-        destroy_account_html: A user has deleted his account. We invite you to go and file his petitions.
-        destroy_account_explanation: You received this notification because you are administrator of the platform.
     accessibility:
       logo: "%{organization}'s official logo"
       skip_button: Skip to main content
@@ -391,6 +384,12 @@ en:
         request_data: Request data
     datepicker:
       help_text: 'Expected format: %{datepicker_format}'
+    destroy_account_mailer:
+      notify:
+        destroy_account_explanation: You received this notification because you are administrator of the platform.
+        destroy_account_html: A user has deleted his account. We invite you to go and file his petitions.
+        hello: Hello %{name}
+        subject: A user has deleted his account.
     devise:
       omniauth_registrations:
         create:
@@ -1283,12 +1282,13 @@ en:
       not_saved:
         one: 'There''s been an error processing your request:'
         other: 'There were multiple errors when processing your request:'
-      taken: Taken
+      taken: has already been taken
       too_many_marks: is using too many consecutive punctuation marks (e.g. ! and ?)
       too_much_caps: is using too many capital letters (over 25% of the text)
       too_short: is too short (under 15 characters)
   forms:
     required: Required
+    required_explanation: "* Required fields are marked with an asterisk"
   invisible_captcha:
     sentence_for_humans: If you are human, ignore this field
     timestamp_error_message: Sorry, that was too quick! Please resubmit.

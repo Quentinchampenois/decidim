@@ -221,6 +221,21 @@ describe "Initiative", type: :system do
               expect(page).to have_content("End of signature collection period")
             end
           end
+
+          context "when the initiative type does not enable area" do
+            it "does not show the area" do
+              expect(page).not_to have_content("Area")
+            end
+          end
+
+          context "when the initiative type enables area" do
+            let(:initiative_type) { create(:initiatives_type, :area_enabled, organization: organization, minimum_committee_members: initiative_type_minimum_committee_members, signature_type: "offline") }
+
+            it "shows the area" do
+              # Update test according to commit : 4e180fdf2b7c1a9994dbbaf185646777f3735d21
+              expect(page).not_to have_content("Area")
+            end
+          end
         end
 
         context "when there is only one initiative type" do
@@ -235,20 +250,6 @@ describe "Initiative", type: :system do
           it "have no 'Initiative type' grey field" do
             expect(page).not_to have_content("Initiative type")
             expect(page).not_to have_css("#type_description")
-          end
-        end
-
-        context "when the initiative type does not enable area" do
-          it "does not show the area" do
-            expect(page).not_to have_content("Area")
-          end
-        end
-
-        context "when the initiative type enables area" do
-          let(:initiative_type) { create(:initiatives_type, :area_enabled, organization: organization, minimum_committee_members: initiative_type_minimum_committee_members, signature_type: "offline") }
-
-          it "shows the area" do
-            expect(page).to have_content("Area")
           end
         end
       end
@@ -307,7 +308,7 @@ describe "Initiative", type: :system do
         end
       end
 
-      context "when Finish" do
+      context "when Finish", processing_uploads_for: Decidim::AttachmentUploader do
         let(:initiative) { build(:initiative) }
 
         before do
@@ -318,6 +319,7 @@ describe "Initiative", type: :system do
           find_button("Continue").click
 
           select(translated(initiative_type_scope.scope.name, locale: :en), from: "Scope")
+          attach_file :initiative_add_documents, Decidim::Dev.asset("Exampledocument.pdf")
           select("Online", from: "Signature collection type")
           find_button("Continue").click
         end
@@ -333,12 +335,12 @@ describe "Initiative", type: :system do
 
           it "Offers contextual help" do
             within ".callout.success" do
-              expect(page).to have_content("Congratulations! Your citizen initiative has been successfully created.")
+              expect(page).to have_content("Congratulations! Your initiative has been successfully created.")
             end
           end
 
           it "displays an edit link" do
-            within ".column.actions" do
+            within ".actions" do
               expect(page).to have_link("Edit my initiative")
             end
           end
@@ -349,9 +351,10 @@ describe "Initiative", type: :system do
           let(:initiative_type_minimum_committee_members) { 0 }
 
           it "displays a send to technical validation link" do
-            within ".column.actions" do
+            expected_message = "You are going to send the initiative for an admin to review it and publish it. Once published you will not be able to edit it. Are you sure?"
+            within ".actions" do
               expect(page).to have_link("Send my initiative")
-              expect(page).to have_selector "a[data-confirm='Confirm']"
+              expect(page).to have_selector "a[data-confirm='#{expected_message}']"
             end
           end
 
@@ -364,9 +367,10 @@ describe "Initiative", type: :system do
           let(:initiative_type_minimum_committee_members) { 0 }
 
           it "displays a send to technical validation link" do
-            within ".column.actions" do
+            expected_message = "You are going to send the initiative for an admin to review it and publish it. Once published you will not be able to edit it. Are you sure?"
+            within ".actions" do
               expect(page).to have_link("Send my initiative")
-              expect(page).to have_selector "a[data-confirm='Confirm']"
+              expect(page).to have_selector "a[data-confirm='#{expected_message}']"
             end
           end
 

@@ -5,6 +5,8 @@ module Decidim
     module Admin
       # A form object used to collect the all the initiative type attributes.
       class InitiativeTypeForm < Decidim::Form
+        DEFAULT_MINIMUM_COMMITTEE_MEMBERS = 2
+
         include TranslatableAttributes
 
         mimic :initiatives_type
@@ -29,7 +31,7 @@ module Decidim
 
         validates :title, :description, translatable_presence: true
         validates :attachments_enabled, :undo_online_signatures_enabled, :custom_signature_end_date_enabled,
-                  :promoting_committee_enabled, :area_enabled, inclusion: { in: [true, false] }
+                  :promoting_committee_enabled, :area_enabled, :comments_enabled, inclusion: { in: [true, false] }
         validates :minimum_committee_members, numericality: { only_integer: true }, allow_nil: true
         validates :banner_image, presence: true, if: ->(form) { form.context.initiative_type.nil? }
 
@@ -39,6 +41,7 @@ module Decidim
 
         def minimum_committee_members
           return 0 unless promoting_committee_enabled?
+          return DEFAULT_MINIMUM_COMMITTEE_MEMBERS if super.blank?
 
           super
         end

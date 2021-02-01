@@ -77,10 +77,8 @@ module Decidim
 
           case permission_action.action
           when :update, :destroy
-            toggle_allow(attached && attached.is_a?(Decidim::Initiative) && initiative.created?)
-          when :create
-            toggle_allow(initiative.created?)
-          when :read
+            toggle_allow(attached && attached.is_a?(Decidim::Initiative))
+          when :create, :read
             allow!
           else
             disallow!
@@ -208,10 +206,11 @@ module Decidim
         end
 
         def allowed_to_send_to_technical_validation?
-          initiative.created? && (
-            !initiative.created_by_individual? ||
-            initiative.enough_committee_members?
-          )
+          initiative.discarded? ||
+            (initiative.created? && (
+              !initiative.created_by_individual? ||
+              initiative.enough_committee_members?
+            ))
         end
       end
     end

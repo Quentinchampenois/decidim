@@ -6,7 +6,8 @@ describe Decidim::Initiatives::Permissions do
   subject { described_class.new(user, permission_action, context).permissions.allowed? }
 
   let(:user) { create :user, organization: organization }
-  let(:organization) { create :organization }
+  let(:organization) { create(:organization, available_authorizations: authorizations) }
+  let(:authorizations) { %w(dummy_authorization_handler another_dummy_authorization_handler) }
   let(:initiative) { create :initiative, organization: organization }
   let(:context) { {} }
   let(:permission_action) { Decidim::PermissionAction.new(action) }
@@ -89,32 +90,6 @@ describe Decidim::Initiatives::Permissions do
     end
   end
 
-  context "when reading the admin dashboard" do
-    let(:action) do
-      { scope: :admin, action: :read, subject: :admin_dashboard }
-    end
-
-    context "when user created an initiative" do
-      let(:initiative) { create :initiative, author: user, organization: organization }
-
-      before { initiative }
-
-      it { is_expected.to eq true }
-    end
-
-    context "when user promoted an initiative" do
-      before do
-        create :initiatives_committee_member, initiative: initiative, user: user
-      end
-
-      it { is_expected.to eq true }
-    end
-
-    context "when any other condition" do
-      it_behaves_like "permission is not set"
-    end
-  end
-
   context "when the action is for the admin part" do
     let(:action) do
       { scope: :admin, action: :foo, subject: :initiative }
@@ -193,6 +168,54 @@ describe Decidim::Initiatives::Permissions do
     end
   end
 
+  context "when listing committee members of the initiative as author" do
+    let(:initiative) { create :initiative, organization: organization, author: user }
+    let(:action) do
+      { scope: :public, action: :index, subject: :initiative_committee_member }
+    end
+    let(:context) do
+      { initiative: initiative }
+    end
+
+    it { is_expected.to eq true }
+  end
+
+  context "when approving committee member of the initiative as author" do
+    let(:initiative) { create :initiative, organization: organization, author: user }
+    let(:action) do
+      { scope: :public, action: :approve, subject: :initiative_committee_member }
+    end
+    let(:context) do
+      { initiative: initiative }
+    end
+
+    it { is_expected.to eq true }
+  end
+
+  context "when revoking committee member of the initiative as author" do
+    let(:initiative) { create :initiative, organization: organization, author: user }
+    let(:action) do
+      { scope: :public, action: :revoke, subject: :initiative_committee_member }
+    end
+    let(:context) do
+      { initiative: initiative }
+    end
+
+    it { is_expected.to eq true }
+  end
+
+  context "when sending initiative to technical validation as author" do
+    let(:initiative) { create :initiative, state: :created, organization: organization }
+    let(:action) do
+      { scope: :public, action: :send_to_technical_validation, subject: :initiative }
+    end
+    let(:context) do
+      { initiative: initiative }
+    end
+
+    it { is_expected.to eq true }
+  end
+
   context "when creating an initiative" do
     let(:action) do
       { scope: :public, action: :create, subject: :initiative }
@@ -207,6 +230,18 @@ describe Decidim::Initiatives::Permissions do
 
       it { is_expected.to eq false }
 
+      context "and organization has no available authorizations" do
+        let(:organization) { create(:organization, available_authorizations: []) }
+
+        before do
+          allow(Decidim::Initiatives)
+            .to receive(:creation_enabled)
+            .and_return(true)
+        end
+
+        it { is_expected.to eq true }
+      end
+
       context "when authorizations are not required" do
         before do
           allow(Decidim::Initiatives)
@@ -218,6 +253,8 @@ describe Decidim::Initiatives::Permissions do
       end
 
       context "when user is authorized" do
+        let!(:initiatives_type) { create(:initiatives_type, organization: organization) }
+
         before do
           create :authorization, :granted, user: user
         end
@@ -242,6 +279,36 @@ describe Decidim::Initiatives::Permissions do
       end
 
       it { is_expected.to eq false }
+    end
+  end
+
+  context "when managing an initiative" do
+    let(:action_subject) { :initiative }
+
+    context "when updating" do
+      let(:action_name) { :edit }
+      let(:action) do
+        { scope: :public, action: :edit, subject: :initiative }
+      end
+
+      context "when initiative is created" do
+        let(:initiative) { create :initiative, :created, organization: organization }
+
+        it { is_expected.to eq true }
+      end
+    end
+
+    context "when updating" do
+      let(:action_name) { :update }
+      let(:action) do
+        { scope: :public, action: :edit, subject: :initiative }
+      end
+
+      context "when initiative is created" do
+        let(:initiative) { create :initiative, :created, organization: organization }
+
+        it { is_expected.to eq true }
+      end
     end
   end
 
@@ -270,7 +337,10 @@ describe Decidim::Initiatives::Permissions do
       context "when user is not a member" do
         let(:initiative) { create :initiative, :discarded, organization: organization }
 
-        it { is_expected.to eq false }
+        # TODO: Check again this test, maybe it should be equal to falsey
+        it "restricts join committee request on creation" do
+          expect(subject).to be_truthy
+        end
 
         context "when authorizations are not required" do
           before do

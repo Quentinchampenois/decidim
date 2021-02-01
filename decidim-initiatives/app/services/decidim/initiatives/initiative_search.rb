@@ -64,7 +64,13 @@ module Decidim
 
       def search_author
         if author == "myself" && options[:current_user]
-          query.where(decidim_author_id: options[:current_user].id)
+          co_authoring_initiative_ids = Decidim::InitiativesCommitteeMember.where(
+            decidim_users_id: options[:current_user].id
+          ).pluck(:decidim_initiatives_id)
+
+          query.where(decidim_author_id: options[:current_user].id, decidim_author_type: Decidim::UserBaseEntity.name)
+               .or(query.where(id: co_authoring_initiative_ids))
+               .unscope(where: :published_at)
         else
           query
         end
@@ -74,6 +80,7 @@ module Decidim
         return query if scope_ids.include?("all")
 
         clean_scope_ids = scope_ids
+
         conditions = []
         conditions << "decidim_initiatives_type_scopes.decidim_scopes_id IS NULL" if clean_scope_ids.delete("global")
         conditions.concat(["? = ANY(decidim_scopes.part_of)"] * clean_scope_ids.count) if clean_scope_ids.any?
@@ -82,9 +89,9 @@ module Decidim
       end
 
       def search_area_id
-        return query if area_id.include?("all")
+        return query if area_ids.include?("all")
 
-        query.where(decidim_area_id: area_id)
+        query.where(decidim_area_id: area_ids)
       end
 
       private
@@ -159,7 +166,6 @@ module Decidim
       # rubocop:enable Metrics/PerceivedComplexity
 
       # Private: Returns an array with checked type ids.
-
       def type_ids
         [type_id].flatten
       end
@@ -167,6 +173,14 @@ module Decidim
       # Private: Returns an array with checked scope ids.
       def scope_ids
         [scope_id].flatten
+      end
+
+      # Private: Returns an array with checked area ids, handling area_types which are coded as its
+      # areas ids joined by _.
+      def area_ids
+        return [area_id] if area_id.is_a? String
+
+        area_id.map { |id| id.split("_") }.flatten.uniq
       end
     end
   end

@@ -21,9 +21,10 @@ module Decidim
           scope_id: scope&.scope&.id,
           signature_type: "offline",
           attachment: attachment_params
-        }.merge(custom_signature_end_date)
+        }.merge(custom_signature_end_date).merge(area)
       end
       let(:custom_signature_end_date) { {} }
+      let(:area) { {} }
       let(:context) do
         {
           current_organization: organization,
@@ -62,6 +63,63 @@ module Decidim
           let(:custom_signature_end_date) { { signature_end_date: Date.current } }
 
           it { is_expected.to be_invalid }
+        end
+      end
+
+      context "when initiative type enables area" do
+        let(:initiatives_type) { create(:initiatives_type, :area_enabled, organization: organization) }
+
+        context "when area is missing" do
+          it { is_expected.to be_valid }
+        end
+
+        context "when area is present and belongs to organization" do
+          let(:area) { { area_id: decidim_area.id } }
+          let(:decidim_area) { create(:area, organization: organization) }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "when area is present but doesn't belong to organization" do
+          let(:area) { { area_id: decidim_area.id } }
+          let(:decidim_area) { create(:area) }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      describe "#area_updatable?" do
+        let(:user) { create(:user) }
+        let(:context) do
+          {
+            current_organization: organization,
+            current_component: nil,
+            initiative_type: initiatives_type,
+            current_user: user,
+            initiative: initiative
+          }
+        end
+
+        context "when initiative is created" do
+          subject { described_class.from_model(initiative).with_context(context).area_updatable? }
+
+          let(:initiative) { create(:initiative, organization: organization, state: "created", scoped_type: scope) }
+
+          it { is_expected.to eq(true) }
+        end
+
+        context "when current_user is admin" do
+          subject { described_class.from_model(initiative).with_context(context).area_updatable? }
+
+          let(:user) { create(:user, :admin) }
+
+          it { is_expected.to eq(true) }
+        end
+
+        context "when user is not admin and initiative is not created the area is not updatable" do
+          subject { described_class.from_model(initiative).with_context(context).area_updatable? }
+
+          it { is_expected.to eq(false) }
         end
       end
 

@@ -183,13 +183,15 @@ describe "Filter Initiatives", :slow, type: :system do
     end
 
     context "when selecting the published state" do
-      it "lists the published initiatives" do
+      it "lists the published initiatives", :slow do
         within ".filters .state_check_boxes_tree_filter" do
           uncheck "Open"
         end
 
         within ".filters .custom_state_check_boxes_tree_filter" do
           uncheck "All"
+          expect(page).to have_css("#filter_custom_state_published")
+          execute_script "window.scrollBy(0,500)" # Fix Selenium::WebDriver::Error::ElementNotInteractableError
           check "Published"
         end
 

@@ -95,7 +95,7 @@ shared_examples "manage impersonations examples" do
       context "and the action not allowed by the handler used to impersonate" do
         let(:authorization_handler) { "another_dummy_authorization_handler" }
 
-        it "shows popup to require verification" do
+        it "shows popup to require verification", :slow do
           expect(page).to have_content(
             /In order to perform this action, you need to be authorized with "Another example authorization"/
           )
@@ -275,7 +275,7 @@ shared_examples "manage impersonations examples" do
       page.execute_script("$('#impersonate_user_authorization_date_of_birth').focus()")
     end
 
-    page.find(".datepicker-dropdown .day", text: "12").click
+    page.find(".datepicker-dropdown .day:not(.new)", text: "12").click
 
     expect(page).to have_selector("*[type=submit]", count: 1)
 
