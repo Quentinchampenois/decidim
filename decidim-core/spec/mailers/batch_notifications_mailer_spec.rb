@@ -16,7 +16,7 @@ module Decidim
       let(:mail) { described_class.event_received(events, user) }
 
       it "gets the subject from the event" do
-        expect(mail.subject).to include("You have received notifications on #{organization.name}")
+        expect(mail.subject).to include("You have unread notifications on #{organization.name}")
       end
 
       it "delivers the email to the user" do
@@ -28,15 +28,19 @@ module Decidim
       end
 
       it "includes the greeting" do
-        expect(mail.body).to include("Greetings #{user.nickname}")
+        expect(mail.body).to include("Hello #{user.nickname}")
       end
 
-      it "includes the intro" do
+      it "includes the introduction" do
+        expect(mail.body).to include("A lot has happened on #{organization.name} since you last logged in. Here are some notifications you have missed")
+      end
+
+      it "includes the content" do
         expect(mail.body).to include("You are receiving this email because you have subscribed to resources on #{organization.name}")
       end
 
       it "includes the outro" do
-        expect(mail.body).to include("You can stop receiving notifications by visiting your <a href='/profiles/#{user.nickname}'>profile</a>")
+        expect(mail.body).to include("You can stop receiving notifications by visiting your <a href='/notifications_settings'>changing your notification setup</a>")
       end
 
       it "doesn't includes see more" do
