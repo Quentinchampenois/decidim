@@ -275,7 +275,11 @@ module Decidim
 
   # Send multiple notifications in a unique mail
   config_accessor :batch_email_notifications_enabled do
-    false
+    if ENV["BATCH_NOTIFICATIONS_ENABLED"].present?
+      ENV["BATCH_NOTIFICATIONS_ENABLED"] == "true"
+    else
+      false
+    end
   end
 
   # Time when the notification is considered as expired
@@ -286,7 +290,11 @@ module Decidim
   # Maximum of notifications in a mail.
   # If the number of notifications is greater than limit, displays a "see more" link in mail
   config_accessor :batch_email_notifications_max_length do
-    5
+    if ENV["BATCH_NOTIFICATIONS_LIMIT"].presence.to_i.positive?
+      ENV["BATCH_NOTIFICATIONS_LIMIT"].to_i
+    else
+      10
+    end
   end
 
   # Exposes a configuration option: an object to configure Etherpad
