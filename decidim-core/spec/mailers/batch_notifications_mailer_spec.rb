@@ -10,7 +10,7 @@ module Decidim
     let(:user) { create(:user, name: "Sarah Connor", organization: organization) }
     let(:notifications) { create_list(:notification, 3, user: user) }
     let(:events) { events_serializer(notifications) }
-    let(:see_more) { "You have received a lot of notifications on <a href='http://#{organization.host}/'>#{organization.name}</a>. Go check them out on your <a href='/notifications'>notifications</a> space" }
+    let(:see_more) { "More notifications are visible on <a href='http://#{organization.host}/'>#{organization.name}</a>. Go check them out on your <a href='/notifications'>notifications</a> space" }
 
     describe "#event_received" do
       let(:mail) { described_class.event_received(events, user) }
@@ -51,6 +51,7 @@ module Decidim
         expect(events.count).to eq(3)
 
         events.each do |event|
+          expect(mail.body).to include(I18n.l(event[:created_at], format: :decidim_short))
           expect(mail.body).to include(event_instance(event).notification_title)
         end
       end
@@ -95,7 +96,7 @@ module Decidim
           user: event.user,
           extra: event.extra,
           user_role: event.user_role,
-          created_at: time_ago_in_words(event.created_at).capitalize
+          created_at: event.created_at
         }
       end
     end
