@@ -51,6 +51,7 @@ module Decidim
         expect(events.count).to eq(3)
 
         events.each do |event|
+          expect(mail.body).to have_css("svg.icon--datetime")
           expect(mail.body).to include(I18n.l(event[:created_at], format: :decidim_short))
           expect(mail.body).to include(event_instance(event).notification_title)
         end
