@@ -2,7 +2,7 @@
 
 In Decidim, notifications may mean two things:
 
-* he concept of notifying an event to a user. This is the wider use of "notification".
+* the concept of notifying an event to a user. This is the wider use of "notification".
 * the notification's participant space, which lists the ``Decidim::Notification``s she has received.
 
 So, in the wider sense, notifications are messages that are sent to the users, admins or participants, when something interesting occurs in the platform.
@@ -54,6 +54,7 @@ Both, `EmailNotificationGenerator` and `NotificationGenerator` are use the same 
 * *followers*: a collection of Users that receive the notification because they're following it.
 * *affected_users*: a collection of Users that receive the notification because they're affected by it.
 * *force_send*: boolean indicating if EventPublisherJob should skip the `notifiable?` check it performs before notifying.
+* *priority*: A String with the priority to define if a notification as to be sent now (Used only if batch notifications is enabled)
 * *extra*: a Hash with extra information to be included in the notification.
 
 Again, both generators will check for each user
