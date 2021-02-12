@@ -208,6 +208,7 @@ en:
             invalid: There was a problem updating this agenda
             success: Agenda successfully updated
         exports:
+          meeting_comments: Comments
           meetings: Meetings
           registrations: Registrations
         invite_join_meeting_mailer:
@@ -255,6 +256,7 @@ en:
                 other: The meeting cannot be destroyed because it has %{count} proposals associated to it
             success: Meeting successfully deleted
           edit:
+            title: Edit meeting
             update: Update
           form:
             address_help: 'Address: used by Geocoder to find the location'
@@ -289,6 +291,7 @@ en:
             invalid: There was a problem creating this minutes
             success: Minutes successfully created
           edit:
+            title: Edit minutes
             update: Update
           new:
             create: Create
@@ -387,12 +390,15 @@ en:
           title: Edit Your Meeting
           update: Update
         filters:
+          activity: My activity
+          all: All
           category: Category
           date: Date
           date_values:
             all: All
             past: Past
             upcoming: Upcoming
+          my_meetings: My meetings
           origin: Origin
           origin_values:
             all: All
@@ -404,6 +410,7 @@ en:
           type: Type
           type_values:
             all: All
+            hybrid: Both
             in_person: In-person
             online: Online
         filters_small_view:
@@ -503,6 +510,7 @@ en:
           invalid: There was a problem leaving this meeting.
           success: You have left the meeting successfully.
       type_of_meeting:
+        hybrid: Both
         in_person: In person
         online: Online
       types:
@@ -515,11 +523,6 @@ en:
         description: Number of meetings created
         object: meetings
         title: Meetings
-    participatory_processes:
-      participatory_process_groups:
-        highlighted_meetings:
-          past_meetings: Past meetings
-          upcoming_meetings: Upcoming meetings
     participatory_spaces:
       highlighted_meetings:
         past_meetings: Past meetings

@@ -20,7 +20,7 @@ module Decidim
         BatchNotificationsMailer.event_received(
           serialized_events(user_events),
           user
-        ).deliver_later
+        ).deliver_now
 
         mark_as_sent(user_events)
       end
@@ -50,7 +50,7 @@ module Decidim
           priority: event.priority,
           extra: event.extra,
           user_role: event.user_role,
-          created_at: time_ago_in_words(event.created_at).capitalize
+          created_at: event.created_at
         }
       end
     end

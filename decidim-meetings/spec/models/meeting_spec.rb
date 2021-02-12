@@ -177,6 +177,14 @@ module Decidim::Meetings
 
         it { is_expected.to be_resource_visible }
       end
+
+      context "when Meeting is moderated" do
+        let!(:moderation) { create(:moderation, :hidden, reportable: meeting) }
+
+        before { subject.reload }
+
+        it { is_expected.not_to be_resource_visible }
+      end
     end
 
     describe "pad_is_visible?" do
@@ -277,6 +285,42 @@ module Decidim::Meetings
       context "when future meeting" do
         it "returns false" do
           expect(subject.past?).to be false
+        end
+      end
+    end
+
+    describe "#has_contributions?" do
+      context "when the meeting has contributions" do
+        let(:meeting) { build :meeting, contributions_count: 10 }
+
+        it "returns true" do
+          expect(subject.has_contributions?).to be true
+        end
+      end
+
+      context "when the meeting does not have contributions" do
+        let(:meeting) { build :meeting }
+
+        it "returns false" do
+          expect(subject.has_contributions?).to be false
+        end
+      end
+    end
+
+    describe "#has_attendees?" do
+      context "when the meeting has attendees" do
+        let(:meeting) { build :meeting, attendees_count: 10 }
+
+        it "returns true" do
+          expect(subject.has_attendees?).to be true
+        end
+      end
+
+      context "when the meeting does not have attendees" do
+        let(:meeting) { build :meeting }
+
+        it "returns false" do
+          expect(subject.has_attendees?).to be false
         end
       end
     end

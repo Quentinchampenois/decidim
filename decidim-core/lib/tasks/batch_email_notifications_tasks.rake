@@ -7,7 +7,7 @@ namespace :decidim do
       raise ArgumentError unless Decidim.config.batch_email_notifications_enabled
 
       puts "Running BatchEmailNotificationsGeneratorJob..."
-      Decidim::BatchEmailNotificationsGeneratorJob.perform_later
+      Decidim::BatchEmailNotificationsGeneratorJob.perform_now
 
       puts "Task succeeded !"
     rescue ArgumentError => e

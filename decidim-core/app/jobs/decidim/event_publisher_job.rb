@@ -43,11 +43,11 @@ module Decidim
       component&.participatory_space
     end
 
-    # Call perform_later on Job class passing event_name and data parameters
+    # Call perform_now on Job class passing event_name and data parameters
     def send_event(job_klass, event_name, data)
       return if event_name.blank?
 
-      job_klass.perform_later(
+      job_klass.perform_now(
         event_name,
         data[:event_class],
         data[:resource],

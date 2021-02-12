@@ -8,7 +8,7 @@ cs:
         decidim_scope_id: Rozsah
         has_address: Má adresu
         scope_id: Oblast působnosti
-        state: Stát
+        state: Stav
         title: Titul
         user_group_id: Vytvořit návrh spolupráce jako
       proposal:
@@ -21,7 +21,7 @@ cs:
         decidim_scope_id: Rozsah
         has_address: Má adresu
         scope_id: Oblast působnosti
-        state: Stát
+        state: Stav
         suggested_hashtags: Navrhované hashtags
         title: Titul
         user_group_id: Vytvořit návrh jako
@@ -150,10 +150,10 @@ cs:
             proposal_edit_before_minutes: Návrhy mohou být editovány autory před tím, než projde hodně minut
             proposal_length: Maximální délka návrhu
             proposal_limit: Limit návrhu na uživatele
-            proposal_wizard_step_1_help_text: Návrh průvodce "Vytvořit" pomocný text kroku
-            proposal_wizard_step_2_help_text: Průvodce návrhem "Porovnat" krok nápovědy
-            proposal_wizard_step_3_help_text: Návrh průvodce "Kompletní" pomocný text kroku
-            proposal_wizard_step_4_help_text: Průvodce návrhem "Publikovat" pomocný text kroku
+            proposal_wizard_step_1_help_text: Text průvodce kroku nápovědy "Vytvořit" Návrh
+            proposal_wizard_step_2_help_text: Text průvodce kroku nápovědy "Porovnat" návrhy
+            proposal_wizard_step_3_help_text: Text průvodce kroku nápovědy „Dokončit“ Návrh
+            proposal_wizard_step_4_help_text: Text průvodce kroku nápovědy "Publikovat" Návrh
             resources_permissions_enabled: Pro každý návrh lze nastavit oprávnění akce
             scope_id: Oblast působnosti
             scopes_enabled: Oblasti působnosti povoleny
@@ -172,7 +172,7 @@ cs:
               participants: Pozměňovací návrhy jsou viditelné pouze pro jejich autory
             amendments_visibility_help: Pokud je zvolena možnost "pozměňovací návrhy jsou viditelné pouze jejich autorům", musí být účastník přihlášen, aby se seznámil s provedenými pozměňovacími návrhy.
             announcement: Oznámení
-            answers_with_costs: Povolit náklady na odpovědi návrhu
+            answers_with_costs: Povolit finanční náklady v odpovědích návrhu
             automatic_hashtags: Do všech návrhů byly přidány značky Hashtags
             comments_blocked: Komentáře byly blokovány
             creation_enabled: Vytváření návrhu je povoleno
@@ -180,7 +180,7 @@ cs:
             endorsements_enabled: Schvalování povoleno
             proposal_answering_enabled: Odpovídání návrhu je povoleno
             publish_answers_immediately: Okamžitě publikovat odpovědi návrhu
-            suggested_hashtags: Hashtags navrhl uživatelům nové návrhy
+            suggested_hashtags: Hashtagy navržené uživatelům pro nové návrhy
             votes_blocked: Hlasování bylo blokováno
             votes_enabled: Hlasování povoleno
             votes_hidden: Hlasy skryté (pokud jsou povoleny hlasy, při kontrole se skryje počet hlasů)
@@ -347,10 +347,6 @@ cs:
         description: Počet hlasů vygenerovaných v návrzích uživatelů
         object: hlasů
         title: Hlasy
-    participatory_processes:
-      participatory_process_groups:
-        highlighted_proposals:
-          proposals: Návrhy
     participatory_spaces:
       highlighted_proposals:
         see_all: Zobrazit všechny (%{count})
@@ -367,7 +363,7 @@ cs:
         actions:
           preview: Náhled
         exports:
-          comments: Komentáře
+          proposal_comments: Komentáře
           proposals: Návrhy
         models:
           proposal:
@@ -387,7 +383,7 @@ cs:
             info_1: Následující oddíly byly analyzovány z importovaného dokumentu, byly převedeny na návrhy. Nyní můžete před publikováním zkontrolovat a upravit vše, co potřebujete.
             publish_document: Publikujte dokument
             save_draft: Uložit koncept
-            title: PŘEHLED ÚČASTNÍHO TEXTU
+            title: Náhled participačního textu
           new_import:
             accepted_mime_types:
               md: Markdown
@@ -510,6 +506,7 @@ cs:
             no_components: V tomto účastnickém prostoru neexistují žádné jiné komponenty návrhu, které by mohly importovat návrhy.
             select_component: Vyberte součást
             select_states: Zkontrolujte stav návrhů, které chcete importovat
+            title: Importovat návrhy
         proposals_merges:
           create:
             invalid: Při propojení vybraných návrhů došlo k chybě.
@@ -582,13 +579,6 @@ cs:
               ok: Vyjměte návrh spolupráce
               title: Následující akce je nevratná
             success: Kolaborativní návrh byl úspěšně zrušen.
-        compare:
-          mine_is_different: Můj návrh spolupráce je jiný
-          no_similars_found: Výborně! Žádný podobný návrh spolupráce nebyl nalezen
-          title: Podobné návrhy spolupráce
-        complete:
-          send: Poslat
-          title: Dokončete návrh spolupráce
         count:
           drafts_count:
             one: "%{count} návrh spolupráce"
@@ -613,7 +603,7 @@ cs:
           related_to: Související s
           scope: Rozsah
           search: Vyhledávání
-          state: Stát
+          state: Stav
           withdrawn: Staženo
         filters_small_view:
           close_modal: Zavřít modální
@@ -622,14 +612,13 @@ cs:
           unfold: Rozvinout
         new:
           send: Pokračovat
-          title: Vytvořte návrh spolupráce
         new_collaborative_draft_button:
           new_collaborative_draft: Nový návrh spolupráce
         orders:
-          label: 'Objednejte návrhy podle:'
-          most_contributed: Většina přispěla
-          random: Náhodný
-          recent: Nedávno
+          label: 'Řazení konceptů podle:'
+          most_contributed: Nejvíce příspěvků
+          random: Náhodně
+          recent: Nedávné
         requests:
           accepted_request:
             error: Nelze přijmout jako spolupracovník, zkuste to znovu později.
@@ -669,23 +658,14 @@ cs:
         update:
           error: Při ukládání schématu spolupráce došlo k chybám.
           success: Protokol o spolupráci byl úspěšně aktualizován.
-          title: Upravit koncept spolupráce
         wizard_aside:
-          back: Zadní
           back_from_collaborative_draft: Zpět na koncepty spolupráce
-          back_from_step_1: Zpět na koncepty spolupráce
-          back_from_step_2: Zpět na koncepty spolupráce
-          back_from_step_3: Zpět k porovnání konceptů spolupráce
-          back_from_step_4: Zpět k úpravě konceptu
           info: Při vytváření <strong>spolupráce návrhu</strong>.
-        wizard_steps:
-          current_step: Aktuální krok
-          see_steps: viz kroky
-          step_1: Vytvořte návrh spolupráce
-          step_2: Porovnejte s návrhy spolupráce
-          step_3: Dokončete návrh spolupráce
-          step_of: Krok %{current_step_num} z %{total_steps}
-          title: Kroky pro vytvoření společného návrhu
+        wizard_header:
+          title: Vytvořte návrh spolupráce
+      content_blocks:
+        highlighted_proposals:
+          proposals: Návrhy
       create:
         error: Při ukládání návrhu došlo k chybám.
         success: Návrh byl úspěšně vytvořen. Uloženo jako návrh.
@@ -710,7 +690,7 @@ cs:
             published_answer: Publikovaná odpověď
             published_at: Publikováno v
             scope: Rozsah
-            state: Stát
+            state: Stav
             title: Titul
             valuator: Hodnotitel
             valuators: Hodnotitelé
@@ -740,6 +720,8 @@ cs:
             few: "%{count} návrhů"
             many: "%{count} návrhů"
             other: "%{count} návrhů"
+        dynamic_map_instructions:
+          instructions: <h3>Můžete přesunout bod na mapě. </h3><p>Nezapomeňte kliknout na tlačítko "Aktualizovat pozici" před zveřejněním vašeho návrhu.</p>
         edit:
           add_documents: Dokumenty
           add_images: Soubor
@@ -766,7 +748,7 @@ cs:
           related_to: Související s
           scope: Rozsah
           search: Vyhledávání
-          state: Stát
+          state: Stav
           type: Typ
           voted: Hlasoval
         filters_small_view:
@@ -789,20 +771,24 @@ cs:
           send: Pokračovat
           title: Vytvořte svůj návrh
         orders:
-          label: 'Objednejte návrhy podle:'
+          label: 'Seřadit návrhy podle:'
           most_commented: Nejvíce komentované
           most_endorsed: Nejvíce schválené
           most_followed: Nejvíce sledované
-          most_voted: Nejvíce hlasovalo
-          random: Náhodný
-          recent: Nedávno
+          most_voted: Nejvíce podporované
+          random: Náhodně
+          recent: Nedávné
           with_more_authors: S více autory
         participatory_texts:
           index:
             document_index: Index dokumentů
           view_index:
-            see_index: Viz index
+            see_index: Prohlédnout seznam
+        placeholder:
+          address: 37 Homewood Drive Brownsburg, IN 46112
         preview:
+          announcement_body: Váš návrh byl uložen jako návrh. Musí být zveřejněn, aby se mohl zobrazit na webu.
+          announcement_title: Váš návrh ještě nebyl zveřejněn
           modify: Upravte návrh
           proposal_edit_before_minutes:
             one: Tento návrh budete moci upravit během první minuty po zveřejnění návrhu. Po uplynutí tohoto časového okna nebudete moci návrh upravit.
@@ -811,6 +797,7 @@ cs:
             other: Budete mít možnost upravit tento návrh během prvních %{count} minut po návrh zveřejněn. Po uplynutí tohoto časového okna nebudete moci návrh upravit.
           publish: Publikovat
           title: Publikujte svůj návrh
+          update_position: Aktualizovat pozici
         proposal:
           creation_date: 'Tvorba: %{date}'
           view_proposal: Zobrazit návrh
@@ -893,7 +880,7 @@ cs:
           see_steps: viz kroky
           step_1: Vytvořte svůj návrh
           step_2: Porovnejte
-          step_3: Kompletní
+          step_3: Dokončete
           step_4: Publikujte svůj návrh
           step_of: Krok %{current_step_num} z %{total_steps}
           title: Kroky vytváření návrhů
