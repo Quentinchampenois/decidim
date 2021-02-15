@@ -23,7 +23,9 @@
 
   <blockquote class="notification-blockquote">
     <div>
-      <p class="notification-legend"><span class="notification-legend-separator">Created on</span> <%= l(event[:created_at], format: :decidim_short) %></p>
+      <p class="notification-legend">
+        <%= icon "datetime", class: "notification-icon icon" %><%= event[:created_at] %>
+      </p>
       <p>
         <%= event_instance.notification_title %>
       </p>

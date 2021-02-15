@@ -1771,13 +1771,15 @@ td{
 }
 
 .notification{
+  &-icon{
+    width: .625em;
+    height: .625em;
+    fill: #ef604d;
+    color: #3d393c;
+    padding-right: 5px;
+  }
   &-legend{
     font-size: 14px;
-
-    &-separator{
-      border-right: 2px solid lightgrey;
-      padding-right: 6px;
-    }
   }
   &-blockquote{
     padding-top: 10px;
