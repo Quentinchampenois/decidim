@@ -90,7 +90,10 @@ fi:
         name: Nimi
         organization: Organisaatio
         plural: Monikko
+      settings:
+        scope_id: Teema
       static_page:
+        allow_public_access: Salli pääsy ilman kirjautumista
         changed_notably: On tapahtunut huomattavia muutoksia.
         content: Sisältö
         organization: Organisaatio
@@ -131,21 +134,33 @@ fi:
     admin:
       actions:
         add: Lisää
+        attachment:
+          new: Uusi liite
+        attachment_collection:
+          new: Uusi kansio
         browse: Selaa
+        category:
+          new: Uusi aihepiiri
         export: Vie
         manage: Hallitse
         new: Uusi %{name}
+        newsletter:
+          new: Uusi uutiskirje
+        participatory_space_private_user:
+          new: Uusi osallistumistilan yksityinen käyttäjä
         per_page: Per sivu
         permissions: Oikeudet
         reject: Hylkää
         share: Jaa
+        user:
+          new: Uusi käyttäjä
         verify: Vahvista
       admin_terms_of_use:
         accept:
           error: Hallintakäyttäjän ehtojen hyväksyminen epäonnistui.
           success: Hienoa! Olet hyväksynyt hallintakäyttäjän ehdot.
         actions:
-          accept: Hyväksyn nämä hallintakäyttäjän ehdot
+          accept: Hyväksyn seuraavat ehdot
           are_you_sure: Haluatko varmasti olla hyväksymättä hallintakäyttäjän ehtoja?
           refuse: Kieltäydy hyväksymästä hallintakäyttäjän ehtoja
           title: Hyväksy käyttöehdot
@@ -224,6 +239,12 @@ fi:
       autocomplete:
         no_results: Ei tuloksia
         search_prompt: Kirjoita vähintään kolme merkkiä hakuun
+      block_user:
+        new:
+          action: Estä tili ja lähetä perustelut
+          description: Estämällä käyttäjän estät kyseisen käyttäjän pääsyn hänen omalle tililleen. Voit antaa perusteluissasi ja ohjeistuksissasi tietoa siitä, mitä kyseinen käyttäjä voi tehdä palauttaakseen pääsyn tililleen.
+          justification: Perustelut
+          title: Estä käyttäjä %{name}
       categories:
         create:
           error: Aihepiirin luonti epäonnistui.
@@ -279,6 +300,21 @@ fi:
         update:
           error: Komponentin päivitys epäonnistui.
           success: Komponentin päivitys onnistui.
+      conflicts:
+        attempts: Yritykset
+        'false': 'Ei'
+        managed_user_name: Hallittu käyttäjä
+        solved: Ratkaistu
+        title: Tarkistusten ristiriidat
+        transfer:
+          email: Sähköposti
+          error: Nykyisen käyttäjän siirto hallituksi käyttäjäksi epäonnistui.
+          name: Nimi
+          reason: Syy
+          success: Siirto onnistui.
+          title: Siirrä
+        'true': 'Kyllä'
+        user_name: Käyttäjä
       dashboard:
         show:
           view_more_logs: Näytä lisää lokitietoja
@@ -383,8 +419,10 @@ fi:
         help_sections: Ohjeosiot
         homepage: Kotisivu
         impersonations: Esiintymiset toisena käyttäjänä
+        moderation: Yleiset moderoinnit
         newsletters: Uutiskirjeet
         participants: Osallistujat
+        reported_users: Ilmoitetut käyttäjät
         scope_types: Teematyypit
         scopes: Teemat
         settings: Asetukset
@@ -472,6 +510,20 @@ fi:
             phone: Puhelinnumero
             state: Tila
             users_count: Käyttäjämäärä
+      moderated_users:
+        index:
+          actions:
+            title: Toiminnot
+            unreport: Poista ilmoitus
+          name: Nimi
+          nickname: Nimimerkki
+          reason: Syy
+          title: Ilmoitettujen käyttäjien lista
+        report:
+          reasons:
+            does_not_belong: Ei kuulu
+            offensive: Loukkaava
+            spam: Roskaposti
       moderations:
         index:
           title: Moderoinnit
@@ -560,6 +612,9 @@ fi:
           error: Uutiskirjeen päivitys epäonnistui.
           success: Uutiskirjeen päivitys onnistui. Tarkasta se läpi ennen lähetystä.
       officializations:
+        block:
+          error: Käyttäjän estäminen epäonnistui
+          success: Käyttäjän estäminen onnistui
         create:
           success: Käyttäjän virallistaminen onnistui
         destroy:
@@ -567,6 +622,7 @@ fi:
         index:
           actions: Toiminnot
           badge: Kunniamerkki
+          block: Estä käyttäjä
           created_at: Luontihetki
           name: Nimi
           nickname: Nimimerkki
@@ -574,8 +630,10 @@ fi:
           officialize: Virallista
           officialized: Virallistettu
           reofficialize: Virallista uudestaan
+          reports: Ilmoitukset
           show_email: Näytä sähköpostiosoite
           status: Tila
+          unblock: Poista käyttäjän esto
           unofficialize: Poista virallistaminen
         new:
           badge: Virallistamismerkki
@@ -589,6 +647,9 @@ fi:
           hidden: piilotettu
           show: Näytä
           title: Näytä osallistujan sähköpostiosoite
+        unblock:
+          error: Käyttäjän eston poistaminen epäonnistui
+          success: Käyttäjän eston poistaminen onnistui
       organization:
         edit:
           title: Muokkaa organisaatiota
@@ -758,6 +819,7 @@ fi:
         impersonatable_users: Hallittavat käyttäjät
         impersonations: Käyttäjien hallinta
         metrics: Tilastomittarit
+        panel: Hallintakäyttäjä
         participants: Käyttäjät
         scope_types: Teematyypit
         scopes: Teemat
@@ -846,6 +908,7 @@ fi:
           fields:
             created_at: Luonnin ajankohta
             hidden_at: Piilotuksen ajankohta
+            participatory_space: Osallistumistila
             report_count: Määrä
             reportable_id: Id
             reportable_type: Tyyppi
@@ -863,6 +926,8 @@ fi:
   layouts:
     decidim:
       admin:
+        global_moderations:
+          title: Yleiset moderoinnit
         newsletters:
           title: Uutiskirjeet
         settings:

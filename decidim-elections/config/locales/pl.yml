@@ -14,6 +14,7 @@ pl:
       question:
         description: Opis
         max_selections: Maksymalna liczba wyborów
+        min_selections: Żaden z powyższych wariantów
         title: Tytuł
     errors:
       models:
@@ -25,6 +26,10 @@ pl:
           attributes:
             attachment:
               needs_to_be_reattached: Musi zostać ponownie załączony
+        trustee:
+          attributes:
+            public_key:
+              cant_be_changed: nie może zostać zmieniony
   activerecord:
     models:
       decidim/elections/answer:
@@ -81,6 +86,14 @@ pl:
           new:
             create: Utwórz odpowiedź
             title: Nowa odpowiedź
+          select:
+            disable: Odznacz odpowiedź
+            enable: Oznacz odpowiedź jako zaznaczoną
+            invalid: Wystąpił problem z wybraniem tej odpowiedzi
+            success: Odpowiedź wybrana pomyślnie
+          unselect:
+            invalid: Wystąpił problem z odznaczaniem tej odpowiedzi
+            success: Odpowiedź odznaczona pomyślnie
           update:
             invalid: Wystąpił błąd podczas aktualizowania odpowiedzi
             success: Odpowiedź została zaktualizowana
@@ -95,6 +108,7 @@ pl:
             title: Edytuj wybór
             update: Aktualizuj wybór
           index:
+            no_bulletin_board: Nie ma skonfigurowanego serwera <a href="https://github.com/decidim/decidim-bulletin-board">Bulletin Board</a>, który jest potrzebny do korzystania z tego modułu. Zadanie to powinno być wykonane przez administratora systemu.
             title: Wybory
           new:
             create: Utwórz wybór
@@ -106,6 +120,8 @@ pl:
           update:
             invalid: Wystąpił błąd podczas aktualizowania wyboru
             success: Wybór zostały zaktualizowany
+        exports:
+          elections: Wybory
         models:
           answer:
             name: Odpowiedź
@@ -139,6 +155,10 @@ pl:
           update:
             invalid: Wystąpił błąd podczas aktualizowania tego pytania
             success: Pytanie zostało zaktualizowane
+        trustees_participatory_spaces:
+          actions:
+            disable: Wyłącz
+            enable: Rozważ
       admin_log:
         election:
           publish: "%{user_name} opublikował(a) wybór %{resource_name}"
@@ -176,12 +196,13 @@ pl:
           filter: Filtr
           filter_by: Filtruj według
           unfold: Rozwiń
+        results:
+          title: Wyniki wyborów
         show:
+          back: Dostępne wybory
           preview: Podgląd
-          vote: Głosuj
           voting_period_status:
             finished: Głosowanie rozpoczęło się %{start_time} i zakończyło %{end_time}
-            ongoing: Głosowanie kończy się %{end_time}
             upcoming: Głosowanie rozpoczyna się %{start_time}
       models:
         answer:
@@ -198,10 +219,27 @@ pl:
             answers: Odpowiedzi
             max_selections: Maks. liczba opcji do zaznaczenia
             title: Tytuł
+        trustees_participatory_space:
+          fields:
+            email: E-mail
+            inactive: nieaktywne
+            public_key: Klucz publiczny
+            status: Status
       orders:
         label: Sortuj według
         older: Najstarsze
         recent: Najnowsze
+      trustee_zone:
+        trustees:
+          show:
+            elections:
+              list:
+                election: Wybór
+              title: Wybory
+            identification_keys:
+              cancel: Anuluj
+              generate: Generuj klucze identyfikacyjne
+              submit: Prześlij
       votes:
         confirm:
           answer: Odpowiedz
@@ -218,7 +256,6 @@ pl:
           header: Oddanie głosu potwierdzone
           lead: Twój głos został już wysłany!
           text: 'Możesz sprawdzić, czy Twój głos został pomyślnie dodany do skrzynki wyborczej z następującym identyfikatorem: <strong class="evote__poll-id">%{e_vote_poll_id}</strong>'
-          verify_text: Aby to sprawdzić, skopiuj identyfikator i wklej go na <a href="evote-verify">stronie weryfikacji głosu</a>
         encrypting:
           header: Kodowanie głosu...
           text: Twój głos jest szyfrowany, aby mieć pewność, że przekazałeś go anonimowo.
