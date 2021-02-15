@@ -67,6 +67,10 @@ cs:
           edit:
             title: Upravit debatu
             update: Aktualizovat debatu
+          form:
+            debate_type: Typ debaty
+            finite: Konečný (s počátečním a koncovým obdobím)
+            open: Otevřený (žádné počáteční nebo koncové období)
           index:
             title: Debaty
           new:
@@ -75,6 +79,8 @@ cs:
           update:
             invalid: Při aktualizaci této debaty došlo k problému.
             success: Debata byla úspěšně aktualizována.
+        exports:
+          comments: Komentáře
         models:
           debate:
             name: Debata
@@ -156,6 +162,7 @@ cs:
           groups_count: Skupiny
           last_comment_by: Poslední komentář od
           no_comments_yet: Zatím žádné komentáře
+          open: Otevřít diskusi
           participants_count: Účastníci
         update:
           invalid: Při aktualizaci rozpravy došlo k chybě.

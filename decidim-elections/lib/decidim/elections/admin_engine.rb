@@ -13,6 +13,7 @@ module Decidim
         get "/answer_options", to: "feedback_forms#answer_options", as: :answer_options_election_feedback, defaults: { format: "json" }
 
         resources :elections do
+          resources :steps, only: [:index, :update]
           member do
             put :publish
             put :unpublish
@@ -30,13 +31,16 @@ module Decidim
                 get :proposals_picker
                 resource :proposals_import, only: [:new, :create]
               end
+              member do
+                put :select
+                put :unselect
+              end
             end
           end
         end
 
         resources :trustees, only: [:index, :new, :edit, :create, :destroy], controller: "trustees_participatory_spaces"
 
-        resources :setup, only: [:show, :update]
         root to: "elections#index"
       end
 
