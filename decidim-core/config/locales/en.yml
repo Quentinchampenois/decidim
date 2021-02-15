@@ -331,7 +331,6 @@ en:
         email_outro: You can stop receiving notifications by visiting your <a href='%{notifications_settings_path}'>changing your notification setup</a>
         email_resume: A lot has happened on %{organization_name} since you last logged in. Here are some notifications you have missed.
         email_see_more: More notifications are visible on <a href='%{organization_path}'>%{organization_name}</a>. Go check them out on your <a href='%{notifications_path}'>notifications</a> space
-        sent_ago: "%{sent_ago} ago"
     collapsible_list:
       hidden_elements_count:
         one: and %{count} more
