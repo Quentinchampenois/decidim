@@ -1,6 +1,6 @@
 <p><%== t(".email_greeting", username: @user.nickname.html_safe) %></p>
 
-<p><%== t(".email_intro", organization_name: @organization.name.html_safe) %></p>
+<p><%== t(".email_resume", organization_name: @organization.name.html_safe) %></p>
 
 <% if see_more? %>
   <p><%== t(".email_see_more",
@@ -21,13 +21,18 @@
     )
   %>
 
-  <blockquote>
-    <p>
-      <%= resource_icon event[:resource], class: "notification-icon icon icon--small" %>
-      <%= event_instance.notification_title %>
-    </p>
-    <span class="notification-time_ago"><%= t(".sent_ago", sent_ago: event[:created_at]) %></span>
+  <blockquote class="notification-blockquote">
+    <div>
+      <p class="notification-legend">
+        <%= icon "datetime", class: "notification-icon icon" %><%= event[:created_at] %>
+      </p>
+      <p>
+        <%= event_instance.notification_title %>
+      </p>
+    </div>
   </blockquote>
 <% end %>
 
-<p><%== t(".email_outro", profile_path: decidim.profile_path(@user.nickname)) %></p>
+<p><%== t(".email_intro", organization_name: @organization.name.html_safe) %></p>
+
+<p><%== t(".email_outro", notifications_settings_path: decidim.notifications_settings_path) %></p>

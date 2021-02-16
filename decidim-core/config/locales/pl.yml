@@ -90,7 +90,6 @@ pl:
         file_no_exists: Plik nie istnieje
         notice: Twoje dane są obecnie w trakcie procesowania w celu pobrania. Otrzymasz e-mail po zakończeniu.
       delete:
-        alert: Nie można cofnąć tej czynności. Jeśli usuniesz konto, nie będzie można się już na nie logować.
         confirm:
           close: Zamknij okno
           ok: Tak, chcę usunąć moje konto
@@ -283,8 +282,6 @@ pl:
         name: Przykładowa autoryzacja
       dummy_authorization_workflow:
         name: Przykładowy proces autoryzacji
-      errors:
-        duplicate_authorization: Użytkownik jest już uprawniony na podstawie tych samych danych.
       expired_at: Wygasł %{timestamp}
       expires_at: Wygasa %{timestamp}
       foo_authorization:
@@ -423,7 +420,6 @@ pl:
           email_already_exists: Inne konto korzysta z tego samego adresu e-mail
         new:
           complete_profile: Uzupełnij profil
-          nickname_help: Twój pseudonim w %{organization}
           sign_up: Proszę uzupełnij swój profil
           subtitle: Proszę wypełnić poniższy formularz, aby dokończyć rejestrację
           username_help: Publiczne imię wyświetlane przy Twoich wpisach. W celu zagwarantowania anonimowości może być dowolna nazwa.
@@ -432,7 +428,6 @@ pl:
           already_have_an_account?: Posiadasz już konto?
           newsletter: Chcę otrzymywać okazjonalne newslettery z istotnymi informacjami
           newsletter_title: Zgoda na subskrybcję
-          nickname_help: Twój pseudonim w %{organization}
           password_help: "Minimalna liczba znaków: %{minimun_characters}; nie może być zbyt powszechny (np. 123456) i musi różnić się od Twojego pseudonimu i adresu e-mail."
           sign_in: Zaloguj się
           sign_up: Zarejestruj się
@@ -684,7 +679,6 @@ pl:
         file:
           explanation: 'Wytyczne dotyczące pliku:'
           message_1: Ma być obrazem lub dokumentem.
-          message_2: W przypadku zdjęć używaj najlepiej krajobrazów, serwis docina obraz.
         image:
           explanation: 'Wytyczne dotyczące obrazu:'
           message_1: Preferowany obraz krajobrazu, który nie zawiera żadnego tekstu.

@@ -44,7 +44,11 @@ nl:
             title: Budget bewerken
             update: Budget bijwerken
           index:
+            finished_orders: Voltooide stemmen
+            pending_orders: Openstaande stemmen
             title: Budgetten
+            users_with_finished_orders: Gebruikers met voltooide stemmen
+            users_with_pending_orders: Gebruikers met openstaande stemmen
           new:
             create: Budget maken
             title: Nieuw budget
@@ -235,8 +239,6 @@ nl:
             vote_rule_minimum_budget_projects_enabled: 'Inschakelen van regel: minimum aantal projecten waarover gestemd moet worden'
             vote_rule_selected_projects_enabled: 'Activeer regel: er moet over een minimum en een maximum aantal projecten gestemd worden'
             vote_rule_threshold_percent_enabled: 'Regel inschakelen: Minimaal budget percentage'
-            vote_selected_projects_maximum: Minimaal aantal te selecteren projecten
-            vote_selected_projects_minimum: Minimaal aantal te selecteren projecten
             vote_threshold_percent: Percentage van het budget dat bereikt moet worden om te kunnen stemmen
             workflow: Workflow
             workflow_choices:

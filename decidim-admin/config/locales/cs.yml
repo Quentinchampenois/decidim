@@ -44,7 +44,7 @@ cs:
         from: Z e-mailové adresy
         github_handler: GitHub handler
         header_snippets: Úryvky záhlaví
-        highlight_alternative_color: Zvýraznění, alternativa
+        highlight_alternative_color: Jiné zvýraznění
         highlight_color: Zvýraznit
         highlighted_content_banner_action_subtitle: Podnadpis Tlačítka Akce
         highlighted_content_banner_action_title: Název tlačítka akce
@@ -59,8 +59,8 @@ cs:
         machine_translation_display_priority_original: Původní text přednostně
         machine_translation_display_priority_translation: Přeložený text přednostně
         name: Název
-        official_img_footer: Oficiální zápatí loga
-        official_img_header: Oficiální záhlaví loga
+        official_img_footer: Oficiální logo zápatí
+        official_img_header: Oficiální logo záhlaví
         official_url: Oficiální URL organizace
         omnipresent_banner_short_description: Stručný popis
         omnipresent_banner_title: Název
@@ -90,19 +90,22 @@ cs:
         name: Název
         organization: Organizace
         plural: Množné číslo
+      settings:
+        scope_id: Oblast působnosti
       static_page:
+        allow_public_access: Povolit přístup bez autentizace
         changed_notably: Došlo ke znatelným změnám.
         content: Obsah
         organization: Organizace
         show_in_footer: Zobrazit v zápatí
         slug: URL slug
         title: Titul
-        weight: Hmotnost
+        weight: Váha
       static_page_topic:
         description: Popis
         show_in_footer: Zobrazit v zápatí
         title: Titul
-        weight: Hmotnost
+        weight: Váha
       user_group_csv_verification:
         file: Soubor
     errors:
@@ -131,27 +134,39 @@ cs:
     admin:
       actions:
         add: Přidat
+        attachment:
+          new: Nová příloha
+        attachment_collection:
+          new: Nová sbírka příloh
         browse: Procházet
+        category:
+          new: Nová kategorie
         export: Exportovat
         manage: Spravovat
         new: Nová %{name}
+        newsletter:
+          new: Nový zpravodaj
+        participatory_space_private_user:
+          new: Nový soukromý uživatel participačního prostoru
         per_page: Na stránku
         permissions: Oprávnění
         reject: Odmítnout
         share: Sdílet
+        user:
+          new: Nový uživatel
         verify: Ověřit
       admin_terms_of_use:
         accept:
           error: Při přijímání správcovských podmínek použití došlo k chybě.
           success: Skvělé! Přijali jste administrátorské podmínky použití.
         actions:
-          accept: Souhlasím s těmito podmínkami administrátora
+          accept: Souhlasím s následujícími podmínkami
           are_you_sure: Opravdu chcete odmítnout administrátorské podmínky?
           refuse: Odmítnout administrátorské podmínky
           title: Souhlasit s podmínkami používání
         required_review:
           alert: 'Vyžadováno: Zkontrolujte naše administrátorské podmínky použití'
-          callout: Věnujte prosím chvilku a přečtěte si administrátorské podmínky použití. V opačném případě nebudete moci platformu spravovat.
+          callout: Věnujte prosím chvilku a přečtěte si administrátorské podmínky použití. V opačném případě nebudete moci platformu spravovat. MUSÍTE KLIKNOUT NA ZELENÉ TLAČÍTKO.
           cta: Zkontrolovat je nyní.
         title: Administrátorské podmínky použití
       area_types:
@@ -159,7 +174,7 @@ cs:
           error: Při vytváření nového typu oblasti došlo k chybě.
           success: Typ oblasti byl úspěšně vytvořen.
         destroy:
-          success: Typ prostoru úspěšně zničen
+          success: Typ oblasti byl úspěšně smazán
         edit:
           title: Upravit typ oblasti
           update: Aktualizace
@@ -216,7 +231,7 @@ cs:
         index:
           attachments_title: Přílohy
         new:
-          create: Vytvoření přílohy
+          create: Vytvořit přílohu
           title: Nová příloha
         update:
           error: Při aktualizaci této přílohy došlo k chybě.
@@ -224,6 +239,12 @@ cs:
       autocomplete:
         no_results: Nenalezeny žádné výsledky
         search_prompt: Zadejte nejméně tři znaky, které chcete vyhledat
+      block_user:
+        new:
+          action: Blokovat účet a odeslat odůvodnění
+          description: Blokováním uživatele bude jeho účet nepoužitelný, ve svém odůvodnění a pokynech můžete uvést způsob, jaký považujete za vhodný k odblokování uživatele.
+          justification: Odůvodnění
+          title: Blokovat uživatele %{name}
       categories:
         create:
           error: Při vytváření této kategorie došlo k chybě.
@@ -279,6 +300,21 @@ cs:
         update:
           error: Při aktualizaci této komponenty došlo k chybě.
           success: Komponenta byla úspěšně aktualizována.
+      conflicts:
+        attempts: Pokusy
+        'false': 'Ne'
+        managed_user_name: Spravovaný uživatel
+        solved: Vyřešeno
+        title: Konflikty ověření
+        transfer:
+          email: E-mail
+          error: Při převodu aktuálního účastníka na spravovaného účastníka došlo k chybě.
+          name: Jméno
+          reason: Důvod
+          success: Aktuální převod byl úspěšně dokončen.
+          title: Převod
+        'true': 'Ano'
+        user_name: Uživatel
       dashboard:
         show:
           view_more_logs: Zobrazit další protokoly
@@ -299,10 +335,10 @@ cs:
           reportable_type_string_eq:
             label: Typ
         officialized_at_null:
-          label: Stát
+          label: Stav
           values:
-            'false': Úředně
-            'true': Není oficializováno
+            'false': Ověřeno
+            'true': Neověřeno
         private_space_eq:
           label: Soukromé
           values:
@@ -315,7 +351,7 @@ cs:
             'true': Nezveřejněno
         scope_id_eq:
           label: Oblast působnosti
-        search_label: Vyhledávání
+        search_label: Hledat
         search_placeholder:
           name_or_nickname_or_email_cont: Hledat %{collection} podle e-mailu, jména nebo přezdívky.
           reported_id_string_or_reported_content_cont: Hledat %{collection} podle nahlášeného Id nebo obsahu.
@@ -347,7 +383,7 @@ cs:
       impersonations:
         close_session:
           error: Při zavírání aktuální relace správy účastníků došlo k potížím.
-          success: Aktuální relace zosobnění byla úspěšně ukončena.
+          success: Aktuální relace v zastoupení byla úspěšně ukončena.
         create:
           error: Došlo k chybě, která se vyskytuje u účastníka.
           success: Spravovaný účastník byl úspěšně vytvořen.
@@ -356,7 +392,7 @@ cs:
           name: Jméno
           reason: Důvod
         new:
-          impersonate: Vydávat se za uživatele
+          impersonate: V zastoupení
           impersonate_existing_managed_user: Spravovat účastníka "%{name}"
           impersonate_existing_user: Spravovat účastníka "%{name}"
           impersonate_new_managed_user: Spravovat nového účastníka
@@ -382,7 +418,8 @@ cs:
         dashboard: Ovládací panel
         help_sections: Sekce nápovědy
         homepage: Domovská stránka
-        impersonations: Vydávání se za uživatele
+        impersonations: V zastoupení
+        moderation: Globální moderace
         newsletters: Zpravodaje
         participants: Účastníci
         reported_users: Nahlášení uživatelé
@@ -432,7 +469,7 @@ cs:
             subject: Předmět
           name: Zpravodaj
         participatory_space_private_user:
-          name: Účastnický prostor soukromého účastníka
+          name: Participační prostor soukromého účastníka
         scope:
           fields:
             name: název
@@ -471,22 +508,28 @@ cs:
             document_number: Číslo dokumentu
             name: název
             phone: Telefon
-            state: Stát
+            state: Stav
             users_count: Počet účastníků
       moderated_users:
         index:
           actions:
+            block: Blokovat
             title: Akce
+            unblock: Odemknout
             unreport: Zrušit nahlášení
           name: Jméno
           nickname: Přezdívka
           reason: Důvod
+          reports: Zprávy
           title: Seznam nahlášených uživatelů
         report:
           reasons:
             does_not_belong: Nepatří
             offensive: Urážlivý
             spam: Nevyžádané
+        tabs:
+          blocked: Blokováno
+          unblocked: Odblokováno
       moderations:
         index:
           title: Moderování
@@ -500,7 +543,7 @@ cs:
             author: Autor(ři)
             callout_html: Obsah se zobrazí v panelu moderátora, když byl signalizován uživatelem (může to být někdo s registrovaným účtem) kliknutím na vlaječku %{icon} vedle položky.
             content_original_language: Původní jazyk obsahu
-            participatory_space: Účastnický prostor
+            participatory_space: Participační prostor
             reported_content: Nahlášený obsah
             see_current: Zobrazit aktuální
             see_original: Zobrazit originál
@@ -540,7 +583,7 @@ cs:
           has_been_sent_to: 'Byl poslán: '
           no_scopes: Žádné oblasti působnosti
           not_sent: Neodesláno
-          participants: 'uživatelé '
+          participants: 'účastníci '
           segmented_to: 'Rozděleno na %{subject}: '
           subscribed_count: 'Přihlášeno:'
           title: Zpravodaje
@@ -575,6 +618,9 @@ cs:
           error: Při aktualizaci tohoto zpravodaje došlo k chybě.
           success: Zpravodaj byl úspěšně aktualizován. Před odesláním jej prosím zkontrolujte.
       officializations:
+        block:
+          error: Při blokování uživatele došlo k chybě
+          success: Uživatel byl úspěšně zablokován
         create:
           success: Uživatel úspěšně oficializován
         destroy:
@@ -582,21 +628,23 @@ cs:
         index:
           actions: Akce
           badge: Odznak
+          block: Zablokovat uživatele
           created_at: Vytvořeno na
           name: název
           nickname: Přezdívka
-          not_officialized: Není oficializováno
-          officialize: Úředně
-          officialized: Úředně
-          reofficialize: Reofficialize
+          not_officialized: Neověřeno
+          officialize: Ověřit
+          officialized: Ověřen
+          reofficialize: Znovu ověřit
           reports: Hlášení
           show_email: Zobrazit e-mailovou adresu
-          status: Postavení
-          unofficialize: Odebrat oficializaci
+          status: Stav
+          unblock: Odblokovat uživatele
+          unofficialize: Zrušit ověření
         new:
-          badge: Oficializační odznak
-          officialize: Úředně
-          title: Oficializovat uživatele "%{name}"
+          badge: Odznak ověření
+          officialize: Ověřit
+          title: Oficializovat účastníka "%{name}"
         show_email_modal:
           close_modal: Zavřít okno
           description: Pokud potřebujete kontaktovat účastníka, můžete kliknout na tlačítko Zobrazit pro zobrazení e-mailové adresy. Tato akce bude zaznamenána.
@@ -604,7 +652,10 @@ cs:
           full_name: Celé jméno
           hidden: skrytý
           show: Zobrazit
-          title: Zobrazit e-mailovou adresu uživatele
+          title: Zobrazit e-mailovou adresu účastníka
+        unblock:
+          error: Při odblokování uživatele došlo k chybě
+          success: Uživatel byl úspěšně odblokován
       organization:
         edit:
           title: Upravit organizaci
@@ -631,11 +682,11 @@ cs:
           cta_button_path_help: 'Můžete přepisovat, kde se na domovské stránce odkazuje tlačítko Volat na akci. Použijte zde částečné cesty, ne úplné adresy URL. Přijme písmena, čísla, pomlčky a lomítka a musí začínat písmenem. Tlačítko Volat na akci se na domovské stránce zobrazí mezi vítaným textem a popisem. Příklad: %{url}'
           cta_button_text_help: Přepínání textu tlačítka volání na akci můžete na domovské stránce přepisovat pro každý dostupný jazyk ve vaší organizaci. Pokud není nastavena, bude použita výchozí hodnota. Tlačítko Volat na akci se na domovské stránce zobrazí mezi vítaným textem a popisem.
           homepage_appearance_title: Upravit vzhled stránky
-          homepage_highlighted_content_banner_title: Vysoce kvalitní banner obsahu
+          homepage_highlighted_content_banner_title: Zvýrazněný obsahový banner
           images:
-            layout_appearance_title: Upravit vzhled vzhledu
+            layout_appearance_title: Upravit vzhled zobrazení
             preview: Náhled
-          omnipresent_banner_appearance_title: Upravte všudypřítomný banner
+          omnipresent_banner_appearance_title: Upravit všudypřítomný banner
       organization_homepage:
         edit:
           active_content_blocks: Bloky aktivního obsahu
@@ -646,16 +697,16 @@ cs:
       participatory_space_private_users:
         create:
           error: Při přidávání soukromého uživatele pro tento participační prostor došlo k chybě.
-          success: Úspěšně byl úspěšně vytvořen soukromý uživatelský přístup.
+          success: Přístup soukromého účastníka do participativního prostoru byl úspěšně vytvořen.
         destroy:
           error: Při odstraňování soukromého uživatele tohoto participačního prostoru došlo k chybě.
-          success: Úspěšně zničen soukromý uživatelský prostor účastníka.
+          success: Přístup soukromého účastníka do participativního prostoru byl úspěšně zrušen.
         index:
           import_via_csv: Importovat přes CSV
-          title: Účastní prostor soukromý uživatel
+          title: Participační prostor soukromého účastníka
         new:
           create: Vytvořit
-          title: Nový účastnický prostor soukromého účastníka.
+          title: Nový participační prostor soukromého účastníka.
       participatory_space_private_users_csv_imports:
         create:
           invalid: Při čtení souboru CSV došlo k chybě.
@@ -746,14 +797,14 @@ cs:
         destroy:
           success: Stránka byla úspěšně zničena
         edit:
-          changed_notably_help: Pokud je zaškrtnuto, uživatelé budou upozorněni, aby přijali nové smluvní podmínky.
+          changed_notably_help: Pokud je zaškrtnuto, účastníci budou upozorněni, aby přijali nové smluvní podmínky.
           title: Upravit stránku
           update: Aktualizace
         form:
           none: Žádný
           slug_help: 'Zde použijte částečné cesty, nikoli úplné adresy URL. Jsou povolena písmena, čísla, pomlčky a lomítka a musí začínat písmenem. Příklad: %{url}'
         index:
-          last_notable_change: Poslední pozoruhodná změna
+          last_notable_change: Poslední významná změna
         new:
           create: Vytvořit stránku
           title: Nová stránka
@@ -774,6 +825,7 @@ cs:
         impersonatable_users: Spravovatelní účastníci
         impersonations: Správa účastníků
         metrics: Metriky
+        panel: Admin
         participants: Uživatelé
         scope_types: Typy oblastí působnosti
         scopes: Oblasti působnosti
@@ -813,7 +865,7 @@ cs:
       users:
         create:
           error: Při pozvání tohoto administrátora došlo k chybě.
-          success: Účastník pozván úspěšně.
+          success: Účastník úspěšně pozván.
         destroy:
           error: Při pokusu o odstranění tohoto administrátora došlo k chybě.
           success: Účastník již není administrátorem.
@@ -862,12 +914,13 @@ cs:
           fields:
             created_at: Datum vytvoření
             hidden_at: Skryté u
+            participatory_space: Participativní prostor
             report_count: Spočítat
             reportable_id: Id
             reportable_type: Typ
             reported_content_url: Oznámená adresa URL obsahu
             reports: Zprávy
-            visit_url: Navštivte adresu URL
+            visit_url: Navštívit URL
         report:
           fields:
             details: Detaily důvodu
@@ -875,13 +928,15 @@ cs:
             reason: Důvod
   errors:
     messages:
-      invalid_json: Neplatná JSON
+      invalid_json: Neplatný JSON
   layouts:
     decidim:
       admin:
+        global_moderations:
+          title: Globální moderace
         newsletters:
           title: Zpravodaje
         settings:
           title: Nastavení
         users:
-          title: Uživatelé
+          title: Účastníci

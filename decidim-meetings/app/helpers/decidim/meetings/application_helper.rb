@@ -29,8 +29,9 @@ module Decidim
 
       def filter_type_values
         type_values = []
-        type_values << TreePoint.new("online", t("decidim.meetings.meetings.filters.type_values.online"))
-        type_values << TreePoint.new("in_person", t("decidim.meetings.meetings.filters.type_values.in_person"))
+        Decidim::Meetings::Meeting::TYPE_OF_MEETING.each do |type|
+          type_values << TreePoint.new(type, t("decidim.meetings.meetings.filters.type_values.#{type}"))
+        end
 
         TreeNode.new(
           TreePoint.new("", t("decidim.meetings.meetings.filters.type_values.all")),
@@ -46,6 +47,14 @@ module Decidim
             TreePoint.new("past", t("decidim.meetings.meetings.filters.date_values.past"))
           ]
         )
+      end
+
+      # Options to filter meetings by activity.
+      def activity_filter_values
+        [
+          ["all", t("decidim.meetings.meetings.filters.all")],
+          ["my_meetings", t("decidim.meetings.meetings.filters.my_meetings")]
+        ]
       end
     end
   end

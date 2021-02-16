@@ -82,7 +82,6 @@ pt:
         file_no_exists: Ficheiro não existente
         notice: A transferência dos seus dados está atualmente em progresso. Receberá um e-mail quando estiver concluído.
       delete:
-        alert: Esta ação não poderá ser desfeita. Se cancelar a sua conta não poderá voltar a fazer login.
         confirm:
           close: Fechar janela
           ok: Sim, eu quero cancelar a minha conta
@@ -270,8 +269,6 @@ pt:
         name: Exemplo de autorização
       dummy_authorization_workflow:
         name: Fluxo de trabalho de autorização falsa
-      errors:
-        duplicate_authorization: Um participante com os mesmos dados já está autorizado.
       expired_at: Expirou em %{timestamp}
       expires_at: Expira em %{timestamp}
       foo_authorization:
@@ -406,7 +403,6 @@ pt:
           email_already_exists: Outra conta está usando o mesmo endereço de e-mail
         new:
           complete_profile: Complete o seu perfil
-          nickname_help: O seu pseudónimo em %{organization}
           sign_up: Por favor, complete o seu perfil
           subtitle: Por favor, preencha o seguinte formulário para completar a inscrição
           username_help: Nome público que aparece nas suas publicações. Com o objetivo de garantir o anonimato, pode ser qualquer nome.
@@ -415,7 +411,6 @@ pt:
           already_have_an_account?: Já tem uma conta?
           newsletter: Receber um boletim informativo ocasional com informações relevantes
           newsletter_title: Permissão de contacto
-          nickname_help: O seu pseudónimo em %{organization}
           password_help: "%{minimun_characters} caracteres no mínimo, não deverá ser muito comum (por ex. 123456) e deverá ser diferente da sua alcunha e do seu e-mail."
           sign_in: Entrar
           sign_up: Inscreva-se
@@ -665,7 +660,6 @@ pt:
         file:
           explanation: 'Orientação para o ficheiro:'
           message_1: Tem que ser uma imagem ou um documento.
-          message_2: Para imagens, use de preferência imagens de paisagem, o serviço corta a imagem.
         image:
           explanation: 'Orientação para a imagem:'
           message_1: Preferencialmente, uma imagem de paisagem que não tem nenhum texto.

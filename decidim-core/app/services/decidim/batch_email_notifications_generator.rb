@@ -50,7 +50,7 @@ module Decidim
           priority: event.priority,
           extra: event.extra,
           user_role: event.user_role,
-          created_at: time_ago_in_words(event.created_at).capitalize
+          created_at: I18n.l(event.created_at, format: :decidim_short)
         }
       end
     end

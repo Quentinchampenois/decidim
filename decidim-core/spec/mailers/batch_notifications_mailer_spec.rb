@@ -10,13 +10,13 @@ module Decidim
     let(:user) { create(:user, name: "Sarah Connor", organization: organization) }
     let(:notifications) { create_list(:notification, 3, user: user) }
     let(:events) { events_serializer(notifications) }
-    let(:see_more) { "You have received a lot of notifications on <a href='http://#{organization.host}/'>#{organization.name}</a>. Go check them out on your <a href='/notifications'>notifications</a> space" }
+    let(:see_more) { "More notifications are visible on <a href='http://#{organization.host}/'>#{organization.name}</a>. Go check them out on your <a href='/notifications'>notifications</a> space" }
 
     describe "#event_received" do
       let(:mail) { described_class.event_received(events, user) }
 
       it "gets the subject from the event" do
-        expect(mail.subject).to include("You have received notifications on #{organization.name}")
+        expect(mail.subject).to include("You have unread notifications on #{organization.name}")
       end
 
       it "delivers the email to the user" do
@@ -28,15 +28,19 @@ module Decidim
       end
 
       it "includes the greeting" do
-        expect(mail.body).to include("Greetings #{user.nickname}")
+        expect(mail.body).to include("Hello #{user.nickname}")
       end
 
-      it "includes the intro" do
+      it "includes the introduction" do
+        expect(mail.body).to include("A lot has happened on #{organization.name} since you last logged in. Here are some notifications you have missed")
+      end
+
+      it "includes the content" do
         expect(mail.body).to include("You are receiving this email because you have subscribed to resources on #{organization.name}")
       end
 
       it "includes the outro" do
-        expect(mail.body).to include("You can stop receiving notifications by visiting your <a href='/profiles/#{user.nickname}'>profile</a>")
+        expect(mail.body).to include("You can stop receiving notifications by visiting your <a href='/notifications_settings'>changing your notification setup</a>")
       end
 
       it "doesn't includes see more" do
@@ -47,6 +51,8 @@ module Decidim
         expect(events.count).to eq(3)
 
         events.each do |event|
+          expect(mail.body).to have_css("svg.icon--datetime")
+          expect(mail.body).to include(event[:created_at])
           expect(mail.body).to include(event_instance(event).notification_title)
         end
       end

@@ -17,7 +17,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
       extra: notifications.first.extra,
       priority: notifications.first.priority,
       user_role: notifications.first.user_role,
-      created_at: time_ago_in_words(notifications.first.created_at).capitalize
+      created_at: I18n.l(notifications.first.created_at, format: :decidim_short)
     }
   end
 
@@ -57,7 +57,7 @@ describe Decidim::BatchEmailNotificationsGenerator do
 
       it "marks the notifications has sent" do
         subject.generate
-        expect(Decidim::Notification.where(decidim_user_id: user.id).where.not(sent_at: nil).count).to eq(5)
+        expect(Decidim::Notification.where(decidim_user_id: user.id).where.not(sent_at: nil).count).to eq(10)
       end
 
       context "when user doesn't want to receive email notification" do
@@ -145,8 +145,8 @@ describe Decidim::BatchEmailNotificationsGenerator do
 
       it "returns notifications for user" do
         expect(subject.send(:events_for, user)).not_to include(notification)
-        expect(subject.send(:events_for, user)).to match_array(notifications.reverse.first(5))
-        expect(subject.send(:events_for, user).length).to eq(5)
+        expect(subject.send(:events_for, user)).to match_array(notifications.reverse.first(10))
+        expect(subject.send(:events_for, user).length).to eq(10)
       end
     end
   end

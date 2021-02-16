@@ -28,6 +28,7 @@ require "omniauth-twitter"
 require "omniauth-google-oauth2"
 require "invisible_captcha"
 require "premailer/rails"
+require "premailer/adapter/decidim"
 require "geocoder"
 require "paper_trail"
 require "cells/rails"
@@ -87,9 +88,9 @@ module Decidim
       end
 
       initializer "decidim.graphql_api" do
-        Decidim::Api::QueryType.define do
-          Decidim::QueryExtensions.define(self)
-        end
+        # Enable them method `!` everywhere for compatibility, this line will be removed when upgrading to GraphQL 2.0
+        GraphQL::DeprecatedDSL.activate
+        Decidim::Api::QueryType.include Decidim::QueryExtensions
 
         Decidim::Api.add_orphan_type Decidim::Core::UserType
         Decidim::Api.add_orphan_type Decidim::Core::UserGroupType
@@ -333,6 +334,36 @@ module Decidim
           end
         end
 
+        Decidim.metrics_registry.register(:blocked_users) do |metric_registry|
+          metric_registry.manager_class = "Decidim::Metrics::BlockedUsersMetricManage"
+
+          metric_registry.settings do |settings|
+            settings.attribute :highlighted, type: :boolean, default: false
+            settings.attribute :scopes, type: :array, default: %w(home)
+            settings.attribute :weight, type: :integer, default: 1
+          end
+        end
+
+        Decidim.metrics_registry.register(:user_reports) do |metric_registry|
+          metric_registry.manager_class = "Decidim::Metrics::UserReportsMetricManage"
+
+          metric_registry.settings do |settings|
+            settings.attribute :highlighted, type: :boolean, default: false
+            settings.attribute :scopes, type: :array, default: %w(home)
+            settings.attribute :weight, type: :integer, default: 1
+          end
+        end
+
+        Decidim.metrics_registry.register(:reported_users) do |metric_registry|
+          metric_registry.manager_class = "Decidim::Metrics::ReportedUsersMetricManage"
+
+          metric_registry.settings do |settings|
+            settings.attribute :highlighted, type: :boolean, default: false
+            settings.attribute :scopes, type: :array, default: %w(home)
+            settings.attribute :weight, type: :integer, default: 1
+          end
+        end
+
         Decidim.metrics_registry.register(:participants) do |metric_registry|
           metric_registry.manager_class = "Decidim::Metrics::ParticipantsMetricManage"
 
@@ -504,6 +535,10 @@ module Decidim
 
       initializer "nbspw" do
         NOBSPW.configuration.use_ruby_grep = true
+      end
+
+      initializer "decidim.premailer" do
+        Premailer::Adapter.use = :decidim
       end
 
       config.to_prepare do

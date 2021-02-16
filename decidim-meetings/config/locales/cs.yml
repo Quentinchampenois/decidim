@@ -96,6 +96,7 @@ cs:
             creation_enabled_for_participants: Účastníci mohou vytvářet schůzky
             default_registration_terms: Výchozí podmínky registrace
             enable_pads_creation: Povolit vytvoření sdíleného textu
+            registration_code_enabled: Registrační kód povolen
             resources_permissions_enabled: Nastavení oprávnění lze nastavit pro každou schůzku
             scope_id: Oblast působnosti
             scopes_enabled: Oblasti působnosti povoleny
@@ -214,6 +215,7 @@ cs:
             invalid: Při aktualizaci této agendy došlo k problému
             success: Agenda byla úspěšně aktualizována
         exports:
+          meeting_comments: Komentáře
           meetings: Setkání
           registrations: Registrace
         invite_join_meeting_mailer:
@@ -263,6 +265,7 @@ cs:
                 other: Schůzka nemůže být zničena, protože s ní je spojeno %{count} návrhů
             success: Setkání bylo úspěšně smazáno
           edit:
+            title: Upravit schůzku
             update: Aktualizace
           form:
             address_help: 'Adresa: použita Geocoderem k nalezení polohy'
@@ -297,6 +300,7 @@ cs:
             invalid: Při vytváření těchto minut došlo k problému
             success: Minuty úspěšně vytvořeny
           edit:
+            title: Upravit minuty
             update: Aktualizace
           new:
             create: Vytvořit
@@ -416,6 +420,7 @@ cs:
           type: Typ
           type_values:
             all: Vše
+            hybrid: Obojí
             in_person: Osobně
             online: Online
         filters_small_view:
@@ -517,6 +522,7 @@ cs:
           invalid: Při setkání došlo k problému.
           success: Zasedání jste úspěšně opustili.
       type_of_meeting:
+        hybrid: Obojí
         in_person: Osobně
         online: Online
       types:
@@ -529,11 +535,6 @@ cs:
         description: Počet vytvořených schůzek
         object: setkání
         title: Setkání
-    participatory_processes:
-      participatory_process_groups:
-        highlighted_meetings:
-          past_meetings: Minulé schůze
-          upcoming_meetings: Nadcházející schůzky
     participatory_spaces:
       highlighted_meetings:
         past_meetings: Minulé schůze

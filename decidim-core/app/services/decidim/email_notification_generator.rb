@@ -30,8 +30,6 @@ module Decidim
     end
     # rubocop:enable Metrics/ParameterLists
 
-    # rubocop:disable Metrics/CyclomaticComplexity
-
     # Schedules a job for each recipient to send the email. Returns `nil`
     # if the resource is not resource or if it is not present.
     #
@@ -42,7 +40,6 @@ module Decidim
 
       followers.each do |recipient|
         next unless ["all", "followed-only"].include?(recipient.notification_types)
-        next unless participatory_space.present? && participatory_space.is_a?(Decidim::Participable) && participatory_space.can_participate?(recipient)
 
         send_email_to(recipient, user_role: :follower)
       end
@@ -53,7 +50,6 @@ module Decidim
         send_email_to(recipient, user_role: :affected_user)
       end
     end
-    # rubocop: enable Metrics/CyclomaticComplexity
 
     private
 
@@ -87,7 +83,8 @@ module Decidim
 
     def component
       return resource.component if resource.is_a?(Decidim::HasComponent)
-      return resource if resource.is_a?(Decidim::Component)
+
+      resource if resource.is_a?(Decidim::Component)
     end
 
     def participatory_space
