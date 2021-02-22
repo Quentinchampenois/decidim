@@ -378,6 +378,7 @@ describe Decidim::Initiatives::Permissions do
           before do
             # bypass validation for matching signataire model defined in osp-app
             user.update_attribute "email", ""
+            user.update_attribute "name", "Anonyme"
           end
 
           it { is_expected.to be_falsey }
