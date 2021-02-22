@@ -373,6 +373,15 @@ describe Decidim::Initiatives::Permissions do
 
           it { is_expected.to eq true }
         end
+
+        context "when user is a 'signataire'" do
+          before do
+            # bypass validation for matching signataire model defined in osp-app
+            user.update_attribute "email", ""
+          end
+
+          it { is_expected.to be_falsey }
+        end
       end
     end
   end
