@@ -376,8 +376,10 @@ describe Decidim::Initiatives::Permissions do
         context "when user is a 'signataire'" do
           before do
             # bypass validation for matching signataire model defined in osp-app
+            # rubocop:disable Rails/SkipsModelValidations
             user.update_attribute "email", ""
             user.update_attribute "name", "Anonyme"
+            # rubocop:enable Rails/SkipsModelValidations
           end
 
           it { is_expected.to be_falsey }
