@@ -422,6 +422,7 @@ fr-CA:
           form:
             attachment_legend: "(Facultatif) Ajouter une pièce jointe"
             created_in_meeting: Cette proposition provient d'une réunion
+            delete_attachment: Supprimer la pièce jointe
             select_a_category: Sélectionner une catégorie
             select_a_meeting: Sélectionnez une réunion
           index:
@@ -660,6 +661,7 @@ fr-CA:
         success: Le brouillon de la proposition a bien été supprimé.
       last_activity:
         new_proposal_at_html: "<span>Nouvelle proposition à %{link}</span>"
+        proposal_updated_at_html: "<span>Débat mis à jour à %{link}</span>"
       models:
         collaborative_draft:
           fields:

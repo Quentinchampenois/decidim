@@ -361,6 +361,7 @@ fi:
             space_type: Osallistumistila
             upcoming: Tulevat
       last_activity:
+        meeting_updated_at_html: "<span>Tapaaminen päivitetty osoitteessa %{link}</span>"
         new_meeting_at_html: "<span>Uusi tapaaminen osoitteessa %{link}</span>"
       mailer:
         invite_join_meeting_mailer:
@@ -389,12 +390,15 @@ fi:
           title: Muokkaa tapaamista
           update: Päivitä
         filters:
+          activity: Oma toiminta
+          all: Kaikki
           category: Aihepiiri
           date: Päivämäärä
           date_values:
             all: Kaikki
             past: Menneet
             upcoming: Tulevat
+          my_meetings: Omat tapaamiseni
           origin: Alkuperä
           origin_values:
             all: Kaikki
@@ -533,6 +537,8 @@ fi:
       proposals_from_meeting:
         meeting_proposal: 'Liittyvät ehdotukset:'
         proposal_meeting: 'Liittyvät tapaamiset:'
+    statistics:
+      meetings_count: Tapaamista
   devise:
     mailer:
       join_meeting:

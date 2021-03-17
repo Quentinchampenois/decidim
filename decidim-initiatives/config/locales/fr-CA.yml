@@ -85,6 +85,8 @@ fr-CA:
         search_placeholder:
           title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Rechercher %{collection} par titre, description, ID ou nom de l'auteur.
       menu:
+        components: Fonctionnalités
+        information: Informations
         initiatives: Initiatives
         initiatives_types: Types d'initiatives
       models:
@@ -154,10 +156,10 @@ fr-CA:
             email_subject: Nouvelle étape franchie !
             notification_title: L'initiative <a href="%{resource_path}">%{resource_title}</a> a atteint les %{percentage}% de signatures.
         support_threshold_reached:
-          email_intro: L'initiative %{resource_title} a atteint le seuil de soutiens
+          email_intro: La pétition %{resource_title} a atteint le seuil de signatures
           email_outro: Vous avez reçu cette notification parce que vous êtes un administrateur de la plateforme.
-          email_subject: Seuil de soutiens atteint
-          notification_title: L'initiative <a href="%{resource_path}">%{resource_title}</a> a atteint le seuil de soutiens
+          email_subject: Seuil des signatures atteint
+          notification_title: La pétition <a href="%{resource_path}">%{resource_title}</a> a atteint le seuil de signatures
     gamification:
       badges:
         initiatives:
@@ -393,7 +395,7 @@ fr-CA:
           notification_title: L'initiative<a href="%{resource_path}">%{resource_title}</a> a été soutenue par <a href="%{author_path}">%{author_name} %{author_nickname}</a>.
         revoke_membership_request:
           email_intro: "%{author_nickname} a accepté votre candidature pour faire partie du comité de promotion de la pétition %{resource_title}."
-          email_outro: 'Vous avez reçu cette notification parce que vous avez demandé à faire partie du comité de promotion de cette pétition : %{resource_title}.'
+          email_outro: 'Vous avez reçu cette notification parce que vous avez demandé à rejoindre cette pétition : %{resource_title}.'
           email_subject: "%{author_nickname} a rejeté votre candidature au comité de promotion"
           notification_title: <a href="%{author_profile_url}">%{author_nickname}</a> a rejeté votre candidature pour faire partie du comité de promotion de la pétition suivante <a href="%{resource_url}">%{resource_title}</a>.
         spawn_committee_request_event:
@@ -580,12 +582,6 @@ fr-CA:
           vote: Vote
   layouts:
     decidim:
-      admin:
-        initiative:
-          attachments: Documents liés
-          committee_members: Membres du Comité de promotion
-          components: Fonctionnalités
-          information: Informations
       initiative_creation_header:
         back: Retour
         fill_data: Complétez votre initiative

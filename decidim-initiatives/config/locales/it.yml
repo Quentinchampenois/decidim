@@ -69,6 +69,8 @@ it:
         search_placeholder:
           title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Cerca %{collection} per titolo, descrizione, ID o nome dell'autore.
       menu:
+        components: componenti
+        information: Informazione
         initiatives: Iniziative
         initiatives_types: Tipi di iniziativa
       models:
@@ -133,10 +135,7 @@ it:
             email_subject: Nuova pietra miliare completata!
             notification_title: L'iniziativa <a href="%{resource_path}">%{resource_title}</a> ha raggiunto il %{percentage}% delle firme.
         support_threshold_reached:
-          email_intro: L'iniziativa %{resource_title} ha raggiunto la soglia di supporto
           email_outro: Hai ricevuto questa notifica perché sei un amministratore della piattaforma.
-          email_subject: Soglia di supporto raggiunta
-          notification_title: L'iniziativa <a href="%{resource_path}">%{resource_title}</a> ha raggiunto la soglia di supporto
     gamification:
       badges:
         initiatives:
@@ -468,12 +467,6 @@ it:
           vote: Firma
   layouts:
     decidim:
-      admin:
-        initiative:
-          attachments: allegati
-          committee_members: membri del Comitato
-          components: componenti
-          information: Informazione
       initiative_creation_header:
         back: Indietro
         fill_data: Creare

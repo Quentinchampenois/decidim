@@ -85,6 +85,8 @@ tr:
         search_placeholder:
           title_or_description_or_id_string_or_author_name_or_author_nickname_cont: '%{collection} ''ı başlık, açıklama, kimlik veya yazar adına göre arayın.'
       menu:
+        components: Bileşenler
+        information: Bilgi
         initiatives: Girişimler
         initiatives_types: Girişim türleri
       models:
@@ -154,10 +156,7 @@ tr:
             email_subject: Yeni kilometre taşı tamamlandı!
             notification_title: <a href="<a href="%{resource_path}">">%{resource_title} </a> girişimi, imzaların %{percentage} kadarını elde etti.
         support_threshold_reached:
-          email_intro: '%{resource_title} girişimi imza eşiğine ulaştı'
           email_outro: Bu bildirimi, platformun yöneticisi olduğunuz için aldınız.
-          email_subject: İmza eşiğine ulaşıldı
-          notification_title: <a href="%{resource_path}">%{resource_title} </a> girişimi imza eşiğine ulaştı
     gamification:
       badges:
         initiatives:
@@ -557,12 +556,6 @@ tr:
           vote: İmza
   layouts:
     decidim:
-      admin:
-        initiative:
-          attachments: Ekli Dosyalar
-          committee_members: Komite üyeleri
-          components: Bileşenler
-          information: Bilgi
       initiative_creation_header:
         back: Geri
         fill_data: Oluştur

@@ -71,6 +71,8 @@ lv:
         search_placeholder:
           title_or_description_or_id_string_or_author_name_or_author_nickname_cont: Meklēt %{collection} pēc nosaukuma, apraksta, ID vai autora vārda.
       menu:
+        components: Komponenti
+        information: Informācija
         initiatives: Iniciatīvas
         initiatives_types: Iniciatīvu veidi
       models:
@@ -132,10 +134,7 @@ lv:
             email_subject: Jauns sasniegums!
             notification_title: <a href="%{resource_path}">%{resource_title}</a> iniciatīva ir sasniegusi %{percentage}% parakstu.
         support_threshold_reached:
-          email_intro: Iniciatīva %{resource_title} ir sasniegusi atbalsta slieksni
           email_outro: Jūs saņēmāt šo paziņojumu, jo esat šīs platformas administrators.
-          email_subject: Sasniegts atbalsta slieksnis
-          notification_title: <a href="%{resource_path}">%{resource_title}</a> iniciatīva ir sasniegusi atbalsta slieksni
     gamification:
       badges:
         initiatives:
@@ -461,12 +460,6 @@ lv:
           vote: Parakstīt
   layouts:
     decidim:
-      admin:
-        initiative:
-          attachments: Pielikumi
-          committee_members: Komitejas locekļi
-          components: Komponenti
-          information: Informācija
       initiative_creation_header:
         back: Atpakaļ
         fill_data: Izveidot

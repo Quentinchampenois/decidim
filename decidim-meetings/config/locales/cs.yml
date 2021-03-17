@@ -80,7 +80,7 @@ cs:
           error: Bylo zde chyba, že se tato schůzka zdvojnásobila.
           success: Duplicitní schůzka úspěšně.
         new:
-          copy: kopírovat
+          copy: Kopírovat
           select: Vyberte, která data chcete duplikovat
           title: Duplicitní schůzka
     components:
@@ -237,7 +237,7 @@ cs:
           index:
             filter:
               accepted: Přijato
-              all: Všechno
+              all: Vše
               rejected: Odmítnuto
               sent: Odeslaná
             filter_by: Filtrovat podle
@@ -365,14 +365,15 @@ cs:
       directory:
         meetings:
           index:
-            all: Všechno
-            date: datum
+            all: Vše
+            date: Datum
             meetings: Setkání
-            past: Minulost
+            past: Minulé
             search: Vyhledávání
             space_type: Účastní prostor
             upcoming: Nadcházející
       last_activity:
+        meeting_updated_at_html: "<span>Schůzka aktualizována na %{link}</span>"
         new_meeting_at_html: "<span>Nové setkání v %{link}</span>"
       mailer:
         invite_join_meeting_mailer:
@@ -403,12 +404,15 @@ cs:
           title: Upravit schůzku
           update: Aktualizovat
         filters:
+          activity: Moje aktivita
+          all: Vše
           category: Kategorie
-          date: datum
+          date: Datum
           date_values:
             all: Vše
             past: Minulé
             upcoming: Nadcházející
+          my_meetings: Moje schůzky
           origin: Původ
           origin_values:
             all: Vše
@@ -486,7 +490,7 @@ cs:
         invite:
           fields:
             email: E-mailem
-            name: název
+            name: Název
             sent_at: Odesláno v
             status: Stav
           status:
@@ -549,6 +553,8 @@ cs:
       proposals_from_meeting:
         meeting_proposal: 'Související návrhy:'
         proposal_meeting: 'Související setkání:'
+    statistics:
+      meetings_count: Setkání
   devise:
     mailer:
       join_meeting:

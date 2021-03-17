@@ -330,14 +330,6 @@ en:
           title: Confirm your email
       show:
         close_modal: Close modal
-    batch_notifications_mailer:
-      event_received:
-        batch_notification_subject: You have unread notifications on %{organization_name}
-        email_greeting: Hello %{username}.
-        email_intro: You are receiving this email because you have subscribed to resources on %{organization_name}
-        email_outro: You can stop receiving notifications by visiting your <a href='%{notifications_settings_path}'>changing your notification setup</a>
-        email_resume: A lot has happened on %{organization_name} since you last logged in. Here are some notifications you have missed.
-        email_see_more: More notifications are visible on <a href='%{organization_path}'>%{organization_name}</a>. Go check them out on your <a href='%{notifications_path}'>notifications</a> space
     block_user_mailer:
       notify:
         body_1: Your account was blocked.
@@ -1082,24 +1074,7 @@ en:
         metrics:
           headline: Metrics
         statistics:
-          answers_count: Completed Surveys
-          assemblies_count: Assemblies
-          comments_count: Comments
-          conferences_count: Conferences
-          debates_count: Debates
-          endorsements_count: Endorsements
           headline: Current state of %{organization}
-          meetings_count: Meetings
-          orders_count: Votes
-          pages_count: Pages
-          processes_count: Processes
-          projects_count: Projects
-          proposals_accepted: Accepted Proposals
-          proposals_count: Proposals
-          results_count: Results
-          surveys_count: Surveys
-          users_count: Participants
-          votes_count: Votes
         sub_hero:
           register: Register
       index:
@@ -1291,6 +1266,15 @@ en:
         close_window: Close window
         share: Share
         share_link: Share link
+    statistics:
+      comments_count: Comments
+      endorsements_count: Endorsements
+      followers_count: Followers
+      headline: Statistics
+      no_stats: There are no statistics yet.
+      pages_count: Pages
+      participants_count: Participants
+      users_count: Participants
     tags:
       filter_results_for_category: 'Filter results for category: %{resource}'
       filter_results_for_scope: 'Filter results for scope: %{resource}'
@@ -1533,7 +1517,7 @@ en:
     messages:
       already_confirmed: was already confirmed, please try signing in
       confirmation_period_expired: needs to be confirmed within %{period}, please request a new one
-      content_type_whitelist_error: the file type is not valid
+      content_type_allowlist_error: the file type is not valid
       cycle_detected: a scope's parent can't be one of its descendants
       expired: has expired, please request a new one
       file_size_is_less_than_or_equal_to: file size must be less than or equal to %{count}

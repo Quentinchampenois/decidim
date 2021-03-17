@@ -120,6 +120,8 @@ tr:
           questions: Sorular
           results: Sonuçlar
         questions_submenu:
+          attachments: Ekler
+          categories: Kategoriler
           components: Bileşenler
           configuration: Konfigürasyon
           consultation: Danışma
@@ -324,10 +326,6 @@ tr:
           title: Danışma nedir?
     menu:
       consultations: İstişareler
-    pages:
-      home:
-        statistics:
-          consultations_count: İstişareler
     questions:
       next_button: Sonraki soru
       previous_button: Önceki soru
@@ -364,10 +362,6 @@ tr:
           vote: Oy ver
   layouts:
     decidim:
-      admin:
-        question:
-          attachments: Ekler
-          categories: Kategoriler
       consultation_voting_data:
         start_voting_date: Oylama başlıyor
       question_components:
