@@ -20,24 +20,27 @@ describe "Edit initiative", type: :system do
   end
 
   describe "when user is initiative author" do
-    let(:initiative) { create(:initiative, :created, author: user, scoped_type: scoped_type, organization: organization) }
+    context "and initiative is created" do
+      let(:initiative) { create(:initiative, :created, author: user, scoped_type: scoped_type, organization: organization) }
 
-    it "can be updated" do
-      visit decidim_initiatives.initiative_path(initiative)
-
-      click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
-
-      expect(page).to have_content "EDIT INITIATIVE"
-
-      within "form.edit_initiative" do
-        fill_in :initiative_title, with: new_title
-        click_button "Update"
+      before do
+        visit decidim_initiatives.initiative_path(initiative)
+        click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
       end
 
-      expect(page).to have_content(new_title)
+      it "can be updated" do
+        expect(page).to have_content "EDIT INITIATIVE"
+
+        within "form.edit_initiative" do
+          fill_in :initiative_title, with: new_title
+          click_button "Update"
+        end
+
+        expect(page).to have_content(new_title)
+      end
     end
 
-    context "when initiative is published" do
+    context "and initiative is published" do
       let(:initiative) { create(:initiative, author: user, scoped_type: scoped_type, organization: organization) }
 
       it "can't be updated" do
@@ -57,13 +60,11 @@ describe "Edit initiative", type: :system do
 
     before do
       create(:initiatives_committee_member, user: user, initiative: initiative)
+      visit decidim_initiatives.initiative_path(initiative)
+      click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
     end
 
     it "can be updated" do
-      visit decidim_initiatives.initiative_path(initiative)
-
-      click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
-
       expect(page).to have_content "EDIT INITIATIVE"
 
       within "form.edit_initiative" do
@@ -79,11 +80,12 @@ describe "Edit initiative", type: :system do
     let(:user) { create(:user, :admin, organization: organization) }
     let(:initiative) { create(:initiative, :created, scoped_type: scoped_type, organization: organization) }
 
-    it "can be updated" do
+    before do
       visit decidim_initiatives.initiative_path(initiative)
-
       click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
+    end
 
+    it "can be updated" do
       expect(page).to have_content "EDIT INITIATIVE"
 
       within "form.edit_initiative" do
