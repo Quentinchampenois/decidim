@@ -18,7 +18,7 @@ describe "Edit initiative", type: :system do
   let(:edit_initiative_path) { decidim_initiatives.edit_initiative_path(initiative) }
 
   shared_examples "manage update" do
-    it "can be updated" do
+    it "can be updated", :slow do
       visit initiative_path
 
       click_link("Edit", href: edit_initiative_path)
