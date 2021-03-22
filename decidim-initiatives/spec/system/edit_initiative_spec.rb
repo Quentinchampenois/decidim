@@ -28,7 +28,7 @@ describe "Edit initiative", type: :system do
         click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
       end
 
-      it "can be updated" do
+      it "can be updated", :slow do
         expect(page).to have_content "EDIT INITIATIVE"
 
         within "form.edit_initiative" do
@@ -64,7 +64,7 @@ describe "Edit initiative", type: :system do
       click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
     end
 
-    it "can be updated" do
+    it "can be updated", :slow do
       expect(page).to have_content "EDIT INITIATIVE"
 
       within "form.edit_initiative" do
@@ -85,7 +85,7 @@ describe "Edit initiative", type: :system do
       click_link("Edit", href: decidim_initiatives.edit_initiative_path(initiative))
     end
 
-    it "can be updated" do
+    it "can be updated", :slow do
       expect(page).to have_content "EDIT INITIATIVE"
 
       within "form.edit_initiative" do
