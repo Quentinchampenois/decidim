@@ -28,11 +28,13 @@ describe "Conversations", type: :system do
 
   shared_examples "create new conversation" do
     it "allows sending an initial message", :slow do
+      expect(page).not_to have_content("Required fields are marked with an asterisk")
       start_conversation("Is this a Ryanair style democracy?")
       expect(page).to have_selector(".conversation-chat:last-child", text: "Is this a Ryanair style democracy?")
     end
 
     it "redirects to an existing conversation if it exists already", :slow do
+      expect(page).not_to have_content("Required fields are marked with an asterisk")
       start_conversation("Is this a Ryanair style democracy?")
       expect(page).to have_selector(".conversation-chat:last-child", text: "Is this a Ryanair style democracy?")
 
