@@ -32,7 +32,7 @@ module Decidim
       end
 
       def email_subject
-        I18n.t("email_subject", i18n_options).html_safe
+        decidim_sanitize I18n.t("email_subject", i18n_options)
       end
 
       def email_intro
