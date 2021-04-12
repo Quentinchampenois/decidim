@@ -65,6 +65,7 @@ shared_examples_for "a simple event" do |skip_space_checks|
     it "is generated correctly" do
       expect(subject.email_subject).to be_kind_of(String)
       expect(subject.email_subject).not_to include("translation missing")
+      expect(subject.email_subject).not_to include("&#39;")
     end
   end
 
@@ -150,5 +151,16 @@ shared_examples_for "a simple event" do |skip_space_checks|
       it { is_expected.to include(participatory_space_title: satisfy(&:present?)) }
       it { is_expected.to include(participatory_space_url: start_with("http")) }
     end
+  end
+end
+
+shared_examples_for "with diacritics" do
+  let(:comment) { create :comment, commentable: dummy_resource }
+  let(:dummy_resource) { create :dummy_resource, title: { en: title } }
+  let(:title) { "It's the resource title !" }
+
+  it "shows diacritics" do
+    expect(subject.email_subject).not_to include("&#39;")
+    expect(subject.email_subject).to eq("There is a new comment from #{comment.author.name} in It's the resource title !")
   end
 end
