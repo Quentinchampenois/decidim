@@ -24,9 +24,18 @@ $(() => {
   if ($addressInput.length > 0) {
     attachGeocoding($addressInputField, null, (coordinates) => {
       $map.show()
-      $("[data-decidim-map]").data("map-controller").getConfig()
-      $("[data-decidim-map]").data("map-controller").config.marker.latitude = coordinates[0];
-      $("[data-decidim-map]").data("map-controller").config.marker.longitude = coordinates[1];
+
+      const markerData = {
+        latitude: coordinates[0],
+        longitude: coordinates[1],
+        address: $addressInput.val()
+      }
+
+      const config = $("[data-decidim-map]").data("map-controller").getConfig()
+      config.marker.latitude = markerData.latitude;
+      config.marker.longitude = markerData.longitude;
+      config.marker.address = markerData.address;
+      $("[data-decidim-map]").data("mapController").start();
     });
   }
 });
