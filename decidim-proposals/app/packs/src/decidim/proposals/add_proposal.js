@@ -4,7 +4,9 @@ $(() => {
   const $checkbox = $("input:checkbox[name$='[has_address]']");
   const $addressInput = $("#address_input");
   const $addressInputField = $("input", $addressInput);
+  const $map = $("#address_map");
 
+  $map.hide();
   if ($checkbox.length > 0) {
     const toggleInput = () => {
       if ($checkbox[0].checked) {
@@ -20,6 +22,11 @@ $(() => {
   }
 
   if ($addressInput.length > 0) {
-    attachGeocoding($addressInputField);
+    attachGeocoding($addressInputField, null, (coordinates) => {
+      $map.show()
+      $("[data-decidim-map]").data("map-controller").getConfig()
+      $("[data-decidim-map]").data("map-controller").config.marker.latitude = coordinates[0];
+      $("[data-decidim-map]").data("map-controller").config.marker.longitude = coordinates[1];
+    });
   }
 });

@@ -68,7 +68,9 @@ const getCoordinateInputName = (coordinate, $input, options) => {
  *   the latitude and longitude element IDs or names from the default.
  * @returns {void}
  */
-export default function attachGeocoding($input, options) {
+
+// Checker ici
+export default function attachGeocoding($input, options, callback) {
   const attachOptions = $.extend({}, options);
   const inputIdParts = $input.attr("id").split("_");
   inputIdParts.pop();
@@ -126,6 +128,7 @@ export default function attachGeocoding($input, options) {
   $input.on("geocoder-suggest-coordinates.decidim", (_ev, coordinates) => {
     setCoordinates(coordinates);
     geocoded = true;
+    callback(coordinates)
   });
 
   // Set the initial values if the field defines the coordinates

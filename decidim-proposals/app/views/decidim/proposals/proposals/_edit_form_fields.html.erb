@@ -40,6 +40,11 @@
   <div class="field" id="address_input">
     <%= form.geocoding_field :address, placeholder: t("decidim.proposals.proposals.placeholder.address") %>
   </div>
+
+  <div class="map" id="address_map">
+    <%= render partial: "dynamic_map_instructions" %>
+    <%= dynamic_map_for proposal_preview_data_for_map(@proposal) %>
+  </div>
 <% end %>
 
 <% if @form.categories&.any? %>
