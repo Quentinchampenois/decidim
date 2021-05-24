@@ -26,26 +26,24 @@ $(() => {
 
   if ($addressInput.length > 0) {
     if ($checkbox[0].checked) {
-      $map.show()
+      $map.show();
     }
 
-    const ctrl = $("[data-decidim-map]").data("map-controller")
+    const ctrl = $("[data-decidim-map]").data("map-controller");
     ctrl.setEventHandler("coordinates", (ev) => {
-      $("input[name='"+ latFieldName +"']").val(ev.lat)
-        $("input[name='"+ longFieldName +"']").val(ev.lng)
-    })
+      $(`input[name='${latFieldName}']`).val(ev.lat);
+      $(`input[name='${longFieldName}']`).val(ev.lng);
+    });
 
     attachGeocoding($addressInputField, null, (coordinates) => {
-      $map.show()
-
+      $map.show();
       // Remove previous marker when user updates address in address field
-      ctrl.removeMarker()
-
+      ctrl.removeMarker();
       ctrl.addMarker({
         latitude: coordinates[0],
         longitude: coordinates[1],
         address: $addressInput.val()
-      })
+      });
     });
   }
 });

@@ -12,7 +12,7 @@ export default class MapDragMarkerController extends MapController {
   }
 
   addMarker(markerData) {
-    if ( markerData.latitude === null || markerData.longitude === null ) {
+    if (markerData.latitude === null || markerData.longitude === null) {
       return;
     }
 
