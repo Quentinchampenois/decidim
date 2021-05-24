@@ -22,20 +22,42 @@ $(() => {
   }
 
   if ($addressInput.length > 0) {
+    const getCoordinateInputName = (coordinate, $input, options) => {
+      const key = `${coordinate}Name`;
+      if (options[key]) {
+        return options[key];
+      }
+
+      const inputName = $input.attr("name");
+      const subNameMatch = /\[[^\]]+\]$/;
+      if (inputName.match(subNameMatch)) {
+        return inputName.replace(subNameMatch, `[${coordinate}]`);
+      }
+
+      return coordinate;
+    }
+
     attachGeocoding($addressInputField, null, (coordinates) => {
       $map.show()
 
-      const markerData = {
+      const ctrl = $("[data-decidim-map]").data("map-controller")
+      ctrl.addMarker({
         latitude: coordinates[0],
         longitude: coordinates[1],
         address: $addressInput.val()
-      }
+      })
 
-      const config = $("[data-decidim-map]").data("map-controller").getConfig()
-      config.marker.latitude = markerData.latitude;
-      config.marker.longitude = markerData.longitude;
-      config.marker.address = markerData.address;
-      $("[data-decidim-map]").data("mapController").start();
+      ctrl.setEventHandler("coordinates", (ev) => {
+        const latFieldName = getCoordinateInputName("latitude", $addressInputField, {})
+        const longFieldName = getCoordinateInputName("longitude", $addressInputField, {})
+        const $latField = $("input[name='"+ latFieldName +"']")
+        const $longField = $("input[name='"+ longFieldName +"']")
+
+        $latField.val(ev.lat)
+        $longField.val(ev.lng)
+      })
+
+      ctrl.start();
     });
   }
 });

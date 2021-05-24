@@ -16,7 +16,7 @@ export default class MapDragMarkerController extends MapController {
       lat: markerData.latitude,
       lng: markerData.longitude
     };
-    //this.triggerEvent("coordinates", [coordinates]);
+    this.triggerEvent("coordinates", [coordinates]);
 
     this.marker = L.marker(coordinates, {
       icon: this.createIcon(),
