@@ -1,3 +1,9 @@
-<div class="column dynamic-map-instructions">
-  <%== t(".instructions") %>
+<div class="dynamic-map-instructions">
+  <% if preview.blank? %>
+    <h3><%= t(".form.instructions") %></h3>
+    <p><%= t(".form.description") %></p>
+  <% else %>
+    <h3><%= t(".preview.instructions") %></h3>
+    <p><%= t(".preview.description") %></p>
+  <% end %>
 </div>

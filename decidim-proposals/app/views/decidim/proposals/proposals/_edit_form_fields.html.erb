@@ -42,7 +42,7 @@
   </div>
 
   <div class="map" id="address_map">
-    <%= render partial: "dynamic_map_instructions" %>
+    <%= render partial: "dynamic_map_instructions", locals: { preview: false } %>
     <%= dynamic_map_for proposal_preview_data_for_map(@proposal) %>
   </div>
 <% end %>

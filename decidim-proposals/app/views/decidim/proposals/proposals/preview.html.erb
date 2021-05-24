@@ -24,7 +24,7 @@
 
     <% if component_settings.geocoding_enabled? %>
       <% if has_position?(@proposal) %>
-        <%= render partial: "dynamic_map_instructions" %>
+        <%= render partial: "dynamic_map_instructions", locals: { preview: true } %>
         <%= dynamic_map_for proposal_preview_data_for_map(@proposal) %>
       <% end %>
     <% end %>
