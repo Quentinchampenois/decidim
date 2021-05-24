@@ -47,10 +47,6 @@ export default class MapController {
     return this.map;
   }
 
-  reload() {
-    this.map.scrollWheelZoom.disable();
-  }
-
   // Override this in the specific map controllers.
   start() {}
 
