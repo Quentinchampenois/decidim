@@ -21,6 +21,14 @@
     <div class="row column">
       <%= attachments_for @proposal %>
     </div>
+
+    <% if component_settings.geocoding_enabled? %>
+      <% if has_position?(@proposal) %>
+        <%= render partial: "dynamic_map_instructions" %>
+        <%= dynamic_map_for proposal_preview_data_for_map(@proposal) %>
+      <% end %>
+    <% end %>
+
     <div class="p-l">
       <div class="row column flex-center">
         <%= link_to t(".modify"), edit_draft_proposal_path(@proposal) %>

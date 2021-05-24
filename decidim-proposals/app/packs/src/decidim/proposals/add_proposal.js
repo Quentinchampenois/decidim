@@ -22,6 +22,11 @@ $(() => {
   }
 
   if ($addressInput.length > 0) {
+
+    if ($checkbox.is(":checked")) {
+      $map.show()
+    }
+
     const getCoordinateInputName = (coordinate, $input, options) => {
       const key = `${coordinate}Name`;
       if (options[key]) {
@@ -37,10 +42,21 @@ $(() => {
       return coordinate;
     }
 
+    const ctrl = $("[data-decidim-map]").data("map-controller")
+
+    ctrl.setEventHandler("coordinates", (ev) => {
+      const latFieldName = getCoordinateInputName("latitude", $addressInputField, {})
+      const longFieldName = getCoordinateInputName("longitude", $addressInputField, {})
+      const $latField = $("input[name='"+ latFieldName +"']")
+      const $longField = $("input[name='"+ longFieldName +"']")
+      $latField.val(ev.lat)
+      $longField.val(ev.lng)
+    })
+
     attachGeocoding($addressInputField, null, (coordinates) => {
       $map.show()
 
-      const ctrl = $("[data-decidim-map]").data("map-controller")
+      ctrl.removeMarker()
       ctrl.addMarker({
         latitude: coordinates[0],
         longitude: coordinates[1],
@@ -48,16 +64,16 @@ $(() => {
       })
 
       ctrl.setEventHandler("coordinates", (ev) => {
+        console.log("nonononon")
         const latFieldName = getCoordinateInputName("latitude", $addressInputField, {})
         const longFieldName = getCoordinateInputName("longitude", $addressInputField, {})
         const $latField = $("input[name='"+ latFieldName +"']")
         const $longField = $("input[name='"+ longFieldName +"']")
-
         $latField.val(ev.lat)
         $longField.val(ev.lng)
       })
 
-      ctrl.start();
+      // ctrl.reload();
     });
   }
 });
