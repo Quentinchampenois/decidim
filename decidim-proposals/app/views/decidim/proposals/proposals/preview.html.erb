@@ -13,6 +13,11 @@
         <% end %>
 
         <%= render_proposal_body(@proposal) %>
+        <% if component_settings.geocoding_enabled? %>
+          <% if has_position?(@proposal) %>
+            <%= render partial: "decidim/shared/static_map", locals: { icon_name: "proposals", geolocalizable: @proposal } %>
+          <% end %>
+        <% end %>
       </div>
       <div class="row column">
         <%= cell "decidim/proposals/proposal_tags", @proposal %>
@@ -21,13 +26,6 @@
     <div class="row column">
       <%= attachments_for @proposal %>
     </div>
-
-    <% if component_settings.geocoding_enabled? %>
-      <% if has_position?(@proposal) %>
-        <%= render partial: "dynamic_map_instructions", locals: { preview: true } %>
-        <%= dynamic_map_for proposal_preview_data_for_map(@proposal) %>
-      <% end %>
-    <% end %>
 
     <div class="p-l">
       <div class="row column flex-center">

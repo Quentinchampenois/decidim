@@ -717,12 +717,8 @@ en:
             one: "%{count} proposal"
             other: "%{count} proposals"
         dynamic_map_instructions:
-          form:
-            description: The coordinates will be updated when clicking on 'preview' button. However, the address does not change.
-            instructions: You can move the point on the map.
-          preview:
-            description: If you want to update the coordinates, go back to 'complete' step
-            instructions: You cannot update coordinates of point on map.
+          description: The coordinates will be updated when clicking on 'preview' button. However, the address does not change.
+          instructions: You can move the point on the map.
         edit:
           add_documents: Documents
           add_images: File

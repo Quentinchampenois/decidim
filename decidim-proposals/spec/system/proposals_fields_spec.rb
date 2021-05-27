@@ -80,8 +80,8 @@ describe "Proposals", type: :system do
             find("*[type=submit]").click
           end
 
-          expect(page).not_to have_content("You cannot update coordinates of point on map.")
-          expect(page).not_to have_css("[data-decidim-map]")
+          expect(page).not_to have_css(".address__info")
+          expect(page).not_to have_css(".address__map")
 
           click_button "Publish"
 
@@ -116,6 +116,7 @@ describe "Proposals", type: :system do
               fill_in :proposal_title, with: "More sidewalks and less roads"
               fill_in :proposal_body, with: "Cities need more people, not more cars"
               fill_in_geocoding :proposal_address, with: address
+
               expect(page).to have_css("[data-decidim-map]")
               expect(page).to have_content("You can move the point on the map.")
               select translated(category.name), from: :proposal_category_id
@@ -124,8 +125,12 @@ describe "Proposals", type: :system do
               find("*[type=submit]").click
             end
 
-            expect(page).to have_content("You cannot update coordinates of point on map.")
-            expect(page).to have_css("[data-decidim-map]")
+            within ".card__content.address" do
+              expect(page).to have_css(".address__info")
+              expect(page).to have_css(".address__map")
+              expect(page).to have_content(address)
+            end
+
             click_button "Publish"
 
             expect(page).to have_content("successfully")
