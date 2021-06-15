@@ -13,6 +13,9 @@ module Decidim
       include Decidim::DataPortability
       include Decidim::Traceable
       include Decidim::Loggable
+      include Decidim::Searchable
+      include Decidim::TranslatableResource
+      include Decidim::TranslatableAttributes
 
       # Limit the max depth of a comment tree. If C is a comment and R is a reply:
       # C          (depth 0)
