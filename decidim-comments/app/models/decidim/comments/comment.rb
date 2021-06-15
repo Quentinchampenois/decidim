@@ -13,9 +13,6 @@ module Decidim
       include Decidim::DataPortability
       include Decidim::Traceable
       include Decidim::Loggable
-      include Decidim::Searchable
-      include Decidim::TranslatableResource
-      include Decidim::TranslatableAttributes
 
       # Limit the max depth of a comment tree. If C is a comment and R is a reply:
       # C          (depth 0)
@@ -41,14 +38,6 @@ module Decidim
       before_validation :compute_depth
 
       delegate :organization, to: :commentable
-      translatable_fields :body
-      searchable_fields({
-                          participatory_space: :itself,
-                          A: :body,
-                          datetime: :created_at
-                        },
-                        index_on_create: true,
-                        index_on_update: ->(comment) { comment.visible? })
 
       def self.positive
         where(alignment: 1)
@@ -60,10 +49,6 @@ module Decidim
 
       def self.negative
         where(alignment: -1)
-      end
-
-      def visible?
-        participatory_space.try(:visible?) && component.try(:published?)
       end
 
       def participatory_space
@@ -133,9 +118,9 @@ module Decidim
         if resources.first&.kind_of?(Decidim::Comments::Commentable)
           commentable_type = resources.first.class.name
           Decidim::Comments::Comment.select("DISTINCT decidim_author_id").not_hidden
-                                    .where(decidim_commentable_id: resources.pluck(:id))
-                                    .where(decidim_commentable_type: commentable_type)
-                                    .where("decidim_author_type" => "Decidim::UserBaseEntity").pluck(:decidim_author_id)
+            .where(decidim_commentable_id: resources.pluck(:id))
+            .where(decidim_commentable_type: commentable_type)
+            .where("decidim_author_type" => "Decidim::UserBaseEntity").pluck(:decidim_author_id)
         end
       end
 
