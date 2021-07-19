@@ -25,8 +25,8 @@ describe "Participatory texts", type: :system do
     clean_proposal_body = strip_tags(translated(proposal.body))
 
     expect(prop_block).to have_button("Follow")
-    expect(prop_block).to have_link("Comment") if component.settings.comments_enabled
-    expect(prop_block).to have_link(proposal.comments_count.to_s) if component.settings.comments_enabled
+    expect(prop_block).to have_link("Comment") unless component.current_settings.comments_blocked
+    expect(prop_block).to have_link(proposal.comments_count.to_s) unless component.current_settings.comments_blocked
     expect(prop_block).to have_content(clean_proposal_body) if proposal.participatory_text_level == "article"
     expect(prop_block).not_to have_content(clean_proposal_body) if proposal.participatory_text_level != "article"
   end

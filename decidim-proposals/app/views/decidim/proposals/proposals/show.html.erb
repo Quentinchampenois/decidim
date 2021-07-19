@@ -105,16 +105,20 @@ extra_admin_link(
             <% end %>
             <div class="row collapse buttons__row">
               <% if endorsements_enabled? %>
-                <div class="column small-9 collapse">
+                <div class="column <%= @proposal.comments_blocked? ? "small-12" : "small-9" %> collapse">
                   <%= endorsement_buttons_cell(@proposal) %>
                 </div>
               <% end %>
+
+              <%# byebug %>
+              <% unless @proposal.comments_blocked? %>
               <div class="column collapse <%= endorsements_enabled? ? "small-3" : "" %>">
                 <%= link_to "#comments", class: "button small compact hollow secondary button--nomargin expanded" do %>
                     <span class="show-for-sr"><%= present(@proposal).title(html_escape: true) %></span>
                     <%= icon "comment-square", class: "icon--small", aria_label: t(".comments"), role: "img" %> <%= @proposal.comments_count %>
                 <% end %>
               </div>
+              <% end %>
             </div>
             <br>
             <%= follow_button_for(@proposal) %>

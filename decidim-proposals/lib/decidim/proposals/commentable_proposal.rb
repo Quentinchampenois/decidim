@@ -13,6 +13,10 @@ module Decidim
           component.settings.comments_enabled?
         end
 
+        def comments_blocked?
+          component.current_settings.comments_blocked?
+        end
+
         # Public: Overrides the `accepts_new_comments?` Commentable concern method.
         def accepts_new_comments?
           commentable? && !component.current_settings.comments_blocked

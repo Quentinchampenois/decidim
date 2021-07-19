@@ -18,6 +18,15 @@ describe "show", type: :system do
       expect(page).to have_content proposal.title[I18n.locale.to_s]
     end
 
+    it "doesn't display comments count" do
+      proposal.component.update!(settings: { comments_enabled: false, comments_blocked: true })
+      proposal.reload
+
+      within ".card>.card__content" do
+        expect(page).not_to have_css(".icon--comment-square.icon.icon--small")
+      end
+    end
+
     it_behaves_like "going back to list button"
   end
 end
