@@ -171,6 +171,8 @@ en:
             other: "%{count} results"
         filters:
           all: All
+          filter_by: "Filter by:"
+          select_scope: Select a scope
           scopes: Scopes
         home:
           categories_label: Categories
