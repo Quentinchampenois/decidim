@@ -2,6 +2,9 @@
 
 class ChangeUppercasedNicknamed < ActiveRecord::Migration[6.0]
   def up
+    logger = Logger.new($stdout)
+
+    logger.info("[Migration] - ChangeUppercasedNicknamed - Updating users nicknames...")
     # Store each users updated
     has_changed = []
 
@@ -28,6 +31,8 @@ class ChangeUppercasedNicknamed < ActiveRecord::Migration[6.0]
         has_changed.append(user)
       end
     end
+
+    logger.info("[Migration] - ChangeUppercasedNicknamed - Process terminated, #{has_changed.count} users nickname have been updated.")
   end
 
   def send_notification_to(user, new_nickname)
