@@ -132,6 +132,25 @@ if !Rails.env.production? || ENV["SEED"]
     admin_terms_accepted_at: Time.current
   )
 
+  ["hello_world", "Hello_world", "HELlo_world", "Hello_worlD", "Hello_worlD-1"].each do |nickname|
+    Decidim::User.new(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      nickname: nickname,
+      password: "decidim123456",
+      password_confirmation: "decidim123456",
+      organization: organization,
+      confirmed_at: Time.current,
+      locale: I18n.default_locale,
+      admin: false,
+      tos_agreement: true,
+      personal_url: Faker::Internet.url,
+      about: Faker::Lorem.paragraph(sentence_count: 2),
+      accepted_tos_version: organization.tos_version,
+      admin_terms_accepted_at: Time.current
+    ).save!(validate: false)
+  end
+
   ["user@example.org", "user2@example.org"].each do |email|
     Decidim::User.find_or_initialize_by(email: email).update!(
       name: Faker::Name.name,
