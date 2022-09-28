@@ -68,4 +68,23 @@ describe "Rack Attack", type: :system do
       end
     end
   end
+
+  describe "Fail2Ban" do
+    let(:headers) { { "REMOTE_ADDR" => "3.4.5.6", "decidim.current_organization" => organization } }
+
+    %w(/etc/passwd /wp-admin/index.php /wp-login/index.php SELECT CONCAT /.git/config).each do |path|
+      it "blocks user for specific request : '#{path}'" do
+        get "#{decidim.root_path}#{path}", params: {}, headers: headers
+        expect(response).to have_http_status(:forbidden)
+
+        get decidim.root_path, params: {}, headers: headers
+        expect(response).to have_http_status(:forbidden)
+
+        travel_to(61.minutes.from_now) do
+          get decidim.root_path, params: {}, headers: headers
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
 end
