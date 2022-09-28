@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if Rails.env.production? || Rails.env.test?
+if (ENV.fetch("ENABLE_RACK_ATTACK") == "1") || Rails.env.production? || Rails.env.test?
   require "rack/attack"
 
   Rails.application.configure do |config|
@@ -11,7 +11,11 @@ if Rails.env.production? || Rails.env.test?
     Rack::Attack.blocklist("block all access to system") do |request|
       # Requests are blocked if the return value is truthy
       if request.path.start_with?("/system")
-        Decidim.system_accesslist_ips.any? && Decidim.system_accesslist_ips.map { |ip_address| IPAddr.new(ip_address).include?(IPAddr.new(request.ip)) }.any?
+        next if Decidim.system_accesslist_ips.blank?
+
+        Decidim.system_accesslist_ips.select do |ip_address|
+          IPAddr.new(ip_address).include?(IPAddr.new(request.ip))
+        end.empty?
       end
     end
 
