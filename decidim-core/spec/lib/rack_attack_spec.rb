@@ -10,10 +10,6 @@ describe "Rack Attack", type: :system do
   describe "Throttling" do
     let(:headers) { { "REMOTE_ADDR" => "1.2.3.4", "decidim.current_organization" => organization } }
 
-    before do
-      Rack::Attack.reset!
-    end
-
     it "accepts 100 requests and then block requests" do
       100.times do |_|
         get decidim.root_path, params: {}, headers: headers
@@ -35,10 +31,6 @@ describe "Rack Attack", type: :system do
     let(:headers) { { "REMOTE_ADDR" => "2.3.4.5", "decidim.current_organization" => organization } }
     let(:params) { { "user" => { "email" => "user@example.org" } } }
 
-    before do
-      Rack::Attack.reset!
-    end
-
     it "accepts 5 requests and then block requests" do
       5.times do |_|
         post "/users/sign_in", params: params, headers: headers
@@ -59,10 +51,6 @@ describe "Rack Attack", type: :system do
   describe "Throttling user password recovery" do
     let(:headers) { { "REMOTE_ADDR" => "3.4.5.6", "decidim.current_organization" => organization } }
     let(:params) { { "user" => { "email" => "user@example.org" } } }
-
-    before do
-      Rack::Attack.reset!
-    end
 
     it "accepts 5 requests and then block requests" do
       5.times do |_|
