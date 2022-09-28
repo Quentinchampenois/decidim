@@ -3,6 +3,10 @@
 if (ENV.fetch("ENABLE_RACK_ATTACK", nil) == "1") || Rails.env.production? || Rails.env.test?
   require "rack/attack"
 
+  Rack::Attack.enabled = true
+
+  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new if Rails.env.test?
+
   Rails.application.configure do |config|
     config.middleware.use Rack::Attack
   end
@@ -23,8 +27,7 @@ if (ENV.fetch("ENABLE_RACK_ATTACK", nil) == "1") || Rails.env.production? || Rai
     Rack::Attack.throttle(
       "requests by ip",
       limit: Decidim.throttling_max_requests,
-      period: Decidim.throttling_period,
-      &:ip
+      period: Decidim.throttling_period, &:ip
     )
 
     # Throttle login attempts for a given email parameter to 6 reqs/minute
