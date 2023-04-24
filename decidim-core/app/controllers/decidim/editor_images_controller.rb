@@ -14,7 +14,7 @@ module Decidim
 
       CreateEditorImage.call(@form) do
         on(:ok) do |image|
-          render json: { url: image.attached_uploader(:file).path, message: I18n.t("success", scope: "decidim.editor_images.create") }
+          render json: { url: image.attached_uploader(:file).url(host: current_organization.host), message: I18n.t("success", scope: "decidim.editor_images.create") }
         end
 
         on(:invalid) do |_message|
