@@ -60,7 +60,7 @@ module Decidim
         it "returns full image url" do
           expect do
             post :create, params: valid_params
-          end.to change { Decidim::EditorImage.count }.by(1)
+          end.to change(Decidim::EditorImage, :count).by(1)
 
           response_h = JSON.parse(response.body)
           expect(response_h["url"]).to include("http://#{organization.host}")
@@ -77,7 +77,6 @@ module Decidim
             expect(response.body).to include("Error uploading image")
           end
         end
-
       end
     end
   end
