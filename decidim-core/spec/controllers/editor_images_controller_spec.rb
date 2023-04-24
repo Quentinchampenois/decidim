@@ -57,6 +57,16 @@ module Decidim
           expect(response).to have_http_status(:ok)
         end
 
+        it "returns full image url" do
+          expect do
+            post :create, params: valid_params
+          end.to change { Decidim::EditorImage.count }.by(1)
+
+          response_h = JSON.parse(response.body)
+          expect(response_h["url"]).to include("http://#{organization.host}")
+          expect(response_h["message"]).to eq("Image uploaded successfully.")
+        end
+
         context "when file is not valid" do
           it "does not create an editor image and returns an error message" do
             expect do
@@ -67,6 +77,7 @@ module Decidim
             expect(response.body).to include("Error uploading image")
           end
         end
+
       end
     end
   end
