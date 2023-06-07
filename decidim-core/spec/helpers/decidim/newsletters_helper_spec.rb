@@ -26,6 +26,17 @@ module Decidim
 
         it { is_expected.to eq("<p>Hello, </p>") }
       end
+
+      describe "when image is present" do
+        subject { helper.parse_interpolations(text, user, newsletter.id) }
+
+        let(:text) { %{(My image uploaded <img src="/rails/active_storage" />)} }
+        let(:user) { create(:user, organization: organization) }
+        let(:organization) { create(:organization, host: "localhost") }
+        let(:newsletter) { create(:newsletter) }
+
+        it { is_expected.to eq(%{(My image uploaded <img src="#{decidim.root_url(host: organization.host)}rails/active_storage" />)}) }
+      end
     end
 
     describe "#custom_url_for_mail_root" do

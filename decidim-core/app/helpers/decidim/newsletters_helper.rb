@@ -22,10 +22,19 @@ module Decidim
       end
 
       if user.present?
-        content.gsub("%{name}", user.name)
+        content = content.gsub("%{name}", user.name)
       else
-        content.gsub("%{name}", "")
+        content = content.gsub("%{name}", "")
       end
+
+      images = content.scan(/src\s*=\s*"([^"]*)"/)
+
+      images.each do |src|
+        src_replaced = "#{decidim.root_url(host: host)}#{src.first[1..-1]}"
+        content = content.gsub!(/src\s*=\s*"([^"]*#{src.first})"/, %(src="#{src_replaced}"))
+      end
+
+      content
     end
 
     # this method is used to generate the root link on mail with the utm_codes
