@@ -9,32 +9,11 @@ module Decidim
     # And replace "%{name}" on the subject or content of newsletter to the user Name
     # for example transform "%{name}" to "User Name"
     def parse_interpolations(content, user = nil, id = nil)
-      if Decidim.config.track_newsletter_links && id.present? && user.present?
-        host = user.organization.host.to_s
-        campaign = "newsletter_#{id}"
+      host = user&.organization&.host&.to_s
 
-        links = content.scan(/href\s*=\s*"([^"]*)"/)
-
-        links.each do |link|
-          link_replaced = link.first + utm_codes(host, campaign)
-          content = content.gsub(/href\s*=\s*"([^"]*#{link.first})"/, %(href="#{link_replaced}"))
-        end
-      end
-
-      if user.present?
-        content = content.gsub("%{name}", user.name)
-      else
-        content = content.gsub("%{name}", "")
-      end
-
-      images = content.scan(/src\s*=\s*"([^"]*)"/)
-
-      images.each do |src|
-        src_replaced = "#{decidim.root_url(host: host)}#{src.first[1..-1]}"
-        content = content.gsub!(/src\s*=\s*"([^"]*#{src.first})"/, %(src="#{src_replaced}"))
-      end
-
-      content
+      content = interpret_name(content, user)
+      content = track_newsletter_links(content, id, host)
+      transform_image_urls(content, host)
     end
 
     # this method is used to generate the root link on mail with the utm_codes
@@ -52,6 +31,42 @@ module Decidim
     # You can change or add utm_codes for track
     def utm_codes(host, newsletter_id)
       "?utm_source=#{host}&utm_campaign=#{newsletter_id}"
+    end
+
+    private
+
+    def interpret_name(content, user)
+      return content.gsub("%{name}", "") if user.blank?
+
+      content.gsub("%{name}", user.name)
+    end
+
+    def transform_image_urls(content, host)
+      return content if host.blank?
+
+      content.scan(/src\s*=\s*"([^"]*)"/).each do |src|
+        root_url = decidim.root_url(host:)[0..-2]
+        src_replaced = "#{root_url}#{src.first}"
+        content = content.gsub(/src\s*=\s*"([^"]*#{src.first})"/, %(src="#{src_replaced}"))
+      end
+
+      content
+    end
+
+    def track_newsletter_links(content, id, host)
+      return content unless Decidim.config.track_newsletter_links
+      return content if id.blank?
+      return content if host.blank?
+
+      campaign = "newsletter_#{id}"
+      links = content.scan(/href\s*=\s*"([^"]*)"/)
+
+      links.each do |link|
+        link_replaced = link.first + utm_codes(host, campaign)
+        content = content.gsub(/href\s*=\s*"([^"]*#{link.first})"/, %(href="#{link_replaced}"))
+      end
+
+      content
     end
   end
 end
