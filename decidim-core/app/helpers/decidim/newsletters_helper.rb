@@ -35,12 +35,19 @@ module Decidim
 
     private
 
+    # Interpret placeholder '%{name}' and replace by the user name
+    # If user is not define, it returns content with blank instead of the placeholder
+    # return - String : Content
     def interpret_name(content, user)
       return content.gsub("%{name}", "") if user.blank?
 
       content.gsub("%{name}", user.name)
     end
 
+    # Find each img HTML tag with relative path in src attribute
+    # For each URL, prepends the decidim.root_url
+    #   If host is not defined it returns full content
+    # return - String : Content
     def transform_image_urls(content, host)
       return content if host.blank?
 
@@ -53,6 +60,8 @@ module Decidim
       content
     end
 
+    # Add tracking query params to each links
+    # return - String : Content
     def track_newsletter_links(content, id, host)
       return content unless Decidim.config.track_newsletter_links
       return content if id.blank?
