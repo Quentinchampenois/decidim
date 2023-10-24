@@ -18,5 +18,12 @@ jobs:
         with:
           disallowed_prefixes: "feat/,feature/,fix/,chore/,build/,ci/,refactor/,docs/,wip/,fix:"
           prefix_case_sensitive: false
+          regex: "^[A-Z].+"
           min_length: 5
           max_length: 100
+      - uses: jesusvasquez333/verify-pr-label-action@v1.4.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          valid-labels: "type: feature, type:change, type: fix, type: removal, target: developer-experience, type: internal"
+          invalid-labels: "type: bug"
+          pull-request-number: "${{ github.event.pull_request.number }}"

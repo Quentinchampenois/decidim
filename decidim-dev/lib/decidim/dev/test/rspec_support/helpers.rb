@@ -10,15 +10,31 @@ module Decidim
     end
 
     def within_user_menu
-      within ".topbar__user__logged" do
-        find("a", text: user.name).click
+      main_bar_selector = ".main-bar"
+
+      within main_bar_selector do
+        find("#trigger-dropdown-account").click
+
         yield
       end
     end
 
-    def within_language_menu
-      within ".topbar__dropmenu.language-choose" do
-        find("ul.dropdown.menu").click
+    def within_admin_sidebar_menu
+      within("[id='admin-sidebar-menu-settings']") do
+        yield
+      end
+    end
+
+    def within_admin_menu
+      click_button "Manage"
+      within("[id*='dropdown-menu-settings']") do
+        yield
+      end
+    end
+
+    def within_language_menu(options = {})
+      within(options[:admin] ? ".topbar__dropmenu.language-choose" : "footer") do
+        find(options[:admin] ? "#admin-menu-trigger" : "#trigger-dropdown-language-chooser").click
         yield
       end
     end
@@ -28,17 +44,19 @@ module Decidim
     end
 
     def within_flash_messages
-      within ".flash" do
+      within ".flash", match: :first do
         yield
       end
     end
 
     def expect_user_logged
-      expect(page).to have_css(".topbar__user__logged")
+      expect(page).to have_css(".main-bar #trigger-dropdown-account")
     end
 
     def have_admin_callout(text)
-      have_selector(".callout--full", text:)
+      within_flash_messages do
+        have_content text
+      end
     end
 
     def stub_get_request_with_format(rq_url, rs_format)
@@ -159,12 +177,8 @@ module Decidim
       )
 
       # Wait for the file to be uploaded
-      if respond_to?(:redesigned) && redesigned
-        within "[data-dropzone-items]" do
-          expect(page).to have_content(filename)
-        end
-      else
-        expect(page).to have_css("img[alt='Uploaded file']")
+      within "[data-dropzone-items]" do
+        expect(page).to have_content(filename)
       end
     end
 

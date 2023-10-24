@@ -52,7 +52,7 @@ en:
         confirm_destroy: Are you sure?
         destroy: Delete
         edit: Edit
-        new: New %{name}
+        new: New debate
         title: Actions
       admin:
         debate_closes:
@@ -82,9 +82,6 @@ en:
             success: Debate successfully updated.
         exports:
           comments: Comments
-        models:
-          debate:
-            name: Debate
       admin_log:
         debate:
           close: "%{user_name} closed the %{resource_name} debate on the %{space_name} space"
@@ -97,10 +94,9 @@ en:
           invalid: There was a problem closing the debate.
           success: Debate successfully closed.
         close_debate_modal:
-          close: Close
+          cancel: Cancel
           description: What is the summary or conclusion of this debate?
           send: Close debate
-        closed: Closed
         count:
           debates_count:
             one: "%{count} debate"
@@ -108,8 +104,6 @@ en:
         create:
           invalid: There was a problem creating the debate.
           success: Debate successfully created.
-        debate:
-          participate: Participate
         edit:
           back: Back
           save: Save changes
@@ -124,18 +118,12 @@ en:
           official: Official
           origin: Origin
           participants: Participants
-          scope: Scope
           search: Search
           state: Status
           state_values:
             closed: Closed
             open: Open
-          user_groups: Groups
-        filters_small_view:
-          close_modal: Close modal
-          filter: Filter
-          filter_by: Filter by
-          unfold: Unfold
+          user_group: Groups
         form:
           select_a_category: Please select a category
         index:
@@ -151,36 +139,27 @@ en:
           recent: Most recent
           updated: Recently updated
         show:
-          back: Back to list
           close_debate: Close debate
-          date: Date
           debate_closed: Closed
           debate_conclusions_are: 'The debate was closed on %{date} with these conclusions:'
           edit_conclusions: Edit conclusions
           edit_debate: Edit debate
           groups_count: Groups
-          last_comment_by: Last comment by
-          no_comments_yet: No comments yet
           open: Open debate
           participants_count: Participants
         update:
           invalid: There was a problem updating the debate.
           success: Debate successfully updated.
-        versions:
-          debates:
-            back_to_resource: Go back to debate
-          index:
-            title: Versions
-        versions_list:
-          back_to_resource: Go back to debate
       last_activity:
         debate_updated: 'Debate updated:'
         new_debate: 'New debate:'
       models:
         debate:
           fields:
+            end: End
             end_time: End date
             official_debate: Official debate
+            start: Start
             start_time: Start date
             title: Title
     events:

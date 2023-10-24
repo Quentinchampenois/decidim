@@ -1,4 +1,4 @@
-import icon from "src/decidim/redesigned_icon";
+import icon from "src/decidim/icon";
 import { fileNameToTitle } from "src/decidim/editor/utilities/file";
 
 const createElement = (template) => {
@@ -179,7 +179,13 @@ export default class UploadDialog {
       if (this.legacyDesign) {
         $(this.element).foundation("open");
       } else {
-        this.element.dialog.open();
+        const dialogId = this.element.dataset.dialog;
+        const dialog = window.Decidim.currentDialogs[dialogId];
+        if (dialog) {
+          dialog.open();
+        } else {
+          console.error(`Upload dialog not initialized for: ${dialogId}`);
+        }
       }
 
       this.callback = resolve;
