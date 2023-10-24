@@ -1,12 +1,17 @@
 <% if model.can_be_joined_by?(current_user) %>
   <% if model.has_registration_for? current_user %>
-    <%= render :cancelation_modal %>
+    <span>
+      <%= icon("check", class: "icon--small") %>
+      <%= t("going", scope: "decidim.meetings.meetings.show") %>
+    </span>
     <%= action_authorized_button_to(
       :join,
       t("leave", scope: "decidim.meetings.meetings.show"),
-      "#",
+      meeting_registration_path(model),
+      resource: model,
+      method: :delete,
       class: button_classes,
-      data: { "dialog-open": "meeting-cancelation-confirm-#{model.id}" }
+      data: { disable: true, confirm: t("leave_confirmation", scope: "decidim.meetings.meetings.show") }
     ) %>
   <% else %>
     <% if model.registration_form_enabled? %>
@@ -18,22 +23,20 @@
         disabled: !model.has_available_slots?
       ) %>
     <% else %>
-      <%= render :registration_modal %>
+      <%= render :registration_confirm %>
       <%= action_authorized_button_to(
         :join,
         i18n_join_text,
         "#",
         class: button_classes,
         disabled: !model.has_available_slots?,
-        data: { "dialog-open": current_user.present? ? "meeting-registration-confirm-#{model.id}" : "loginModal" }
+        data: { open: current_user.present? ? "meeting-registration-confirm-#{model.id}" : "loginModal" }
       ) %>
     <% end %>
   <% end %>
-
   <% if shows_remaining_slots? %>
-    <%= render :remaining_slots %>
+    <span><%= t("remaining_slots", scope: "decidim.meetings.meetings.show", count: model.remaining_slots) %></span>
   <% end %>
-
 <% elsif model.on_different_platform? %>
   <%= action_authorized_link_to(
     :join,

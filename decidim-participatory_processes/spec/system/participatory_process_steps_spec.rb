@@ -7,7 +7,6 @@ describe "Participatory Process Steps", type: :system do
   let!(:participatory_process) do
     create(
       :participatory_process,
-      :with_content_blocks,
       organization:,
       description: { en: "Description", ca: "Descripció", es: "Descripción" },
       short_description: { en: "Short description", ca: "Descripció curta", es: "Descripción corta" }
@@ -29,24 +28,24 @@ describe "Participatory Process Steps", type: :system do
 
     it_behaves_like "accessible page" do
       before do
-        visit decidim_participatory_processes.participatory_process_path(participatory_process, display_steps: true)
+        visit decidim_participatory_processes.participatory_process_participatory_process_steps_path(participatory_process)
       end
     end
 
     it "lists all the steps" do
-      visit decidim_participatory_processes.participatory_process_path(participatory_process, display_steps: true)
+      visit decidim_participatory_processes.participatory_process_participatory_process_steps_path(participatory_process)
 
-      expect(page).to have_css(".participatory-space__metadata-modal__step", count: 3)
+      expect(page).to have_css(".timeline__item", count: 3)
       steps.each do |step|
         expect(page).to have_content(/#{translated(step.title)}/i)
       end
     end
 
-    it "does not show a CTA button in the process hero content block" do
-      visit decidim_participatory_processes.participatory_process_path(participatory_process)
+    it "does not show a CTA button" do
+      visit decidim_participatory_processes.participatory_process_participatory_process_steps_path(participatory_process)
 
-      within "[id^='hero']" do
-        expect(page).not_to have_css("[data-cta]")
+      within ".process-header__phase" do
+        expect(page).not_to have_css(".process-header__button")
       end
     end
 
@@ -55,10 +54,10 @@ describe "Participatory Process Steps", type: :system do
         participatory_process.steps.first.update!(cta_path: "my_path", cta_text: { en: "Take action!" })
       end
 
-      it "shows a CTA button in the process hero content block" do
-        visit decidim_participatory_processes.participatory_process_path(participatory_process)
+      it "shows a CTA button" do
+        visit decidim_participatory_processes.participatory_process_participatory_process_steps_path(participatory_process)
 
-        within "[id^='hero']" do
+        within ".process-header__phase" do
           expect(page).to have_link("Take action!")
         end
       end

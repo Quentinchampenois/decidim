@@ -11,12 +11,6 @@ module Decidim
         process.attached_uploader(:banner_image).url(host: process.organization.host)
       end
 
-      def area_name
-        return if process.area.blank?
-
-        Decidim::AreaPresenter.new(process.area).translated_name_with_type
-      end
-
       def process
         __getobj__
       end

@@ -64,8 +64,7 @@ module Decidim
           omniauth_settings: form.encrypted_omniauth_settings,
           smtp_settings: form.encrypted_smtp_settings,
           send_welcome_notification: true,
-          file_upload_settings: form.file_upload_settings.final,
-          content_security_policy: form.content_security_policy
+          file_upload_settings: form.file_upload_settings.final
         )
       end
 

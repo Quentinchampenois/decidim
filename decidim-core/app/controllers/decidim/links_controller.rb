@@ -10,8 +10,8 @@ module Decidim
     helper_method :external_url
 
     before_action :parse_url
-    rescue_from Decidim::InvalidUrlError, with: :modal
-    rescue_from URI::InvalidURIError, with: :modal
+    rescue_from Decidim::InvalidUrlError, with: :invalid_url
+    rescue_from URI::InvalidURIError, with: :invalid_url
 
     def new
       headers["X-Robots-Tag"] = "noindex"
@@ -19,11 +19,10 @@ module Decidim
 
     private
 
-    def modal
+    def invalid_url
       flash[:alert] = I18n.t("decidim.links.invalid_url")
-
       if request.xhr?
-        render "modal"
+        render "invalid_url"
       else
         redirect_to decidim.root_path
       end
@@ -36,7 +35,7 @@ module Decidim
     end
 
     def external_url
-      @external_url ||= URI.parse(URI::Parser.new.escape(params[:external_url]))
+      @external_url ||= URI.parse(params[:external_url])
     end
   end
 end

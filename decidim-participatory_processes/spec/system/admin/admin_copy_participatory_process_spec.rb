@@ -38,7 +38,7 @@ describe "Admin copies participatory process", type: :system do
 
       expect(page).to have_content("successfully")
       expect(page).to have_content("Copy participatory process")
-      expect(page).to have_content("Unpublished")
+      expect(page).to have_content("Not published")
     end
   end
 
@@ -65,12 +65,9 @@ describe "Admin copies participatory process", type: :system do
       expect(page).to have_content("successfully")
 
       within find("tr", text: "Copy participatory process") do
-        click_link "Copy participatory process"
+        click_link "Configure"
       end
-
-      within_admin_sidebar_menu do
-        click_link "Phases"
-      end
+      click_link "Phases"
 
       within ".table-list" do
         participatory_process.steps.each do |step|
@@ -86,12 +83,9 @@ describe "Admin copies participatory process", type: :system do
       expect(page).to have_content("successfully")
 
       within find("tr", text: "Copy participatory process") do
-        click_link "Copy participatory process"
+        click_link "Configure"
       end
-
-      within_admin_sidebar_menu do
-        click_link "Categories"
-      end
+      click_link "Categories"
 
       within ".table-list" do
         participatory_process.categories.each do |category|
@@ -107,12 +101,9 @@ describe "Admin copies participatory process", type: :system do
       expect(page).to have_content("successfully")
 
       within find("tr", text: "Copy participatory process") do
-        click_link "Copy participatory process"
+        click_link "Configure"
       end
-
-      within_admin_sidebar_menu do
-        click_link "Components"
-      end
+      click_link "Components"
 
       within ".table-list" do
         participatory_process.components.each do |component|

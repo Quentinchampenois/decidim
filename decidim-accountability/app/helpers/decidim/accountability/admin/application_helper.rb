@@ -7,7 +7,6 @@ module Decidim
       #
       module ApplicationHelper
         include Decidim::Admin::ResourceScopeHelper
-        include Decidim::PaginateHelper
       end
     end
   end

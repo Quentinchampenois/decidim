@@ -10,15 +10,10 @@ shared_examples "sorted moderations" do
   end
   let!(:moderation) { moderations.first }
   let(:moderations_link_text) { "Moderations" }
-  let(:moderations_link_in_admin_menu) { true }
 
   before do
     visit participatory_space_path
-    if moderations_link_in_admin_menu
-      within_admin_sidebar_menu { click_link(moderations_link_text) }
-    else
-      within("div.layout-nav") { click_link(moderations_link_text) }
-    end
+    click_link moderations_link_text
   end
 
   it "sorts the most recent first" do
@@ -49,15 +44,10 @@ shared_examples "manage moderations" do
     end
   end
   let(:moderations_link_text) { "Moderations" }
-  let(:moderations_link_in_admin_menu) { true }
 
   before do
     visit participatory_space_path
-    if moderations_link_in_admin_menu
-      within_admin_sidebar_menu { click_link(moderations_link_text) }
-    else
-      within("div.layout-nav") { click_link(moderations_link_text) }
-    end
+    click_link moderations_link_text
   end
 
   context "when listing moderations" do
@@ -125,7 +115,7 @@ shared_examples "manage moderations" do
       search = moderation.reportable.id
       within ".filters__section" do
         fill_in("Search Moderation by reportable id or content.", with: search)
-        click_button(type: "submit")
+        find(:xpath, "//button[@type='submit']").click
       end
       expect(page).to have_selector("tbody tr", count: 1)
     end
@@ -169,7 +159,7 @@ shared_examples "manage moderations" do
           }
         )
 
-        within_language_menu(admin: true) do
+        within_language_menu do
           click_link "Català"
         end
       end
@@ -184,7 +174,9 @@ shared_examples "manage moderations" do
 
   context "when listing hidden resources" do
     before do
-      click_link "Hidden"
+      within ".card-title" do
+        click_link "Hidden"
+      end
     end
 
     it "user cannot unreport them" do

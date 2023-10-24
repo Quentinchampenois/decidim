@@ -47,10 +47,6 @@ module Decidim
           def reportable_types
             collection.pluck(:decidim_reportable_type).uniq.sort
           end
-
-          def extra_allowed_params
-            [:hidden]
-          end
         end
       end
     end

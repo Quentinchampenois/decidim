@@ -13,8 +13,7 @@ module Decidim
     include ImpersonateUsers
     include HasStoredPath
     include NeedsTosAccepted
-    include Headers::HttpCachingDisabler
-    include Headers::ContentSecurityPolicy
+    include HttpCachingDisabler
     include ActionAuthorization
     include ForceAuthentication
     include SafeRedirect
@@ -22,7 +21,9 @@ module Decidim
     include UserBlockedChecker
     include DisableRedirectionToExternalHost
     include NeedsPasswordChange
-    include LinkedResourceReference
+
+    include RedesignLayout
+    redesign active: true
 
     helper Decidim::MetaTagsHelper
     helper Decidim::DecidimFormHelper
@@ -31,7 +32,6 @@ module Decidim
     helper Decidim::TranslationsHelper
     helper Decidim::AriaSelectedLinkToHelper
     helper Decidim::MenuHelper
-    helper Decidim::BreadcrumbHelper
     helper Decidim::ComponentPathHelper
     helper Decidim::ViewHooksHelper
     helper Decidim::CardHelper

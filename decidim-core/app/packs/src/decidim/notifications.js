@@ -1,10 +1,11 @@
 /**
- * This file handles the interactions of the notifications site via javascript
+ * REDESIGN_PENDING: This file will be unnecessary once Turbo is implemented.
+ * The topbar__notifications element has changes after redesign
  * @param {HTMLElement} node target node
  * @returns {void}
  */
 export default function(node = document) {
-  const noNotificationsText = node.querySelector("#empty-notifications")
+  const noNotificationsText = node.querySelector(".empty-notifications")
   const handleRemove = ({ currentTarget }) => currentTarget.remove()
   const handleFadeOut = (element) => {
     if (element) {
@@ -13,21 +14,15 @@ export default function(node = document) {
     }
   }
   const emptyNotifications = () => {
-    noNotificationsText.hidden = false
-
-    node.querySelector("#dropdown-menu-account [data-unread-notifications]").remove()
-    if (!node.querySelector(".main-bar__notification").dataset.unreadConversations) {
-      node.querySelector(".main-bar__notification").remove()
-    }
+    noNotificationsText.classList.remove("hidden")
+    noNotificationsText.classList.remove("hide")
+    node.querySelector(".topbar__notifications")?.classList?.remove("is-active")
   }
   const handleClick = ({ currentTarget }) => {
     handleFadeOut(currentTarget.closest("[data-notification]"))
     if (!node.querySelector("[data-notification]:not([style])")) {
       emptyNotifications()
     }
-  }
-  const hideReadAllButton = () => {
-    handleFadeOut(node.querySelector("[data-notification-read-all]"))
   }
 
   const notifications = node.querySelectorAll("[data-notification]")
@@ -40,7 +35,6 @@ export default function(node = document) {
         "click", () => {
           notifications.forEach((notification) => handleFadeOut(notification))
           emptyNotifications()
-          hideReadAllButton()
         }
       )
   }

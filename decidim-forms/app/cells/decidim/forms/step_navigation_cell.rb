@@ -43,6 +43,8 @@ module Decidim
       end
 
       def confirm_data
+        return {} if redesign_enabled?
+
         { data: {
           confirm: t("decidim.forms.step_navigation.show.are_you_sure"),
           disable: true

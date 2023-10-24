@@ -12,21 +12,26 @@ module Decidim
       include Decidim::SanitizeHelper
       include Decidim::CheckBoxesTreeHelper
       include Decidim::RichTextEditorHelper
-      include ::Decidim::FollowableHelper
 
       def filter_origin_values
-        origin_keys = %w(official participants)
-        origin_keys << "user_group" if current_organization.user_groups_enabled?
+        origin_values = []
+        origin_values << TreePoint.new("official", t("decidim.meetings.meetings.filters.origin_values.official"))
+        origin_values << TreePoint.new("participants", t("decidim.meetings.meetings.filters.origin_values.participants")) # todo
+        if current_organization.user_groups_enabled?
+          origin_values << TreePoint.new("user_group", t("decidim.meetings.meetings.filters.origin_values.user_groups")) # todo
+        end
+        # if current_organization.user_groups_enabled? and component_settings enabled enabled
 
-        origin_values = flat_filter_values(*origin_keys, scope: "decidim.meetings.meetings.filters.origin_values")
-        origin_values.prepend(["", t("all", scope: "decidim.meetings.meetings.filters.origin_values")])
-
-        filter_tree_from_array(origin_values)
+        TreeNode.new(
+          TreePoint.new("", t("decidim.meetings.meetings.filters.origin_values.all")),
+          origin_values
+        )
       end
 
       def filter_type_values
-        type_values = flat_filter_values(*Decidim::Meetings::Meeting::TYPE_OF_MEETING.keys, scope: "decidim.meetings.meetings.filters.type_values").map do |args|
-          TreePoint.new(*args)
+        type_values = []
+        Decidim::Meetings::Meeting::TYPE_OF_MEETING.keys.each do |type|
+          type_values << TreePoint.new(type, t("decidim.meetings.meetings.filters.type_values.#{type}"))
         end
 
         TreeNode.new(
@@ -36,12 +41,19 @@ module Decidim
       end
 
       def filter_date_values
-        flat_filter_values(:all, :upcoming, :past, scope: "decidim.meetings.meetings.filters.date_values")
+        [
+          ["all", t("decidim.meetings.meetings.filters.date_values.all")],
+          ["upcoming", t("decidim.meetings.meetings.filters.date_values.upcoming")],
+          ["past", t("decidim.meetings.meetings.filters.date_values.past")]
+        ]
       end
 
       # Options to filter meetings by activity.
       def activity_filter_values
-        flat_filter_values(:all, :my_meetings, scope: "decidim.meetings.meetings.filters")
+        [
+          ["all", t("decidim.meetings.meetings.filters.all")],
+          ["my_meetings", t("decidim.meetings.meetings.filters.my_meetings")]
+        ]
       end
 
       # If the meeting is official or the rich text editor is enabled on the
@@ -83,11 +95,6 @@ module Decidim
 
       def iframe_embed_or_live_event_page?(meeting)
         %w(embed_in_meeting_page open_in_live_event_page).include? meeting.iframe_embed_type
-      end
-
-      def apply_meetings_pack_tags
-        append_stylesheet_pack_tag("decidim_meetings", media: "all")
-        append_javascript_pack_tag("decidim_meetings")
       end
     end
   end

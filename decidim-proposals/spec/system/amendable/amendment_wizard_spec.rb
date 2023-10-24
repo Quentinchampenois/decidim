@@ -24,14 +24,17 @@ describe "Amendment Wizard", type: :system do
 
     context "and in step_1: Create your amendment" do
       it "shows the current step_1 highlighted" do
-        within "#wizard-steps" do
-          expect(page).to have_css("[aria-current]", count: 1)
-          expect(page).to have_css("[aria-current]:nth-child(1)")
+        within ".wizard__steps" do
+          expect(page).to have_css(".step--active", count: 1)
+          expect(page).to have_css(".step--past", count: 0)
+          expect(page).to have_css(".step--active.step_1")
         end
       end
 
       it "shows the new amendment form" do
-        expect(page).to have_content("Create Amendment Draft")
+        within ".section-heading" do
+          expect(page).to have_content("CREATE AMENDMENT DRAFT")
+        end
 
         within ".new_amendment" do
           fill_in :amendment_emendation_params_title, with: title
@@ -48,7 +51,7 @@ describe "Amendment Wizard", type: :system do
 
         it "redirects to the proposal page" do
           expect(page).to have_content(translated(proposal.title))
-          expect(page).to have_css("#amend-button")
+          expect(page).to have_content("AMEND PROPOSAL")
         end
       end
     end
@@ -67,17 +70,22 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "show previous and current step_2 highlighted" do
-          within "#wizard-steps" do
-            expect(page).to have_css("[aria-current]", count: 1)
-            expect(page).to have_css("[aria-current]:nth-child(2)")
+          within ".wizard__steps" do
+            expect(page).to have_css(".step--active", count: 1)
+            expect(page).to have_css(".step--past", count: 1)
+            expect(page).to have_css(".step--active.step_2")
           end
         end
 
         it "shows similar emendations" do
-          expect(page).to have_content("Similar Emendations (1)")
+          within ".section-heading" do
+            expect(page).to have_content("SIMILAR EMENDATIONS (1)")
+          end
 
-          expect(page).to have_css('[id^="proposals__proposal"]', text: "More sidewalks and less roads")
-          expect(page).to have_css('[id^="proposals__proposal"]', count: 1)
+          within ".card-grid" do
+            expect(page).to have_css(".card--proposal", text: "More sidewalks and less roads")
+            expect(page).to have_css(".card--proposal", count: 1)
+          end
 
           within "[data-alert-box].success" do
             expect(page).to have_content("Amendment draft has been created successfully.")
@@ -103,7 +111,9 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "redirects to step_3: Complete your amendment" do
-          expect(page).to have_content("Edit Amendment Draft")
+          within ".section-heading" do
+            expect(page).to have_content("EDIT AMENDMENT DRAFT")
+          end
         end
 
         it "shows no similar proposal found callout" do
@@ -124,14 +134,24 @@ describe "Amendment Wizard", type: :system do
       end
 
       it "show previous and current step_3 highlighted" do
-        within "#wizard-steps" do
-          expect(page).to have_css("[aria-current]", count: 1)
-          expect(page).to have_css("[aria-current]:nth-child(3)")
+        within ".wizard__steps" do
+          expect(page).to have_css(".step--active", count: 1)
+          expect(page).to have_css(".step--past", count: 2)
+          expect(page).to have_css(".step--active.step_3")
         end
       end
 
       it "shows the edit amendment form" do
-        expect(page).to have_content("Edit Amendment Draft")
+        # It seems that from version 83 of chromdriver, it gets really picky
+        # Content mus be inside the virtual window of test
+        # Got the idea from:
+        # https://stackoverflow.com/a/39103252
+        # https://stackoverflow.com/a/62003082
+        page.scroll_to(find(".section-heading"))
+
+        within ".section-heading" do
+          expect(page).to have_content("EDIT AMENDMENT DRAFT")
+        end
 
         within ".edit_amendment" do
           fill_in :amendment_emendation_params_title, with: "#{title}Edited"
@@ -148,6 +168,7 @@ describe "Amendment Wizard", type: :system do
         before do
           within ".edit_amendment" do
             click_link "Discard this draft"
+            accept_confirm
           end
         end
 
@@ -156,7 +177,9 @@ describe "Amendment Wizard", type: :system do
             expect(page).to have_content("Amendment draft was successfully deleted.")
           end
 
-          expect(page).to have_content("Create Amendment Draft")
+          within ".section-heading" do
+            expect(page).to have_content("CREATE AMENDMENT DRAFT")
+          end
         end
       end
 
@@ -170,7 +193,9 @@ describe "Amendment Wizard", type: :system do
           end
 
           it "shows similar emendations" do
-            expect(page).to have_content("Similar Emendations (1)")
+            within ".section-heading" do
+              expect(page).to have_content("SIMILAR EMENDATIONS (1)")
+            end
           end
         end
 
@@ -180,7 +205,9 @@ describe "Amendment Wizard", type: :system do
           end
 
           it "redirects to step_3: Complete your amendment" do
-            expect(page).to have_content("Edit Amendment Draft")
+            within ".section-heading" do
+              expect(page).to have_content("EDIT AMENDMENT DRAFT")
+            end
 
             within "[data-alert-box].success" do
               expect(page).to have_content("No similar emendations found.")
@@ -209,19 +236,25 @@ describe "Amendment Wizard", type: :system do
       end
 
       it "show current step_4 highlighted" do
-        within "#wizard-steps" do
-          expect(page).to have_css("[aria-current]", count: 1)
-          expect(page).to have_css("[aria-current]:nth-child(4)")
+        within ".wizard__steps" do
+          expect(page).to have_css(".step--active", count: 1)
+          expect(page).to have_css(".step--past", count: 3)
+          expect(page).to have_css(".step--active.step_4")
         end
       end
 
       it "shows a preview before publishing" do
-        expect(page).to have_content("Publish Amendment Draft")
-        expect(page).to have_content(title)
-        expect(page).to have_content(user.name)
-        expect(page).to have_content(body)
-        expect(page).to have_button(text: "Publish")
-        expect(page).to have_selector("a", text: "Modify")
+        within ".section-heading" do
+          expect(page).to have_content("PUBLISH AMENDMENT DRAFT")
+        end
+
+        within ".card" do
+          expect(page).to have_content(title)
+          expect(page).to have_content(user.name)
+          expect(page).to have_content(body)
+          expect(page).to have_button(text: "Publish")
+          expect(page).to have_selector("a", text: "Modify")
+        end
       end
 
       context "when the Publish button is clicked", versioning: true do
@@ -230,7 +263,7 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "publishes the amendment" do
-          expect(page).to have_css(".flash.warning[data-announcement]", text: "This amendment for the proposal #{translated(proposal.title)} is being evaluated.")
+          expect(page).to have_css(".callout.warning[data-announcement]", text: "This amendment for the proposal #{translated(proposal.title)} is being evaluated.")
 
           within "[data-alert-box].success" do
             expect(page).to have_content("Amendment successfully published.")
@@ -244,7 +277,7 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "redirects to step_3: Complete your amendment" do
-          expect(page).to have_content("Edit Amendment Draft")
+          expect(page).to have_content("EDIT AMENDMENT DRAFT")
         end
       end
 
@@ -254,7 +287,7 @@ describe "Amendment Wizard", type: :system do
         end
 
         it "redirects to step_3: Complete your amendment" do
-          expect(page).to have_content("Edit Amendment Draft")
+          expect(page).to have_content("EDIT AMENDMENT DRAFT")
         end
       end
     end
@@ -272,13 +305,20 @@ describe "Amendment Wizard", type: :system do
       end
 
       it "is NOT shown the amendment draft in the amendments list" do
-        within("#amendments") do
-          expect(page).to have_content("1 amendment")
-        end
+        expect(page).to have_css("#amendments", text: "AMENDMENTS")
 
-        within "#amendment-list" do
+        within ".amendment-list" do
           expect(page).to have_content(translated(emendation.title))
           expect(page).not_to have_content(translated(emendation_draft.title))
+        end
+      end
+
+      it "is NOT shown the author of the amendment draft in the amenders list" do
+        expect(page).to have_content("AMENDED BY")
+
+        within ".amender-list" do
+          expect(page).to have_content(amendment.amender.name)
+          expect(page).not_to have_content(amendment_draft.amender.name)
         end
       end
     end

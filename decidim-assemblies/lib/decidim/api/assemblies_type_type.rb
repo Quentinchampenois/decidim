@@ -2,7 +2,7 @@
 
 module Decidim
   module Assemblies
-    # This type represents an AssemblyType instance
+    # This type represents an AssembliesType.
     class AssembliesTypeType < Decidim::Api::Types::BaseObject
       description "An assemblies type"
 

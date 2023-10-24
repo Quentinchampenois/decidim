@@ -8,13 +8,11 @@ shared_examples "manage proposals permissions" do
     end
 
     it "is possible to select Example authorization handler" do
-      within "[data-content]" do
-        within ".card.withdraw-permission" do
-          expect(page).to have_content("Withdraw")
-          check "Example authorization (Direct)"
-        end
-        find("*[type=submit]").click
+      within ".card.withdraw-permission" do
+        expect(page).to have_content("Withdraw")
+        check "Example authorization (Direct)"
       end
+      find("*[type=submit]").click
 
       expect(page).to have_admin_callout("successfully")
     end

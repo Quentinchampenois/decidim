@@ -81,7 +81,7 @@ describe "Admin manages participatory processes", type: :system, versioning: tru
 
       expect(page).to have_admin_callout("successfully")
 
-      within "[data-content]" do
+      within ".container" do
         expect(page).to have_current_path decidim_admin_participatory_processes.participatory_process_steps_path(Decidim::ParticipatoryProcess.last)
         expect(page).to have_content("Phases")
         expect(page).to have_content("Introduction")
@@ -98,13 +98,9 @@ describe "Admin manages participatory processes", type: :system, versioning: tru
 
     it "update a participatory process without images does not delete them" do
       within find("tr", text: translated(participatory_process3.title)) do
-        click_link translated(participatory_process3.title)
+        click_link "Configure"
       end
-
-      within_admin_sidebar_menu do
-        click_link "About this process"
-      end
-
+      click_submenu_link "Info"
       click_button "Update"
 
       expect(page).to have_admin_callout("successfully")

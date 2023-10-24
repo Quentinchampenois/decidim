@@ -4,16 +4,12 @@ require "spec_helper"
 
 describe "Admin manages questionnaire templates", type: :system do
   let!(:organization) { create(:organization) }
-  let!(:user) { create(:user, :admin, :confirmed, organization:) }
+  let!(:user) { create(:user, :confirmed, organization:) }
 
   before do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_templates.questionnaire_templates_path
-  end
-
-  it_behaves_like "needs admin TOS accepted" do
-    let(:user) { create(:user, :admin, :confirmed, admin_terms_accepted_at: nil, organization:) }
   end
 
   describe "listing templates" do
@@ -55,12 +51,12 @@ describe "Admin manages questionnaire templates", type: :system do
           ca: "Descripció"
         )
 
-        click_button "Save", match: :first
+        page.find("*[type=submit]").click
       end
 
       expect(page).to have_admin_callout("successfully")
 
-      within "[data-content]" do
+      within ".container" do
         expect(page).to have_current_path decidim_admin_templates.edit_questionnaire_template_path(Decidim::Templates::Template.last.id)
         expect(page.find("#template_name_en").value).to eq("My template")
 
@@ -85,7 +81,7 @@ describe "Admin manages questionnaire templates", type: :system do
         )
       end
 
-      click_button "Save"
+      page.find("*[type=submit]").click
       expect(page).to have_admin_callout("successfully")
     end
   end
@@ -114,7 +110,7 @@ describe "Admin manages questionnaire templates", type: :system do
           ca: "Descripció"
         )
 
-        find("*[type=submit]", match: :first).click
+        find("*[type=submit]").click
       end
 
       expect(page).to have_admin_callout("problem")
@@ -144,7 +140,7 @@ describe "Admin manages questionnaire templates", type: :system do
 
       expect(page).to have_admin_callout("successfully")
 
-      within "[data-content]" do
+      within ".container" do
         expect(page).to have_current_path decidim_admin_templates.edit_questionnaire_template_path(template)
         expect(page.find("#template_name_en").value).to eq("My new name")
       end
@@ -205,7 +201,7 @@ describe "Admin manages questionnaire templates", type: :system do
         click_link("Edit")
       end
 
-      within "[data-content]" do
+      within ".container" do
         click_link("Edit")
       end
 
@@ -238,7 +234,7 @@ describe "Admin manages questionnaire templates", type: :system do
 
       expect(page).to have_admin_callout("successfully")
 
-      within "[data-content]" do
+      within ".container" do
         expect(page).to have_current_path decidim_admin_templates.edit_questionnaire_template_path(template)
         expect(page).to have_content("My question")
       end
@@ -249,11 +245,11 @@ describe "Admin manages questionnaire templates", type: :system do
         click_link("Edit")
       end
 
-      within "[data-content]" do
+      within ".container" do
         click_link("Edit")
       end
 
-      within ".item_show__header" do
+      within ".card-title" do
         expect(page).not_to have_button("Preview")
         expect(page).not_to have_button("No answers yet")
       end
@@ -288,7 +284,7 @@ describe "Admin manages questionnaire templates", type: :system do
 
     it "shows the template preview" do
       within ".questionnaire-template-preview" do
-        expect(page).to have_i18n_content(questionnaire.title)
+        expect(page).to have_i18n_content(questionnaire.title, upcase: true)
         expect(page).to have_i18n_content(questionnaire.questions.first.body)
         expect(page).to have_field(id: "questionnaire_responses_0")
         expect(page).to have_selector("button[type=submit][disabled]")

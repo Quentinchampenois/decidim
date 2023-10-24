@@ -1,70 +1,74 @@
-<div class="form__wrapper">
-  <p class="font-semibold">
-    <%= t("recount_summary", scope: "decidim.votings.polling_station_closure_recount") %>
-  </p>
+<p>
+  <%= content_tag :strong, t("recount_summary", scope: "decidim.votings.polling_station_closure_recount") %>
+</p>
 
-  <code>
-    <span>
-      <%= t("total_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
-      <%= model.results.total_ballots&.first&.value %>
-    </span>
-    <div class="ml-4">
+<div class="card--secondary">
+  <div class="card__content">
+    <div>
       <span>
-        <%= t("total_valid_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
-        <%= model.results.valid_ballots&.first&.value %>
+        <%= content_tag :strong, t("total_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
+        <%= model.results.total_ballots&.first&.value %>
       </span>
-      <br>
-      <span>
-        <%= t("total_blank_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
-        <%= model.results.blank_ballots&.first&.value %>
-      </span>
-      <br>
-      <span>
-        <%= t("total_null_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
-        <%= model.results.null_ballots&.first&.value %>
-      </span>
+      <div class="ml-s">
+        <span>
+          <%= content_tag :strong, t("total_valid_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
+          <%= model.results.valid_ballots&.first&.value %>
+        </span>
+        <br>
+        <span>
+          <%= content_tag :strong, t("total_blank_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
+          <%= model.results.blank_ballots&.first&.value %>
+        </span>
+        <br>
+        <span>
+          <%= content_tag :strong, t("total_null_ballots", scope: "decidim.votings.polling_station_closure_recount") %>
+          <%= model.results.null_ballots&.first&.value %>
+        </span>
+      </div>
     </div>
 
-  <% model.election.questions.each do |question| %>
-      <span>
-        <%= translated_attribute(question.title) %>
-      </span>
+    <% model.election.questions.each do |question| %>
+      <div class="mt-s">
+        <span>
+          <%= content_tag :strong, translated_attribute(question.title) %>
+        </span>
 
-      <div class="ml-4">
-        <% question.answers.each.with_index(1) do |answer, index| %>
-          <span>
-            <%= translated_attribute(answer.title) %>:
+        <div class="ml-s">
+          <% question.answers.each.with_index(1) do |answer, index| %>
+            <span>
+              <%= content_tag :strong, translated_attribute(answer.title) %>:
 
-            <%= content_tag :span, answer.results&.valid_answers&.first&.value %>
-          </span>
-          <% unless index == question.answers.count %>
-            <br>
+              <%= content_tag :span, answer.results&.valid_answers&.first&.value %>
+            </span>
+            <% unless index == question.answers.count %>
+              <br>
+            <% end %>
           <% end %>
-        <% end %>
 
-        <% if question.nota_option? %>
-          <br>
-          <%= t("nota_option", scope: "decidim.votings.polling_station_closure_recount") %>
+          <% if question.nota_option? %>
+            <br>
+            <%= content_tag :strong, t("nota_option", scope: "decidim.votings.polling_station_closure_recount") %>
 
-          <%= content_tag :span, question.results.blank_answers&.first&.value %>
-        <% end %>
+            <%= content_tag :span, question.results.blank_answers&.first&.value %>
+          <% end %>
+        </div>
       </div>
     <% end %>
-  </code>
-
-  <p>
-    <%= t("polling_officer_notes", scope: "decidim.votings.polling_station_closure_recount") %>
-    <br>
-    <% if model.polling_officer_notes.present? %>
-      <%= model.polling_officer_notes %>
-    <% else %>
-      <%= content_tag :span, t("polling_officer_notes_blank", scope: "decidim.votings.polling_station_closure_recount") %>
-    <% end %>
-  </p>
-
-  <% if model.signed? %>
-    <p>
-      <%= t("signed", scope: "decidim.votings.polling_station_closure_recount") %>
-    </p>
-  <% end %>
+  </div>
 </div>
+
+<p class="mt-sm">
+  <%= content_tag :strong, t("polling_officer_notes", scope: "decidim.votings.polling_station_closure_recount") %>
+  <br>
+  <% if model.polling_officer_notes.present? %>
+    <%= model.polling_officer_notes %>
+  <% else %>
+    <%= content_tag :span, t("polling_officer_notes_blank", scope: "decidim.votings.polling_station_closure_recount"), class: "text-muted" %>
+  <% end %>
+</p>
+
+<% if model.signed? %>
+  <p>
+    <%= content_tag :strong, t("signed", scope: "decidim.votings.polling_station_closure_recount"), class: "text-success" %>
+  </p>
+<% end %>

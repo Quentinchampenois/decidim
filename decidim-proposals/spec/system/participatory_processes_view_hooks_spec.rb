@@ -12,14 +12,12 @@ describe "Proposals in process home", type: :system do
     allow(Decidim::Proposals.config)
       .to receive(:participatory_space_highlighted_proposals_limit)
       .and_return(highlighted_proposals)
-
-    create(:content_block, organization:, scope_name: :participatory_process_homepage, manifest_name: :highlighted_proposals, scoped_resource_id: participatory_process.id)
   end
 
   context "when there are no proposals" do
     it "does not show the highlighted proposals section" do
       visit resource_locator(participatory_process).path
-      expect(page).not_to have_css("#participatory-process-homepage-highlighted-proposals")
+      expect(page).not_to have_css(".highlighted_proposals")
     end
   end
 
@@ -32,8 +30,8 @@ describe "Proposals in process home", type: :system do
     it "shows the highlighted proposals section" do
       visit resource_locator(participatory_process).path
 
-      within "#participatory-process-homepage-highlighted-proposals" do
-        expect(page).to have_css("[id^='proposals__proposal']", count: proposals_count)
+      within ".highlighted_proposals" do
+        expect(page).to have_css(".card--proposal", count: proposals_count)
 
         proposals_titles = proposals.map(&:title).map { |title| translated(title) }
         drafted_proposals_titles = drafted_proposals.map(&:title).map { |title| translated(title) }
@@ -54,8 +52,8 @@ describe "Proposals in process home", type: :system do
       it "shows the amount of proposals configured" do
         visit resource_locator(participatory_process).path
 
-        within "#participatory-process-homepage-highlighted-proposals" do
-          expect(page).to have_css("[id^='proposals__proposal']", count: highlighted_proposals)
+        within ".highlighted_proposals" do
+          expect(page).to have_css(".card--proposal", count: highlighted_proposals)
 
           proposals_titles = proposals.map(&:title).map { |title| translated(title) }
           highlighted_proposals = page.all(".card--proposal .card__title").map(&:text)

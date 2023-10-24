@@ -5,10 +5,6 @@ module Decidim
   class LastActivitiesController < Decidim::ApplicationController
     include FilterResource
     include Paginable
-    include ::Shakapacker::Helper
-    include ::ActionView::Helpers::AssetUrlHelper
-    include IconHelper
-    include HasSpecificBreadcrumb
 
     helper Decidim::ResourceHelper
     helper Decidim::FiltersHelper
@@ -18,7 +14,17 @@ module Decidim
     private
 
     def resource_types
-      @resource_types ||= ActionLog.public_resource_types
+      return @resource_types if defined?(@resource_types)
+
+      @resource_types = ActionLog.public_resource_types.sort_by do |klass|
+        klass.constantize.model_name.human
+      end
+
+      @resource_types = @resource_types.map do |klass|
+        [klass, klass.constantize.model_name.human]
+      end
+
+      @resource_types << ["all", I18n.t("decidim.last_activities.all")]
     end
 
     def activities
@@ -26,19 +32,11 @@ module Decidim
     end
 
     def search_collection
-      LastActivity.new(current_organization, current_user:).query
+      LastActivity.new(current_organization).query
     end
 
     def default_filter_params
       { with_resource_type: "all" }
-    end
-
-    def breadcrumb_item
-      {
-        label: t("decidim.last_activities.name"),
-        active: true,
-        url: last_activities_path
-      }
     end
   end
 end

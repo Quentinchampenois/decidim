@@ -4,6 +4,3 @@ import "src/decidim/initiatives/scoped_type"
 
 // Images
 require.context("../images", true)
-
-// CSS
-import "stylesheets/initiatives.scss"

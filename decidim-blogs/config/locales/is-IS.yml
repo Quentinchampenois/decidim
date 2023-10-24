@@ -7,6 +7,9 @@ is-IS:
         edit: Breyta
         title: Aðgerðir
       admin:
+        models:
+          post:
+            name: Post
         posts:
           edit:
             save: Uppfæra

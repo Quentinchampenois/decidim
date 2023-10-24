@@ -30,9 +30,7 @@ describe "Admin imports assembly", type: :system do
         "image/jpeg"
       )
 
-      within_admin_menu do
-        click_link "Import"
-      end
+      click_link "Import", match: :first
 
       within ".import_assembly" do
         fill_in_i18n(
@@ -52,23 +50,19 @@ describe "Admin imports assembly", type: :system do
     it "imports the json document" do
       expect(page).to have_content("successfully")
       expect(page).to have_content("Import assembly")
-      expect(page).to have_content("Unpublished")
+      expect(page).to have_content("Not published")
 
       within find("tr", text: "Import assembly") do
         click_link "Configure"
       end
 
-      within_admin_sidebar_menu do
-        click_link "Categories"
-      end
+      click_link "Categories"
       within ".table-list" do
         expect(page).to have_content(translated("Veritatis provident nobis reprehenderit tenetur."))
         expect(page).to have_content(translated("Quidem aliquid reiciendis incidunt iste."))
       end
 
-      within_admin_sidebar_menu do
-        click_link "Components"
-      end
+      click_link "Components"
       expect(Decidim::Assembly.last.components.size).to eq(9)
       within ".table-list" do
         Decidim::Assembly.last.components.each do |component|
@@ -76,9 +70,7 @@ describe "Admin imports assembly", type: :system do
         end
       end
 
-      within_admin_sidebar_menu do
-        click_link "Files"
-      end
+      click_link "Files"
       if Decidim::Assembly.last.attachments.any?
         within ".table-list" do
           Decidim::Assembly.last.attachments.each do |attachment|

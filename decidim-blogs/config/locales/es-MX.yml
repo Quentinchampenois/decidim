@@ -23,6 +23,9 @@ es-MX:
         new: Nueva publicación
         title: Comportamiento
       admin:
+        models:
+          post:
+            name: Enviar
         posts:
           create:
             invalid: Se ha producido un error al crear esta publicación.
@@ -46,11 +49,6 @@ es-MX:
           create: "%{user_name} creó el post %{resource_name} en el blog de %{space_name}"
           delete: "%{user_name} ha eliminado el post %{resource_name} en el blog de %{space_name}"
           update: "%{user_name} ha actualizado el post %{resource_name} en el blog de %{space_name}"
-      content_blocks:
-        highlighted_posts:
-          last_published: Última publicación
-          name: Publicaciones
-          see_all: Per todas las publicaciones
       last_activity:
         new_post: 'Nueva publicación:'
       models:
@@ -62,10 +60,8 @@ es-MX:
             published_at: Hora de publicación
             title: Título
       posts:
-        index:
-          count:
-            one: "%{count} publicación"
-            other: "%{count} publicaciones"
+        show:
+          view: Ver
     components:
       blogs:
         actions:

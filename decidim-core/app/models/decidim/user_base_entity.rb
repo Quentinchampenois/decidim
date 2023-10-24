@@ -52,17 +52,7 @@ module Decidim
     end
 
     def public_users_followings
-      # To include users and groups self.class is not valid because for a user
-      # self.class.joins(:follows)... only return users
-      @public_users_followings ||= users_followings.not_blocked
-    end
-
-    def users_followings
-      @users_followings ||= Decidim::UserBaseEntity.joins(:follows).where(decidim_follows: { user: self })
-    end
-
-    def followings_blocked?
-      Decidim::UserBaseEntity.joins(:follows).where(decidim_follows: { user: self }).blocked.exists?
+      @public_users_followings ||= self.class.joins(:follows).where(decidim_follows: { user: self }).not_blocked
     end
 
     private

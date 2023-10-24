@@ -2,53 +2,64 @@
 
 module Decidim
   # This cell renders the button to follow the given resource.
-  class FollowButtonCell < Decidim::ButtonCell
+  class FollowButtonCell < Decidim::ViewModel
+    include LayoutHelper
+    include Decidim::SanitizeHelper
+    include Decidim::ResourceHelper
+
     def show
       return if model == current_user
 
       render
     end
 
+    private
+
     def followers_count
       if model.respond_to?(:followers_count)
         model.followers_count
       else
-        model.followers.size
+        model.followers.count
       end
     end
 
-    def id_option
-      @id_option ||= options[:mobile] ? "follow-mobile" : "follow"
-    end
-
-    private
-
     def button_classes
-      options[:button_classes] || "button button__sm button__text-secondary only:m-auto"
+      return "card__button secondary text-uppercase follow-button mb-none has-tip" if inline?
+
+      extra_classes = ""
+      extra_classes += " active" if current_user_follows?
+      extra_classes += if large?
+                         " button--sc"
+                       else
+                         " small"
+                       end
+
+      "button expanded button--icon follow-button secondary hollow #{extra_classes}"
     end
 
-    def text
-      current_user_follows? ? t("decidim.follows.destroy.button") : t("decidim.follows.create.button")
+    def icon_options
+      icon_base_options = { aria_hidden: true }
+      return icon_base_options.merge(class: "icon--small", role: "img", "aria-hidden": true) if inline?
+
+      icon_base_options
     end
 
-    def path
-      decidim.follow_path(req_params)
+    def render_screen_reader_title_for(resource)
+      content_tag :span, class: "show-for-sr" do
+        decidim_html_escape(resource_title(resource))
+      end
     end
 
-    def req_params
-      { follow: { followable_gid: model.to_sgid.to_s, button_classes: } }
+    # Checks whether the button will be shown inline or not. Inline buttons will
+    # not have any border, and the icon will be small. This is mostly intended
+    # to be used from cards.
+    def inline?
+      options[:inline]
     end
 
-    def method
-      current_user_follows? ? :delete : :post
-    end
-
-    def icon_name
-      current_user_follows? ? resource_type_icon_key("unfollow") : resource_type_icon_key("follow")
-    end
-
-    def remote
-      true
+    # Checks whether the button will be shown large or not.
+    def large?
+      options[:large]
     end
 
     def current_user_follows?

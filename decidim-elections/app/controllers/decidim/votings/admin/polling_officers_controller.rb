@@ -12,12 +12,12 @@ module Decidim
 
         def new
           enforce_permission_to :create, :polling_officer, voting: current_voting
-          @form = form(VotingUserRoleForm).instance
+          @form = form(PollingOfficerForm).instance
         end
 
         def create
           enforce_permission_to :create, :polling_officer, voting: current_voting
-          @form = form(VotingUserRoleForm).from_params(params, voting: current_voting)
+          @form = form(PollingOfficerForm).from_params(params, voting: current_voting)
 
           CreatePollingOfficer.call(@form, current_user, current_voting) do
             on(:ok) do

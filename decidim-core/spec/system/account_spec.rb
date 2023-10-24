@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "Account", type: :system do
-  let(:user) { create(:user, :confirmed, password:) }
+  let(:user) { create(:user, :confirmed, password:, password_confirmation: password) }
   let(:password) { "dqCFgjfDbC7dPbrv" }
   let(:organization) { user.organization }
 
@@ -46,12 +46,12 @@ describe "Account", type: :system do
         find("#user_avatar_button").click
 
         within ".upload-modal" do
-          click_button "Remove"
+          find(".remove-upload-item").click
           input_element = find("input[type='file']", visible: :all)
           input_element.attach_file(Decidim::Dev.asset("5000x5000.png"))
 
           expect(page).to have_content("File resolution is too large", count: 1)
-          expect(page).to have_content("Validation error!")
+          expect(page).to have_css(".upload-errors .form-error", count: 1)
         end
       end
     end
@@ -65,11 +65,15 @@ describe "Account", type: :system do
           fill_in :user_name, with: "Nikola Tesla"
           fill_in :user_personal_url, with: "https://example.org"
           fill_in :user_about, with: "A Serbian-American inventor, electrical engineer, mechanical engineer, physicist, and futurist."
-          all("*[type=submit]").last.click
+          find("*[type=submit]").click
         end
 
         within_flash_messages do
           expect(page).to have_content("successfully")
+        end
+
+        within ".title-bar" do
+          expect(page).to have_content("Nikola Tesla")
         end
 
         user.reload
@@ -86,131 +90,93 @@ describe "Account", type: :system do
       end
     end
 
-    describe "when update password" do
-      let!(:encrypted_password) { user.encrypted_password }
-      let(:new_password) { "decidim1234567890" }
-
-      before do
-        click_button "Change password"
-      end
-
-      it "toggles old and new password fields" do
-        within "form.edit_user" do
-          expect(page).to have_content("must not be too common (e.g. 123456) and must be different from your nickname and your email.")
-          expect(page).to have_field("user[password]", with: "", type: "password")
-          expect(page).to have_field("user[old_password]", with: "", type: "password")
-          click_button "Change password"
-          expect(page).not_to have_field("user[password]", with: "", type: "password")
-          expect(page).not_to have_field("user[old_password]", with: "", type: "password")
-        end
-      end
-
-      it "shows fields if password is wrong" do
-        within "form.edit_user" do
-          fill_in "Password", with: new_password
-          fill_in "Current password", with: "wrong password12345"
-          find("*[type=submit]").click
-        end
-        expect(page).to have_field("user[password]", with: "decidim1234567890", type: "password")
-        expect(page).to have_content("is invalid")
-      end
-
-      it "changes the password with correct password" do
-        within "form.edit_user" do
-          fill_in "Password", with: new_password
-          fill_in "Current password", with: password
-          find("*[type=submit]").click
-        end
-        within_flash_messages do
-          expect(page).to have_content("successfully")
-        end
-        expect(user.reload.encrypted_password).not_to eq(encrypted_password)
-        expect(page).not_to have_field("user[password]", with: "", type: "password")
-        expect(page).not_to have_field("user[old_password]", with: "", type: "password")
-      end
-    end
-
-    context "when update email" do
-      let(:pending_email) { "foo@bar.com" }
-
-      context "when typing new email" do
-        before do
+    describe "updating the password" do
+      context "when password and confirmation match" do
+        it "updates the password successfully" do
           within "form.edit_user" do
-            fill_in "Your email", with: pending_email
-            find("*[type=submit]").click
-          end
-        end
+            page.find(".change-password").click
 
-        it "toggles the current password" do
-          expect(page).to have_content("In order to confirm the changes to your account, please provide your current password.")
-          expect(find("#user_old_password")).to be_visible
-          expect(page).to have_content "Current password"
-          expect(page).not_to have_content "Password"
-        end
+            fill_in :user_password, with: "sekritpass123"
+            fill_in :user_password_confirmation, with: "sekritpass123"
 
-        it "renders the old password with error" do
-          within "form.edit_user" do
             find("*[type=submit]").click
-            fill_in :user_old_password, with: "wrong password"
-            find("*[type=submit]").click
-          end
-          within ".flash.alert" do
-            expect(page).to have_content "There was a problem updating your account."
-          end
-          within ".old-user-password" do
-            expect(page).to have_content "is invalid"
-          end
-        end
-      end
-
-      context "when correct old password" do
-        before do
-          within "form.edit_user" do
-            fill_in "Your email", with: pending_email
-            find("*[type=submit]").click
-            fill_in :user_old_password, with: password
-
-            perform_enqueued_jobs { find("*[type=submit]").click }
           end
 
           within_flash_messages do
-            expect(page).to have_content("You will receive an email to confirm your new email address")
-          end
-        end
-
-        after do
-          clear_enqueued_jobs
-        end
-
-        it "tells user to confirm new email" do
-          expect(page).to have_content("Email change verification")
-          expect(page).to have_selector("#user_email[disabled='disabled']")
-          expect(page).to have_content("We have sent an email to #{pending_email} to verify your new email address")
-        end
-
-        it "resend confirmation" do
-          within "#email-change-pending" do
-            click_link "Send again"
-          end
-          expect(page).to have_content("Confirmation email resent successfully to #{pending_email}")
-          perform_enqueued_jobs
-          perform_enqueued_jobs
-
-          expect(emails.count).to eq(2)
-          visit last_email_link
-          expect(page).to have_content("Your email address has been successfully confirmed")
-        end
-
-        it "cancels the email change" do
-          expect(Decidim::User.find(user.id).unconfirmed_email).to eq(pending_email)
-          within "#email-change-pending" do
-            click_link "cancel"
+            expect(page).to have_content("successfully")
           end
 
-          expect(page).to have_content("Email change cancelled successfully")
-          expect(page).not_to have_content("Email change verification")
-          expect(Decidim::User.find(user.id).unconfirmed_email).to be_nil
+          expect(user.reload.valid_password?("sekritpass123")).to be(true)
         end
+      end
+
+      context "when passwords do not match" do
+        it "does not update the password" do
+          within "form.edit_user" do
+            page.find(".change-password").click
+
+            fill_in :user_password, with: "sekritpass123"
+            fill_in :user_password_confirmation, with: "oopseytypo"
+
+            find("*[type=submit]").click
+          end
+
+          within_flash_messages do
+            expect(page).to have_content("There was a problem")
+          end
+
+          expect(user.reload.valid_password?("sekritpass123")).to be(false)
+        end
+      end
+    end
+
+    context "when updating the email" do
+      let(:pending_email) { "foo@bar.com" }
+
+      before do
+        within "form.edit_user" do
+          fill_in :user_email, with: pending_email
+
+          perform_enqueued_jobs { find("*[type=submit]").click }
+        end
+
+        within_flash_messages do
+          expect(page).to have_content("You will receive an email to confirm your new email address")
+        end
+      end
+
+      after do
+        clear_enqueued_jobs
+      end
+
+      it "tells user to confirm new email" do
+        expect(page).to have_content("Email change verification")
+        expect(page).to have_selector("#user_email[disabled='disabled']")
+        expect(page).to have_content("We have sent an email to #{pending_email} to verify your new email address")
+      end
+
+      it "resend confirmation" do
+        within "#email-change-pending" do
+          click_link "Send again"
+        end
+        expect(page).to have_content("Confirmation email resent successfully to #{pending_email}")
+        perform_enqueued_jobs
+        perform_enqueued_jobs
+
+        expect(emails.count).to eq(2)
+        visit last_email_link
+        expect(page).to have_content("Your email address has been successfully confirmed")
+      end
+
+      it "cancels the email change" do
+        expect(Decidim::User.find(user.id).unconfirmed_email).to eq(pending_email)
+        within "#email-change-pending" do
+          click_link "cancel"
+        end
+
+        expect(page).to have_content("Email change cancelled successfully")
+        expect(page).not_to have_content("Email change verification")
+        expect(Decidim::User.find(user.id).unconfirmed_email).to be_nil
       end
     end
 
@@ -220,7 +186,9 @@ describe "Account", type: :system do
       end
 
       it "updates the user's notifications" do
-        page.find("[for='newsletter_notifications']").click
+        within ".switch.newsletter_notifications" do
+          page.find(".switch-paddle").click
+        end
 
         within "form.edit_user" do
           find("*[type=submit]").click
@@ -232,7 +200,7 @@ describe "Account", type: :system do
       end
 
       context "when the user is an admin" do
-        let!(:user) { create(:user, :confirmed, :admin, password:) }
+        let!(:user) { create(:user, :confirmed, :admin, password:, password_confirmation: password) }
 
         before do
           login_as user, scope: :user
@@ -240,8 +208,13 @@ describe "Account", type: :system do
         end
 
         it "updates the administrator's notifications" do
-          page.find("[for='email_on_moderations']").click
-          page.find("[for='user_notification_settings[close_meeting_reminder]']").click
+          within ".switch.email_on_moderations" do
+            page.find(".switch-paddle").click
+          end
+
+          within ".switch.notification_settings" do
+            page.find(".switch-paddle").click
+          end
 
           within "form.edit_user" do
             find("*[type=submit]").click
@@ -273,10 +246,9 @@ describe "Account", type: :system do
         end
 
         it "display translated scope name" do
+          label_field = "label[for='user_scopes_#{scopes.first.id}_checked']"
           expect(page).to have_content("My interests")
-          within "label[for='user_scopes_#{scopes.first.id}_checked']" do
-            expect(page).to have_content(translated(scopes.first.name))
-          end
+          expect(find("#{label_field} > span.switch-label").text).to eq(translated(scopes.first.name))
         end
 
         it "allows to choose interests" do
@@ -312,7 +284,7 @@ describe "Account", type: :system do
           expect(page).to have_content("successfully")
         end
 
-        click_link("Log in", match: :first)
+        find(".sign-in-link").click
 
         within ".new_user" do
           fill_in :session_user_email, with: user.email
@@ -338,7 +310,7 @@ describe "Account", type: :system do
 
   context "when on the notifications page in a PWA browser" do
     let(:organization) { create(:organization, host: "pwa.lvh.me") }
-    let(:user) { create(:user, :confirmed, password:, organization:) }
+    let(:user) { create(:user, :confirmed, password:, password_confirmation: password, organization:) }
     let(:password) { "dqCFgjfDbC7dPbrv" }
     let(:vapid_keys) do
       {
@@ -360,7 +332,10 @@ describe "Account", type: :system do
       context "when on the account page" do
         it "enables push notifications if supported browser" do
           sleep 2
-          page.find("[for='allow_push_notifications']").click
+          within ".push-notifications" do
+            # Check allow push notifications
+            find(".switch-paddle").click
+          end
 
           # Wait for the browser to be subscribed
           sleep 5
@@ -373,7 +348,7 @@ describe "Account", type: :system do
             expect(page).to have_content("successfully")
           end
 
-          find(:css, "#allow_push_notifications", visible: false).execute_script("this.checked = true")
+          expect(page.find("#allow_push_notifications", visible: false)).to be_checked
         end
       end
     end

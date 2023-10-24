@@ -1,8 +1,9 @@
 var $debates = $('#debates');
+var $debatesCount = $('#debates-count');
 var $orderFilterInput = $('.order_filter');
 
 $debates.html('<%= j(render partial: "debates").strip.html_safe %>');
-$orderFilterInput.val('<%= order %>');
+$debatesCount.html('<%= j(render partial: "count").strip.html_safe %>');
 
-$debates[0].innerHTML = $debates[0].innerHTML.replace('data-open="false"', 'data-open="true"');
-document.dispatchEvent(new CustomEvent("ajax:loaded", { detail: $debates[0] }));
+var $dropdownMenu = $('.dropdown.menu', $debates);
+$dropdownMenu.foundation();

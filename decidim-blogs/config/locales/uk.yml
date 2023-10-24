@@ -18,6 +18,9 @@ uk:
         new: Створити новий допис
         title: Дії
       admin:
+        models:
+          post:
+            name: Допис
         posts:
           edit:
             save: Оновити
@@ -33,6 +36,9 @@ uk:
           fields:
             author: Автор
             body: Основний текст
+      posts:
+        show:
+          view: Переглянути
     components:
       blogs:
         name: Блог

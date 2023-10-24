@@ -22,6 +22,9 @@ tr:
         new: Yeni posta
         title: Eylemler
       admin:
+        models:
+          post:
+            name: posta
         posts:
           edit:
             save: Güncelleştirme
@@ -38,6 +41,9 @@ tr:
           fields:
             author: Yazar
             body: Vücut
+      posts:
+        show:
+          view: Görünüm
     components:
       blogs:
         name: Blog

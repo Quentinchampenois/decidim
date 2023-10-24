@@ -11,14 +11,12 @@ describe "Admin manages trustees", type: :system do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit_component_admin
-    within_admin_sidebar_menu do
-      click_link "Trustees"
-    end
+    click_link "Trustees"
   end
 
   context "without existing trustee" do
     it "creates a new trustee" do
-      click_link "New trustee"
+      find(".card-title a.new").click
 
       within ".new_trustee" do
         autocomplete_select "#{user.name} (@#{user.nickname})", from: :user_id
@@ -110,7 +108,7 @@ describe "Admin manages trustees", type: :system do
     let(:participatory_space) { create(:assembly, organization:) }
 
     it "shows the trustees page" do
-      expect(page).to have_content("New trustee")
+      expect(page).to have_content("New Trustee")
     end
   end
 
@@ -118,7 +116,7 @@ describe "Admin manages trustees", type: :system do
     let(:participatory_space) { create(:voting, organization:) }
 
     it "shows the trustees page" do
-      expect(page).to have_content("New trustee")
+      expect(page).to have_content("New Trustee")
     end
   end
 end

@@ -10,9 +10,7 @@ shared_examples "manage voting attachments examples" do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_votings.edit_voting_path(voting)
-    within_admin_sidebar_menu do
-      click_link "Files"
-    end
+    click_link "Files"
   end
 
   it_behaves_like "manage attachments examples"

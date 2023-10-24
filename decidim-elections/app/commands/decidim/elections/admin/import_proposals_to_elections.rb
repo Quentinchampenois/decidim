@@ -30,7 +30,7 @@ module Decidim
         attr_reader :form, :answer
 
         def invalid?
-          form.election.blocked? || form.invalid?
+          form.election.started? || form.invalid?
         end
 
         def create_answers_from_accepted_proposals

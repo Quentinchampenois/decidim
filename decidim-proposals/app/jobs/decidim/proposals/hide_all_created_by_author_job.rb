@@ -5,14 +5,12 @@ module Decidim
     class HideAllCreatedByAuthorJob < ::Decidim::HideAllCreatedByAuthorJob
       protected
 
-      def perform(resource:, extra: {})
-        return unless extra.fetch(:hide, false)
-
-        Decidim::Proposals::Proposal.not_hidden.from_author(resource).find_each do |content|
-          hide_content(content, extra[:event_author], extra[:justification])
+      def perform(author:, justification:, current_user:)
+        Decidim::Proposals::Proposal.not_hidden.from_author(author).find_each do |content|
+          hide_content(content, current_user, justification)
         end
-        Decidim::Proposals::CollaborativeDraft.not_hidden.from_author(resource).find_each do |content|
-          hide_content(content, extra[:event_author], extra[:justification])
+        Decidim::Proposals::CollaborativeDraft.not_hidden.from_author(author).find_each do |content|
+          hide_content(content, current_user, justification)
         end
       end
     end

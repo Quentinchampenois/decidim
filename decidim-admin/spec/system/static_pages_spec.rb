@@ -58,7 +58,9 @@ describe "Content pages", type: :system do
       end
 
       it "can create topics" do
-        click_link "Create topic"
+        within ".secondary-nav" do
+          click_link "Create topic"
+        end
 
         within ".new_static_page_topic" do
           fill_in_i18n(
@@ -165,7 +167,9 @@ describe "Content pages", type: :system do
     end
 
     it "can create new pages" do
-      click_link "Create page"
+      within ".secondary-nav" do
+        click_link "Create page"
+      end
 
       within ".new_static_page" do
         fill_in :static_page_slug, with: "welcome"
@@ -186,7 +190,7 @@ describe "Content pages", type: :system do
           ca: "<p>Contingut HTML</p>"
         )
 
-        select topic.title[I18n.locale.to_s], from: :static_page_topic_id
+        select topic.title[I18n.locale.to_s], from: "Topic"
         find("*[type=submit]").click
       end
 
@@ -231,7 +235,7 @@ describe "Content pages", type: :system do
             "#static_page-content-tabs",
             en: "This is the new <strong>content</strong>"
           )
-          select topic.title[I18n.locale.to_s], from: :static_page_topic_id
+          select topic.title[I18n.locale.to_s], from: "Topic"
           find("*[type=submit]").click
         end
 
@@ -255,17 +259,13 @@ describe "Content pages", type: :system do
       end
 
       it "can visit them" do
-        new_window = window_opened_by do
-          within find("tr", text: translated(decidim_page.title)) do
-            click_link "View public page"
-          end
+        within find("tr", text: translated(decidim_page.title)) do
+          click_link "View public page"
         end
 
-        page.within_window(new_window) do
-          expect(page).to have_content(translated(decidim_page.title))
-          expect(page).to have_content(strip_tags(translated(decidim_page.content)))
-          expect(page).to have_current_path(/#{decidim_page.slug}/)
-        end
+        expect(page).to have_content(translated(decidim_page.title))
+        expect(page).to have_content(strip_tags(translated(decidim_page.content)))
+        expect(page).to have_current_path(/#{decidim_page.slug}/)
       end
     end
   end

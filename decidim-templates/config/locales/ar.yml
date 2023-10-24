@@ -28,6 +28,8 @@ ar:
             skip_template: تخطي
           edit:
             edit: تعديل
+          form:
+            save: حفظ
           preview:
             current_step: الخطوة %{step}
       template_types:

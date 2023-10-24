@@ -5,9 +5,6 @@ module Decidim
     # Controller that allows managing the appearance of the organization.
     class OrganizationAppearanceController < Decidim::Admin::ApplicationController
       layout "decidim/admin/settings"
-
-      add_breadcrumb_item_from_menu :admin_settings_menu
-
       helper Decidim::Admin::UploaderImageDimensionsHelper
 
       def edit

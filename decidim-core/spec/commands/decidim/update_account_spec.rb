@@ -5,15 +5,14 @@ require "spec_helper"
 module Decidim
   describe UpdateAccount do
     let(:command) { described_class.new(user, form) }
-    let(:user) { create(:user, :confirmed, password: user_password) }
-    let(:user_password) { "decidim1234567890" }
+    let(:user) { create(:user, :confirmed) }
     let(:data) do
       {
         name: user.name,
         nickname: user.nickname,
         email: user.email,
         password: nil,
-        old_password: nil,
+        password_confirmation: nil,
         avatar: nil,
         remove_avatar: nil,
         personal_url: "https://example.org",
@@ -28,7 +27,7 @@ module Decidim
         nickname: data[:nickname],
         email: data[:email],
         password: data[:password],
-        old_password: data[:old_password],
+        password_confirmation: data[:password_confirmation],
         avatar: data[:avatar],
         remove_avatar: data[:remove_avatar],
         personal_url: data[:personal_url],
@@ -82,43 +81,22 @@ module Decidim
         let(:validator) { instance_double(ValidEmail2::Address) }
 
         before do
-          form.email = "new@example.com"
+          form.email = "new@email.com"
+
           allow(ValidEmail2::Address).to receive(:new).and_return(validator)
           allow(validator).to receive(:valid?).and_return(true)
           allow(validator).to receive(:disposable?).and_return(false)
         end
 
-        context "with correct old password" do
-          before do
-            form.old_password = user_password
-          end
-
-          it "broadcasts ok" do
-            expect { command.call }.to broadcast(:ok)
-          end
-
-          it "sends a reconfirmation email" do
-            expect do
-              perform_enqueued_jobs { command.call }
-            end.to broadcast(:ok, true)
-            expect(last_email.to).to include("new@example.com")
-          end
+        it "broadcasts ok" do
+          expect { command.call }.to broadcast(:ok)
         end
 
-        context "with incorrect password" do
-          before do
-            form.old_password = "foobar123456789"
-          end
-
-          it "broadcasts invalid" do
-            expect { command.call }.to broadcast(:invalid)
-          end
-        end
-
-        context "with empty password" do
-          it "broadcasts invalid" do
-            expect { command.call }.to broadcast(:invalid)
-          end
+        it "sends a reconfirmation email" do
+          expect do
+            perform_enqueued_jobs { command.call }
+          end.to broadcast(:ok, true)
+          expect(last_email.to).to include("new@email.com")
         end
       end
 
@@ -147,42 +125,21 @@ module Decidim
       end
 
       describe "when the password is present" do
-        let(:user) { create(:user, :confirmed, password: user_password, password_updated_at: 1.week.ago) }
+        let(:user) { create(:user, :confirmed, password_updated_at: 1.week.ago) }
 
         before do
           form.password = "pNY6h9crVtVHZbdE"
+          form.password_confirmation = "pNY6h9crVtVHZbdE"
         end
 
-        context "with incorrect old password" do
-          before do
-            form.old_password = "foobar1234567890"
-          end
-
-          it "broadcasts invalid" do
-            expect { command.call }.to broadcast(:invalid)
-          end
+        it "updates the password" do
+          expect { command.call }.to broadcast(:ok)
+          expect(user.reload.valid_password?("pNY6h9crVtVHZbdE")).to be(true)
         end
 
-        context "with empty old password" do
-          it "broadcasts invalid" do
-            expect { command.call }.to broadcast(:invalid)
-          end
-        end
-
-        context "with correct old password" do
-          before do
-            form.old_password = user_password
-          end
-
-          it "updates the password" do
-            expect { command.call }.to broadcast(:ok)
-            expect(user.reload.valid_password?("pNY6h9crVtVHZbdE")).to be(true)
-          end
-
-          it "sets the password_updated_at to the current time" do
-            expect { command.call }.to broadcast(:ok)
-            expect(User.last.password_updated_at).to be_between(2.seconds.ago, Time.current)
-          end
+        it "sets the password_updated_at to the current time" do
+          expect { command.call }.to broadcast(:ok)
+          expect(User.last.password_updated_at).to be_between(2.seconds.ago, Time.current)
         end
       end
 

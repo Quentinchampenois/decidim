@@ -27,8 +27,6 @@ module Decidim
           if process.persisted?
             add_admins_as_followers(process)
             link_related_processes
-            Decidim::ContentBlocksCreator.new(process).create_default!
-
             broadcast(:ok, process)
           else
             form.errors.add(:hero_image, process.errors[:hero_image]) if process.errors.include? :hero_image

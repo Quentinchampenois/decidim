@@ -14,5 +14,6 @@ si:
         form:
           body:
             label: අදහස
+          submit: යවන්න
           user_group_id:
             label: ලෙස අදහස් දක්වන්න

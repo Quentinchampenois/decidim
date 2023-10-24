@@ -15,13 +15,15 @@ describe "Admin manages budgets", type: :system do
   end
 
   describe "admin form" do
-    before { click_on "New budget" }
+    before { click_on "New Budget" }
 
     it_behaves_like "having a rich text editor", "new_budget", "content"
   end
 
   it "creates a new budget" do
-    click_link "New budget"
+    within ".card-title" do
+      click_link "New Budget"
+    end
 
     within ".new_budget" do
       fill_in_i18n(
@@ -40,12 +42,16 @@ describe "Admin manages budgets", type: :system do
       )
       fill_in :budget_weight, with: 1
       fill_in :budget_total_budget, with: 100_000_00
-      select translated(scope.name), from: :budget_decidim_scope_id
+      scope_pick select_data_picker(:budget_decidim_scope_id), scope
     end
 
-    click_button "Create budget"
+    within ".new_budget" do
+      find("*[type=submit]").click
+    end
 
-    expect(page).to have_admin_callout("Budget successfully created.")
+    within ".callout-wrapper" do
+      expect(page).to have_content("successfully")
+    end
 
     within "table" do
       expect(page).to have_content("My Budget")
@@ -66,11 +72,13 @@ describe "Admin manages budgets", type: :system do
           es: "Mi nuevo título",
           ca: "El meu nou títol"
         )
+
+        find("*[type=submit]").click
       end
 
-      click_button "Update budget"
-
-      expect(page).to have_admin_callout("Budget successfully updated.")
+      within ".callout-wrapper" do
+        expect(page).to have_content("successfully")
+      end
 
       within "table" do
         expect(page).to have_content("My new title")
@@ -93,7 +101,9 @@ describe "Admin manages budgets", type: :system do
         end
       end
 
-      expect(page).to have_admin_callout("Budget successfully deleted.")
+      within ".callout-wrapper" do
+        expect(page).to have_content("successfully")
+      end
 
       within "table" do
         expect(page).not_to have_content(translated(budget.title))
@@ -162,16 +172,16 @@ describe "Admin manages budgets", type: :system do
       it "shows finished and pending orders" do
         visit current_path
         within find_all(".card-divider").last do
-          expect(page).to have_content("Finished votes: 4")
-          expect(page).to have_content("Pending votes: 1")
+          expect(page).to have_content("Finished votes: \n4")
+          expect(page).to have_content("Pending votes: \n1")
         end
       end
 
       it "shows count of users with finished and pending orders" do
         visit current_path
         within find_all(".card-divider").last do
-          expect(page).to have_content("Users with finished votes: 3")
-          expect(page).to have_content("Users with pending votes: 1")
+          expect(page).to have_content("Users with finished votes: \n3")
+          expect(page).to have_content("Users with pending votes: \n1")
         end
       end
     end

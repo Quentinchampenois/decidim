@@ -30,16 +30,7 @@ module Decidim
         end
 
         def tailwind_configuration_template
-          File.read(configuration_template_path)
-        end
-
-        def configuration_template_path
-          @configuration_template_path ||= begin
-            original_path = File.expand_path("tailwind.config.js.erb", __dir__)
-            alternate_path = File.expand_path("config/tailwind.config.js.erb", app_path)
-
-            File.exist?(alternate_path) ? alternate_path : original_path
-          end
+          File.read(File.expand_path("tailwind.config.js.erb", __dir__))
         end
 
         def app_path

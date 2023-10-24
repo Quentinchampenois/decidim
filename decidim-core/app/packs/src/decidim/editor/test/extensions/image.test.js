@@ -69,9 +69,7 @@ describe("Image", () => {
     const dialogWrapper = document.createElement("div");
     dialogWrapper.innerHTML = uploadTemplates.redesign;
     uploadDialogElement = dialogWrapper.firstElementChild;
-    uploadDialogElement.dataset.dialog = "testDialog";
     uploadDialogElement.dialog = new DummyDialog(uploadDialogElement);
-    window.Decidim.currentDialogs = { testDialog: uploadDialogElement.dialog };
     document.body.append(uploadDialogElement);
 
     editor = createBasicEditor({

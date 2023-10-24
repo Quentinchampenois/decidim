@@ -3,8 +3,6 @@
 require "spec_helper"
 require "nokogiri"
 
-require "decidim/core/test/shared_examples/form_builder_examples"
-
 module Decidim
   describe FilterFormBuilder do
     let(:helper) { Class.new(ActionView::Base).new(ActionView::LookupContext.new(ActionController::Base.view_paths), {}, []) }
@@ -22,63 +20,49 @@ module Decidim
 
     let(:builder) { FilterFormBuilder.new(:resource, resource, helper, {}) }
 
+    shared_examples "fieldset_wrapper" do
+      it "wraps fields in a fieldset inside a div with class 'filters__section'" do
+        expect(parsed.css(".filters__section fieldset")).not_to be_empty
+      end
+
+      it "adds a legend tag with a mini-title class inside with value provided by 'legend' option" do
+        expect(parsed.css("legend.mini-title").first.text).to eq("Date")
+      end
+    end
+
     describe "#collection_radio_buttons" do
       let(:output) do
-        builder.collection_radio_buttons :order_start_time, [%w(asc asc), %w(desc desc)], :first, :last
+        builder.collection_radio_buttons :order_start_time, [%w(asc asc), %w(desc desc)], :first, :last, legend_title: "Date"
       end
       let(:parsed) { Nokogiri::HTML(output) }
 
-      it "renders the radio buttons outside its labels" do
-        expect(parsed.css("label input")).to be_empty
-      end
+      include_examples "fieldset_wrapper"
 
-      context "when a help text is defined" do
-        let(:field) { "input" }
-        let(:help_text_text) { "This is the help text" }
-        let(:output) do
-          builder.collection_radio_buttons :order_start_time, [%w(asc asc), %w(desc desc)], :first, :last, help_text: help_text_text
-        end
-
-        it_behaves_like "having a help text"
+      it "renders the radio buttons inside its labels" do
+        expect(parsed.css("label input")).not_to be_empty
       end
     end
 
     describe "#collection_check_boxes" do
       let(:output) do
-        builder.collection_check_boxes :scope_id, scopes, :id, :name
+        builder.collection_check_boxes :scope_id, scopes, :id, :name, legend_title: "Date"
       end
       let(:parsed) { Nokogiri::HTML(output) }
 
-      it "renders the check boxes outside its labels" do
-        expect(parsed.css("label input")).to be_empty
-      end
+      include_examples "fieldset_wrapper"
 
-      context "when a help text is defined" do
-        let(:field) { "input" }
-        let(:help_text_text) { "This is the help text" }
-        let(:output) do
-          builder.collection_check_boxes :scope_id, scopes, :id, :name, help_text: help_text_text
-        end
-
-        it_behaves_like "having a help text"
+      it "renders the check boxes inside its labels" do
+        expect(parsed.css("label input")).not_to be_empty
       end
     end
 
     describe "#categories_select" do
       let(:output) do
-        builder.categories_select :category_id, categories, disable_parents: false, label: false, include_blank: true
+        builder.categories_select :category_id, categories, legend_title: "Date", disable_parents: false, label: false, include_blank: true
       end
       let(:parsed) { Nokogiri::HTML(output) }
 
-      context "when a help text is defined" do
-        let(:field) { "<select" }
-        let(:help_text_text) { "This is the help text" }
-        let(:output) do
-          builder.categories_select :category_id, categories, disable_parents: false, label: false, include_blank: true, help_text: help_text_text
-        end
-
-        it_behaves_like "having a help text"
-      end
+      include_examples "fieldset_wrapper"
     end
   end
 end

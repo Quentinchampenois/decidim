@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "decidim/proposals/test/capybara_proposals_picker"
 
 describe "Admin manages meetings other features", serves_geocoding_autocomplete: true, serves_map: true, type: :system do
   let(:manifest_name) { "meetings" }

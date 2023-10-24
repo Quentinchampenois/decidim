@@ -8,21 +8,19 @@ module Decidim
       include NeedsPermission
       include NeedsPasswordChange
       include NeedsSnippets
-      include NeedsAdminTosAccepted
       include FormFactory
       include LocaleSwitcher
       include UseOrganizationTimeZone
       include PayloadInfo
-      include Headers::HttpCachingDisabler
-      include Headers::ContentSecurityPolicy
+      include HttpCachingDisabler
       include DisableRedirectionToExternalHost
-      include Decidim::Admin::Concerns::HasBreadcrumbItems
+
+      include DisabledRedesignLayout
 
       helper Decidim::Admin::ApplicationHelper
       helper Decidim::Admin::AttributesDisplayHelper
       helper Decidim::Admin::SettingsHelper
       helper Decidim::Admin::IconLinkHelper
-      helper Decidim::Admin::IconWithTooltipHelper
       helper Decidim::Admin::MenuHelper
       helper Decidim::Admin::ScopesHelper
       helper Decidim::Admin::Paginable::PerPageHelper
@@ -33,8 +31,7 @@ module Decidim
       helper Decidim::LanguageChooserHelper
       helper Decidim::ComponentPathHelper
       helper Decidim::SanitizeHelper
-      helper Decidim::BreadcrumbHelper
-      helper Decidim::Templates::Admin::ApplicationHelper if Decidim.module_installed?(:templates)
+      helper Decidim::Templates::Admin::ApplicationHelper if Decidim::Admin.enable_templates
 
       default_form_builder Decidim::Admin::FormBuilder
 

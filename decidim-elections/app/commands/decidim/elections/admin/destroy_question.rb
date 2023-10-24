@@ -27,7 +27,7 @@ module Decidim
         attr_reader :question, :current_user
 
         def invalid?
-          question.election.blocked?
+          question.election.started?
         end
 
         def destroy_question!

@@ -30,7 +30,7 @@ module Decidim
         attr_reader :answer, :current_user
 
         def invalid?
-          answer.question.election.blocked?
+          answer.question.election.started?
         end
 
         def destroy_answer

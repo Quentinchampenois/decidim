@@ -4,7 +4,7 @@ import { IdentificationKeys } from "@decidim/decidim-bulletin_board";
 
 $(() => {
   function identificationKeys() {
-    const $form = $("#trustee_zone form");
+    const $form = $(".trustee_zone form");
     const $trusteeSlug = $("#trustee_slug", $form);
     const $trusteePublicKey = $("#trustee_public_key", $form);
 
@@ -12,9 +12,8 @@ $(() => {
       $trusteeSlug.val(),
       $trusteePublicKey.val()
     );
-
     if (!window.trusteeIdentificationKeys.browserSupport) {
-      $("#not_supported_browser").attr("hidden", false);
+      $("#not_supported_browser").addClass("visible");
       return;
     }
 
@@ -29,24 +28,23 @@ $(() => {
           $trusteePublicKey.val(
             JSON.stringify(window.trusteeIdentificationKeys.publicKey)
           );
-          $submit.attr("hidden", false);
-          $generate.attr("hidden", true);
+          $submit.addClass("visible");
         }).
         catch(() => {
           alert($generate.data("error"));
         });
     });
 
-    $("button", $submit).click(() => {
+    $("button.hollow", $submit).click(() => {
       $trusteePublicKey.val("");
-      $submit.attr("hidden", true);
+      $submit.removeClass("visible");
     });
 
     $("button", $upload).click(() => {
       window.trusteeIdentificationKeys.
         upload().
         then(() => {
-          $upload.attr("hidden", true);
+          $upload.addClass("hide");
         }).
         catch((errorMessage) => {
           alert($upload.data(errorMessage));
@@ -54,7 +52,7 @@ $(() => {
     });
 
     window.trusteeIdentificationKeys.present((result) => {
-      $upload.attr("hidden", result);
+      $upload.toggleClass("hide", result);
     });
   }
 

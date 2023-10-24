@@ -151,6 +151,9 @@ module Decidim::Admin
                 "manifest_name" => "conferences",
                 "ids" => [] },
               { "id" => nil,
+                "manifest_name" => "consultations",
+                "ids" => [] },
+              { "id" => nil,
                 "manifest_name" => "initiatives",
                 "ids" => [] }
             ]
@@ -196,6 +199,9 @@ module Decidim::Admin
                 "ids" => [] },
               { "id" => nil,
                 "manifest_name" => "conferences",
+                "ids" => [] },
+              { "id" => nil,
+                "manifest_name" => "consultations",
                 "ids" => [] },
               { "id" => nil,
                 "manifest_name" => "initiatives",
@@ -252,6 +258,9 @@ module Decidim::Admin
               "manifest_name" => "conferences",
               "ids" => [] },
             { "id" => nil,
+              "manifest_name" => "consultations",
+              "ids" => [] },
+            { "id" => nil,
               "manifest_name" => "initiatives",
               "ids" => [] }
           ]
@@ -293,6 +302,9 @@ module Decidim::Admin
               "ids" => [] },
             { "id" => nil,
               "manifest_name" => "conferences",
+              "ids" => [] },
+            { "id" => nil,
+              "manifest_name" => "consultations",
               "ids" => [] },
             { "id" => nil,
               "manifest_name" => "initiatives",

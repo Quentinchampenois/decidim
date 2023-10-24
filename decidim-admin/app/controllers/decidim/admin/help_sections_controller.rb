@@ -8,8 +8,6 @@ module Decidim
       layout "decidim/admin/settings"
       include TranslationsHelper
 
-      add_breadcrumb_item_from_menu :admin_settings_menu
-
       helper_method :sections
 
       before_action do

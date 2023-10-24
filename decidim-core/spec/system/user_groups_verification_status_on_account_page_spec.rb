@@ -18,12 +18,10 @@ describe "User group verification status on account page", type: :system do
     it "the user can check their status on their account page" do
       visit decidim.own_user_groups_path
 
-      within "#dropdown-menu-profile" do
-        click_link "Groups"
-      end
+      click_link "Groups"
 
       expect(page).to have_content(user_group.name)
-      expect(page).not_to have_css("div.profile__user-avatar-badge")
+      expect(page).to have_content("Pending")
     end
 
     describe "#verified?" do
@@ -39,12 +37,10 @@ describe "User group verification status on account page", type: :system do
     it "the user can check their status on their account page" do
       visit decidim.own_user_groups_path
 
-      within "#dropdown-menu-profile" do
-        click_link "Groups"
-      end
+      click_link "Groups"
 
       expect(page).to have_content(user_group.name)
-      expect(page).not_to have_css("div.profile__user-avatar-badge")
+      expect(page).to have_content("Rejected")
     end
   end
 
@@ -54,12 +50,10 @@ describe "User group verification status on account page", type: :system do
     it "the user can check their status on their account page" do
       visit decidim.own_user_groups_path
 
-      within "#dropdown-menu-profile" do
-        click_link "Groups"
-      end
+      click_link "Groups"
 
       expect(page).to have_content(user_group.name)
-      expect(page).to have_css("div.profile__user-avatar-badge")
+      expect(page).to have_content("Verified")
     end
 
     describe "#verified?" do

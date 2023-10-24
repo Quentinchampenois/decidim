@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 
+import * as L from "leaflet";
 import "src/decidim/map/factory"
 
 /**
@@ -33,7 +34,7 @@ const legacyMapSupport = ($map) => {
 
   let markerColor = getComputedStyle(document.documentElement).getPropertyValue("--primary");
   if (!markerColor || markerColor.length < 1) {
-    markerColor = "#e02d2d";
+    markerColor = "#ef604d";
   }
 
   // Configure the map element with the new style

@@ -21,6 +21,9 @@ module Decidim
       include NeedsSnippets
       include UserBlockedChecker
 
+      include RedesignLayout
+      redesign active: true
+
       helper Decidim::TranslationsHelper
       helper Decidim::MetaTagsHelper
       helper Decidim::DecidimFormHelper
@@ -28,11 +31,9 @@ module Decidim
       helper Decidim::ReplaceButtonsHelper
       helper Decidim::LayoutHelper
       helper Decidim::MenuHelper
-      helper Decidim::BreadcrumbHelper
       helper Decidim::OmniauthHelper
       helper Decidim::CacheHelper
       helper Decidim::SocialShareButtonHelper
-      helper Decidim::SanitizeHelper
 
       layout "layouts/decidim/application"
 

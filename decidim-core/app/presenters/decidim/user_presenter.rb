@@ -57,7 +57,7 @@ module Decidim
     end
 
     def display_mention
-      link_to nickname, profile_url, data: { "external-link": false }
+      link_to nickname, profile_url, class: "user-mention"
     end
 
     def can_be_contacted?
@@ -74,8 +74,6 @@ module Decidim
     end
 
     def has_tooltip?
-      return if respond_to?(:deleted?) && deleted?
-
       true
     end
 

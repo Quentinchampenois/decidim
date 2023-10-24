@@ -93,15 +93,12 @@ describe "Valuator manages proposals", type: :system do
 
     it "can leave proposal notes" do
       expect(page).to have_content("Private notes")
-      click_button "Private notes"
-
-      within ".new_proposal_note" do
+      within ".add-comment" do
         fill_in "Note", with: " This is my note"
         click_button "Submit"
       end
 
-      click_button "Private notes"
-      within ".component__show_notes-grid .comment:last-child" do
+      within ".comment-thread" do
         expect(page).to have_content("This is my note")
       end
     end

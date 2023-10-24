@@ -51,7 +51,7 @@ ca:
         confirm_destroy: Segur?
         destroy: Suprimeix
         edit: Edita
-        new: Afegir debat
+        new: Nou %{name}
         title: Accions
       admin:
         debate_closes:
@@ -81,6 +81,9 @@ ca:
             success: Debate actualizado correctament.
         exports:
           comments: Comentaris
+        models:
+          debate:
+            name: Debat
       admin_log:
         debate:
           close: "La participant %{user_name} ha tancat el debat %{resource_name} a l'espai %{space_name}"
@@ -93,7 +96,7 @@ ca:
           invalid: S'ha produït un error en tancar el debat.
           success: Debat tancat correctament.
         close_debate_modal:
-          cancel: Cancel·lar
+          close: Tanca
           description: Quin és el resum o conclusions d'aquest debat?
           send: Tancar el debat
         closed: Tancat
@@ -120,12 +123,18 @@ ca:
           official: Oficial
           origin: Origen
           participants: Participants
+          scope: Àmbit
           search: Cerca
           state: Estat
           state_values:
             closed: Tancat
             open: Obert
-          user_group: Grups
+          user_groups: Grups
+        filters_small_view:
+          close_modal: Tancar finestra
+          filter: Filtra
+          filter_by: Filtra per
+          unfold: Desplega
         form:
           select_a_category: Si us plau, selecciona una categoria
         index:
@@ -141,6 +150,7 @@ ca:
           recent: Més recents
           updated: Recentment actualitzats
         show:
+          back: Torna al llistat
           close_debate: Tancar el debat
           date: Data
           debate_closed: Tancat
@@ -148,21 +158,28 @@ ca:
           edit_conclusions: Editar conclusions
           edit_debate: Editar debat
           groups_count: Grups
+          last_comment_by: Darrer comentari de
+          no_comments_yet: Encara no hi ha comentaris
           open: Debat obert
           participants_count: Participants
         update:
           invalid: S'ha produït un error en actualitzar aquest debat.
           success: Debat actualitzat correctament.
+        versions:
+          debates:
+            back_to_resource: Tornar al debat
+          index:
+            title: Versions
+        versions_list:
+          back_to_resource: Tornar al debat
       last_activity:
         debate_updated: 'Debat actualitzat:'
         new_debate: 'Nou debat:'
       models:
         debate:
           fields:
-            end: Finalitza
             end_time: Data de finalització
             official_debate: Debat oficial
-            start: Comença
             start_time: Data d'inici
             title: Títol
     events:

@@ -6,15 +6,18 @@ module Decidim
     class ConversationsController < Decidim::ApplicationController
       include ConversationHelper
       include FormFactory
-      include HasSpecificBreadcrumb
 
       helper ConversationHelper
 
-      layout "layouts/decidim/application"
+      layout "layouts/decidim/application", force_redesign: true
 
       before_action :authenticate_user!
 
       helper_method :conversation, :user_grouped_messages, :sender_is_user?, :user_groups, :validation_messages
+
+      def redesign_enabled?
+        true
+      end
 
       # Shows the form to initiate a conversation with an user (the recipient)
       # recipient is passed via GET parameter:
@@ -96,7 +99,7 @@ module Decidim
 
       def check_multiple
         @form = form(ConversationForm).from_params(params, sender: current_user)
-        redirect_link = current_or_new_conversation_path_with_multiple(@form.recipient, nickname: params[:nickname])
+        redirect_link = current_or_new_conversation_path_with_multiple(@form.recipient)
         redirect_to redirect_link
       end
 
@@ -136,14 +139,6 @@ module Decidim
 
       def sender_is_user?(sender)
         current_user.id == sender.id
-      end
-
-      def breadcrumb_item
-        {
-          label: t("layouts.decidim.user_menu.conversations"),
-          url: conversations_path,
-          active: true
-        }
       end
     end
   end

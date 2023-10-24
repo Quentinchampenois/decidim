@@ -34,28 +34,26 @@ $(() => {
       if (`${query}`.trim().length < queryMinLength) {
         return;
       }
-      // Changes to the autocomplete api call based on:
-      // https://developer.here.com/documentation/geocoding-search-api/migration_guide/migration-geocoder/topics-api/autocomplete.html
+
       currentSuggestionQuery = setTimeout(() => {
         $.ajax({
           method: "GET",
-          url: "https://autocomplete.search.hereapi.com/v1/autocomplete",
+          url: "https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json",
           data: {
             apiKey: config.apiKey,
-            // eslint-disable-next-line
-            q: query,
-            lang: language
+            query: query,
+            language: language
           },
           dataType: "json"
         }).done((resp) => {
-          if (resp.items) {
-            return callback(resp.items.map((item) => {
+          if (resp.suggestions) {
+            return callback(resp.suggestions.map((item) => {
               const label = generateAddressLabel(item.address, addressFormat);
 
               return {
                 key: label,
                 value: label,
-                locationId: item.id
+                locationId: item.locationId
               }
             }));
           }
@@ -67,24 +65,30 @@ $(() => {
     $input.on("geocoder-suggest-select.decidim", (_ev, selectedItem) => {
       $.ajax({
         method: "GET",
-        url: "https://lookup.search.hereapi.com/v1/lookup",
+        url: "https://geocoder.ls.hereapi.com/6.2/geocode.json",
         data: {
           apiKey: config.apiKey,
-          id: selectedItem.locationId
+          gen: 9,
+          jsonattributes: 1,
+          locationid: selectedItem.locationId
         },
         dataType: "json"
       }).done((resp) => {
-        if (!resp || Object.keys(resp).length < 1
+        if (!resp.response || !Array.isArray(resp.response.view) ||
+          resp.response.view.length < 1
         ) {
           return;
         }
-        const position = resp.position;
-        if (!position || !position.lat || !position.lng) {
-          return
+
+        const view = resp.response.view[0];
+        if (!Array.isArray(view.result) || view.result.length < 1) {
+          return;
         }
+
+        const result = view.result[0];
         const coordinates = [
-          position.lat,
-          position.lng
+          result.location.displayPosition.latitude,
+          result.location.displayPosition.longitude
         ];
 
         $input.trigger(

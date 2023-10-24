@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_context "when conference moderator administrating a conference" do
+shared_context "when conference moderator administrating an conference" do
   let(:conference) { create(:conference) }
   let!(:user) { create(:conference_moderator, :confirmed, organization:, conference:) }
 

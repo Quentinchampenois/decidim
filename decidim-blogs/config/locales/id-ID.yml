@@ -15,6 +15,9 @@ id:
         new: Berita Baru
         title: Tindakan
       admin:
+        models:
+          post:
+            name: Pos
         posts:
           edit:
             save: Memperbarui
@@ -30,6 +33,9 @@ id:
           fields:
             author: Penulis
             body: Tubuh
+      posts:
+        show:
+          view: Melihat
     components:
       blogs:
         name: Blog

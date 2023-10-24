@@ -7,7 +7,8 @@ module Decidim
     let(:handler) do
       DummyAuthorizationHandler.new({})
     end
-    let(:organization) { double(cta_button_path: "/", scopes: Decidim::Scope.none) }
+    let(:organization) { double(cta_button_path: "/") }
+    let(:redesign_enabled) { false }
 
     before do
       view.extend AuthorizationFormHelper
@@ -20,6 +21,7 @@ module Decidim
       allow(view).to receive(:authorizations_path).and_return("/authorizations")
       allow(view).to receive(:stored_location).and_return("/processes")
       allow(view).to receive(:redirect_url).and_return("/")
+      allow(view).to receive(:redesign_enabled?).and_return(redesign_enabled)
     end
 
     it "renders the form from the partial" do

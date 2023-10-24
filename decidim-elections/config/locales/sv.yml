@@ -24,7 +24,6 @@ sv:
         location: Plats
         location_hints: Detaljer om platsen
         polling_station_managers: Koordinatorer
-        polling_station_president_id: Ordförande
         title: Titel
       question:
         max_selections: Maximalt antal val
@@ -33,10 +32,8 @@ sv:
         banner_image: Bannerbild
         end_time: Omröstningen avslutas
         promoted: Annonserad
-        scope_id: Omfång
         start_time: Omröstningen börjar
         title: Titel
-        voting_type: Rösttyp
     errors:
       models:
         answer:
@@ -97,9 +94,6 @@ sv:
             'true': Inte signerat
         validated_eq:
           label: Bekräftad
-          values:
-            'false': Ej validerad
-            'true': Bekräftad
     components:
       elections:
         actions:
@@ -120,6 +114,7 @@ sv:
         manage_answers: Hantera svar
         manage_questions: Hantera frågor
         manage_steps: Hanterade steg
+        new: Ny %{name}
         preview: Förhandsgranska
         publish: Publicera
         title: Åtgärder
@@ -158,6 +153,12 @@ sv:
         models:
           answer:
             name: Svar
+          election:
+            name: Val
+          question:
+            name: Fråga
+          trustee:
+            name: Förvaltare
         proposals_imports:
           new:
             create: Importera förslag till svar
@@ -259,6 +260,7 @@ sv:
           key_ceremony_title: Nyckelceremoni
           not_available: Ännu inte publicerade
           not_created: Inte skapat
+          not_published: Ej publicerat
           not_ready: Inte klart
           not_started: Inte påbörjad
           published: Publicerat
@@ -272,7 +274,13 @@ sv:
           all: Allt
           date: Datum
           finished: Avslutad
+          search: Sök
           upcoming: Kommande
+        filters_small_view:
+          close_modal: Stäng fönster
+          filter: Filter
+          filter_by: Filtrera efter
+          unfold: Veckla ut
         results:
           percentage: "%{count}%"
           selected: Valda
@@ -344,9 +352,7 @@ sv:
               task: Uppgift
             start: Start
             status:
-              completed: Slutförd
               pending: Väntande
-              processing: Bearbetar
         menu:
           trustee_zone: Förvaltarzon
         trustees:
@@ -366,15 +372,17 @@ sv:
               submit: Skicka in
       votes:
         ballot_decision:
-          audit: ( Granska valsedel )
+          audit: "( Granska valsedel )"
           back: Starta om omröstningsprocessen
         confirm:
+          answer: Svar
           answer_number: svara %{number}
           confirm: Bekräfta
           edit: redigera
           header: Bekräfta din röst
           intro: Här är en sammanfattning av den röst som du ska rösta. <br> Vänligen bekräfta din röst eller redigera dina svar.
           nota_option: Tom
+          question: Fråga %{count}
         confirmed:
           back: Tillbaka till val
           experience: Hur var din erfarenhet?
@@ -386,9 +394,10 @@ sv:
           try_again: Försök igen
         header:
           ballot_decision: Lägg eller granska din röst
+          casting: Rösta
           confirm: Bekräfta din röst
-          election: Omröstning
-          register: Registrera
+          confirmed: Rösta bekräftad
+          failed: Omröstningen misslyckades
         messages:
           not_allowed: Ni får inte rösta om detta val just nu.
         modal:
@@ -400,6 +409,7 @@ sv:
           question_steps: Fråga %{current_step} av %{total_steps}
           selections: "%{selected} av %{max_selections}<br> val"
         onboarding_modal:
+          close: Stäng fönstret
           create_account: Skapa konto
           no_account: Nej tack.
         verify:
@@ -449,23 +459,28 @@ sv:
               confirm_destroy: Är du säker?
               destroy: Radera
               edit: Redigera
+              new: Ny
               title: Åtgärder
             title: Valtyper
           new:
             create: Skapa
         content_blocks:
-          header:
-            name: Omröstningsbanner
-          metrics:
-            name: Omröstningsmetrik
+          landing_page:
+            header:
+              name: Omröstningsbanner
+            metrics:
+              name: Omröstningsmetrik
+            stats:
+              name: Omröstningsstatistik
+            timeline:
+              name: Omröstningstidslinje
         index:
+          not_published: Ej publicerade
           published: Publicerad
         landing_page:
           content_blocks:
             edit:
               update: Uppdatera
-          edit:
-            title: Sidans innehåll
         menu:
           votings: Omröstningar
           votings_submenu:
@@ -475,6 +490,7 @@ sv:
             ballot_styles: Valtyper
             census: Census
             components: Komponenter
+            info: Information
             landing_page: Landningssida
             monitoring_committee_members: Medlemmar
             monitoring_committee_verify_elections: Verifiera omröstningar
@@ -484,6 +500,7 @@ sv:
           ballot_style:
             fields:
               code: Kod
+            name: Valtyp
           monitoring_committee_member:
             fields:
               email: E-post
@@ -492,15 +509,18 @@ sv:
             fields:
               email: E-post
               name: Namn
+            name: Röstmottagare
           polling_station:
             fields:
               address: Adress
               polling_station_managers: Koordinatorer
               polling_station_president: Ordförande
               title: Titel
+            name: Röststation
           voting:
             fields:
               created_at: Skapad den
+              promoted: Uppmärksammad
               published: Publicerad
               title: Titel
         monitoring_committee_election_results:
@@ -564,6 +584,8 @@ sv:
             confirm_destroy: Är du säker?
             destroy: Ta bort
             new_voting: Ny omröstningsutrymme
+            publish: Publicera
+            unpublish: Avpublicera
           edit:
             update: Uppdatera
           form:
@@ -582,7 +604,6 @@ sv:
         admin:
           census:
             new:
-              submit: Skicka in CSV
               title: Skapa census
         document_types:
           dni: ID-kort
@@ -593,8 +614,14 @@ sv:
             download: Ladda ner
       content_blocks:
         landing_page:
+          description:
+            title: Om den här omröstningen
+          metrics:
+            heading: Metrik
           polling_stations:
             heading: Vallokaler
+          timeline:
+            heading: Tidslinje
       monitoring_committee_members:
         actions:
           confirm_destroy: Är du säker?
@@ -604,7 +631,8 @@ sv:
       pages:
         home:
           highlighted_votings:
-            active_spaces: Activa omröstningar
+            active_votings: Activa omröstningar
+            see_all_votings: Se alla omröstningar
       polling_officer_zone:
         closures:
           certify:
@@ -618,6 +646,7 @@ sv:
             election: 'Omröstning:'
             heading: Omräkning
             modal_ballots_count_error:
+              close_modal: Stäng
               total_ballots: 'Totalt antal röstsedlar:'
               total_people: 'Totala människor:'
             polling_station: 'Vallokal:'
@@ -626,6 +655,7 @@ sv:
             heading: Omräkning
           sign:
             cancel: Avbryta
+            close_modal: Stäng
             confirm: Fortsätt
         in_person_votes:
           in_person_form:
@@ -658,6 +688,7 @@ sv:
         actions:
           confirm_destroy: Är du säker?
           destroy: Radera
+          new: Ny
           title: Åtgärder
         roles:
           manager: Koordinator
@@ -671,6 +702,7 @@ sv:
           confirm_destroy: Är du säker?
           destroy: Radera
           edit: Redigera
+          new: Ny
           title: Åtgärder
       votings:
         access_code_modal:
@@ -678,7 +710,6 @@ sv:
         check_census:
           check_status: Kontrollera status
           success:
-            access_link: via e-post.
             access_link_with_sms: via SMS eller e-post.
           title: Kan jag rösta?
         check_fields:
@@ -698,6 +729,7 @@ sv:
             one: "%{count} omröstning"
             other: "%{count} omröstningar"
         elections_log:
+          election_log: Omröstningslogg
           title: Omröstningslogg
         filters:
           active: Aktiva
@@ -706,26 +738,39 @@ sv:
           finished: Avslutade
           search: Sök
           upcoming: Kommande
+        filters_small_view:
+          close_modal: Stäng fönster
+          filter: Filtrera
+          filter_by: Filtrera efter
+          unfold: Veckla ut
         index:
           title: Omröstningar
         login:
           access_code: Behörighetskod
           access_code_placeholder: Behörighetskod
           start_voting: Starta omröstningen
+          step: Identifikation
         orders:
           label: 'Sortera omröstningar efter:'
           random: Slumpmässig
           recent: Senaste
+        show:
+          dates: Datum
       votings_m:
         badge_name:
           finished: Avslutade
           ongoing: Pågående
           upcoming: Kommande
+        footer_button_text:
+          participate: Delta
+          view: Visa
+          vote: Rösta
         unspecified: Ej angivet
         voting_type:
           hybrid: Hybrid
           in_person: Fysisk
           online: Online
+        voting_types_label: Rösttyp
   layouts:
     decidim:
       election_votes_header:
@@ -733,6 +778,8 @@ sv:
       voting_navigation:
         check_census: Kan jag rösta?
         election_log: Omröstningslogg
+        voting_menu_item: Omröstningen
       votings:
         promoted_voting:
+          more_info: Mer information
           vote: Omröstning

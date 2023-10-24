@@ -38,6 +38,7 @@ describe "Decidim::Api::QueryType" do
       comments_count
       assemblies_count
       conferences_count
+      consultations_count
       followers_count
       participants_count
     ).each do |stat|

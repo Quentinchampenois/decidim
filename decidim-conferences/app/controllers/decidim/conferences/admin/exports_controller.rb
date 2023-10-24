@@ -5,7 +5,7 @@ module Decidim
     module Admin
       # This controller allows exporting things.
       # It is targeted for customizations for exporting things that lives under
-      # a conference.
+      # an conference.
       class ExportsController < Decidim::Admin::ExportsController
         include Concerns::ConferenceAdmin
       end

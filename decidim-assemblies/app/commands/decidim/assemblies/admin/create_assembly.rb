@@ -25,7 +25,6 @@ module Decidim
           if assembly.persisted?
             add_admins_as_followers(assembly)
             link_participatory_processes(assembly)
-            Decidim::ContentBlocksCreator.new(assembly).create_default!
 
             broadcast(:ok, assembly)
           else

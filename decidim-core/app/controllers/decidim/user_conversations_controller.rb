@@ -10,7 +10,6 @@ module Decidim
     include UserGroups
     include FormFactory
     include Messaging::ConversationHelper
-    include HasProfileBreadcrumb
 
     before_action :authenticate_user!
     before_action :ensure_profile_manager

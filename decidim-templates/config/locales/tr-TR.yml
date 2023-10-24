@@ -4,8 +4,6 @@ tr:
       menu:
         templates: Şablonlar
       templates:
-        actions:
-          new_template: Yeni şablon
         apply:
           error: Bu şablonu uygularken bir sorun oluştu.
         copy:
@@ -28,9 +26,6 @@ tr:
         name: Şablon
     templates:
       admin:
-        block_user_templates:
-          form:
-            save: Kaydet
         questionnaire_templates:
           choose:
             create_from_template: Şablondan Oluştur
@@ -42,6 +37,8 @@ tr:
             edit: Düzenle
             questionnaire: Anket
           form:
+            save: Kaydet
+            template_title: Şablon Bilgisi
             title: '%{questionnaire_for} için anket şablonu'
           index:
             confirm_delete: Bu şablonu silmek istediğinizden emin misiniz?

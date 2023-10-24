@@ -1,19 +1,27 @@
 <%= button_reveal_modal %>
 
-<%= decidim_modal id: modal_id do %>
-  <div data-dialog-container>
-    <%= icon "draft-line" %>
-    <h3 class="h3" id="dialog-title-<%= modal_id %>" tabindex="-1" data-dialog-title>
+<div id="<%= modal_id %>" class="reveal" data-reveal aria-labelledby="<%= modal_id %>-title" aria-hidden="true" role="dialog">
+  <div class="reveal__header">
+    <h3 id="<%= modal_id %>-title" class="reveal__title">
       <%= modal_title %>
     </h3>
 
-    <p>
-      <%= modal_body %>
-    </p>
+    <button class="close-button" data-close aria-label="<%= close_label %>" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
 
-  <div data-dialog-actions>
+  <div class="row">
+    <div>
+      <p>
+        <%= modal_body %>
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
     <%= button_cancel %>
+
     <%= button_continue %>
   </div>
-<% end %>
+</div>

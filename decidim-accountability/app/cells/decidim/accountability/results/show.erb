@@ -1,7 +1,3 @@
-<% if results.any? %>
-  <% results.each do |result| %>
-    <%= card_for result, render_extra_data: true %>
-  <% end %>
-<% else %>
-  <%= cell("decidim/announcement", t("no_results", scope: "decidim.accountability.results")) %>
+<% results.each do |result| %>
+  <%= card_for result, link_whole_card: true, render_extra_data: true %>
 <% end %>

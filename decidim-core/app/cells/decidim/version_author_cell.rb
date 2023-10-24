@@ -1,23 +1,20 @@
 # frozen_string_literal: true
 
 module Decidim
-  class VersionAuthorCell < AuthorCell
-    def has_tooltip?
-      return super unless from_context.is_a?(PaperTrail::Version)
-      return if author.is_a?(String)
-
-      super
-    end
-
-    def display_name
-      return super unless from_context.is_a?(PaperTrail::Version)
-      return author if author.is_a?(String) && author.present?
-
-      super
-    end
+  class VersionAuthorCell < Decidim::ViewModel
+    include Decidim::ApplicationHelper
+    include Decidim::SanitizeHelper
 
     def author
-      @author ||= Decidim.traceability.version_editor(from_context)
+      model
+    end
+
+    def author_name
+      return nil unless author
+      return author if author.is_a?(String)
+      return t("decidim.version_author.show.deleted") if author.deleted?
+
+      author.name
     end
   end
 end

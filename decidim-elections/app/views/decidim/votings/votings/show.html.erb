@@ -9,10 +9,12 @@ edit_link(
 )
 %>
 
-<div class="participatory-space__container">
+<% landing_content_blocks.each do |content_block| %>
+  <%= cell content_block.manifest.cell, content_block %>
+<% end %>
 
-  <% landing_content_blocks.each do |content_block| %>
-    <%= cell content_block.manifest.cell, content_block %>
-  <% end %>
+<% if landing_content_blocks.empty? %>
+  <%= cell("decidim/votings/content_blocks/landing_page/header", nil) %>
 
-</div>
+  <%= cell("decidim/votings/content_blocks/landing_page/description", nil) %>
+<% end %>

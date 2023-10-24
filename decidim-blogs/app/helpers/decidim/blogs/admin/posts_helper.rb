@@ -7,7 +7,6 @@ module Decidim
       module PostsHelper
         include Decidim::ApplicationHelper
         include SanitizeHelper
-        include PaginateHelper
 
         # Public: truncates the post body
         #
@@ -38,7 +37,7 @@ module Decidim
         def publish_data(published_at)
           data = {}
           if published_at > Time.current
-            data[:icon] = icon("time-line", aria_label: t("decidim.blogs.admin.posts.index.not_published_yet"), role: "img")
+            data[:icon] = icon("clock", aria_label: t("decidim.blogs.admin.posts.index.not_published_yet"), role: "img")
             data[:popup] = t("decidim.blogs.admin.posts.index.not_published_yet")
           end
           data

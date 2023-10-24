@@ -11,7 +11,8 @@ module Decidim
 
       included do
         def resource_text(override_translation = nil)
-          comment.formatted_body(override_translation)
+          translated_body = translated_attribute(comment.body, comment.organization, override_translation)
+          Decidim::ContentProcessor.render(sanitize_content(render_markdown(translated_body)), "div")
         end
 
         def author

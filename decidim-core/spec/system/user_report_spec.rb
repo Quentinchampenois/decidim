@@ -10,6 +10,7 @@ describe "Report User", type: :system do
 
   before do
     switch_to_host(user.organization.host)
+    login_as user, scope: :user
   end
 
   context "when the user is blocked" do
@@ -24,8 +25,8 @@ describe "Report User", type: :system do
     end
 
     it "cannot be reported" do
-      within ".profile__actions-secondary" do
-        expect(page).not_to have_button("Report")
+      within ".profile--sidebar", match: :first do
+        expect(page).not_to have_css(".user-report_link")
       end
     end
   end
@@ -34,31 +35,25 @@ describe "Report User", type: :system do
     it "gives the option to sign in" do
       page.visit reportable_path
 
-      expect(page).not_to have_css("#loginModal-content")
+      expect(page).not_to have_css("html.is-reveal-open")
 
-      within ".profile__actions-secondary" do
-        click_button "Report"
-      end
+      click_button "Report"
 
-      expect(page).to have_css("#loginModal-content")
+      expect(page).to have_css("html.is-reveal-open")
     end
   end
 
   context "when admin is logged in" do
-    let(:admin) { create(:user, :admin, :confirmed, organization: user.organization) }
-
-    before do
-      login_as admin, scope: :user
-    end
+    let!(:user) { create(:user, :confirmed, :admin) }
 
     context "and the admin has not reported the resource yet" do
       it "reports the resource" do
         visit reportable_path
 
-        expect(page).to have_selector(".profile__actions-secondary")
+        expect(page).to have_selector(".profile--sidebar")
 
-        within ".profile__actions-secondary" do
-          click_button "Report"
+        within ".profile--sidebar", match: :first do
+          click_button
         end
 
         expect(page).to have_css(".flag-modal", visible: :visible)
@@ -76,10 +71,10 @@ describe "Report User", type: :system do
       it "chooses to block the resource" do
         visit reportable_path
 
-        expect(page).to have_selector(".profile__actions-secondary")
+        expect(page).to have_selector(".profile--sidebar")
 
-        within ".profile__actions-secondary" do
-          click_button "Report"
+        within ".profile--sidebar", match: :first do
+          click_button
         end
 
         expect(page).to have_css(".flag-modal", visible: :visible)
@@ -105,15 +100,17 @@ describe "Report User", type: :system do
       it "reports the resource" do
         visit reportable_path
 
-        within ".profile__actions-secondary" do
-          click_button "Report"
+        expect(page).to have_selector(".profile--sidebar")
+
+        within ".profile--sidebar", match: :first do
+          click_button
         end
 
-        expect(page).to have_css("#flagModal-content", visible: :visible)
+        expect(page).to have_css(".flag-modal", visible: :visible)
         expect(page).not_to have_field(name: "report[block]", visible: :visible)
         expect(page).not_to have_field(name: "report[hide]", visible: :visible)
 
-        within "#flagModal-content" do
+        within ".flag-modal" do
           click_button "Report"
         end
 
@@ -130,11 +127,13 @@ describe "Report User", type: :system do
       it "cannot report it twice" do
         visit reportable_path
 
-        within ".profile__actions-secondary" do
-          click_button "Report"
+        expect(page).to have_selector(".profile--sidebar")
+
+        within ".profile--sidebar", match: :first do
+          click_button
         end
 
-        expect(page).to have_css("#flagModal-content", visible: :visible)
+        expect(page).to have_css(".flag-modal", visible: :visible)
 
         expect(page).to have_content "already reported"
       end

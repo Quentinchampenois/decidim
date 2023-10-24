@@ -31,7 +31,7 @@ module Decidim
           return broadcast(:invalid)
         end
 
-        with_events(with_transaction: true) do
+        transaction do
           create_proposal
         end
 
@@ -41,16 +41,6 @@ module Decidim
       private
 
       attr_reader :form, :proposal, :attachment
-
-      def event_arguments
-        {
-          resource: proposal,
-          extra: {
-            event_author: form.current_user,
-            locale:
-          }
-        }
-      end
 
       # Prevent PaperTrail from creating an additional version
       # in the proposal multi-step creation process (step 1: create)

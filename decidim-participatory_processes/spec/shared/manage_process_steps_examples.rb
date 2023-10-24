@@ -14,17 +14,15 @@ shared_examples "manage process steps examples" do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_participatory_processes.edit_participatory_process_path(participatory_process)
-    within_admin_sidebar_menu do
-      click_link "Phases"
-    end
+    click_link "Phases"
   end
 
   it_behaves_like "having a rich text editor for field", ".tabs-content[data-tabs-content='participatory_process_step-description-tabs']", "full" do
-    before { click_link "New phase" }
+    before { find(".card-title a.button").click }
   end
 
   it "creates a new participatory_process" do
-    click_link "New phase"
+    find(".card-title a.button").click
 
     fill_in_i18n(
       :participatory_process_step_title,
@@ -41,11 +39,18 @@ shared_examples "manage process steps examples" do
       ca: "Descripció més llarga"
     )
 
-    fill_in :participatory_process_step_start_date, with: Time.current.change(day: 12)
-    fill_in :participatory_process_step_end_date, with: Time.current.change(day: 22)
+    page.execute_script("$('#participatory_process_step_start_date').focus()")
+    page.find(".datepicker-dropdown .day:not(.new)", text: "12").click
+    page.execute_script("$('#participatory_process_step_end_date').focus()")
+    page.find(".datepicker-dropdown .day", text: "22").click
 
     within ".new_participatory_process_step" do
-      click_button "Create"
+      # For some reason, the form submit button click can fail unless the page
+      # is first scrolled to this element
+      # Got the idea from:
+      # https://stackoverflow.com/a/39103252
+      page.scroll_to(find(".form-general-submit"))
+      find(".form-general-submit").click
     end
 
     expect(page).to have_admin_callout("successfully")

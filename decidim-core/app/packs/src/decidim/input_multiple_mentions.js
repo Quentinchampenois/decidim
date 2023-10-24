@@ -1,5 +1,5 @@
 import AutoComplete from "src/decidim/autocomplete";
-import icon from "src/decidim/icon";
+import icon from "src/decidim/redesigned_icon";
 
 const updateSubmitButton = ($fieldContainer, $selectedItems) => {
   const $form = $fieldContainer.closest("form");

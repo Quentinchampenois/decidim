@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-require "decidim/dev/test/rspec_support/tom_select"
-
 shared_examples "manage results" do
   include_context "when managing an accountability component as an admin"
 
   describe "admin form" do
-    before { click_on "New result", match: :first }
+    before { click_on "New Result", match: :first }
 
     it_behaves_like "having a rich text editor", "new_result", "full"
 
     it "displays the proposals picker" do
-      expect(page).to have_content("Proposals")
+      expect(page).to have_content("Choose proposals")
     end
 
     context "when proposal linking is disabled" do
@@ -46,7 +44,7 @@ shared_examples "manage results" do
           ca: "El meu nou títol"
         )
 
-        tom_select("#proposals_list", option_id: proposals.first(2).map(&:id))
+        proposals_pick(select_data_picker(:result_proposals, multiple: true), proposals.last(2))
 
         find("*[type=submit]").click
       end
@@ -59,7 +57,7 @@ shared_examples "manage results" do
     end
 
     it "creates a new result", :slow do
-      click_link "New result", match: :first
+      click_link "New Result", match: :first
 
       within ".new_result" do
         fill_in_i18n(
@@ -77,9 +75,8 @@ shared_examples "manage results" do
           ca: "Descripció més llarga"
         )
 
-        tom_select("#proposals_list", option_id: proposals.first(2).map(&:id))
-
-        select translated(scope.name), from: :result_decidim_scope_id
+        proposals_pick(select_data_picker(:result_proposals, multiple: true), proposals.first(2))
+        scope_pick(select_data_picker(:result_decidim_scope_id), scope)
         select translated(category.name), from: :result_decidim_category_id
 
         find("*[type=submit]").click

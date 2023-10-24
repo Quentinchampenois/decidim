@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "FollowersBadge" do
+describe "followers badge" do
   let(:organization) { create(:organization) }
 
   describe "reset" do

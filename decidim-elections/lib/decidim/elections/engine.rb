@@ -22,10 +22,8 @@ module Decidim
 
           get :election_log, on: :member
         end
-        scope "/elections" do
-          root to: "elections#index"
-        end
-        get "/", to: redirect("elections", status: 301)
+
+        root to: "elections#index"
       end
 
       initializer "decidim_elections.add_cells_view_paths" do

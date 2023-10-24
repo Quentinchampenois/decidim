@@ -127,6 +127,7 @@ module Decidim
       decidim-templates
       decidim-verifications
       decidim-conferences
+      decidim-consultations
       decidim-elections
       decidim-initiatives
       decidim-templates

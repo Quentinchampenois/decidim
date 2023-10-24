@@ -22,9 +22,7 @@ module Decidim
       true
     end
 
-    def method_missing(method, *_args)
-      return false if method.end_with?("?")
-
+    def method_missing(_method, *_args)
       ""
     end
   end

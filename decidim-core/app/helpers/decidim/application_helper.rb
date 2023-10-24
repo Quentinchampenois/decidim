@@ -8,6 +8,7 @@ module Decidim
     include Decidim::ContextualHelpHelper
     include Decidim::AmendmentsHelper
     include Decidim::CacheHelper
+    include Decidim::RedesignHelper
 
     # Truncates a given text respecting its HTML tags.
     #
@@ -99,7 +100,7 @@ module Decidim
     # Renders the cell contents.
     def cell(name, model, options = {}, &)
       options = { context: { view_context: self, current_user: } }.deep_merge(options)
-      super(name, model, options, &)
+      super(redesigned_cell_name(name), model, options, &)
     end
 
     # Public: Builds the URL for the step Call To Action. Takes URL params

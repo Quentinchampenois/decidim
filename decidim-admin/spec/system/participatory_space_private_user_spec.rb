@@ -16,9 +16,7 @@ describe "Admin checks pagination on participatory space private users", type: :
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_assemblies.edit_assembly_path(assembly)
-    within_admin_sidebar_menu do
-      click_link "Private users"
-    end
+    find("a[href*='participatory_space_private_users']").click
   end
 
   it "shows private users of the participatory space and changes page correctly" do

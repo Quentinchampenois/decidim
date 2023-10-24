@@ -11,9 +11,7 @@ checks:
     enabled: false
 
   identical-code:
-    enabled: true
-    exclude_patterns:
-    - "decidim_app-design/packages/"
+    enabled: false
 
   method-complexity:
     enabled: false
@@ -31,9 +29,7 @@ checks:
     enabled: false
 
   similar-code:
-    enabled: true
-    exclude_patterns:
-      - "decidim-*/lib/decidim/*/admin_engine.rb"
+    enabled: false
 
 plugins:
   bundler-audit:
@@ -66,9 +62,7 @@ plugins:
       - 4cd229a46c20efb3b58249cd528bc66c
 
     exclude_patterns:
-      - "decidim-*/lib/decidim/*/admin_engine.rb"
       - "decidim-*/spec/**/*"
-      - "**/eslint-config/index.js"
 
   eslint:
     enabled: false
@@ -85,7 +79,6 @@ plugins:
       - decidim-core/app/assets/javascripts/decidim/core/bundle.js
       - decidim-elections/lib/decidim/elections/jwk_utils.rb
       - decidim-dev/config/rubocop/ruby.yml
-      - docs/modules/develop/pages/maintainers/security.adoc
 
   grep:
     enabled: true
@@ -141,5 +134,3 @@ exclude_patterns:
   - "spec/decidim_dummy_app/"
   - "coverage/"
   - "webpack.report.html"
-  - "decidim_app-design/public/sw.js"
-  - "decidim_app-design/public/sw.js.map"

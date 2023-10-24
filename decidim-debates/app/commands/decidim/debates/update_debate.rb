@@ -21,26 +21,13 @@ module Decidim
         return broadcast(:invalid) if form.invalid?
         return broadcast(:invalid) unless form.debate.editable_by?(form.current_user)
 
-        with_events(with_transaction: true) do
-          update_debate
-        end
-
+        update_debate
         broadcast(:ok, @debate)
       end
 
       private
 
       attr_reader :form
-
-      def event_arguments
-        {
-          resource: @debate,
-          extra: {
-            event_author: form.current_user,
-            locale:
-          }
-        }
-      end
 
       def update_debate
         @debate = Decidim.traceability.update!(

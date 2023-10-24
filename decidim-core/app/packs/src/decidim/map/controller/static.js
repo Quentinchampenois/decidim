@@ -1,3 +1,4 @@
+import * as L from "leaflet";
 import MapController from "src/decidim/map/controller"
 
 const openLink = window.open;

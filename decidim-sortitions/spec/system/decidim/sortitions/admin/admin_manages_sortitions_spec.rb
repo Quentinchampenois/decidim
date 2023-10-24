@@ -16,9 +16,7 @@ describe "Admin manages sortitions", type: :system do
 
     it "is added" do
       visit current_path
-      within_admin_sidebar_menu do
-        click_link "Components"
-      end
+      click_link "Components"
       click_button "Add component"
       click_link "Sortitions"
 

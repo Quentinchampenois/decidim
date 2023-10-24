@@ -23,11 +23,11 @@ describe "User closes a debate", type: :system do
 
   context "when closing my debate" do
     it "allows closing my debate", :slow do
-      find("button[data-dialog-open='close-debate']", text: "Close debate").click
+      click_button "Close debate"
 
       within ".close-debate-modal" do
         fill_in :debate_conclusions, with: "Yes, all organizations should use Decidim!"
-        click_button "Close debate"
+        find("*[type=submit]").click
       end
 
       expect(page).to have_content("The debate was closed")
@@ -54,7 +54,7 @@ describe "User closes a debate", type: :system do
 
       within ".close-debate-modal" do
         fill_in :debate_conclusions, with: "New conclusions"
-        click_button "Close debate"
+        find("*[type=submit]").click
       end
 
       expect(page).to have_content("New conclusions")

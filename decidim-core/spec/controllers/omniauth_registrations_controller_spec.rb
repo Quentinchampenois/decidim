@@ -90,7 +90,7 @@ module Decidim
           let!(:identity) { create(:identity, user:, uid:) }
 
           before do
-            request.env["omniauth.auth"][:info][:email] = "omniauth@example.com"
+            request.env["omniauth.auth"][:info][:email] = "omniauth@email.com"
           end
 
           it "does not log in" do

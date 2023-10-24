@@ -110,6 +110,10 @@ module Decidim
         end
       end
 
+      def show
+        enforce_permission_to :read, :static_page
+      end
+
       def destroy
         enforce_permission_to :destroy, :static_page, static_page: page
 

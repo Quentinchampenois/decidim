@@ -6,7 +6,7 @@
 # https://github.com/decidim/decidim/pull/6161
 shared_examples "editable content for admins" do
   describe "edit link" do
-    let(:header_selector) { "header #admin-bar" }
+    let(:header_selector) { Decidim.redesign_active ? "header div.relative.w-full" : ".topbar" }
 
     before do
       relogin_as user
@@ -27,7 +27,9 @@ shared_examples "editable content for admins" do
       let(:user) { create(:user, :confirmed, organization:) }
 
       it "does not have a link to edit the content at the admin" do
-        expect(page).not_to have_css(header_selector)
+        within header_selector do
+          expect(page).not_to have_link("Edit")
+        end
       end
     end
   end

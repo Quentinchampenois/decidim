@@ -35,6 +35,7 @@ lv:
         destroy: Dzēst
         edit: Labot
         import_csv: Importēt CSV
+        new: Jauns %{name}
         preview: Priekšskatīt
         timeline_entries: Projekta attīstība
         title: Darbības
@@ -50,6 +51,8 @@ lv:
             name: Rezultāts
           status:
             name: Statuss
+          timeline_entry:
+            name: Laika grafika ieraksts
         results:
           edit:
             title: Labot rezultātu

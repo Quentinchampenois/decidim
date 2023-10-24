@@ -40,7 +40,7 @@ describe "User activity", type: :system do
   end
 
   let(:resource_types) do
-    ["Collaborative draft", "Comment", "Debate", "Initiative", "Meeting", "Post", "Proposal"]
+    ["Collaborative Draft", "Comment", "Debate", "Initiative", "Meeting", "Post", "Proposal", "Question"]
   end
 
   before do
@@ -103,15 +103,15 @@ describe "User activity", type: :system do
     end
 
     it "displays activities filter with the correct options" do
-      within("#dropdown-menu-resource") do
-        resource_types.push("All activity types").each do |type|
+      within(".filter-container #dropdown-menu") do
+        resource_types.push("All types").each do |type|
           expect(page).to have_css("label", text: type)
         end
       end
     end
 
     it "displays activities filter with the All types option checked by default" do
-      within("#dropdown-menu-resource") do
+      within(".filter-container #dropdown-menu") do
         expect(page.find("input[value='all']", visible: false)).to be_checked
       end
     end

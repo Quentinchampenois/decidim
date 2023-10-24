@@ -25,14 +25,10 @@ shared_examples "manage assemblies announcements" do
       end
     end
 
-    new_window = window_opened_by do
-      within "tr", text: translated(assembly.title) do
-        click_link "Preview"
-      end
+    within "tr", text: translated(assembly.title) do
+      click_link "Preview"
     end
 
-    page.within_window(new_window) do
-      expect(page).to have_content("An important announcement")
-    end
+    expect(page).to have_content("An important announcement")
   end
 end

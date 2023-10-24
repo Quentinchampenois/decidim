@@ -15,7 +15,7 @@ module Decidim
       private
 
       def conference_spaces
-        [conference_participatory_processes, conference_assemblies].compact
+        [conference_participatory_processes, conference_assemblies, conference_consultations].compact
       end
 
       def conference_participatory_processes
@@ -34,6 +34,15 @@ module Decidim
         return unless assemblies.any?
 
         assemblies
+      end
+
+      def conference_consultations
+        return unless Decidim.participatory_space_manifests.map(&:name).include?(:consultations)
+
+        consultations = model.linked_participatory_space_resources(:consultations, "included_consultations")
+        return unless consultations.any?
+
+        consultations
       end
 
       def title(block_space)

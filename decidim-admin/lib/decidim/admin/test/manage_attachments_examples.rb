@@ -30,7 +30,7 @@ shared_examples "manage attachments examples" do
     end
 
     it "can add attachments without a collection to a process" do
-      click_link "New attachment"
+      find(".card-title a.new").click
 
       within ".new_attachment" do
         fill_in_i18n(
@@ -64,7 +64,7 @@ shared_examples "manage attachments examples" do
     end
 
     it "can add attachments within a collection to a process" do
-      click_link "New attachment"
+      find(".card-title a.new").click
 
       within ".new_attachment" do
         fill_in_i18n(

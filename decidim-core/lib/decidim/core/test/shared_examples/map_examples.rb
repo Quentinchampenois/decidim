@@ -60,7 +60,6 @@ shared_context "with frontend map elements" do
   let(:html_document) do
     document_inner = html_body
     head_extra = html_head
-    template.append_stylesheet_pack_tag("decidim_dev")
     template.instance_eval do
       <<~HTML.strip
         <!doctype html>
@@ -69,7 +68,6 @@ shared_context "with frontend map elements" do
           <title>Map Test</title>
           #{stylesheet_pack_tag "decidim_core"}
           #{javascript_pack_tag "decidim_core", defer: false}
-
           #{head_extra}
         </head>
         <body>
@@ -78,9 +76,7 @@ shared_context "with frontend map elements" do
           </header>
           <main id="content">
             <h1>Map Test</h1>
-            <div class="dev__map">
-              #{document_inner}
-            </div>
+            #{document_inner}
           </main>
           <script type="text/javascript">
             // This is just to indicate to Capybara that the page has fully
@@ -103,7 +99,6 @@ shared_context "with frontend map elements" do
     # context.
     final_html = html_document
     Rails.application.routes.draw do
-      get "maptiles/:z/:x/:y.png", to: ->(_) { [200, {}, [final_html]] }
       get "test_dynamic_map", to: ->(_) { [200, {}, [final_html]] }
       get "offline", to: ->(_) { [200, {}, [""]] }
     end
@@ -131,10 +126,10 @@ shared_examples "a page with dynamic map" do
         # Create two separate map elements to make sure generating multiple
         # map elements will not produce any HTML or accessibility validation
         # errors.
-        content = builder.map_element(id: "map1") do
+        content = builder.map_element(id: "map1", class: "google-map") do
           content_tag(:span, "", id: "map1_inner")
         end
-        content += builder.map_element(id: "map2") do
+        content += builder.map_element(id: "map2", class: "google-map") do
           content_tag(:span, "", id: "map2_inner")
         end
         content
@@ -145,9 +140,9 @@ shared_examples "a page with dynamic map" do
   it_behaves_like "accessible page"
 
   it "displays the maps" do
-    expect(page).to have_selector("#map1", visible: :all)
+    expect(page).to have_selector("#map1.google-map", visible: :all)
     expect(page).to have_selector("#map1_inner", visible: :all)
-    expect(page).to have_selector("#map2", visible: :all)
+    expect(page).to have_selector("#map2.google-map", visible: :all)
     expect(page).to have_selector("#map2_inner", visible: :all)
   end
 end

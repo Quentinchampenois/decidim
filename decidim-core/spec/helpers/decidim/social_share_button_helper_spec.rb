@@ -6,10 +6,17 @@ module Decidim
   describe SocialShareButtonHelper do
     let(:args) { { url: "http://example.org" } }
     let(:result) { helper.social_share_button_tag("Hello", **args) }
+    let(:redesign_enabled) { false }
+
+    before do
+      # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(ActionView::Base).to receive(:redesign_enabled?).and_return(redesign_enabled)
+      # rubocop:enable RSpec/AnyInstance
+    end
 
     describe "social_share_button_tag" do
       it "renders the class" do
-        expect(result).to include("data-social-share")
+        expect(result).to include(redesign_enabled ? "data-social-share" : "social-share-button")
       end
     end
 
@@ -26,11 +33,11 @@ module Decidim
 
       context "when there is only a service" do
         before do
-          allow(Decidim.config).to receive(:social_share_services).and_return(%w(X))
+          allow(Decidim.config).to receive(:social_share_services).and_return(%w(Twitter))
         end
 
         it "renders the correct HTML" do
-          expect(result).to include("Share to X")
+          expect(result).to include("Share to Twitter")
           expect(result).to include("https://twitter.com/intent/tweet?url=http%3A%2F%2Fexample.org&amp;text=Hello")
           expect(result).to include(".svg")
         end
@@ -38,11 +45,11 @@ module Decidim
 
       context "when there are multiple services" do
         before do
-          allow(Decidim.config).to receive(:social_share_services).and_return(%w(X Facebook WhatsApp))
+          allow(Decidim.config).to receive(:social_share_services).and_return(%w(Twitter Facebook WhatsApp))
         end
 
         it "renders the correct HTML" do
-          expect(result).to include("Share to X")
+          expect(result).to include("Share to Twitter")
           expect(result).to include("Share to Facebook")
           expect(result).to include("Share to WhatsApp")
           expect(result).to include("https://twitter.com/intent/tweet?url=http%3A%2F%2Fexample.org&amp;text=Hello")
@@ -66,15 +73,15 @@ module Decidim
         end
       end
 
-      context "with X and all optional params" do
+      context "with Twitter and all optional params" do
         let(:args) { { url: "http://example.org", hashtags: "Hello", via: "Decidim" } }
 
         before do
-          allow(Decidim.config).to receive(:social_share_services).and_return(%w(X))
+          allow(Decidim.config).to receive(:social_share_services).and_return(%w(Twitter))
         end
 
         it "renders the correct HTML" do
-          expect(result).to include("Share to X")
+          expect(result).to include("Share to Twitter")
           expect(result).to include("https://twitter.com/intent/tweet?url=http%3A%2F%2Fexample.org&amp;text=Hello&amp;hashtags=Hello&amp;via=Decidim")
           expect(result).to include(".svg")
         end
@@ -83,7 +90,7 @@ module Decidim
           let(:args) { { hashtags: "Hello" } }
 
           it "renders the correct HTML" do
-            expect(result).to eq(%(<div class="share-modal__list" data-social-share=""></div>))
+            expect(result).to eq(redesign_enabled ? %(<div class="share-modal__list" data-social-share=""></div>) : %(<div class="social-share-button"></div>))
           end
         end
       end

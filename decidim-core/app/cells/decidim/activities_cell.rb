@@ -17,17 +17,23 @@ module Decidim
     end
 
     def activity_cell_for(activity)
-      opts = options.slice(:id_prefix, :hide_participatory_space).merge(
+      options = {
         show_author: (context[:user] != activity.user)
-      )
+      }
 
-      cell "#{activity.resource_type.constantize.name.underscore}_activity", activity, context: opts
+      cell "#{activity.resource_type.constantize.name.underscore}_activity", activity, context: options
     rescue NameError
-      cell "decidim/activity", activity, context: opts
+      cell "decidim/activity", activity, context: options
     end
 
     def activities
-      @activities ||= model.map do |activity|
+      @activities ||= last_activities.select do |activity|
+        activity.visible_for?(current_user)
+      end
+    end
+
+    def last_activities
+      @last_activities ||= model.map do |activity|
         activity.organization_lazy
         activity.resource_lazy
         activity.participatory_space_lazy

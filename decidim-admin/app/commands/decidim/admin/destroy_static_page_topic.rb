@@ -24,7 +24,7 @@ module Decidim
 
       attr_reader :page, :current_user
 
-      def destroy_topic
+      def destroy_page
         transaction do
           Decidim.traceability.perform_action!(
             "delete",

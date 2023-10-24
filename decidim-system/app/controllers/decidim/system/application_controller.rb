@@ -6,8 +6,9 @@ module Decidim
     class ApplicationController < ActionController::Base
       include FormFactory
       include PayloadInfo
-      include Headers::HttpCachingDisabler
+      include HttpCachingDisabler
       include DisableRedirectionToExternalHost
+      include DisabledRedesignLayout
 
       protect_from_forgery with: :exception, prepend: true
 

@@ -27,7 +27,7 @@ module Decidim
         type.field :assembly,
                    Decidim::Assemblies::AssemblyType,
                    null: true,
-                   description: "Finds an assembly" do
+                   description: "Finds a assembly" do
           argument :id, GraphQL::Types::ID, "The ID of the participatory space", required: false
         end
       end

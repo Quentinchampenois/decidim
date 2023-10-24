@@ -51,7 +51,11 @@ module Decidim
           present_user_name,
           user_path,
           class: "logs__log__author",
-          title: "@#{user.nickname}"
+          title: "@#{user.nickname}",
+          data: {
+            tooltip: true,
+            "disable-hover": false
+          }
         )
       end
 

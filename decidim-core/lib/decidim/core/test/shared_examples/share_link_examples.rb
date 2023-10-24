@@ -2,7 +2,8 @@
 
 shared_examples "share link" do
   it "allows copying the share link from the share modal" do
-    click_button("Share")
+    expect(page).to have_css(".share-link", text: "Share")
+    find(".share-link", text: "Share").click
 
     # This overrides document.execCommand in order to ensure it was called.
     page.execute_script(
@@ -11,7 +12,7 @@ shared_examples "share link" do
         document.execCommand = function(cmd) {
           if (cmd === "copy") {
             var $test = $('<div id="urlShareTest" />');
-            $("#socialShare").append($test);
+            $("#urlShare").append($test);
 
             var selObj = window.getSelection();
             $test.text(
@@ -26,18 +27,24 @@ shared_examples "share link" do
     )
 
     within "#socialShare" do
-      expect(page).to have_content("Share")
-      expect(page).to have_content("Copy")
+      expect(page).to have_content("Share:")
+      expect(page).to have_content("Share link")
+
+      find("a[data-open='urlShare']").click
+    end
+
+    within "#urlShare" do
+      expect(page).to have_content("Share link:")
+      find("button[data-clipboard-copy]").click
+
+      expect(find("button[data-clipboard-copy]")).to have_content("Copied!")
 
       input = find("#urlShareLink")
-
-      find("[data-clipboard-copy]").click
-
-      expect(find("[data-clipboard-copy]")).to have_content("Copied!")
       expect(page).to have_content("The following text was copied to clipboard: #{input.value}")
 
       # Check that the screen reader announcement is properly added.
-      expect(find("[aria-role='alert']")).to have_content("The link was successfully copied to clipboard.")
+      announcement = find(".clipboard-announcement")
+      expect(announcement).to have_content("The link was successfully copied to clipboard.")
     end
   end
 end

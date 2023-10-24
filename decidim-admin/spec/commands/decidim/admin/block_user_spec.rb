@@ -17,7 +17,7 @@ module Decidim::Admin
           double(
             user: user_to_block,
             current_user:,
-            justification:,
+            justification: :justification,
             valid?: true,
             hide?: false
           )
@@ -32,7 +32,8 @@ module Decidim::Admin
         end
 
         it "user is notified" do
-          expect { subject.call }.to have_enqueued_mail(Decidim::BlockUserMailer).once
+          subject.call
+          expect(Decidim::BlockUserJob).to have_been_enqueued.on_queue("block_user")
         end
 
         it "user is updated" do

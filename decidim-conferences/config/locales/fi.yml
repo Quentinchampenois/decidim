@@ -5,6 +5,7 @@ fi:
         assemblies_ids: Liittyvät ryhmät
         available_slots: Vapaat paikat
         banner_image: Bannerikuva
+        consultations_ids: Liittyvät kuulemiset
         copy_categories: Kopioi aihepiirit
         copy_components: Kopioi komponentit
         copy_features: Kopioi ominaisuudet
@@ -62,7 +63,7 @@ fi:
         personal_url: Henkilökohtainen URL-osoite
         position: Asema
         short_bio: Lyhyt henkilökuvaus
-        twitter_handle: X käsittelijä
+        twitter_handle: Twitter-käyttäjänimi
         user_id: Käyttäjä
       conference_user_role:
         email: Sähköposti
@@ -89,6 +90,7 @@ fi:
     admin:
       actions:
         confirm: Vahvista
+        new_conference: Uusi konferenssi
         send_diplomas: Lähetä läsnäolotodistukset
       conference_copies:
         new:
@@ -101,7 +103,7 @@ fi:
           success: Konferenssin julkaisu onnistui.
         destroy:
           error: Konferenssin julkaisun lopettaminen epäonnistui.
-          success: Konferenssin julkaisun lopettaminen onnistui.
+          success: Konferenssin julkaisun peruminen onnistui.
       conference_registration:
         confirm:
           error: Konferenssin ilmoittautumisen vahvistaminen epäonnistui.
@@ -151,6 +153,7 @@ fi:
         form:
           title: Yleistä tietoa
         index:
+          not_published: Ei julkaistu
           published: Julkaistu
         new:
           create: Luo
@@ -191,6 +194,7 @@ fi:
           conference_invites: Kutsut
           conference_speakers: Puhujat
           diploma: Läsnäolotodistus
+          info: Tiedot
           media_links: Medialinkit
           moderations: Moderoinnit
           partners: Yhteistyökumppanit
@@ -201,6 +205,7 @@ fi:
         conference:
           fields:
             created_at: Luonnin ajankohta
+            promoted: Korostettu
             published: Julkaistu
             title: Otsikko
         conference_speaker:
@@ -265,7 +270,7 @@ fi:
           success: Ilmoittautumistyypin julkaisu onnistui.
         destroy:
           error: Ilmoittautumistyypin julkaisun lopettaminen epäonnistui.
-          success: Ilmoittamistyypin julkaisun lopettaminen onnistui.
+          success: Ilmoittamistyypin julkaisun peruminen onnistui.
       registration_types:
         create:
           error: Ilmoittautumistyyppin lisääminen tälle konferenssille epäonnistui.
@@ -326,7 +331,7 @@ fi:
       admin:
         conference_copies:
           form:
-            slug_help_html: 'URL-tunnisteita käytetään luomaan URL-osoitteet, jotka osoittavat tähän konferenssiin. Hyväksyy vain kirjaimet, numerot ja viivat. Kirjaimen on oltava ensimmäinen merkki tunnisteessa. Esimerkki: %{url}'
+            slug_help: 'URL-tunnisteita käytetään luomaan URL-osoitteet, jotka osoittavat tähän konferenssiin. Hyväksyy vain kirjaimet, numerot ja viivat. Kirjaimen on oltava ensimmäinen merkki tunnisteessa. Esimerkki: %{url}'
         conference_invites:
           create:
             error: Käyttäjän kutsuminen konferenssiin epäonnistui.
@@ -343,6 +348,7 @@ fi:
               all: Kaikki
               rejected: Hylätyt
               sent: Lähetetyt
+            filter_by: Suodata
             invite_attendee: Kutsu käyttäjä
             invites: Kutsut
             search: Hae
@@ -367,7 +373,7 @@ fi:
             registrations_count:
               one: Ilmoittautumisia on 1 kpl.
               other: Ilmoittautumisia on %{count} kpl.
-            slug_help_html: 'URL-tunnisteita käytetään luomaan URL-osoitteet, jotka osoittavat tähän konferenssiin. Hyväksyy vain kirjaimet, numerot ja viivat. Kirjaimen on oltava ensimmäinen merkki tunnisteessa. Esimerkki: %{url}'
+            slug_help: 'URL-tunnisteita käytetään luomaan URL-osoitteet, jotka osoittavat tähän konferenssiin. Hyväksyy vain kirjaimet, numerot ja viivat. Kirjaimen on oltava ensimmäinen merkki tunnisteessa. Esimerkki: %{url}'
         diplomas:
           edit:
             save: Tallenna
@@ -410,11 +416,11 @@ fi:
       conference_registration_mailer:
         confirmation:
           confirmed_html: Ilmoittautumisesi konferenssiin <a href="%{url}">%{title}</a> on vahvistettu.
-          details_1: 'Olet ilmoittautunut konferenssiin ilmoittautumistyypillä %{registration_type}. Hinta on %{price} ja voit osallistua seuraaviin tilaisuuksiin:'
+          details_1: 'Olet ilmoittautunut konferenssiin ilmoittautumistyypillä %{registration_type}. Hinta on %{price} ja voit osallistua seuraaviin tapahtumiin:'
           details_2: Konferenssin tiedot löytyvät liitetiedostosta.
         pending_validation:
           confirmation_pending: Saat vahvistuksen pian
-          details: 'Olet ilmoittautunut tyypillä %{registration_type}, jonka hinta on %{price}. Voit osallistua seuraaviin tilaisuuksiin:'
+          details: 'Olet ilmoittautunut tyypillä %{registration_type}, jonka hinta on %{price}. Voit osallistua seuraaviin tapahtumiin:'
           pending_html: Ilmoittautumisesi konferenssiin <a href="%{url}">%{title}</a> odottaa vahvistusta.
       conference_registrations:
         create:
@@ -429,7 +435,7 @@ fi:
           invalid: Konferenssista poistuminen epäonnistui.
           success: Konferenssista poistuminen onnistui.
       conference_speaker:
-        go_to_twitter: Siirry X-palveluun
+        go_to_twitter: Siirry Twitteriin
         more_info: lisätietoja
         personal_website: Henkilökohtainen verkkosivusto
         show:
@@ -450,8 +456,7 @@ fi:
         show:
           login_as: Olet kirjautunut sisään henkilönä %{name} <%{email}>
           make_conference_registration: Ilmoittaudu konferenssiin
-          manage_registration: Hallinnoi ilmoittautumistasi
-          register: Ilmoittaudu
+          register: Rekisteröidy
       content_blocks:
         highlighted_conferences:
           name: Tärkeimmät konferenssit
@@ -493,8 +498,9 @@ fi:
       pages:
         home:
           highlighted_conferences:
-            active_spaces: Aktiiviset konferenssit
-            see_all_spaces: Näytä kaikki konferenssit
+            active_conferences: Aktiiviset konferenssit
+            conferences_button_title: Linkki Konferenssit-sivulle, jossa näkyvät kaikki konferenssit
+            see_all_conferences: Katso kaikki konferenssit
       registration_types:
         index:
           choose_an_option: 'Valitse ilmoittautumisvaihtoehto:'
@@ -506,6 +512,7 @@ fi:
         introduction: Esittely
         objectives: Tavoitteet
         related_assemblies: Liittyvät ryhmät
+        related_consultations: Liittyvät kuulemiset
         related_participatory_processes: Liittyvät osallistumisprosessit
     events:
       conferences:
@@ -541,8 +548,8 @@ fi:
     help:
       participatory_spaces:
         conferences:
-          contextual: "<p><strong>Konferenssi</strong> on useiden tapahtumien sarja, mihin kutsutaan puhujia ja jolle määritetään useita tietotyyppejä, jotka ovat tyypillisiä suurille kongresseille tai sosiaalisille tapahtumille (ilmoittautumiset, kannatusorganisaatioiden tai rahoittajien listat, jne.).</p><p>Esimerkkejä: Konferenssi voidaan järjestää organisaatiolle ja sen jäsenille tai se voi olla jonkin osallistumisprosessin yksi osa tai kuulemisen jälkeinen tapahtuma.</p>\n"
-          page: "<p><strong>Konferenssi</strong> on useiden tapahtumien sarja, mihin kutsutaan puhujia ja jolle määritetään useita tietotyyppejä, jotka ovat tyypillisiä suurille kongresseille tai sosiaalisille tapahtumille (ilmoittautumiset, kannatusorganisaatioiden tai rahoittajien listat, jne.).</p><p>Esimerkkejä: Konferenssi voidaan järjestää organisaatiolle ja sen jäsenille tai se voi olla jonkin osallistumisprosessin yksi osa tai kuulemisen jälkeinen tapahtuma.</p>\n"
+          contextual: "<p><strong>Konferenssi</strong> on useiden tapahtumien sarja, mihin kutsutaan puhujia ja jolle määritetään useita tietotyyppejä, jotka ovat tyypillisä suurille kongresseille tai sosiaalisille tapahtumille (ilmoittautumiset, kannatusorganisaatioiden tai rahoittajien listat, jne.).</p><p>Esimerkkejä: Konferenssi voidaan järjestää organisaatiolle ja sen jäsenille tai se voi olla jonkin osallistumisprosessin yksi osa tai kuulemisen jälkeinen tapahtuma.</p>\n"
+          page: "<p><strong>Konferenssi</strong> on useiden tapahtumien sarja, mihin kutsutaan puhujia ja jolle määritetään useita tietotyyppejä, jotka ovat tyypillisä suurille kongresseille tai sosiaalisille tapahtumille (ilmoittautumiset, kannatusorganisaatioiden tai rahoittajien listat, jne.).</p><p>Esimerkkejä: Konferenssi voidaan järjestää organisaatiolle ja sen jäsenille tai se voi olla jonkin osallistumisprosessin yksi osa tai kuulemisen jälkeinen tapahtuma.</p>\n"
           title: Mitä konferenssit ovat?
     log:
       value_types:
@@ -563,8 +570,10 @@ fi:
   layouts:
     decidim:
       conference_hero:
-        manage_registration: Hallinnoi ilmoittautumistasi
         register: Ilmoittaudu
+      conference_widgets:
+        show:
+          take_part: Osallistu
       conferences:
         conference:
           more_info: Lisätietoja
@@ -575,7 +584,11 @@ fi:
           conferences:
             one: "%{count} konferenssi"
             other: "%{count} konferenssia"
+        promoted_conference:
+          more_info: Lisätietoja
+          take_part: Osallistu
       conferences_nav:
+        conference_menu_item: Tiedot
         conference_partners_menu_item: Yhteistyökumppanit
         conference_speaker_menu_item: Puhujat
         media: Media

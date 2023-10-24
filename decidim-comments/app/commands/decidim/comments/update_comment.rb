@@ -24,9 +24,7 @@ module Decidim
       def call
         return broadcast(:invalid) if form.invalid? || !comment.authored_by?(current_user)
 
-        with_events do
-          update_comment
-        end
+        update_comment
 
         broadcast(:ok)
       end
@@ -34,16 +32,6 @@ module Decidim
       private
 
       attr_reader :form, :comment, :current_user
-
-      def event_arguments
-        {
-          resource: comment,
-          extra: {
-            event_author: form.current_user,
-            locale:
-          }
-        }
-      end
 
       def update_comment
         parsed = Decidim::ContentProcessor.parse(form.body, current_organization: form.current_organization)

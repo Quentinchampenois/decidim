@@ -25,8 +25,10 @@ describe "Admin exports initiatives", type: :system do
     it "shows the export dropdown" do
       visit decidim_admin_initiatives.initiatives_path
 
-      expect(page).to have_content("Export all")
-      expect(page).not_to have_content("Export selection")
+      within ".card-title" do
+        expect(page).to have_content("Export all")
+        expect(page).not_to have_content("Export selection")
+      end
     end
   end
 
@@ -62,8 +64,10 @@ describe "Admin exports initiatives", type: :system do
         visit decidim_admin_initiatives.initiatives_path
         apply_filter("State", "Created")
 
-        expect(page).to have_content("Export all")
-        expect(page).to have_content("Export selection")
+        within ".card-title" do
+          expect(page).to have_content("Export all")
+          expect(page).to have_content("Export selection")
+        end
       end
     end
 

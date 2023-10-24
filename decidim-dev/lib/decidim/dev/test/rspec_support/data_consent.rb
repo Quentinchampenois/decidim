@@ -15,7 +15,7 @@ module Capybara
       if dialog_present
         click_button "Settings"
       else
-        within "footer" do
+        within ".footer" do
           click_link "Cookie settings"
         end
       end
@@ -25,7 +25,7 @@ module Capybara
       elsif categories.is_a?(Array)
         categories.each do |category|
           within "[data-id='#{category}']" do
-            find(".cookies__category-toggle").click
+            find(".switch-paddle").click
           end
         end
         click_button "Save settings"

@@ -29,7 +29,7 @@ module Decidim
     #
     # @return [Decidim::ShortLink] The short link matching the identifier
     def link
-      @link ||= Decidim::ShortLink.find_by(identifier: params[:id], organization: current_organization)
+      @link ||= Decidim::ShortLink.find_by(identifier: params[:id])
     end
   end
 end

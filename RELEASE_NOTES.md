@@ -23,72 +23,16 @@ bin/rails db:migrate
 
 ### 1.3. Follow the steps and commands detailed in these notes
 
+#### 1.3.1 Configuration parameter change
+
+Prior to 0.28, there was the possibility of configuring a list of disallowed passwords using the configuration parameter `Decidim.password_blacklist` or the environment variable `DECIDIM_PASSWORD_BLACKLIST`. These methods have been renamed as follows:
+
+- `Decidim.password_blacklist` becomes `Decidim.denied_passwords`
+- `DECIDIM_PASSWORD_BLACKLIST` becomes `DECIDIM_DENIED_PASSWORDS`
+
+You can read more about this change on PR [\#10288](https://github.com/decidim/decidim/pull/10288).
+
 ## 2. General notes
-
-## 2.1. Redesign
-
-TBD
-
-## 2.2. Consultation
-
-The consultations module has been fully removed from this version, so if you're using it in your application you need to remove it from your Gemfile:
-
-```console
-bundle remove decidim-consultations
-```
-
-If you're not using it, then you don't need to do anything.
-
-If you're maintaining a version of this module, please share the URL of the git repository by [creating an issue on the decidim.org website repository](https://github.com/decidim/decidim.org) so that we can update the [Modules page](https://decidim.org/modules).
-
-There's an error with the migrations after you've removed this module, you'd need to change them like this:
-
-### db/migrate/*_add_commentable_counter_cache_to_consultations.decidim_consultations.rb
-
-```ruby
-# frozen_string_literal: true
-# This migration comes from decidim_consultations (originally 20200827154143)
-
-class AddCommentableCounterCacheToConsultations < ActiveRecord::Migration[5.2]
-  class Question < ApplicationRecord
-    self.table_name = :decidim_consultations_questions
-  end
-
-  def change
-    add_column :decidim_consultations_questions, :comments_count, :integer, null: false, default: 0, index: true
-    Question.reset_column_information
-    Question.find_each(&:update_comments_count)
-  end
-end
-```
-
-### db/migrate/*_add_followable_counter_cache_to_consultations.decidim_consultations.rb
-
-```ruby
-# frozen_string_literal: true
-# This migration comes from decidim_consultations (originally 20210310120626)
-
-class AddFollowableCounterCacheToConsultations < ActiveRecord::Migration[5.2]
-  class Question < ApplicationRecord
-    self.table_name = :decidim_consultations_questions
-  end
-
-  def change
-    add_column :decidim_consultations_questions, :follows_count, :integer, null: false, default: 0, index: true
-
-    reversible do |dir|
-      dir.up do
-        Question.reset_column_information
-        Question.find_each do |record|
-          record.class.reset_counters(record.id, :follows)
-        end
-      end
-    end
-  end
-end
-```
-
-You can read more about this change on PR [#11171](https://github.com/decidim/decidim/pull/11171).
 
 ## 3. One time actions
 
@@ -98,28 +42,7 @@ These are one time actions that need to be done after the code is updated in the
 
 The redesign has introduced Tailwind CSS framework to compile CSS. It integrates with Webpacker, which generates Tailwind configuration dynamically when Webpacker is invoked.
 
-There are some actions that you will need to do in your existing application that's already done in new applications:
-
-- Add `tailwind.config.js` to your app's `.gitignore`.
-
-```console
-echo tailwind.config.js >> .gitignore
-```
-
-- Migrate your settings from your applications's `_decidim-settings.scss` file, available at `app/packs/stylesheets/decidim/_decidim-settings.scss`.
-If you want to define the colors and other Tailwind related configurations, you can do it following the instructions on the documentation on how to [customize Tailwind](https://docs.decidim.org/en/develop/customize/styles.html#_tailwind_css).
-
-- After that's done, remove your `_decidim-settings.scss` file.
-
-```console
-rm app/packs/stylesheets/decidim/_decidim-settings.scss
-```
-
-- Remove this comment from your `decidim-application.scss` file, available at `app/packs/stylesheets/decidim/decidim_application.scss`.
-
-```javascript
-// To override CSS variables or Foundation settings use _decidim-settings.scss
-```
+You will need to add `tailwind.config.js` to your app `.gitignore`. If you generate a new Decidim app from scratch, that entry will already be included in the `.gitignore`.
 
 You can read more about this change on PR [\#9480](https://github.com/decidim/decidim/pull/9480).
 
@@ -159,7 +82,7 @@ In some other cases when you run your application on a custom port (other than 3
 
 You can read more about this change on PR [\#10519](https://github.com/decidim/decidim/pull/10519).
 
-### 3.4. User moderation panel changes
+### 3.3. User moderation panel changes
 
 In older Decidim installations, when blocking an user directly from the participants menu, without being previously reported, it will hide that user, making it unavailable in the Reported Participants section. You will need to run this command once to make sure there are no users or entities that got blocked but are not visible in the participants listing.
 
@@ -169,7 +92,7 @@ bundle exec rake decidim:upgrade:moderation:fix_blocked_user_panel
 
 You can read more about this change on PR [\#10521](https://github.com/decidim/decidim/pull/10521).
 
-### 3.5. Change Webpacker to Shakapacker
+### 3.4. Change Webpacker to Shakapacker
 
 Since the Rails team has retired the Webpacker in favour or importmap-rails or js-bundling, we got ouserlves in a situation where performance improvements could not be performed.
 In order to continue having support for Webpacker like syntax, we have switched to Shakapacker.
@@ -177,12 +100,30 @@ In order to continue having support for Webpacker like syntax, we have switched 
 In order to perform the update, you will need to make sure that you **do not have webpacker in your Gemfile**.
 If you have it, please remove it, and allow Decidim to handle the webpacker / shakapacker dependency.
 
+In order to perform the migration to shakapacker, please backup the following files, to make sure that you save any customizations you may have done to webpacker:
+
+```console
+config/webpacker.yml
+config/webpack/*
+package.json
+postcss.config.js
+```
+
+After all the backups and changes mentioned above have been completed, follow the default upgrade steps, as mentioned above in the document.
+Then run the below command, and replace all the configuration with the one that Decidim is providing by default:
+
+```console
+bundle exec rake decidim:webpacker:install
+```
+
+This will make the necessary changes in the `config/webpacker.yml`, but also in the `config/webpack/` folder.
+
 #### Note for development
 
 If you are using the `Procfile.dev` file, you will need to make sure that you have the following line in your configuration. If you have not altered the `Procfile.dev` file, you will not need to do anything, as we covered that part:
 
 ```console
-shakapacker: ./bin/shakapacker-dev-server
+webpacker: ./bin/webpacker-dev-server
 ```
 
 In order to run your development server, you will need to run the following command:
@@ -191,40 +132,15 @@ In order to run your development server, you will need to run the following comm
 ./bin/dev
 ```
 
-Also, by migrating to Shakapacker, we no longer use `config/webpacker.yml`. All the webpack configuration will be done through `config/shakapacker.yml`
+You can read more about this change on PR [\#10389](https://github.com/decidim/decidim/pull/10389).
 
-You can read more about this change on PR
-
-- [\#10389](https://github.com/decidim/decidim/pull/10389)
-- [\#11728](https://github.com/decidim/decidim/pull/11728)
-
-### 3.6. Initialize content blocks on spaces or resources with landing page
-
-The processes and assemblies participatory spaces have changed the show page and now is composed using content blocks. For the new spaces created in this version a callback is executed creating the content blocks marked as `default!` in the engine for the corresponding homepage scope. To have the same initialization in the existing spaces there is a task to generate those blocks if not present already. Run the below command to generate default content blocks when not present for all spaces and resources with content blocks homepage (participatory processes, participatory process groups and assemblies):
-
-```console
-bundle exec rake decidim:content_blocks:initialize_default_content_blocks
-```
-
-The task has some optional arguments:
-
-- The first to specify the manifest name and generate the default content blocks only on the spaces or resources with the manifest name (`participatory_processes`, `participatory_process_group` or `assemblies`).
-- The second can be the id of a resource o space to apply only on the space or resource with the id. This argument is considered only if the manifest name argument is present.
-- The last argument only works on participatory spaces (assemblies and participatory processes) and when set as true the task also creates a content block for each published component on the space unless a block already exists for that component or the block exists for the component type and configured to display resources from all components of the same type.
-
-For example, to generate the default content blocks and also the components blocks on participatory spaces run the command with arguments:
-
-```console
-bundle exec rake decidim:content_blocks:initialize_default_content_blocks[,,true]
-```
-
-### 3.7. Graphql upgrade
+### 3.5. Graphql upgrade
 
 In [\#10606](https://github.com/decidim/decidim/pull/10606) we have upgraded the GraphQL gem to version 2.0.19. This upgrade introduces some breaking changes, so you will need to update your GraphQL queries to match the new API. This change should be transparent for most of the users, but if you have custom GraphQL queries, you will need to update them. Also, please note, there might be some issues with community plugins that offer support for GraphQL, so you might need to update them as well.
 
 Please see the [change log](https://github.com/rmosolgo/graphql-ruby/blob/master/CHANGELOG.md) for graphql gem for more information.
 
-### 3.8. Orphans valuator assignments cleanup
+### 3.6. Orphans valuator assignments cleanup
 
 We have added a new task that helps you clean the valuator assignements records of roles that have been deleted.
 
@@ -236,7 +152,7 @@ bundle exec rake decidim:proposals:upgrade:remove_valuator_orphan_records
 
 You can see more details about this change on PR [\#10607](https://github.com/decidim/decidim/pull/10607)
 
-### 3.9. Initiatives pages exception fix
+### 3.7. Initiatives pages exception fix
 
 We have added a new tasks to fix a bug related to the pages component inside of the Initiatives module (`decidim-initiatives`).
 
@@ -248,47 +164,10 @@ bundle exec rake decidim:initiatives:upgrade:fix_broken_pages
 
 You can see more details about this change on PR [\#10928](https://github.com/decidim/decidim/pull/10928)
 
-### 3.10. Add Content Security Policy (CSP) support
-
-We have introduced support for Content Security Policy (CSP). This is a security feature that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks.
-By default, the CSP is enabled, and is configured to be as restrictive as possible, having the following default configuration:
-
-```ruby
-{
-        "default-src" => %w('self' 'unsafe-inline'),
-        "script-src" => %w('self' 'unsafe-inline' 'unsafe-eval'),
-        "style-src" => %w('self' 'unsafe-inline'),
-        "img-src" => %w('self' *.hereapi.com data:),
-        "font-src" => %w('self'),
-        "connect-src" => %w('self' *.hereapi.com *.jsdelivr.net),
-        "frame-src" => %w('self'),
-        "media-src" => %w('self')
-}
-```
-
-In order to customize the CSP we are providing, have 2 options, either by using a configuration key the initializer `config/initializers/decidim.rb` or by setting values in the Organization's system admin.
-
-Please read more in the docs:
-
-- [Customize Content Security Policy](https://docs.decidim.org/en/develop/customize/content_security_policy)
-- [Using Content Security Policy initializer](https://docs.decidim.org/en/develop/configure/initializer#_content_security_policy)
-
-You can check more about the implementation in the [\#10700](https://github.com/decidim/decidim/pull/10700) pull request.
-
-### 3.11 Anti-spam measures in the robots.txt
-
-In order to improve the fight against spam attacks in Decidim applications, we have added a new task that helps you replace yours. Take into account that this will override your robots.txt, so if you have done any change you need to make a backup before running this task.
-
-```bash
-bundle exec rails decidim:robots:replace
-```
-
-You can see more details about this change on PR [\#11693](https://github.com/decidim/decidim/pull/11693)
-
 ## 4. Scheduled tasks
 
 Implementers need to configure these changes it in your scheduler task system in the production server. We give the examples
-with `crontab`, although alternatively you could use `whenever` gem or the scheduled jobs of your hosting provider.
+ with `crontab`, although alternatively you could use `whenever` gem or the scheduled jobs of your hosting provider.
 
 ### 4.1. Automatically change active step in participatory processes
 
@@ -310,7 +189,7 @@ You can read more about this change on PR [\#9026](https://github.com/decidim/de
 
 As the gem that we were using for sharing to Social Network do not support Webpacker, we have implemented the same functionality in `decidim-core`.
 
-If you want to have the default social share services enabled (X/Twitter, Facebook, WhatsApp and Telegram), then you can just remove the initializer in your application:
+If you want to have the default social share services enabled (Twitter, Facebook, WhatsApp and Telegram), then you can just remove the initializer in your application:
 
 ```console
 rm config/initializers/social_share_button.rb
@@ -325,7 +204,7 @@ rm config/initializers/social_share_button.rb
 ```ruby
 # In config/initializers/decidim.rb
 Decidim.configure do |config|
-  (...)
+(...)
   config.social_share_services = Rails.application.secrets.decidim[:social_share_services]
 end
 ```
@@ -393,6 +272,8 @@ The transferred data can differ between the different modules but the official m
 - **decidim-comments**
   - Comments
   - Comment votes
+- **decidim-consultations**
+  - Consultation votes
 - **decidim-debates**
   - Debates
   - Endorsements for debates (through endorsement transfers at `decidim-core`)
@@ -473,6 +354,7 @@ module DecidimYourCity
       Decidim::AuthorizationTransfer.unregister(:blogs) # blog posts
       Decidim::AuthorizationTransfer.unregister(:budgets) # budgets
       Decidim::AuthorizationTransfer.unregister(:comments) # comments
+      Decidim::AuthorizationTransfer.unregister(:consultations) # consultation votes
       Decidim::AuthorizationTransfer.unregister(:debates) # debates
       Decidim::AuthorizationTransfer.unregister(:elections) # elections
       Decidim::AuthorizationTransfer.unregister(:forms) # form answers, e.g. survey form answers or meeting registrations
@@ -540,13 +422,23 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 ```
 
-The editor JS is automatically included in the normal Decidim layout when you display editors using the default form builder shipped with Decidim.
+The editor JS is automatically included in the normal Decidim layout but in case you have customized your layout, you will need to add the following snippet at the end of your layout (`layouts/decidim/_decidim_javascript.html.erb` in the default layout):
+
+```erb
+<%= javascript_pack_tag "decidim_editor", defer: false %>
+```
+
+Note that this snippet is only needed on those pages where the editor is displayed but we include this JavaScript tag on all pages to ensure the availability of the editor, even if the page content is cached when the dynamic snippets are not always added to the views. In case you do not need the rich text editor at the participant side of the site at all, you can omit this tag.
 
 #### 5.3.3. New CSS to display the rich text content
 
 The new version of Decidim ships with rewritten CSS for displaying the rich text editor content. This CSS has been written in Tailwind as this is the new CSS framework used in Decidim. You will need to revisit any CSS that you had previously written for the editor and preferrably rewrite it based on the updated content structure and CSS class names.
 
-The editor CSS is automatically included in the normal Decidim layout when you display editors using the default form builder shipped with Decidim.
+The editor CSS is automatically included in the normal Decidim layout but in case you have customized your layout, you will need to add the following code snipped at the `<head>` section of your layout definition file:
+
+```erb
+<%= stylesheet_pack_tag "decidim_editor", media: "all" %>
+```
 
 #### 5.3.4. Registering rich text content for the content migration
 
@@ -613,18 +505,14 @@ In order to do so, the administrator needs to go to the user's profile and click
 
 In order to hide all the Participant resources, keeping a separation of concerns, we have started to use `ActiveSupport::Notifications.publish` to notify the modules that the admin user has chosen to hide all the Participant's contributions.
 
-As of [\#11064](https://github.com/decidim/decidim/pull/11064) we are dispatching the following event:
+We are dispatching the following event:
 
 ```ruby
-event_name = "decidim.admin.block_user:after"
+event_name = "decidim.system.events.hide_user_created_content"
 ActiveSupport::Notifications.publish(event_name, {
-  resource: form.user, # user to be blocked
-  extra: {
-    event_author: form.current_user, # current admin user
-    locale:, # current locale
-    justification: form.justification, # reason for blocking the user
-    hide: form.hide? # true if the admin user has chosen to hide all the user's content
-  }
+  author: current_blocking.user, # user to be blocked
+  justification: current_blocking.justification, # reason for blocking the user
+  current_user: current_blocking.blocking_user # admin user that is blocking the other user
 })
 ```
 
@@ -632,7 +520,7 @@ The plugin creators could subscribe to this event and hide the content of the us
 
 ```ruby
 initializer "decidim_comments.moderation_content" do
-  ActiveSupport::Notifications.subscribe("decidim.admin.block_user:after") do |_event_name, data|
+  ActiveSupport::Notifications.subscribe("decidim.system.events.hide_user_created_content") do |_event_name, data|
     Decidim::Comments::HideAllCreatedByAuthorJob.perform_later(**data)
   end
 end
@@ -662,15 +550,13 @@ module Decidim
     class HideAllCreatedByAuthorJob < ::Decidim::HideAllCreatedByAuthorJob
       protected
 
-      def perform(resource:, extra: {})
-        return unless extra.fetch(:hide, false)
-
-        Decidim::YourModule::YourModel.not_hidden.from_author(resource).find_each do |content|
-          hide_content(content, extra[:event_author], extra[:justification])
+      def perform(author:, justification:, current_user:)
+        Decidim::YourModule::YourModel.not_hidden.from_author(author).find_each do |content|
+          hide_content(content, current_user, justification)
         end
 
-        Decidim::YourModule::YourSecondModel.not_hidden.from_author(resource).find_each do |content|
-          hide_content(content, extra[:event_author], extra[:justification])
+        Decidim::YourModule::YourSecondModel.not_hidden.from_author(author).find_each do |content|
+          hide_content(content, current_user, justification)
         end
       end
     end
@@ -678,10 +564,7 @@ module Decidim
 end
 ```
 
-You can read more about this change at PRs:
-
-- [\#10111](https://github.com/decidim/decidim/pull/10111)
-- [\#11064](https://github.com/decidim/decidim/pull/11064)
+You can read more about this change at PR [\#10111](https://github.com/decidim/decidim/pull/10111).
 
 ### 5.4. Extra context argument added to SMS gateway implementations
 
@@ -715,12 +598,3 @@ end
 ```
 
 You can read more about this change at PR [\#10760](https://github.com/decidim/decidim/pull/10760).
-
-### 5.5. Configuration parameter change
-
-Prior to 0.28, there was the possibility of configuring a list of disallowed passwords using the configuration parameter `Decidim.password_blacklist` or the environment variable `DECIDIM_PASSWORD_BLACKLIST`. These methods have been renamed as follows:
-
-- `Decidim.password_blacklist` becomes `Decidim.denied_passwords`
-- `DECIDIM_PASSWORD_BLACKLIST` becomes `DECIDIM_DENIED_PASSWORDS`
-
-You can read more about this change on PR [\#10288](https://github.com/decidim/decidim/pull/10288).

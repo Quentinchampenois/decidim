@@ -15,15 +15,14 @@ module Decidim
     def resource_version(resource, options = {})
       return unless resource.respond_to?(:versions) && resource.versions_count.positive?
 
-      path = options.delete(:versions_path)
       html = []
       html << resource_version_number(resource.versions_count)
       html << " "
       html << resource_version_of(resource.versions_count)
       html << " "
-      html << link_to_other_resource_versions(path, options) if path.present?
+      html << link_to_other_resource_versions(options[:versions_path]) if options[:versions_path]
 
-      safe_join(html)
+      content_tag(:div, safe_join(html), class: "tech-info #{options[:class]}")
     end
 
     def resource_version_number(count, css_class = "")
@@ -34,14 +33,13 @@ module Decidim
       t("of_versions", scope: "decidim.versions.resource_version", number: count)
     end
 
-    def link_to_other_resource_versions(versions_path, options = {})
+    def link_to_other_resource_versions(versions_path)
       link_to(
         t(
           "see_other_versions",
           scope: "decidim.versions.resource_version"
         ),
-        versions_path,
-        **options
+        versions_path
       )
     end
   end

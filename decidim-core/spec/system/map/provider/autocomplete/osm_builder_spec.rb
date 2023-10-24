@@ -35,7 +35,7 @@ module Decidim
                               country: "Country1"
                             },
                             geometry: {
-                              coordinates: [2.234, 1.123]
+                              coordinates: [1.123, 2.234]
                             }
                           },
                           {
@@ -46,7 +46,7 @@ module Decidim
                               country: "Country2"
                             },
                             geometry: {
-                              coordinates: [4.456, 3.345]
+                              coordinates: [3.345, 4.456]
                             }
                           },
                           {
@@ -58,7 +58,7 @@ module Decidim
                               country: "Country3"
                             },
                             geometry: {
-                              coordinates: [6.678, 5.567]
+                              coordinates: [5.567, 6.678]
                             }
                           }
                         ]

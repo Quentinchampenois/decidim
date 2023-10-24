@@ -79,7 +79,7 @@ module Decidim
         end
 
         def orders
-          @orders ||= Order.where(budget: budgets)
+          @orders ||= Order.where(decidim_budgets_budget_id: budgets)
         end
 
         def pending_orders

@@ -81,7 +81,6 @@ class ConsentManager {
 
       let cloned = this.warningElement.cloneNode(true);
       cloned.classList.remove("hide");
-      cloned.hidden = false;
       original.appendChild(cloned);
     });
   }
@@ -99,7 +98,7 @@ class ConsentManager {
   }
 
   updateModalSelections() {
-    const categoryElements = this.modal.querySelectorAll("[data-id]");
+    const categoryElements = this.modal.querySelectorAll(".category-wrapper");
 
     categoryElements.forEach((categoryEl) => {
       const categoryInput = categoryEl.querySelector("input");
