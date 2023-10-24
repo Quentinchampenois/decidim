@@ -24,7 +24,7 @@ describe "Conference program", type: :system do
     it "the menu link is not shown" do
       visit decidim_conferences.conference_path(conference)
 
-      within "aside .conference__nav-container" do
+      within ".process-nav" do
         expect(page).not_to have_content(translated_attribute(component.name))
       end
     end
@@ -49,8 +49,8 @@ describe "Conference program", type: :system do
         it "the menu link is shown" do
           visit decidim_conferences.conference_path(conference)
 
-          within "aside .conference__nav-container" do
-            expect(page).to have_content(translated_attribute(component.name))
+          within ".process-nav" do
+            expect(page).to have_content(translated_attribute(component.name).upcase)
             click_link translated_attribute(component.name)
           end
 

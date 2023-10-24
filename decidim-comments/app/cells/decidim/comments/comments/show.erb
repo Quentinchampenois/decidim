@@ -1,17 +1,16 @@
 <%= content_tag :div, id: node_id, data: { decidim_comments: comments_data } do %>
-  <div id="comments">
+  <div class="columns large-9 comments-container" id="comments">
     <div class="comments">
-      <div class="comments__header">
-        <h2 class="h4">
+      <div class="row collapse order-by">
+        <h3 class="order-by__text section-heading">
           <% if single_comment? %>
             <%= t("decidim.components.comments.comment_details_title") %>
           <% else %>
-            <%= icon "chat-1-line", class: "fill-tertiary w-6 h-6 inline-block align-middle" %>
-            <span class="comments-count inline-block align-middle">
+            <span class="comments-count">
               <%= t("decidim.components.comments.title", count: comments_count) %>
             </span>
           <% end %>
-        </h2>
+        </h3>
         <%= render :order_control %>
       </div>
       <%= single_comment_warning %>
@@ -25,7 +24,7 @@
       <%= add_comment %>
       <%= user_comments_blocked_warning %>
     </div>
-    <div class="callout primary loading-comments hidden">
+    <div class="callout primary loading-comments hide">
       <p><%= t("decidim.components.comments.loading") %></p>
     </div>
   </div>

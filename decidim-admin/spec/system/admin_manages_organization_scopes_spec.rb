@@ -75,7 +75,7 @@ describe "Organization scopes", type: :system do
 
         expect(page).to have_admin_callout("successfully")
 
-        within "[data-content]" do
+        within ".card-section" do
           expect(page).not_to have_content(translated(scope.name))
         end
       end

@@ -8,8 +8,6 @@ module Decidim
     include Decidim::SanitizeHelper
 
     def show
-      return render :online if options[:online]
-
       render
     end
 
@@ -31,6 +29,13 @@ module Decidim
 
     def address
       decidim_sanitize(translated_attribute(model.address))
+    end
+
+    private
+
+    # deprecated
+    def resource_icon
+      icon "meetings", class: "icon--big", role: "img", "aria-hidden": true
     end
   end
 end

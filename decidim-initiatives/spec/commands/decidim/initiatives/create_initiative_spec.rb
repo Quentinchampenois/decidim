@@ -37,7 +37,6 @@ module Decidim
           described_class.new(form, author)
         end
 
-        let(:area) { create(:area, organization:) }
         let(:scoped_type) { create(:initiatives_type_scope) }
         let(:organization) { scoped_type.type.organization }
         let(:author) { create(:user, organization:) }
@@ -56,17 +55,11 @@ module Decidim
             type_id: scoped_type.type.id,
             signature_type: "online",
             scope_id: scoped_type.scope.id,
-            decidim_user_group_id: nil,
-            area_id: area.id
+            decidim_user_group_id: nil
           }
         end
         let(:follower) { create(:user, organization:) }
         let!(:follow) { create(:follow, followable: author, user: follower) }
-
-        it "sets the area" do
-          subject.call
-          expect(Decidim::Initiative.last.area).to eq(area)
-        end
 
         it "does not notify author about committee request" do
           expect(Decidim::EventsManager)

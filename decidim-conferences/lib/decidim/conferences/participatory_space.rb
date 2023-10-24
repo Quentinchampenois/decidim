@@ -17,8 +17,6 @@ Decidim.register_participatory_space(:conferences) do |participatory_space|
 
   participatory_space.query_type = "Decidim::Conferences::ConferenceType"
 
-  participatory_space.breadcrumb_cell = "decidim/conferences/conference_dropdown_metadata"
-
   participatory_space.register_resource(:conference) do |resource|
     resource.model_class_name = "Decidim::Conference"
     resource.card = "decidim/conferences/conference"
@@ -102,6 +100,7 @@ Decidim.register_participatory_space(:conferences) do |participatory_space|
           name: Faker::Name.name,
           nickname: Faker::Twitter.unique.screen_name,
           password: "decidim123456789",
+          password_confirmation: "decidim123456789",
           organization:,
           confirmed_at: Time.current,
           locale: I18n.default_locale,

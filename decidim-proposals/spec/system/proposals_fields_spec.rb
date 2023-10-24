@@ -23,11 +23,13 @@ describe "Proposals", type: :system do
   end
 
   matcher :have_author do |name|
-    match { |node| node.has_selector?("[data-author]", text: name) }
-    match_when_negated { |node| node.has_no_selector?("[data-author]", text: name) }
+    match { |node| node.has_selector?(".author-data", text: name) }
+    match_when_negated { |node| node.has_no_selector?(".author-data", text: name) }
   end
 
   context "when creating a new proposal" do
+    let(:scope_picker) { select_data_picker(:proposal_scope_id) }
+
     context "when the user is logged in" do
       before do
         login_as user, scope: :user
@@ -73,7 +75,7 @@ describe "Proposals", type: :system do
             fill_in :proposal_title, with: "More sidewalks and less roads"
             fill_in :proposal_body, with: "Cities need more people, not more cars"
             select translated(category.name), from: :proposal_category_id
-            select translated(scope.name), from: :proposal_scope_id
+            scope_pick scope_picker, scope
 
             find("*[type=submit]").click
           end
@@ -110,6 +112,7 @@ describe "Proposals", type: :system do
             visit complete_proposal_path(component, proposal_draft)
 
             within ".edit_proposal" do
+              check :proposal_has_address
               fill_in :proposal_title, with: "More sidewalks and less roads"
               fill_in :proposal_body, with: "Cities need more people, not more cars"
               fill_in_geocoding :proposal_address, with: address
@@ -118,13 +121,15 @@ describe "Proposals", type: :system do
               expect(page).to have_content("You can move the point on the map.")
 
               select translated(category.name), from: :proposal_category_id
-              select translated(scope.name), from: :proposal_scope_id
+              scope_pick scope_picker, scope
 
               find("*[type=submit]").click
             end
 
-            within ".static-map__container" do
-              expect(page).to have_css(".static-map")
+            within ".card__content.address" do
+              expect(page).to have_css(".address__info")
+              expect(page).to have_css(".address__map")
+              expect(page).to have_content(address)
             end
 
             click_button "Publish"
@@ -152,6 +157,7 @@ describe "Proposals", type: :system do
               # Prepare the view for submission (other than the address field)
               visit complete_proposal_path(component, proposal_draft)
 
+              check :proposal_has_address
               fill_in :proposal_title, with: "More sidewalks and less roads"
               fill_in :proposal_body, with: "Cities need more people, not more cars"
             end
@@ -206,7 +212,7 @@ describe "Proposals", type: :system do
               fill_in :proposal_title, with: "More sidewalks and less roads"
               fill_in :proposal_body, with: "Cities need more people, not more cars"
               select translated(category.name), from: :proposal_category_id
-              select translated(scope.name), from: :proposal_scope_id
+              scope_pick scope_picker, scope
               select user_group.name, from: :proposal_user_group_id
 
               find("*[type=submit]").click
@@ -243,9 +249,10 @@ describe "Proposals", type: :system do
               within ".edit_proposal" do
                 fill_in :proposal_title, with: "More sidewalks and less roads"
                 fill_in :proposal_body, with: "Cities need more people, not more cars"
+                check :proposal_has_address
                 fill_in :proposal_address, with: address
                 select translated(category.name), from: :proposal_category_id
-                select translated(scope.name), from: :proposal_scope_id
+                scope_pick scope_picker, scope
                 select user_group.name, from: :proposal_user_group_id
 
                 find("*[type=submit]").click
@@ -303,7 +310,7 @@ describe "Proposals", type: :system do
               fill_in :proposal_body, with: "This is my proposal and I want to upload attachments."
             end
 
-            dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city.jpeg"))
+            dynamically_attach_file(:proposal_photos, Decidim::Dev.asset("city.jpeg"))
 
             within ".edit_proposal" do
               find("*[type=submit]").click
@@ -313,7 +320,7 @@ describe "Proposals", type: :system do
 
             expect(page).to have_content("successfully")
 
-            within "#panel-images" do
+            within ".section.images" do
               expect(page).to have_selector("img[src*=\"city.jpeg\"]", count: 1)
             end
           end
@@ -328,19 +335,11 @@ describe "Proposals", type: :system do
               end
             end
 
-            it "sets the card image correctly with zero weight", :slow do
-              skip "REDESIGN_PENDING - Flaky test: upload modal fails on GitHub with multiple fileshttps://github.com/decidim/decidim/issues/10961"
-
+            it "sets the card image correctly with zero weight" do
               # Attach one card image and two document images and go to preview
-              dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city.jpeg"))
-              expect(page).to have_content("city.jpeg")
+              dynamically_attach_file(:proposal_photos, Decidim::Dev.asset("city.jpeg"))
               dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city2.jpeg"))
-              expect(page).to have_content("city.jpeg")
-              expect(page).to have_content("city2.jpeg")
               dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city3.jpeg"))
-              expect(page).to have_content("city.jpeg")
-              expect(page).to have_content("city2.jpeg")
-              expect(page).to have_content("city3.jpeg")
 
               within ".edit_proposal" do
                 find("*[type=submit]").click
@@ -352,20 +351,20 @@ describe "Proposals", type: :system do
 
               # See that the images are in correct positions and remove the card
               # image.
-              within "[data-active-uploads]" do
+              within ".upload-container-for-photos [data-active-uploads]" do
                 expect(page).to have_content("city.jpeg")
+              end
+              within ".upload-container-for-documents [data-active-uploads]" do
                 expect(page).to have_content("city2.jpeg")
                 expect(page).to have_content("city3.jpeg")
               end
 
-              within ".upload-container-for-documents" do
-                click_button "Edit documents"
+              within ".upload-container-for-photos" do
+                click_button "Edit image"
               end
               within ".upload-modal" do
-                within "[data-filename='city.jpeg']" do
-                  click_button("Remove")
-                end
-                click_button "Next"
+                click_button(class: "remove-upload-item")
+                click_button "Save"
               end
 
               within ".edit_proposal" do
@@ -376,8 +375,12 @@ describe "Proposals", type: :system do
               expect(page).to have_content("Your proposal has not yet been published")
               click_link "Modify the proposal"
 
-              within "[data-active-uploads]" do
-                expect(page).not_to have_content("city.jpeg")
+              # See that the card image is now empty and the two other images
+              # are still in the documents container as they should.
+              within ".upload-container-for-photos [data-active-uploads]" do
+                expect(page).not_to have_selector(".attachment-details")
+              end
+              within ".upload-container-for-documents [data-active-uploads]" do
                 expect(page).to have_content("city2.jpeg")
                 expect(page).to have_content("city3.jpeg")
               end

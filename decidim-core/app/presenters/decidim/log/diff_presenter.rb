@@ -16,10 +16,9 @@ module Decidim
       # view_helpers - An object holding the view helpers at the render time.
       #   Most probably should come automatically from the views.
       # options - a Hash with options
-      def initialize(changeset, view_helpers, action_log, options = {})
+      def initialize(changeset, view_helpers, options = {})
         @changeset = changeset
         @view_helpers = view_helpers
-        @action_log = action_log
         @options = { show_previous_value?: true }.merge(options)
       end
 
@@ -32,7 +31,7 @@ module Decidim
 
       private
 
-      attr_reader :changeset, :view_helpers, :options, :action_log
+      attr_reader :changeset, :view_helpers, :options
       alias h view_helpers
 
       # Private: Presents the diff for this action. If the resource and the
@@ -42,7 +41,7 @@ module Decidim
       def present_diff
         return "".html_safe if changeset.blank?
 
-        h.content_tag(:div, class: "logs__log__diff", id: "panel-#{h.dom_id(action_log)}") do
+        h.content_tag(:div, class: "logs__log__diff") do
           changeset.each do |attribute|
             h.concat(present_new_value(attribute[:label], attribute[:new_value], attribute[:type]))
             h.concat(present_previous_value(attribute[:previous_value], attribute[:type])) if options[:show_previous_value?]

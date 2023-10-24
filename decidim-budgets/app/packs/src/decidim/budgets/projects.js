@@ -1,13 +1,13 @@
 $(() => {
-  const $projects = $("#projects, #project-item");
-  const $budgetSummaryTotal = $(".budget-summary__progressbar-marks_right");
-  const selectBudgetSummaryTotal = $budgetSummaryTotal.data("totalAllocation");
+  const $projects = $("#projects, #project");
+  const $budgetSummaryTotal = $(".budget-summary__total");
+  const $budgetExceedModal = $("#budget-excess");
   const $budgetSummary = $(".budget-summary__progressbox");
   const $voteButton = $(".budget-vote-button");
-  const totalAllocation = parseInt(selectBudgetSummaryTotal, 10);
-  const additionSelectorButtons = document.querySelectorAll(".budget__list--header .button__pill")
+  const totalAllocation = parseInt($budgetSummaryTotal.attr("data-total-allocation"), 10);
 
   const cancelEvent = (event) => {
+    $(event.currentTarget).removeClass("loading-spinner");
     event.stopPropagation();
     event.preventDefault();
   };
@@ -21,20 +21,15 @@ $(() => {
     const $currentTarget = $(event.currentTarget);
     const projectAllocation = parseInt($currentTarget.attr("data-allocation"), 10);
 
+    if (!$currentTarget.attr("data-open")) {
+      $currentTarget.addClass("loading-spinner");
+    }
+
     if ($currentTarget.attr("disabled")) {
       cancelEvent(event);
     } else if (($currentTarget.attr("data-add") === "true") && ((currentAllocation + projectAllocation) > totalAllocation)) {
-      window.Decidim.currentDialogs["budget-excess"].toggle()
+      $budgetExceedModal.foundation("toggle");
       cancelEvent(event);
     }
-  });
-
-  additionSelectorButtons.forEach(function(button) {
-    button.addEventListener("click", function(event) {
-      additionSelectorButtons.forEach(function(element) {
-        element.classList.remove("button__pill--active")
-      })
-      event.currentTarget.classList.add("button__pill--active")
-    })
   });
 });

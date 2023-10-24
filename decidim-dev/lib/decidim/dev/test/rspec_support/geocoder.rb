@@ -49,7 +49,7 @@ module Decidim::Map::Provider
       def self.add_stub(address, coordinates)
         stubs.push(
           properties: address.is_a?(Hash) ? address : { street: address },
-          geometry: { coordinates: coordinates.reverse }
+          geometry: { coordinates: }
         )
       end
 
@@ -125,7 +125,7 @@ RSpec.configure do |config|
               country: "Country1"
             },
             geometry: {
-              coordinates: [2.234, 1.123]
+              coordinates: [1.123, 2.234]
             }
           },
           {
@@ -136,7 +136,7 @@ RSpec.configure do |config|
               country: "Country2"
             },
             geometry: {
-              coordinates: [4.456, 3.345]
+              coordinates: [3.345, 4.456]
             }
           },
           {
@@ -148,7 +148,7 @@ RSpec.configure do |config|
               country: "Country3"
             },
             geometry: {
-              coordinates: [6.678, 5.567]
+              coordinates: [5.567, 6.678]
             }
           }
         ]

@@ -1,7 +1,6 @@
 /* eslint-disable */
 const { config } = require("shakapacker");
 const { InjectManifest } = require("workbox-webpack-plugin");
-const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   module: {
@@ -84,29 +83,7 @@ module.exports = {
   // https://github.com/rails/webpacker/issues/2932
   // As Decidim uses multiple packs, we need to enforce a single runtime, to prevent duplication
   optimization: {
-    minimizer: [
-      new TerserPlugin({
-        parallel: Number.parseInt(process.env.SHAKAPACKER_PARALLEL, 10) || true,
-        terserOptions: {
-          parse: {
-            // Let terser parse ecma 8 code but always output
-            // ES5 compliant code for older browsers
-            ecma: 8
-          },
-          compress: {
-            ecma: 5,
-            warnings: false,
-            comparisons: false
-          },
-          mangle: { safari10: true },
-          output: {
-            ecma: 5,
-            comments: false,
-            ascii_only: true
-          }
-        }
-      })
-    ].filter(Boolean)
+    runtimeChunk: false
   },
   entry: config.entrypoints,
   plugins: [

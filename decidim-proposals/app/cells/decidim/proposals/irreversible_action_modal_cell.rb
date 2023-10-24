@@ -33,9 +33,9 @@ module Decidim
       end
 
       def button_reveal_modal
-        data = { "dialog-open": modal_id }
+        data = { open: modal_id }
         label = t(action, scope: "decidim.proposals.collaborative_drafts.show")
-        css = publish? ? "button button__lg button__secondary w-full" : "text-secondary"
+        css = publish? ? "button expanded button--sc" : "secondary"
 
         button_tag label, type: "button", class: css, data:
       end
@@ -51,8 +51,8 @@ module Decidim
       def button_continue
         label = t("ok", scope: "decidim.proposals.collaborative_drafts.collaborative_draft.#{action}.irreversible_action_modal")
         path = resource_path action
-        css = "button button__lg button__secondary"
-        button_to label, path, class: css
+        css = "button expanded"
+        button_to label, path, class: css, form_class: "columns medium-6"
       end
 
       def close_label
@@ -60,8 +60,10 @@ module Decidim
       end
 
       def button_cancel
-        button_tag type: "button", class: "button button__lg button__transparent-secondary", "data-dialog-close": modal_id do
-          close_label
+        tag.div(class: "columns medium-6") do
+          button_tag type: "button", class: "clear button secondary expanded", "data-close": "" do
+            close_label
+          end
         end
       end
 

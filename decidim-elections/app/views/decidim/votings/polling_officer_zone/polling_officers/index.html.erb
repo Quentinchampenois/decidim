@@ -1,11 +1,8 @@
-<%= append_javascript_pack_tag "decidim_votings" %>
-<%= append_stylesheet_pack_tag "decidim_votings" %>
-
-<%= render layout: "layouts/decidim/shared/layout_user_profile" do %>
-
+<div class="polling_officer_zone">
   <%= cell("decidim/announcement", t("polling_officer_role_description", scope: "decidim.votings.polling_officer_zone.polling_officers.index"), callout_class: "success") %>
 
-  <h2 class="h3"><%= t("polling_station.title", scope: "decidim.votings.polling_officer_zone.polling_officers.index") %></h2>
+  <%= content_tag :h2,
+                  t("polling_station.title", scope: "decidim.votings.polling_officer_zone.polling_officers.index") %>
 
   <% if polling_officers_elections.any? %>
     <% polling_officers_elections.each do |election| %>
@@ -15,5 +12,4 @@
   <% else %>
     <%= cell("decidim/announcement", t("polling_station.no_polling_stations", scope: "decidim.votings.polling_officer_zone.polling_officers.index"), callout_class: "warning") %>
   <% end %>
-
-<% end %>
+</div>

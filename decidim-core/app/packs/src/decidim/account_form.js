@@ -1,54 +1,42 @@
-import PasswordToggler from "./password_toggler";
-
+/**
+ * Initializes the edit account form to control the password field elements
+ * which should only be required when they are visible.
+ *
+ * @returns {void}
+ */
 const initializeAccountForm = () => {
-  const newPasswordPanel = document.getElementById("panel-password");
-  const oldPasswordPanel = document.getElementById("panel-old-password");
-  const emailField = document.querySelector("input[type='email']");
-  if (!newPasswordPanel || !emailField) {
+  const editUserForm = document.querySelector("form.edit_user");
+  if (!editUserForm) {
     return;
   }
 
-  const originalEmail = emailField.dataset.original;
-  let emailChanged = originalEmail !== emailField.value;
-  let newPwVisible = false;
+  const passwordChange = editUserForm.querySelector("#passwordChange");
+  if (!passwordChange) {
+    return;
+  }
 
-  const toggleNewPassword = () => {
-    const input = newPasswordPanel.querySelector("input")
-    if (newPwVisible) {
-      input.required = true;
-    } else {
-      input.required = false;
-      input.value = "";
-    }
-  };
-  const toggleOldPassword = () => {
-    if (!oldPasswordPanel) {
-      return;
-    }
+  const passwordFields = passwordChange.querySelectorAll("input[type='password']");
+  if (passwordFields.length < 1) {
+    return;
+  }
 
-    const input = oldPasswordPanel.querySelector("input");
-    if (emailChanged || newPwVisible) {
-      oldPasswordPanel.classList.remove("hidden");
-      input.required = true;
-    } else {
-      oldPasswordPanel.classList.add("hidden");
-      input.required = false;
+  // Foundation uses jQuery so these have to be bound using jQuery and the
+  // attribute value needs to be set through jQuery.
+  const togglePasswordFieldValidators = (enabled) => {
+    $(passwordFields).attr("required", enabled);
+
+    if (!enabled) {
+      passwordFields.forEach((field) => (field.value = ""));
     }
   }
 
-  const observer = new MutationObserver(() => {
-    let ariaHiddenValue = newPasswordPanel.getAttribute("aria-hidden");
-    newPwVisible = ariaHiddenValue === "false";
-
-    toggleNewPassword();
-    toggleOldPassword();
+  $(passwordChange).on("on.zf.toggler", () => {
+    togglePasswordFieldValidators(true);
   });
-  observer.observe(newPasswordPanel, { attributes: true });
-
-  emailField.addEventListener("change", () => {
-    emailChanged = emailField.value !== originalEmail;
-    toggleOldPassword();
+  $(passwordChange).on("off.zf.toggler", () => {
+    togglePasswordFieldValidators(false);
   });
+  togglePasswordFieldValidators(false);
 };
 
 /**
@@ -66,11 +54,13 @@ const initializeDeleteAccount = () => {
   }
 
   const $openModalButton = $(".open-modal-button");
+  const $modal = $("#deleteConfirm");
 
   $openModalButton.on("click", (event) => {
     try {
       const reasonValue = $deleteAccountForm.find("textarea#delete_account_delete_reason").val();
       $deleteAccountModalForm.find("input#delete_account_delete_reason").val(reasonValue);
+      $modal.foundation("open");
     } catch (error) {
       console.error(error); // eslint-disable-line no-console
     }
@@ -81,16 +71,7 @@ const initializeDeleteAccount = () => {
   });
 };
 
-const initializeOldPasswordToggler = () => {
-  const oldUserPassword = document.querySelector(".old-user-password");
-
-  if (oldUserPassword) {
-    new PasswordToggler(oldUserPassword).init();
-  }
-}
-
 $(() => {
   initializeAccountForm();
   initializeDeleteAccount();
-  initializeOldPasswordToggler();
 });

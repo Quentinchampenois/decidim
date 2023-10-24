@@ -84,7 +84,7 @@ tr:
         edit: Düzenle
         filter:
           all_processes: Tüm işlemleri göster
-          process_groups: İşlem Gruplarını Filtreleme
+          process_groups: İşlem Grupları
         import_process: İçe aktar
         new_process: Yeni süreç
         new_process_group: Yeni işlem grubu
@@ -93,7 +93,6 @@ tr:
         preview: Ön izleme
         publish: Yayınla
         resend_invitation: Yeniden gönderme daveti
-        see_process: Süreci gör
         unpublish: Yayından Kaldır
       menu:
         participatory_process_groups: Süreç grupları
@@ -107,7 +106,7 @@ tr:
           attachments: Ekler
           categories: Kategoriler
           components: Bileşenler
-          info: Süreç Hakkında
+          info: Bilgi
           moderations: Denetimler
           private_users: Özel Kullanıcılar
           process_admins: İşlemi gerçekleştiren kullanıcılar
@@ -115,9 +114,9 @@ tr:
       models:
         participatory_process:
           fields:
-            actions: Eylemler
             created_at: Düzenlendi
             private: Özel
+            promoted: Vurgulanan
             published: Yayınlanan
             title: Başlık
           name: Katılımcı süreç
@@ -237,10 +236,10 @@ tr:
         edit:
           update: Güncelleştirme
         index:
+          not_published: Yayınlanmadı
           private: Özel
           public: halka açık
           published: Yayınlanan
-          unpublished: Yayınlanmamış
         new:
           create: yaratmak
           title: Yeni katılımcı süreç
@@ -310,6 +309,9 @@ tr:
         description: Bu kuruluştaki katılımcı süreçlerin sayısı
         object: katılımcı süreçler
         title: Katılımcı süreçler
+    participatory_process:
+      show:
+        related_assemblies: İlgili kurullar
     participatory_process_groups:
       content_blocks:
         html_1:
@@ -318,12 +320,19 @@ tr:
           name: İkinci HTML bloğu
         html_3:
           name: Üçüncü HTML bloğu
+        metadata:
+          developer_group: Tarafından teşvik
+          name: Meta veri
+          participatory_scope: Karar nedir
+          participatory_structure: Nasıl karar verilir
+          target: Katılanlar
         participatory_processes:
           name: Katılımcı süreçleri
         stats:
           name: İstatistikler
         title:
           meta_scope: Kapsam
+          name: Başlık, açıklama ve etiket
           participatory_processes:
             one: 1 süreç
             other: "%{count} süreç"
@@ -332,6 +341,7 @@ tr:
     participatory_process_steps:
       index:
         process_steps: Süreç adımları
+        title: Katılımcı süreç adımları
     participatory_processes:
       admin:
         content_blocks:
@@ -340,16 +350,21 @@ tr:
         new_import:
           accepted_types:
             json: JSON
+        participatory_process_copies:
+          form:
+            slug_help: 'URL sümükleri, bu işleme işaret eden URL''leri oluşturmak için kullanılır. Sadece harfleri, sayıları ve kısa çizgileri kabul eder ve bir harfle başlamalıdır. Örnek: %{url}'
         participatory_process_groups:
           form:
             metadata: Meta veri
-            title: Süreç Hakkında
+            title: Genel bilgi
             visibility: Görünürlük
         participatory_process_imports:
           form:
             document_legend: Doküman Ekle
+            slug_help: 'Sahte URL, bu işleme işaret eden URL''leri oluşturmak için kullanılır. Yalnızca harfleri, sayıları ve kısa çizgileri kabul eder ve bir harfle başlamalıdır. Örnek: %{url}'
         participatory_process_steps:
           form:
+            cta_path_help: 'Tam URL’leri değil kısmi yolları kullanın. Harfleri, sayıları, kısa çizgileri ve eğik çizgileri kabul eder ve bir harfle başlamalıdır. Ayarlanmazsa, düğme gösterilmeyecektir. Örnek: %{url}'
             cta_text_help: Ayarlanmazsa, düğme gösterilmeyecektir.
         participatory_processes:
           form:
@@ -363,6 +378,7 @@ tr:
             scope_type_max_depth_help: Kapsam filtresi derinliğini sınırlayın; Filtre genelden seçilen kapsam türüne kadar gösterilecektir.
             select_an_area: Bir alan seçin
             select_process_group: Bir işlem grubu seçin
+            slug_help: 'URL sümükleri, bu işleme işaret eden URL''leri oluşturmak için kullanılır. Sadece harfleri, sayıları ve kısa çizgileri kabul eder ve bir harfle başlamalıdır. Örnek: %{url}'
             title: Genel bilgi
             visbility: görünürlük
       content_blocks:
@@ -372,6 +388,15 @@ tr:
         title: Katılımcı süreçler
       last_activity:
         new_participatory_process: Yeni katılımcı süreç
+      pages:
+        home:
+          highlighted_processes:
+            active_processes: Aktif süreçler
+            active_step: Aktif adım
+            more_information: Daha fazla bilgi
+            participate: Katıl
+            participate_in: '%{resource_name} sürecine katılın'
+            see_all_processes: Tüm süreçleri gör
       participatory_process_steps:
         index:
           back_to_process: Süreç sayfasına geri dön
@@ -398,10 +423,23 @@ tr:
             past: geçmiş
             upcoming: Yaklaşan
           see: Görmek
+        index:
+          loading: Sonuçlar yükleniyor ...
       show:
+        area: alan
         belongs_to_group: Bu süreç,
+        dates: Tarihler
+        developer_group: Tanıtım grubu
+        end_date: Bitiş tarihi
+        local_area: Organizasyon Alanı
+        participatory_scope: Karar nedir
+        participatory_structure: Nasıl karar verilir
         private_space: Bu özel bir süreç
         related_processes: İlgili süreçler
+        scope: kapsam
+        start_date: Başlangıç tarihi
+        target: Kimler katılır
+        unspecified: Belirtilmemiş
   layouts:
     decidim:
       participatory_process_groups:
@@ -409,6 +447,10 @@ tr:
           browse: Araştır
           browse_resource: '%{resource_name} işlem grubuna göz atın'
           processes_count: 'Süreçler:'
+      participatory_process_widgets:
+        show:
+          active_step: Aktif adım
+          take_part: Yer almak
       participatory_processes:
         index:
           promoted_processes: Vurgulanan süreçler
@@ -418,3 +460,16 @@ tr:
           more_info_about: '%{resource_name} hakkında daha fazla bilgi'
           take_part: Yer almak
           take_part_in: '%{resource_name} sürecine katılın'
+        promoted_process:
+          active_step: 'Mevcut adım:'
+          more_info: Daha fazla bilgi
+          more_info_about: '%{resource_name} süreci hakkında daha fazla bilgi'
+          take_part: Yer almak
+          take_part_in: '%{resource_name} sürecine katılın'
+        promoted_process_group:
+          more_info: Daha fazla bilgi
+      process_header_steps:
+        step: '%{total}adımdan %{current}'
+        view_steps: Adımları göster
+      process_navigation:
+        process_menu_item: Süreç

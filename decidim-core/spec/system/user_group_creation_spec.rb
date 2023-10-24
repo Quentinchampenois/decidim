@@ -32,7 +32,7 @@ describe "User group creation", type: :system do
 
     click_link "Members"
 
-    within "a.profile__user" do
+    within ".card--user_group_membership" do
       expect(page).to have_content(user.name)
     end
   end

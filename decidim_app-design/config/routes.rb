@@ -9,6 +9,4 @@ Rails.application.routes.draw do
   end
 
   root to: "pages#show", id: "index"
-
-  mount Decidim::Core::Engine => "/"
 end

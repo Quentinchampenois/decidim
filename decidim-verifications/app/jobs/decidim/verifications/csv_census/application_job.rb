@@ -3,7 +3,7 @@
 module Decidim
   module Verifications
     module CsvCensus
-      class ApplicationJob < Decidim::ApplicationJob
+      class ApplicationJob < ActiveJob::Base
       end
     end
   end

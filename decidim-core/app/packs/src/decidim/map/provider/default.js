@@ -1,5 +1,3 @@
-import "leaflet"
-
 /**
  * NOTE:
  * This has to load before decidim/map in order for it to apply correctly when

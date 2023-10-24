@@ -18,7 +18,7 @@ module Decidim
       private
 
       def card_size
-        "decidim/proposals/collaborative_draft_l"
+        "decidim/proposals/collaborative_draft_m"
       end
 
       def resource_path

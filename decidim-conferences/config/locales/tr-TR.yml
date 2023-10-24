@@ -4,6 +4,7 @@ tr:
       conference:
         assemblies_ids: İlgili kurullar
         banner_image: Banner resmi
+        consultations_ids: İlgili istişareler
         copy_categories: Kategorileri kopyala
         copy_components: Bileşenleri kopyala
         copy_features: Özellikleri kopyala
@@ -42,12 +43,7 @@ tr:
     admin:
       actions:
         confirm: Onayla
-        new_conference: Yeni Konferans
-        new_conference_user_role: Yeni konferans yöneticisi
-        new_media_link: Yeni Medya Bağlantısı
-        new_partner: Yeni Ortak
-        new_registration_type: Yeni kayıt türü
-        new_speaker: Yeni Konuşmacı
+        new_conference: Yeni konferans
         send_diplomas: Katılım sertifikaları gönder
       conference_copies:
         new:
@@ -108,6 +104,7 @@ tr:
         form:
           title: Genel bilgi
         index:
+          not_published: Yayınlanmadı
           published: Yayınlandı
         new:
           create: Oluştur
@@ -148,6 +145,7 @@ tr:
           conference_invites: Davetler
           conference_speakers: Konuşmacılar
           diploma: Katılım sertifikası
+          info: Bilgi
           media_links: Medya Bağlantıları
           moderations: Moderasyonlar
           partners: Ortaklar
@@ -158,6 +156,7 @@ tr:
         conference:
           fields:
             created_at: Düzenlendi
+            promoted: Vurgulanan
             published: Yayınlanan
             title: Başlık
         conference_speaker:
@@ -275,6 +274,9 @@ tr:
         title: Hoparlörler
     conferences:
       admin:
+        conference_copies:
+          form:
+            slug_help: 'URL sümükleri, bu konferansa işaret eden URL’leri oluşturmak için kullanılır. Sadece harfleri, sayıları ve kısa çizgileri kabul eder ve bir harfle başlamalıdır. Örnek: %{url}'
         conference_invites:
           create:
             error: Kullanıcıyı konferansa katılmaya davet ederken bir sorun oluştu.
@@ -291,6 +293,7 @@ tr:
               all: Herşey
               rejected: Reddedilen
               sent: Gönderilen
+            filter_by: Tarafından filtre
             invite_attendee: Katılımcı Davet Et
             invites: Davetler
             search: Arama
@@ -314,6 +317,7 @@ tr:
             registrations_count:
               one: 1 kayıt oldu.
               other: '%{count} kayıt var.'
+            slug_help: 'URL sümükleri, bu konferansa işaret eden URL’leri oluşturmak için kullanılır. Sadece harfleri, sayıları ve kısa çizgileri kabul eder ve bir harfle başlamalıdır. Örnek: %{url}'
         diplomas:
           edit:
             save: Kayıt etmek
@@ -365,16 +369,14 @@ tr:
         create:
           invalid: Bu konferansa katılırken bir sorun oluştu.
           success: Konferansa başarılı bir şekilde katıldınız.
-          unauthorized: Konferansa kayıt olmadan önce giriş yapmanız gerekmektedir.
         decline_invitation:
           invalid: Davetin reddedilmesiyle ilgili bir sorun oluştu.
           success: Davetiyeyi başarıyla reddettiniz.
-          unauthorized: Gelen Daveti reddetmeden önce giriş yapmanız gerekmektedir.
         destroy:
           invalid: Bu konferansı terk etmekle ilgili bir sorun oluştu.
           success: Konferansı başarıyla terk ettiniz.
       conference_speaker:
-        go_to_twitter: x'e git
+        go_to_twitter: Twitter'a git
         more_info: Daha fazla bilgi
         personal_website: Kişisel web sitesi
         show:
@@ -389,7 +391,6 @@ tr:
           main_promotors: Organizatörler
         show:
           login_as: '%{name} <%{email}> olarak giriş yaptınız'
-          manage_registration: Kayıt İşlemini Yönet
           register: Kayıt olmak
       content_blocks:
         highlighted_conferences:
@@ -427,8 +428,8 @@ tr:
       pages:
         home:
           highlighted_conferences:
-            active_spaces: Aktif konferanslar
-            see_all_spaces: Tüm Konferanslar
+            active_conferences: Aktif konferanslar
+            see_all_conferences: Tüm konferanslara bak
       registration_types:
         index:
           choose_an_option: 'Kayıt seçeneğinizi seçin:'
@@ -440,6 +441,7 @@ tr:
         introduction: Giriş
         objectives: Hedefler
         related_assemblies: İlgili montajlar
+        related_consultations: İlgili istişareler
         related_participatory_processes: İlgili Katılımcı Süreçler
     events:
       conferences:
@@ -492,6 +494,9 @@ tr:
     decidim:
       conference_hero:
         register: Kayıt olmak
+      conference_widgets:
+        show:
+          take_part: Yer almak
       conferences:
         conference:
           more_info: Daha fazla bilgi
@@ -502,7 +507,11 @@ tr:
           conferences:
             one: "%{count} konferans"
             other: "%{count} konferans"
+        promoted_conference:
+          more_info: Daha fazla bilgi
+          take_part: Yer almak
       conferences_nav:
+        conference_menu_item: Bilgi
         conference_partners_menu_item: Ortaklar
         conference_speaker_menu_item: Hoparlörler
         media: medya

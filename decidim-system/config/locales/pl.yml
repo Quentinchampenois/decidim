@@ -37,6 +37,7 @@ pl:
         confirm_destroy: Czy na pewno chcesz to usunąć?
         destroy: Usuń
         edit: Edytuj
+        new: Nowy
         save: Zapisz
         title: Działania
       admins:
@@ -66,6 +67,7 @@ pl:
           fields:
             created_at: Utworzono
             email: Adres e-mail
+          name: Administrator
           validations:
             email_uniqueness: inny administrator z tym samym e-mailem już istnieje
         oauth_application:
@@ -73,6 +75,7 @@ pl:
             created_at: Utworzono
             name: Nazwa aplikacji OAuth
             organization_name: Organizacja
+          name: Aplikacja OAuth
         organization:
           actions:
             save_and_invite: Utwórz organizację i zaproś administratora
@@ -82,6 +85,7 @@ pl:
             name: Nazwa
             omniauth_settings: Ustawienia Omniauth
             smtp_settings: Ustawienia SMTP
+          name: Organizacja
       oauth_applications:
         create:
           error: Wystąpił błąd podczas tworzenia tej aplikacji.

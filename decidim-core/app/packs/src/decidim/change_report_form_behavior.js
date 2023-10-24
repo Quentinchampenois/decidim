@@ -39,7 +39,11 @@ export default function changeReportFormBehavior(container) {
     checkbox.addEventListener("change", (event) => {
       changeLabel(event.target);
       let blockAndHide = event.target.closest("form").querySelector("#block_and_hide");
-      blockAndHide.classList.toggle("invisible");
+      if (event.target.checked === true) {
+        blockAndHide.style.display = "block";
+      } else {
+        blockAndHide.style.display = "none";
+      }
     });
   });
 }

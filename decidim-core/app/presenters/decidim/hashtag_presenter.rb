@@ -27,7 +27,7 @@ module Decidim
     end
 
     def display_hashtag
-      link_to name, decidim.search_path(term: name), target: "_blank", class: "text-secondary underline", rel: "noopener", data: { "external-link": false }
+      link_to name, decidim.search_path(term: name), target: "_blank", class: "hashtag-mention", rel: "noopener"
     end
 
     def display_hashtag_name

@@ -4,7 +4,7 @@ module Decidim
   module Admin
     # Custom ApplicationJob scoped to the admin panel.
     #
-    class ApplicationJob < Decidim::ApplicationJob
+    class ApplicationJob < ActiveJob::Base
     end
   end
 end

@@ -76,7 +76,7 @@ module Decidim
         private
 
         def collection
-          @collection ||= current_conference.partners
+          @collection ||= Decidim::Conferences::Partner.where(conference: current_conference)
         end
       end
     end

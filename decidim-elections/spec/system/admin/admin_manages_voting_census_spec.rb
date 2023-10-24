@@ -11,9 +11,7 @@ describe "Admin manages polling officers", type: :system do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_votings.edit_voting_path(voting)
-    within_admin_sidebar_menu do
-      click_link "Census"
-    end
+    click_link "Census"
   end
 
   context "when init_data" do

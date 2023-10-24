@@ -14,6 +14,7 @@ nl:
         confirm_destroy: Weet u zeker dat u dit wilt verwijderen?
         destroy: Verwijder
         edit: Bewerk
+        new: nieuwe
         save: Opslaan
         title: Acties
       admins:
@@ -45,6 +46,7 @@ nl:
           fields:
             created_at: Gemaakt bij
             email: E-mail
+          name: Admin
           validations:
             email_uniqueness: Een andere admin met dezelfde e-mail bestaat al
         organization:
@@ -55,6 +57,7 @@ nl:
             name: Naam
             omniauth_settings: Omniauth instellingen
             smtp_settings: SMTP-instellingen
+          name: Organisatie
       organizations:
         advanced_settings:
           hide: Geavanceerde instellingen verbergen

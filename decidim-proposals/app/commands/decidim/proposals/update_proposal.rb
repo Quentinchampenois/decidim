@@ -5,6 +5,7 @@ module Decidim
     # A command with all the business logic when a user updates a proposal.
     class UpdateProposal < Decidim::Command
       include ::Decidim::MultipleAttachmentsMethods
+      include GalleryMethods
       include HashtagsMethods
 
       # Public: Initializes the command.
@@ -33,15 +34,22 @@ module Decidim
           return broadcast(:invalid) if attachments_invalid?
         end
 
-        with_events(with_transaction: true) do
+        if process_gallery?
+          build_gallery
+          return broadcast(:invalid) if gallery_invalid?
+        end
+
+        transaction do
           if @proposal.draft?
             update_draft
           else
             update_proposal
           end
 
-          document_cleanup!(include_all_attachments: true)
+          photo_cleanup!
+          document_cleanup!
 
+          create_gallery if process_gallery?
           create_attachments(first_weight: first_attachment_weight) if process_attachments?
         end
 
@@ -51,16 +59,6 @@ module Decidim
       private
 
       attr_reader :form, :proposal, :current_user, :attachment
-
-      def event_arguments
-        {
-          resource: proposal,
-          extra: {
-            event_author: form.current_user,
-            locale:
-          }
-        }
-      end
 
       def invalid?
         form.invalid? || !proposal.editable_by?(current_user) || proposal_limit_reached?

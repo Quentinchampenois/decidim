@@ -23,37 +23,49 @@ module Decidim
                       $("#ajax_request").text(JSON.stringify(request));
 
                       var response = {};
-                      if (request.url === "https://lookup.search.hereapi.com/v1/lookup") {
+                      if (request.url === "https://geocoder.ls.hereapi.com/6.2/geocode.json") {
                         response = {
-                          position: {
-                            lat: 1.123,
-                            lng: 2.234
+                          response: {
+                            view: [
+                              {
+                                result: [
+                                  {
+                                    location:{
+                                      displayPosition: {
+                                        latitude: 1.123,
+                                        longitude: 2.234
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         };
                       } else {
                         response = {
-                          items: [
+                          suggestions: [
                             {
-                              title: "first item",
+                              label: "first item",
                               address: { street: "first item" },
-                              id: "location1"
+                              locationId: "location1"
                             },
                             {
-                              title: "second item",
+                              label: "second item",
                               address: { street: "second item" },
-                              id: "location2"
+                              locationId: "location2"
                             },
                             {
-                              title: "third item",
+                              label: "third item",
                               address: { street: "third item" },
-                              id: "location3"
+                              locationId: "location3"
                             }
                           ]
                         };
                       }
 
                       // This is a normal suggest call to:
-                      // https://autocomplete.search.hereapi.com/v1/autocomplete
+                      // https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json
                       var deferred = $.Deferred().resolve(response);
                       return deferred.promise();
                     };
@@ -82,11 +94,11 @@ module Decidim
                 "#ajax_request",
                 text: {
                   method: "GET",
-                  url: "https://autocomplete.search.hereapi.com/v1/autocomplete",
+                  url: "https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json",
                   data: {
                     apiKey: "key1234",
-                    q: "item",
-                    lang: "en"
+                    query: "item",
+                    language: "en"
                   },
                   dataType: "json"
                 }.to_json
@@ -97,10 +109,12 @@ module Decidim
                 "#ajax_request",
                 text: {
                   method: "GET",
-                  url: "https://lookup.search.hereapi.com/v1/lookup",
+                  url: "https://geocoder.ls.hereapi.com/6.2/geocode.json",
                   data: {
                     apiKey: "key1234",
-                    id: "location1"
+                    gen: 9,
+                    jsonattributes: 1,
+                    locationid: "location1"
                   },
                   dataType: "json"
                 }.to_json

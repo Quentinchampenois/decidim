@@ -1,3 +1,5 @@
 <% full_endorsers.each do |endorser| %>
-  <%= cell "decidim/author", endorser, layout: :avatar %>
+  <span class="endorsers-list__avatar">
+    <%= cell "decidim/author", endorser, layout: :avatar %>
+  </span>
 <% end %>

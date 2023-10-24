@@ -1,5 +1,4 @@
 :uri-blog: https://decidim.org/blog
-:uri-browserstack: https://www.browserstack.com
 :uri-chat: http://chat.decidim.org
 :uri-contributing: xref:CONTRIBUTING.adoc
 :uri-demo: https://try.decidim.org
@@ -73,7 +72,6 @@ All members of the Decidim community agree with {uri-social-contract}[Decidim So
 ** <<members,🧑 Members>>
 ** <<partners,💻 Partners>>
 * <<learn-more,📖 Learn More>>
-* <<credits,🎩 Credits>>
 
 '''
 
@@ -204,7 +202,3 @@ image::https://opencollective.com/decidim/tiers/partner.svg?avatarHeight=36&widt
 | How to contribute to the Decidim project and code base.
 
 |===
-
-== 🎩 Credits
-
-* This project is tested with {uri-browserstack}[BrowserStack].

@@ -60,9 +60,6 @@ module Decidim
             expect { command.call }.to broadcast(:ok)
           end
 
-          it_behaves_like "fires an ActiveSupport::Notification event", "decidim.proposals.create_proposal:before"
-          it_behaves_like "fires an ActiveSupport::Notification event", "decidim.proposals.create_proposal:after"
-
           it "creates a new proposal" do
             expect do
               command.call

@@ -7,9 +7,7 @@ shared_examples "manage conference categories" do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_conferences.edit_conference_path(conference)
-    within_admin_sidebar_menu do
-      click_link "Categories"
-    end
+    click_link "Categories"
   end
 
   it_behaves_like "manage categories examples"

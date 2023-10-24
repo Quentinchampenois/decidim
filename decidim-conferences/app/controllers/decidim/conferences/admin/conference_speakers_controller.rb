@@ -85,7 +85,7 @@ module Decidim
         end
 
         def collection
-          @collection ||= current_conference.speakers
+          @collection ||= Decidim::ConferenceSpeaker.where(conference: current_conference)
         end
       end
     end

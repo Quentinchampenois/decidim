@@ -11,7 +11,6 @@ module Decidim
         include Decidim::Initiatives::SingleInitiativeType
         include Decidim::Initiatives::TypeSelectorOptions
         include Decidim::Initiatives::Admin::Filterable
-        include Decidim::Admin::ParticipatorySpaceAdminBreadcrumb
 
         helper ::Decidim::Admin::ResourcePermissionsHelper
         helper Decidim::Initiatives::InitiativeHelper

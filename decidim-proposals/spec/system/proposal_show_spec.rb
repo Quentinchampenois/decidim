@@ -34,8 +34,7 @@ describe "Show a Proposal", type: :system do
           let(:user) { create(:user, :admin, :confirmed, organization:) }
 
           it "has a link to answer to the proposal at the admin" do
-            within "header" do
-              expect(page).to have_css("#admin-bar")
+            within ".topbar" do
               expect(page).to have_link("Answer", href: /.*admin.*proposal-answer.*/)
             end
           end
@@ -45,8 +44,7 @@ describe "Show a Proposal", type: :system do
           let(:user) { create(:user, :confirmed, organization:) }
 
           it "does not have a link to answer the proposal at the admin" do
-            within "header" do
-              expect(page).not_to have_css("#admin-bar")
+            within ".topbar" do
               expect(page).not_to have_link("Answer")
             end
           end
@@ -63,8 +61,8 @@ describe "Show a Proposal", type: :system do
 
         context "when author does not restrict messaging" do
           it "includes a link to message the proposal author" do
-            within "[data-author]" do
-              find("div.author__container").hover
+            within ".author-data" do
+              find_link.hover
             end
             expect(page).to have_link("Send private message")
           end

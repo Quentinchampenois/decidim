@@ -19,4 +19,5 @@ sl:
     initiatives:
       modal:
         not_authorized:
+          close: Zapri
           title: Potrebna je overitev

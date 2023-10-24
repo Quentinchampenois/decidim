@@ -15,16 +15,18 @@ describe "Assembly admin accesses admin sections", type: :system do
       visit decidim_admin_assemblies.assemblies_path
       click_link "Configure"
 
-      expect(page).to have_content("Info")
-      expect(page).to have_content("Components")
-      expect(page).to have_content("Categories")
-      expect(page).to have_content("Attachments")
-      expect(page).to have_content("Folders")
-      expect(page).to have_content("Files")
-      expect(page).to have_content("Members")
-      expect(page).to have_content("Assembly admins")
-      expect(page).to have_content("Private users")
-      expect(page).to have_content("Moderations")
+      within ".secondary-nav" do
+        expect(page).to have_content("Info")
+        expect(page).to have_content("Components")
+        expect(page).to have_content("Categories")
+        expect(page).to have_content("Attachments")
+        expect(page).to have_content("Folders")
+        expect(page).to have_content("Files")
+        expect(page).to have_content("Members")
+        expect(page).to have_content("Assembly admins")
+        expect(page).to have_content("Private users")
+        expect(page).to have_content("Moderations")
+      end
     end
   end
 
@@ -41,16 +43,18 @@ describe "Assembly admin accesses admin sections", type: :system do
     end
 
     it "can access all sections" do
-      expect(page).to have_content("Info")
-      expect(page).to have_content("Components")
-      expect(page).to have_content("Categories")
-      expect(page).to have_content("Attachments")
-      expect(page).to have_content("Folders")
-      expect(page).to have_content("Files")
-      expect(page).to have_content("Members")
-      expect(page).to have_content("Assembly admins")
-      expect(page).to have_content("Private users")
-      expect(page).to have_content("Moderations")
+      within ".secondary-nav" do
+        expect(page).to have_content("Info")
+        expect(page).to have_content("Components")
+        expect(page).to have_content("Categories")
+        expect(page).to have_content("Attachments")
+        expect(page).to have_content("Folders")
+        expect(page).to have_content("Files")
+        expect(page).to have_content("Members")
+        expect(page).to have_content("Assembly admins")
+        expect(page).to have_content("Private users")
+        expect(page).to have_content("Moderations")
+      end
     end
 
     it_behaves_like "assembly admin manage assembly components"

@@ -6,8 +6,6 @@ module Decidim
     # Public: normalize providers names to they can be used for buttons
     # and icons.
     def normalize_provider_name(provider)
-      return "x" if provider == :twitter
-
       provider.to_s.split("_").first
     end
 

@@ -21,6 +21,14 @@ module Decidim::Conferences
           organization: my_conference.organization
         )
       end
+      let(:consultation) { create(:consultation, organization: my_conference.organization) }
+      let!(:questions) do
+        create_list(
+          :question,
+          3,
+          consultation:
+        )
+      end
 
       let(:params) do
         {
@@ -55,7 +63,8 @@ module Decidim::Conferences
             available_slots: my_conference.available_slots,
             registration_terms: my_conference.registration_terms,
             participatory_processes_ids: participatory_processes.map(&:id),
-            assemblies_ids: assemblies.map(&:id)
+            assemblies_ids: assemblies.map(&:id),
+            consultations_ids: questions.collect(&:consultation).uniq
           }.merge(attachments_params)
         }
       end
@@ -149,6 +158,12 @@ module Decidim::Conferences
           expect(linked_assemblies).to match_array(assemblies)
         end
 
+        it "links consultations" do
+          command.call
+          linked_consultations = my_conference.linked_participatory_space_resources("Consultations", "included_consultations")
+          expect(linked_consultations).to match_array(questions.collect(&:consultation).uniq)
+        end
+
         context "when homepage image is not updated" do
           let(:attachments_params) do
             {
@@ -218,7 +233,8 @@ module Decidim::Conferences
             current_organization: my_conference.organization,
             current_user: user,
             participatory_processes_ids: participatory_processes.map(&:id),
-            assemblies_ids: assemblies.map(&:id)
+            assemblies_ids: assemblies.map(&:id),
+            consultations_ids: questions.collect(&:consultation).uniq
           )
         end
 

@@ -14,9 +14,7 @@ shared_examples "manage process admins examples" do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_participatory_processes.edit_participatory_process_path(participatory_process)
-    within_admin_sidebar_menu do
-      click_link "Process admins"
-    end
+    click_link "Process admins"
   end
 
   it "shows process admin list" do
@@ -26,7 +24,7 @@ shared_examples "manage process admins examples" do
   end
 
   it "creates a new process admin" do
-    click_link "New process admin"
+    find(".card-title a.new").click
 
     within ".new_participatory_process_user_role" do
       fill_in :participatory_process_user_role_email, with: other_user.email

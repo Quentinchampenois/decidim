@@ -5,8 +5,15 @@ require "spec_helper"
 module Decidim
   describe IconHelper do
     describe "#component_icon" do
+      let(:redesign_enabled) { false }
       let(:component) do
         create(:component, manifest_name: :dummy)
+      end
+
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(ActionView::Base).to receive(:redesign_enabled?).and_return(redesign_enabled)
+        # rubocop:enable RSpec/AnyInstance
       end
 
       describe "when the component has no icon" do
@@ -74,7 +81,7 @@ module Decidim
           let(:resource) { build(:user) }
 
           it "renders a person icon" do
-            expect(result).to include("svg#ri-person")
+            expect(result).to include("svg#icon-person")
           end
         end
 
@@ -86,7 +93,7 @@ module Decidim
           end
 
           it "renders a generic icon" do
-            expect(result).to include("svg#ri-bell")
+            expect(result).to include("svg#icon-bell")
           end
         end
 
@@ -98,7 +105,7 @@ module Decidim
           end
 
           it "renders a generic icon" do
-            expect(result).to include("svg#ri-question-mark")
+            expect(result).to include("svg#icon-question-mark")
           end
         end
 
@@ -106,7 +113,7 @@ module Decidim
           let(:resource) { "Something" }
 
           it "renders a generic icon" do
-            expect(result).to include("svg#ri-bell")
+            expect(result).to include("svg#icon-bell")
           end
         end
       end

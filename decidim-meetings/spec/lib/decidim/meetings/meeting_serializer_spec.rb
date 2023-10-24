@@ -57,11 +57,11 @@ module Decidim
         end
 
         it "serializes the start time" do
-          expect(serialized).to include(start_time: meeting.start_time)
+          expect(serialized).to include(start_time: meeting.start_time.to_s(:db))
         end
 
         it "serializes the end time" do
-          expect(serialized).to include(end_time: meeting.end_time)
+          expect(serialized).to include(end_time: meeting.end_time.to_s(:db))
         end
 
         it "serializes the amount of attendees" do

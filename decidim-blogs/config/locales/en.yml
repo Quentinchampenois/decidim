@@ -24,6 +24,9 @@ en:
         new: New post
         title: Actions
       admin:
+        models:
+          post:
+            name: Post
         posts:
           create:
             invalid: There was a problem creating this post.
@@ -47,11 +50,6 @@ en:
           create: "%{user_name} created the %{resource_name} blog post in %{space_name}"
           delete: "%{user_name} deleted the %{resource_name} blog post from %{space_name}"
           update: "%{user_name} updated the %{resource_name} blog post in %{space_name}"
-      content_blocks:
-        highlighted_posts:
-          last_published: Last published
-          name: Posts
-          see_all: See all posts
       last_activity:
         new_post: 'New post:'
       models:
@@ -63,10 +61,8 @@ en:
             published_at: Publish time
             title: Title
       posts:
-        index:
-          count:
-            one: "%{count} post"
-            other: "%{count} posts"
+        show:
+          view: View
     components:
       blogs:
         actions:

@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryProcessGroups
     module ContentBlocks
-      class StatisticsCell < Decidim::ContentBlocks::ParticipatorySpaceStatsCell
+      class StatisticsCell < Decidim::StatisticsCell
         def stats
           @stats ||= begin
             participatory_process_group = Decidim::ParticipatoryProcessGroup.find(model.scoped_resource_id)

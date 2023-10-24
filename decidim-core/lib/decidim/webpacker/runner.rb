@@ -22,7 +22,7 @@ module Decidim
         Decidim::Assets::Tailwind.write_runtime_configuration
 
         # Write the runtime configuration and override the configuration
-        @shakapacker_config = Decidim::Webpacker.configuration.configuration_file
+        @webpacker_config = Decidim::Webpacker.configuration.configuration_file
       end
     end
   end

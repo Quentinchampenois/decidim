@@ -5,15 +5,12 @@ module Decidim
     # A controller that holds the logic to show Assemblies in a public layout.
     class AssembliesController < Decidim::Assemblies::ApplicationController
       include ParticipatorySpaceContext
-      include AssemblyBreadcrumb
 
       participatory_space_layout only: :show
 
       include FilterResource
-      include Paginable
-      include HasParticipatorySpaceContentBlocks
 
-      helper_method :collection, :parent_assemblies, :promoted_assemblies, :stats, :assembly_participatory_processes, :current_assemblies_settings
+      helper_method :parent_assemblies, :promoted_assemblies, :stats, :assembly_participatory_processes, :current_assemblies_settings
 
       def index
         enforce_permission_to :list, :assembly
@@ -59,9 +56,9 @@ module Decidim
 
       def default_filter_params
         {
-          with_any_scope: nil,
-          with_any_area: nil,
-          with_any_type: nil
+          with_scope: nil,
+          with_area: nil,
+          type_id_eq: nil
         }
       end
 
@@ -83,10 +80,6 @@ module Decidim
 
       def parent_assemblies
         search.result.parent_assemblies.order(weight: :asc, promoted: :desc)
-      end
-
-      def collection
-        @collection ||= paginate(Kaminari.paginate_array(parent_assemblies))
       end
 
       def stats

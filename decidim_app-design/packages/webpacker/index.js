@@ -1,6 +1,4 @@
-const { generateWebpackConfig, ...restOpts } = require("shakapacker");
-const webpackConfig = generateWebpackConfig()
-
+const { webpackConfig, ...restOpts } = require("shakapacker");
 const overrideConfig = require("./src/override-config");
 
 module.exports = {

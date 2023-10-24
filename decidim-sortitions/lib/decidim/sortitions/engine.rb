@@ -12,11 +12,10 @@ module Decidim
       isolate_namespace Decidim::Sortitions
 
       routes do
-        resources :sortitions, only: [:index, :show]
-        scope "/sortitions" do
-          root to: "sortitions#index"
+        resources :sortitions, only: [:index, :show] do
+          resource :widget, only: :show, path: "embed"
         end
-        get "/", to: redirect("sortitions", status: 301)
+        root to: "sortitions#index"
       end
 
       initializer "decidim_sortitions.add_cells_view_paths" do

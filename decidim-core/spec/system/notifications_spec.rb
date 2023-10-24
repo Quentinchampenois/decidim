@@ -20,9 +20,8 @@ describe "Notifications", type: :system do
     end
 
     it "has a button on the topbar nav that links to the notifications page" do
-      find("#trigger-dropdown-account").click
-      within "#dropdown-menu-account" do
-        click_link("Notifications")
+      within ".topbar__user__logged" do
+        find("a.topbar__notifications").click
       end
 
       expect(page).to have_current_path decidim.notifications_path
@@ -37,9 +36,8 @@ describe "Notifications", type: :system do
       end
 
       it "displays nothing" do
-        find("#trigger-dropdown-account").click
-        within "#dropdown-menu-account" do
-          click_link("Notifications")
+        within ".topbar__user__logged" do
+          find("a.topbar__notifications").click
         end
 
         expect(page).to have_current_path decidim.notifications_path
@@ -51,16 +49,17 @@ describe "Notifications", type: :system do
       let!(:notification) { nil }
 
       it "the button is not shown as active" do
-        within ".main-bar" do
-          expect(page).not_to have_selector("[data-unread-items]")
+        within ".topbar__user__logged" do
+          expect(page).not_to have_selector("a.topbar__notifications.is-active")
+          expect(page).to have_selector("a.topbar__notifications")
         end
       end
     end
 
     context "when there are some notifications" do
       it "the button is shown as active" do
-        within ".main-bar" do
-          expect(page).to have_selector("[data-unread-items]")
+        within ".topbar__user__logged" do
+          expect(page).to have_selector("a.topbar__notifications.is-active")
         end
       end
     end
@@ -103,11 +102,11 @@ describe "Notifications", type: :system do
       it "hides all notifications from the page" do
         click_link "Mark all as read"
         expect(page).not_to have_selector("[data-notification]")
-        expect(page).not_to have_content("Mark all as read")
         expect(page).to have_content("No notifications yet")
 
-        within ".main-bar" do
-          expect(page).not_to have_selector("[data-unread-items]")
+        within ".title-bar" do
+          expect(page).to have_css(".topbar__notifications")
+          expect(page).not_to have_css(".topbar__notifications.is-active")
         end
       end
     end

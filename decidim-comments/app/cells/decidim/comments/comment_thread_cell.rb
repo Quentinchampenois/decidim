@@ -16,6 +16,12 @@ module Decidim
         model.comment_threads.any?
       end
 
+      def author_name
+        return t("decidim.components.comment.deleted_user") if model.author.deleted?
+
+        model.author.name
+      end
+
       def order
         options[:order] || "older"
       end

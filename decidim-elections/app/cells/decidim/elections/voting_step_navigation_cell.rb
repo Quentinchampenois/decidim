@@ -23,7 +23,7 @@ module Decidim
       end
 
       def button_continue_text
-        t("decidim.elections.votes.voting_step.continue")
+        "#{t("decidim.elections.votes.voting_step.continue")}  #{icon("chevron-right", class: "icon", role: "img", "aria-hidden": true)}"
       end
 
       def previous_step_dom_id
@@ -31,7 +31,7 @@ module Decidim
       end
 
       def next_step_dom_id
-        last_step? ? "step-confirm" : "step-#{current_step_index + 1}"
+        "step-#{current_step_index + 1}"
       end
 
       def current_step_dom_id

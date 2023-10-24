@@ -13,8 +13,14 @@ module Decidim
       render :show
     end
 
+    def membership_cell_name
+      return "decidim/user_group_admin_membership_profile" if options[:from_admin].presence
+
+      "decidim/user_group_membership_profile"
+    end
+
     def memberships
-      @memberships ||= case role
+      @memberships ||= case options[:role].to_s
                        when "member"
                          Decidim::UserGroups::MemberMemberships.for(model).page(params[:page]).per(20)
                        when "admin"
@@ -22,14 +28,6 @@ module Decidim
                        else
                          Decidim::UserGroups::AcceptedMemberships.for(model).page(params[:page]).per(20)
                        end
-    end
-
-    def role
-      options[:role].to_s
-    end
-
-    def validation_messages
-      [t("decidim.members.no_members")] if memberships.blank?
     end
   end
 end

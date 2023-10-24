@@ -1,2 +1,1 @@
-// CSS
-import "stylesheets/decidim/legacy/email.scss";
+import "entrypoints/decidim_email.scss";

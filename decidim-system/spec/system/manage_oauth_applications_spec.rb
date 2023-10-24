@@ -14,7 +14,7 @@ describe "Manage OAuth applications", type: :system do
   end
 
   it "can create new applications" do
-    click_link "New"
+    find(".new").click
 
     within ".new_oauth_application" do
       fill_in :oauth_application_name, with: "Meta Decidim"
@@ -24,7 +24,7 @@ describe "Manage OAuth applications", type: :system do
       fill_in :oauth_application_organization_url, with: "https://www.barcelona.cat"
     end
 
-    dynamically_attach_file(:oauth_application_organization_logo, Decidim::Dev.asset("city.jpeg"), front_interface: true)
+    dynamically_attach_file(:oauth_application_organization_logo, Decidim::Dev.asset("city.jpeg"))
 
     within ".new_oauth_application" do
       find("*[type=submit]").click

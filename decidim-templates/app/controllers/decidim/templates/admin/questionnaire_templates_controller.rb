@@ -8,6 +8,8 @@ module Decidim
       class QuestionnaireTemplatesController < Decidim::Templates::Admin::ApplicationController
         include Decidim::TranslatableAttributes
 
+        skip_before_action :verify_authenticity_token, only: :preview
+
         helper_method :template
 
         def index
@@ -140,7 +142,7 @@ module Decidim
         end
 
         def template
-          @template ||= collection.find(params[:id])
+          @template ||= Template.find_by(id: params[:id])
         end
 
         def search(term)

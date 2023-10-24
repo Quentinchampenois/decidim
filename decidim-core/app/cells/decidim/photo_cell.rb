@@ -17,20 +17,16 @@ module Decidim
       @options[:index]
     end
 
-    def image_alt
-      strip_tags(description) || strip_tags(translated_attribute(model.title)) || t("alt", scope: "decidim.application.photo")
-    end
-
     def image_thumb
-      image_tag model.thumbnail_url, alt: image_alt
+      image_tag model.thumbnail_url, alt: t("alt", scope: "decidim.application.photo")
     end
 
     def image_big
-      image_tag model.big_url, alt: image_alt
+      image_tag model.big_url, alt: t("alt", scope: "decidim.application.photo")
     end
 
     def title
-      decidim_html_escape(translated_attribute(model.title))
+      translated_attribute model.title
     end
 
     def short_description

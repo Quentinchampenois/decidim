@@ -29,7 +29,6 @@ describe "Admin manages answers", type: :system do
 
   describe "importing proposals" do
     it "imports proposals" do
-      page.find(".imports").click
       click_on "Import proposals to answers"
 
       within ".import_proposals" do
@@ -39,18 +38,18 @@ describe "Admin manages answers", type: :system do
 
       click_button "Import proposals to answers"
 
-      expect(page).to have_admin_callout("3 proposals successfully imported")
+      expect(page).to have_content("3 proposals successfully imported")
     end
   end
 
   describe "admin form" do
-    before { click_link "New answer" }
+    before { click_on "New Answer" }
 
     it_behaves_like "having a rich text editor", "new_answer", "full"
   end
 
   it "creates a new answer" do
-    click_link "New answer"
+    click_on "New Answer"
 
     within ".new_answer" do
       fill_in_i18n(
@@ -73,7 +72,9 @@ describe "Admin manages answers", type: :system do
       find("*[type=submit]").click
     end
 
-    expect(page).to have_admin_callout("Answer successfully created.")
+    within ".callout-wrapper" do
+      expect(page).to have_content("successfully")
+    end
 
     within "table" do
       expect(page).to have_content("My answer")
@@ -84,7 +85,7 @@ describe "Admin manages answers", type: :system do
     let(:election) { create(:election, :created, component: current_component) }
 
     it "cannot add a new answer" do
-      expect(page).not_to have_content("New answer")
+      expect(page).not_to have_content("New Answer")
     end
   end
 
@@ -114,7 +115,9 @@ describe "Admin manages answers", type: :system do
         find("*[type=submit]").click
       end
 
-      expect(page).to have_admin_callout("Answer successfully updated.")
+      within ".callout-wrapper" do
+        expect(page).to have_content("successfully")
+      end
 
       within "table" do
         expect(page).to have_content("My new answer")
@@ -140,8 +143,9 @@ describe "Admin manages answers", type: :system do
         end
       end
 
-      # As there is more than one alert, we need to use have_content
-      expect(page).to have_content("Answer successfully deleted.")
+      within ".callout-wrapper" do
+        expect(page).to have_content("successfully")
+      end
 
       within "table" do
         expect(page).not_to have_content(translated(answer.title))
@@ -181,14 +185,16 @@ describe "Admin manages answers", type: :system do
       end
 
       within find("tr", text: translated(answer.title)) do
-        click_link "Mark answer as selected"
+        first(".icon--check").click
       end
 
       within find("tr", text: translated(answer.title)) do
         expect(page).to have_content("Selected")
       end
 
-      expect(page).to have_admin_callout("Answer successfully selected")
+      within ".callout-wrapper" do
+        expect(page).to have_content("Answer successfully selected")
+      end
     end
   end
 end

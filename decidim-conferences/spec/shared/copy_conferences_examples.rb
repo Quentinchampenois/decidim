@@ -34,7 +34,7 @@ shared_examples "copy conferences" do
 
       expect(page).to have_content("successfully")
       expect(page).to have_content("Copy conference")
-      expect(page).to have_content("Unpublished")
+      expect(page).to have_content("Not published")
     end
   end
 
@@ -63,9 +63,7 @@ shared_examples "copy conferences" do
       within find("tr", text: "Copy conference") do
         click_link "Configure"
       end
-      within_admin_sidebar_menu do
-        click_link "Categories"
-      end
+      click_link "Categories"
 
       within ".table-list" do
         conference.categories.each do |category|
@@ -83,9 +81,7 @@ shared_examples "copy conferences" do
       within find("tr", text: "Copy conference") do
         click_link "Configure"
       end
-      within_admin_sidebar_menu do
-        click_link "Components"
-      end
+      click_link "Components"
 
       within ".table-list" do
         conference.components.each do |component|

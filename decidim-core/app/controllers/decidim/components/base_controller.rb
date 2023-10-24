@@ -10,7 +10,7 @@ module Decidim
       include Decidim::NeedsPermission
 
       include ParticipatorySpaceContext
-      before_action :authorize_participatory_space
+      participatory_space_layout
 
       helper Decidim::FiltersHelper
       helper Decidim::OrdersHelper
@@ -34,8 +34,6 @@ module Decidim
       end
 
       before_action :redirect_unless_feature_private
-
-      before_action :set_component_breadcrumb_item
 
       def current_participatory_space
         request.env["decidim.current_participatory_space"]
@@ -68,15 +66,6 @@ module Decidim
 
       def redirect_unless_feature_private
         raise ActionController::RoutingError, "Not Found" unless current_user_can_visit_space?
-      end
-
-      def set_component_breadcrumb_item
-        context_breadcrumb_items << {
-          label: current_component.name,
-          url: root_path,
-          active: false,
-          resource: current_component
-        }
       end
     end
   end

@@ -17,6 +17,9 @@ lb:
         new: Neuer Beitrag
         title: Aktionen
       admin:
+        models:
+          post:
+            name: Post
         posts:
           edit:
             save: Aktualisieren
@@ -33,6 +36,9 @@ lb:
           fields:
             author: Autor
             body: Haupttext
+      posts:
+        show:
+          view: Anzeigen
     components:
       blogs:
         name: Blog

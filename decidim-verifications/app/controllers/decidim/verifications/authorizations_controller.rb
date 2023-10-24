@@ -23,6 +23,8 @@ module Decidim
       def index
         @granted_authorizations = granted_authorizations
         @pending_authorizations = pending_authorizations
+
+        render layout: redesigned_layout("layouts/decidim/user_profile")
       end
 
       def first_login

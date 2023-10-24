@@ -78,7 +78,9 @@ describe "Admin manages participatory process types", type: :system do
 
         expect(page).to have_admin_callout("successfully")
 
-        expect(page).not_to have_content(translated(participatory_process_type.title))
+        within ".card-section" do
+          expect(page).not_to have_content(translated(participatory_process_type.title))
+        end
       end
     end
   end

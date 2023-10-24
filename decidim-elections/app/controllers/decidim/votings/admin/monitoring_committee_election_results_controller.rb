@@ -9,8 +9,6 @@ module Decidim
 
         helper_method :current_voting, :elections, :election, :publish_results_form, :bulletin_board_server
 
-        before_action :append_csp_directives
-
         def index
           enforce_permission_to :read, :monitoring_committee_election_results, voting: current_voting
 
@@ -49,12 +47,6 @@ module Decidim
         end
 
         private
-
-        def append_csp_directives
-          return if bulletin_board_server.blank?
-
-          content_security_policy.append_csp_directive("connect-src", bulletin_board_server)
-        end
 
         def bulletin_board_server
           Decidim::Elections.bulletin_board.bulletin_board_server

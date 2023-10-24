@@ -1,5 +1,4 @@
 <%= content_tag :ul, class: tags_classes do %>
-  <%= icon "price-tag-3-line", class: "inline-block" %>
   <%= content_tag :li, link_to_category if category? %>
 
   <%= content_tag :li, link_to_scope if scope? %>

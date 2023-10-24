@@ -75,7 +75,7 @@ module Decidim
         private
 
         def collection
-          @collection ||= current_conference.media_links
+          @collection ||= Decidim::Conferences::MediaLink.where(conference: current_conference)
         end
       end
     end

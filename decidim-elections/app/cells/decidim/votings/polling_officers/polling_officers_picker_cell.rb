@@ -9,27 +9,13 @@ module Decidim
       class PollingOfficersPickerCell < Decidim::ViewModel
         MAX_POLLING_OFFICERS = 1000
 
+        def show
+          return render :polling_officers if filtered?
+
+          render
+        end
+
         alias component model
-
-        def form
-          options[:form]
-        end
-
-        def field
-          options[:field]
-        end
-
-        def form_name
-          "#{form.object_name}[#{method_name}]"
-        end
-
-        def method_name
-          field.to_s.sub(/s$/, "_ids")
-        end
-
-        def selected_ids
-          form.object.send(method_name)
-        end
 
         def filtered?
           !search_text.nil?
@@ -60,7 +46,18 @@ module Decidim
         end
 
         def filtered_polling_officers
-          @filtered_polling_officers ||= polling_officers
+          @filtered_polling_officers ||= if filtered?
+                                           query = polling_officers.joins(:user)
+                                           if search_text.start_with?("@")
+                                             query.where("nickname ILIKE ?", "#{search_text.delete("@")}%")
+                                           else
+                                             query.where("name ILIKE ?", "%#{search_text}%").or(
+                                               query.where("email ILIKE ?", "%#{search_text}%")
+                                             )
+                                           end
+                                         else
+                                           polling_officers
+                                         end
         end
 
         def polling_officers

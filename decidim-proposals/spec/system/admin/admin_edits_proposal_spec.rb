@@ -82,9 +82,7 @@ describe "Admin edits proposals", type: :system do
         visit_component_admin
         find("a.action-icon--edit-proposal").click
         find("input#proposal_attachment_delete_file").set(true)
-        within ".item__edit-form" do
-          click_button "Update", type: "submit"
-        end
+        find(".form-general-submit .button").click
 
         expect(page).to have_content("Proposal successfully updated.")
 
@@ -100,8 +98,8 @@ describe "Admin edits proposals", type: :system do
 
         find("input#proposal_attachment_delete_file").set(true)
         click_button("Replace")
-        click_button("Remove")
-        click_button("Next")
+        click_button("× Remove")
+        click_button("Save")
         dynamically_attach_file(:proposal_attachment_file, Decidim::Dev.asset("city.jpeg"))
 
         click_button("Update")

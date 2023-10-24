@@ -33,9 +33,6 @@
         name: Mal
     templates:
       admin:
-        block_user_templates:
-          form:
-            save: Lagre
         questionnaire_templates:
           choose:
             create_from_template: Opprett fra mal
@@ -47,6 +44,8 @@
             edit: Rediger
             questionnaire: Spørreskjema
           form:
+            save: Lagre
+            template_title: Informasjon om mal
             title: Spørreskjema mal %{questionnaire_for}
           index:
             confirm_delete: Er du sikker på at du vil slette denne malen?

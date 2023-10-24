@@ -12,18 +12,11 @@ module Decidim
     end
 
     def public_followings
-      @public_followings ||= Kaminari.paginate_array(model.public_users_followings).page(params[:page]).per(20)
+      @public_followings ||= Kaminari.paginate_array(model.public_followings).page(params[:page]).per(20)
     end
 
     def non_public_followings?
-      model.followings_blocked?
-    end
-
-    def validation_messages
-      [].tap do |keys|
-        keys << t("decidim.following.no_followings") if public_followings.blank?
-        keys << t("decidim.following.non_public_followings") if non_public_followings?
-      end
+      public_followings.count < model.following_count
     end
   end
 end

@@ -9,29 +9,54 @@ module Decidim
       MAX_PROPOSALS = 1000
 
       def show
-        render
+        if filtered?
+          render :proposals
+        else
+          render
+        end
       end
 
       alias component model
 
-      def form
-        options[:form]
+      def filtered?
+        !search_text.nil?
       end
 
-      def field
-        options[:field]
+      def picker_path
+        request.path
       end
 
-      def form_name
-        "#{form.object_name}[#{method_name}]"
+      def search_text
+        params[:q]
       end
 
-      def method_name
-        field.to_s.sub(/s$/, "_ids")
+      def more_proposals?
+        @more_proposals ||= more_proposals_count.positive?
       end
 
-      def selected_ids
-        form.object.send(method_name)
+      def more_proposals_count
+        @more_proposals_count ||= proposals_count - MAX_PROPOSALS
+      end
+
+      def proposals_count
+        @proposals_count ||= filtered_proposals.count
+      end
+
+      def decorated_proposals
+        filtered_proposals.limit(MAX_PROPOSALS).each do |proposal|
+          yield Decidim::Proposals::ProposalPresenter.new(proposal)
+        end
+      end
+
+      def filtered_proposals
+        @filtered_proposals ||= if filtered?
+                                  table_name = Decidim::Proposals::Proposal.table_name
+                                  proposals.where(%("#{table_name}"."title"::text ILIKE ?), "%#{search_text}%")
+                                           .or(proposals.where(%("#{table_name}"."reference" ILIKE ?), "%#{search_text}%"))
+                                           .or(proposals.where(%("#{table_name}"."id"::text ILIKE ?), "%#{search_text}%"))
+                                else
+                                  proposals
+                                end
       end
 
       def proposals
@@ -42,10 +67,8 @@ module Decidim
                          &.order(id: :asc)
       end
 
-      def decorated_proposals
-        proposals.limit(MAX_PROPOSALS).each do |proposal|
-          yield Decidim::Proposals::ProposalPresenter.new(proposal)
-        end
+      def proposals_collection_name
+        Decidim::Proposals::Proposal.model_name.human(count: 2)
       end
     end
   end

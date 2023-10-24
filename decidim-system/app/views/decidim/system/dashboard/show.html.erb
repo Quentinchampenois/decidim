@@ -1,6 +1,5 @@
 <% provide :title do %>
-  <h1 class="h1"><%= t("decidim.system.titles.dashboard") %></h1>
-  <h2 class="h3"><%= t ".current_organizations" %></h2>
+  <h2><%= t("decidim.system.titles.dashboard") %></h2>
+  <h3><%= t ".current_organizations" %></h3>
+  <%= render partial: "decidim/system/shared/organizations_list", locals: { organizations: @organizations } %>
 <% end %>
-
-<%= render partial: "decidim/system/shared/organizations_list", locals: { organizations: @organizations } %>

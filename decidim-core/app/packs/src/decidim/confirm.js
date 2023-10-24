@@ -7,15 +7,25 @@
 
 import Rails from "@rails/ujs"
 
+let TEMPLATE_HTML = null;
+
 class ConfirmDialog {
   constructor(sourceElement) {
-    this.$modal = $("#confirm-modal");
+    this.$modal = $(TEMPLATE_HTML);
     this.$source = sourceElement;
-    this.$content = $("[data-confirm-modal-content]", this.$modal);
+    this.$content = $(".confirm-modal-content", this.$modal);
     this.$buttonConfirm = $("[data-confirm-ok]", this.$modal);
     this.$buttonCancel = $("[data-confirm-cancel]", this.$modal);
 
-    window.Decidim.currentDialogs["confirm-modal"].open()
+    // Avoid duplicate IDs and append the new modal to the body
+    const titleId = `confirm-modal-title-${Math.random().toString(36).substring(7)}`;
+
+    this.$modal.removeAttr("id");
+    $("#confirm-modal-title", this.$modal).attr("id", titleId);
+    this.$modal.attr("aria-labelledby", titleId);
+
+    $("body").append(this.$modal);
+    this.$modal.foundation();
   }
 
   confirm(message) {
@@ -25,21 +35,23 @@ class ConfirmDialog {
     this.$buttonCancel.off("click");
 
     return new Promise((resolve) => {
-
       this.$buttonConfirm.on("click", (ev) => {
         ev.preventDefault();
 
-        window.Decidim.currentDialogs["confirm-modal"].close()
+        this.$modal.foundation("close");
         resolve(true);
         this.$source.focus();
       });
-
       this.$buttonCancel.on("click", (ev) => {
         ev.preventDefault();
 
-        window.Decidim.currentDialogs["confirm-modal"].close()
+        this.$modal.foundation("close");
         resolve(false);
         this.$source.focus();
+      });
+
+      this.$modal.foundation("open").on("closed.zf.reveal", () => {
+        this.$modal.remove();
       });
     });
   }
@@ -62,6 +74,11 @@ const allowAction = (ev, element) => {
 
   if (!Rails.fire(element, "confirm")) {
     return false;
+  }
+
+  if (TEMPLATE_HTML === null) {
+    TEMPLATE_HTML = $("#confirm-modal")[0].outerHTML;
+    $("#confirm-modal").remove();
   }
 
   const dialog = new ConfirmDialog(

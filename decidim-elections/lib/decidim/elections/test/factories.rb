@@ -47,7 +47,6 @@ FactoryBot.define do
 
     trait :ongoing do
       started
-      blocked_at { Time.current }
     end
 
     trait :finished do

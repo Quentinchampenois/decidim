@@ -31,8 +31,7 @@ describe "Vote online in an election inside a Voting", type: :system do
     it "can vote and then change the vote", :slow do
       vote_with_census_data
 
-      click_link "Back to elections"
-      click_link(id: "elections__election_#{election.id}")
+      page.find("a.focus__exit").click
 
       expect(page).to have_current_path router.election_path(id: election.id)
       expect(page).not_to have_content("You have already voted in this election.")
@@ -136,7 +135,7 @@ describe "Vote online in an election inside a Voting", type: :system do
       click_link translated(election.title)
       click_link "Start voting"
 
-      within "[data-content]" do
+      within ".card__content" do
         select("DNI", from: "Document type")
         fill_in "Document number", with: "12345678X"
         fill_in "Postal code", with: "04001"
@@ -168,7 +167,7 @@ describe "Vote online in an election inside a Voting", type: :system do
       click_link translated(election.title)
       click_link "Start voting"
 
-      within "[data-content]" do
+      within ".card__content" do
         select("DNI", from: "Document type")
         fill_in "Document number", with: "12345678X"
         fill_in "Postal code", with: "04001"
@@ -205,7 +204,7 @@ describe "Vote online in an election inside a Voting", type: :system do
     click_link translated(election.title)
     click_link "Start voting"
 
-    within "[data-content]" do
+    within ".card__content" do
       select("DNI", from: "Document type")
       fill_in "Document number", with: "12345678X"
       fill_in "Postal code", with: "04001"

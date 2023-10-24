@@ -29,7 +29,7 @@ describe "Edit proposals", type: :system do
       click_link proposal_title
       click_link "Edit proposal"
 
-      expect(page).to have_content "Edit proposal"
+      expect(page).to have_content "EDIT PROPOSAL"
       expect(page).not_to have_content("You can move the point on the map.")
 
       within "form.edit_proposal" do
@@ -52,7 +52,7 @@ describe "Edit proposals", type: :system do
 
       it "shows validation error when format is not accepted" do
         click_link "Edit proposal"
-        dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("participatory_text.md"), keep_modal_open: true) do
+        dynamically_attach_file(:proposal_photos, Decidim::Dev.asset("participatory_text.md"), keep_modal_open: true) do
           expect(page).to have_content("Accepted formats: #{Decidim::OrganizationSettings.for(organization).upload_allowed_file_extensions_image.join(", ")}")
         end
         expect(page).to have_content("only files with the following extensions are allowed: jpeg, jpg, pdf, png, rtf, txt")
@@ -65,24 +65,27 @@ describe "Edit proposals", type: :system do
         it "can delete attachments" do
           visit current_path
 
-          expect(page).to have_content("Documents")
+          # REDESIGN_PENDING: the documents partial now comes with no title,
+          # that is something will be added in the proposal view
+          # expect(page).to have_content("Related documents")
+          expect(page).to have_content("RELATED IMAGES")
           click_link "Edit proposal"
 
           click_button "Edit documents"
           within ".upload-modal" do
-            within "[data-filename='city.jpeg']" do
-              click_button("Remove")
-            end
-            within "[data-filename='Exampledocument.pdf']" do
-              click_button("Remove")
-            end
-            click_button "Next"
+            click_button(class: "remove-upload-item")
+            click_button "Save"
+          end
+          click_button "Edit image"
+          within ".upload-modal" do
+            click_button(class: "remove-upload-item")
+            click_button "Save"
           end
 
           click_button "Send"
 
-          expect(page).not_to have_content("Documents")
-          expect(page).not_to have_content("Images")
+          expect(page).not_to have_content("Related documents")
+          expect(page).not_to have_content("Related images")
         end
 
         context "with attachment titles" do
@@ -91,17 +94,17 @@ describe "Edit proposals", type: :system do
 
           it "can change attachment titles" do
             click_link "Edit proposal"
+            click_button "Edit image"
+            within ".upload-modal" do
+              expect(page).to have_content("Preferrably a landscape image that does not have any text")
+              find(".attachment-title").set(attachment_image_title)
+              click_button "Save"
+            end
             click_button "Edit documents"
             within ".upload-modal" do
               expect(page).to have_content("Has to be an image or a document")
-              expect(page).to have_content("For images, use preferrably landscape images, the service crops the image")
-              within "[data-filename='city.jpeg']" do
-                find("input[type='text']").set(attachment_image_title)
-              end
-              within "[data-filename='Exampledocument.pdf']" do
-                find("input[type='text']").set(attachment_file_title)
-              end
-              click_button "Next"
+              find(".attachment-title").set(attachment_file_title)
+              click_button "Save"
             end
             click_button "Send"
             expect(page).to have_selector("[data-alert-box].success")
@@ -110,58 +113,12 @@ describe "Edit proposals", type: :system do
             expect(translated(Decidim::Attachment.find_by(attached_to_id: proposal.id, content_type: "application/pdf").title)).to eq(attachment_file_title)
           end
         end
-
-        context "with problematic file titles" do
-          let!(:photo) { create(:attachment, :with_image, weight: 0, attached_to: proposal) }
-          let!(:document) { create(:attachment, :with_pdf, weight: 1, attached_to: proposal) }
-
-          before do
-            document.update!(title: { en: "<svg onload=alert('ALERT')>.pdf" })
-            photo.update!(title: { en: "<svg onload=alert('ALERT')>.jpg" })
-          end
-
-          it "displays them correctly on the edit form" do
-            # With problematic code, should raise Selenium::WebDriver::Error::UnexpectedAlertOpenError
-            click_link "Edit proposal"
-            expect(page).to have_content("Required fields are marked with an asterisk")
-            click_button("Edit documents")
-            within "[data-dialog]" do
-              click_button("Next")
-            end
-            click_button("Send")
-            expect(page).to have_content("Proposal successfully updated.")
-          end
-        end
-
-        context "with problematic file names" do
-          let!(:photo) { create(:attachment, :with_image, weight: 0, attached_to: proposal) }
-          let!(:document) { create(:attachment, :with_pdf, weight: 1, attached_to: proposal) }
-
-          before do
-            document.file.blob.update!(filename: "<svg onload=alert('ALERT')>.pdf")
-            photo.file.blob.update!(filename: "<svg onload=alert('ALERT')>.jpg")
-          end
-
-          it "displays them correctly on the edit form" do
-            # With problematic code, should raise Selenium::WebDriver::Error::UnexpectedAlertOpenError
-            click_link "Edit proposal"
-            expect(page).to have_content("Required fields are marked with an asterisk")
-            click_button("Edit documents")
-            within "[data-dialog]" do
-              click_button("Next")
-            end
-            click_button("Send")
-            expect(page).to have_content("Proposal successfully updated.")
-          end
-        end
       end
 
-      context "with multiple images", :slow do
+      context "with multiple images" do
         it "can add many images many times" do
-          skip "REDESIGN_PENDING - Flaky test: upload modal fails on GitHub with multiple fileshttps://github.com/decidim/decidim/issues/10961"
-
           click_link "Edit proposal"
-          dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city.jpeg"))
+          dynamically_attach_file(:proposal_photos, Decidim::Dev.asset("city.jpeg"))
           dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("icon.png"))
           dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("avatar.jpg"))
           click_button "Send"
@@ -170,18 +127,14 @@ describe "Edit proposals", type: :system do
           expect(page).to have_content("icon.png")
           expect(page).to have_content("avatar.jpg")
           dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city2.jpeg"))
-          expect(page).to have_content("city2.jpeg")
-          expect(page).not_to have_content("city3.jpeg")
           dynamically_attach_file(:proposal_documents, Decidim::Dev.asset("city3.jpeg"))
-          expect(page).to have_content("city2.jpeg")
-          expect(page).to have_content("city3.jpeg")
           click_button "Send"
           expect(page).to have_selector("[data-alert-box].success")
-          expect(page).to have_selector("img.object-cover[alt='city.jpeg']")
-          expect(page).to have_selector("img.object-cover[alt='icon.png']")
-          expect(page).to have_selector("img.object-cover[alt='avatar.jpg']")
-          expect(page).to have_selector("img.object-cover[alt='city2.jpeg']")
-          expect(page).to have_selector("img.object-cover[alt='city3.jpeg']")
+          expect(page).to have_selector(".thumbnail[alt='city']")
+          expect(page).to have_selector(".thumbnail[alt='icon']")
+          expect(page).to have_selector(".thumbnail[alt='avatar']")
+          expect(page).to have_selector(".thumbnail[alt='city2']")
+          expect(page).to have_selector(".thumbnail[alt='city3']")
         end
       end
     end
@@ -203,13 +156,13 @@ describe "Edit proposals", type: :system do
 
         click_link translated(proposal.title)
         click_link "Edit proposal"
+        check "proposal_has_address"
 
         expect(page).to have_field("Title", with: translated(proposal.title))
         expect(page).to have_field("Body", with: translated(proposal.body))
         expect(page).to have_field("Address", with: proposal.address)
         expect(page).to have_css("[data-decidim-map]")
 
-        fill_in :proposal_address, with: nil
         fill_in_geocoding :proposal_address, with: new_address
         expect(page).to have_content("You can move the point on the map.")
 
@@ -226,7 +179,7 @@ describe "Edit proposals", type: :system do
           )
         end
 
-        it "allows filling an empty address" do
+        it "allows filling an empty address and unchecking the has address checkbox" do
           visit_component
 
           click_link translated(proposal.title)
@@ -241,7 +194,7 @@ describe "Edit proposals", type: :system do
             fill_in :proposal_body, with: new_body
             fill_in :proposal_address, with: ""
           end
-
+          uncheck "proposal_has_address"
           click_button "Send"
 
           expect(page).to have_content(new_title)
@@ -260,7 +213,7 @@ describe "Edit proposals", type: :system do
         click_link proposal_title
         click_link "Edit proposal"
 
-        expect(page).to have_content "Edit proposal"
+        expect(page).to have_content "EDIT PROPOSAL"
 
         within "form.edit_proposal" do
           fill_in :proposal_body, with: "A"
@@ -284,7 +237,7 @@ describe "Edit proposals", type: :system do
         click_link proposal_title
         click_link "Edit proposal"
 
-        expect(page).to have_content "Edit proposal"
+        expect(page).to have_content "EDIT PROPOSAL"
 
         within "form.edit_proposal" do
           fill_in :proposal_title, with: "A title with a #hashtag"
@@ -307,8 +260,6 @@ describe "Edit proposals", type: :system do
         let(:body_en) { %(Hello <a href="#{link}" target="_blank">this is a link</a> World) }
 
         before do
-          organization.update(rich_text_editor_in_public_views: true)
-
           body = proposal.body
           body["en"] = body_en
           proposal.update!(body:)

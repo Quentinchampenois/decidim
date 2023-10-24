@@ -3,15 +3,15 @@
 shared_examples "manage projects" do
   describe "admin form" do
     before do
-      within ".item_show__wrapper" do
-        click_link("New project", class: "button")
+      within ".process-content" do
+        page.find(".button--title.new").click
       end
     end
 
     it_behaves_like "having a rich text editor", "new_project", "full"
 
     it "displays the proposals picker" do
-      expect(page).to have_content("Proposals")
+      expect(page).to have_content("Choose proposals")
     end
 
     context "when geocoding is enabled", :serves_geocoding_autocomplete do
@@ -135,15 +135,13 @@ shared_examples "manage projects" do
 
     it "shows the order count" do
       visit current_path
-      expect(page).to have_content("Finished votes: 10")
-      expect(page).to have_content("Pending votes: 5")
+      expect(page).to have_content("Finished votes: \n10")
+      expect(page).to have_content("Pending votes: \n5")
     end
   end
 
   it "creates a new project", :slow do
-    within ".bulk-actions-budgets" do
-      click_link "New project"
-    end
+    find(".card-title a.button.new").click
 
     within ".new_project" do
       fill_in_i18n(
@@ -162,7 +160,7 @@ shared_examples "manage projects" do
       )
       fill_in :project_budget_amount, with: 22_000_000
 
-      select translated(scope.name), from: :project_decidim_scope_id
+      scope_pick select_data_picker(:project_decidim_scope_id), scope
       select translated(category.name), from: :project_decidim_category_id
 
       find("*[type=submit]").click
@@ -213,7 +211,7 @@ shared_examples "manage projects" do
           ca: "El meu nou títol"
         )
 
-        tom_select("#proposals_list", option_id: proposals.last(2).map(&:id))
+        proposals_pick(select_data_picker(:project_proposals, multiple: true), proposals.last(2))
 
         find("*[type=submit]").click
       end
@@ -235,7 +233,7 @@ shared_examples "manage projects" do
       end
 
       within ".edit_project" do
-        tom_select("#proposals_list", option_id: proposals.first(proposals.length - 4).map(&:id))
+        proposals_remove(select_data_picker(:project_proposals, multiple: true), proposals.last(4))
 
         find("*[type=submit]").click
       end
@@ -245,10 +243,8 @@ shared_examples "manage projects" do
       expect(project.linked_resources(:proposals, "included_proposals").first.title).to eq(not_removed_projects_title)
     end
 
-    it "creates a new project" do
-      within ".bulk-actions-budgets" do
-        click_link "New project"
-      end
+    it "creates a new project", :slow do
+      find(".card-title a.button.new").click
 
       within ".new_project" do
         fill_in_i18n(
@@ -267,9 +263,8 @@ shared_examples "manage projects" do
         )
         fill_in :project_budget_amount, with: 22_000_000
 
-        tom_select("#proposals_list", option_id: proposals.first(2).map(&:id))
-
-        select translated(scope.name), from: :project_decidim_scope_id
+        proposals_pick(select_data_picker(:project_proposals, multiple: true), proposals.first(2))
+        scope_pick(select_data_picker(:project_decidim_scope_id), scope)
         select translated(category.name), from: :project_decidim_category_id
 
         find("*[type=submit]").click

@@ -1,12 +1,11 @@
-import ConsentManager from "./consent_manager";
+import ConsentManager from "src/decidim/data_consent/consent_manager";
 
 const initDialog = (manager) => {
   if (Object.keys(manager.state).length > 0) {
     return;
   }
-
   const dialogWrapper = document.querySelector("#dc-dialog-wrapper");
-  dialogWrapper.hidden = false
+  dialogWrapper.classList.remove("hide");
 
   const acceptAllButton = dialogWrapper.querySelector("#dc-dialog-accept");
   const rejectAllButton = dialogWrapper.querySelector("#dc-dialog-reject");
@@ -14,20 +13,43 @@ const initDialog = (manager) => {
 
   acceptAllButton.addEventListener("click", () => {
     manager.acceptAll();
-    dialogWrapper.hidden = true;
+    dialogWrapper.style.display = "none";
   });
 
   rejectAllButton.addEventListener("click", () => {
     manager.rejectAll();
-    dialogWrapper.hidden = true;
+    dialogWrapper.style.display = "none";
   });
 
   settingsButton.addEventListener("click", () => {
-    dialogWrapper.hidden = true;
+    dialogWrapper.style.display = "none";
   });
 }
 
 const initModal = (manager) => {
+  const categoryElements = manager.modal.querySelectorAll(".category-wrapper");
+
+  categoryElements.forEach((categoryEl) => {
+    const categoryButton = categoryEl.querySelector(".dc-title");
+    const categoryDescription = categoryEl.querySelector(".dc-description");
+    categoryButton.addEventListener("click", () => {
+      // REDESIGN_PENDING: Remove the hide class when redesign enabled
+      const hidden = categoryDescription.classList.contains("hide") || categoryDescription.hidden;
+      if (hidden) {
+        categoryButton.classList.add("open");
+        categoryDescription.hidden = false;
+        // REDESIGN_PENDING: Remove the hide class when redesign enabled
+        categoryDescription.classList.remove("hide");
+
+      } else {
+        categoryButton.classList.remove("open");
+        categoryDescription.hidden = true;
+        // REDESIGN_PENDING: Remove the hide class when redesign enabled
+        categoryDescription.classList.add("hide");
+      }
+    })
+  })
+
   const acceptAllButton = manager.modal.querySelector("#dc-modal-accept");
   const rejectAllButton = manager.modal.querySelector("#dc-modal-reject");
   const saveSettingsButton = manager.modal.querySelector("#dc-modal-save");
@@ -73,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const categories = [...modal.querySelectorAll("[data-id]")].map((el) => el.dataset.id)
+  const categories = [...modal.querySelectorAll(".category-wrapper")].map((el) => el.dataset.id)
   const manager = new ConsentManager({
     modal: modal,
     categories: categories,

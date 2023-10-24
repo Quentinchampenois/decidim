@@ -1,11 +1,9 @@
-<%= content_tag :div, id: options[:id], class: "flash #{css_class}", data: { announcement: "" }.compact, hidden: options[:hidden] do %>
+<%= content_tag :div, class: "callout #{callout_class}", data: { announcement: "" } do %>
   <% if has_title? %>
-    <div class="h4">
-      <%= clean_title %>
-    </div>
-  <% end %>
+    <div class="h4"><%= clean_title %></div>
 
-  <span class="flash__message">
-    <%= text %>
-  </span>
+    <%= clean_body %>
+  <% else %>
+    <%= clean_announcement %>
+  <% end %>
 <% end %>

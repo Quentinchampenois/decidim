@@ -45,12 +45,6 @@ module Decidim
       end
     end
 
-    def title_icon
-      return if resource.blank?
-
-      resource_type_icon(resource.class)
-    end
-
     # The description to show at the card.
     #
     # The card will also be displayed OK if there is no description.
@@ -94,16 +88,11 @@ module Decidim
     delegate :action, to: :model
 
     def element_id
-      "#{id_prefix}-#{model.id}"
-    end
-
-    def id_prefix
-      @id_prefix ||= context[:id_prefix].presence || "action"
+      "action-#{model.id}"
     end
 
     def cache_hash
       hash = []
-      hash << id_prefix
       hash << I18n.locale.to_s
       hash << model.class.name.underscore
       hash << model.cache_key_with_version
@@ -142,17 +131,13 @@ module Decidim
 
       return unless presenter
 
-      cell "decidim/author", presenter, layout: :avatar
+      cell "decidim/author", presenter
     end
 
     def participatory_space
       return resource if resource.is_a?(Decidim::Participable)
 
       model.participatory_space_lazy
-    end
-
-    def participatory_space_icon
-      icon "treasure-map-line"
     end
 
     def participatory_space_link
@@ -164,10 +149,6 @@ module Decidim
 
     def show_author?
       context[:show_author]
-    end
-
-    def hide_participatory_space?
-      context[:hide_participatory_space]
     end
   end
 end

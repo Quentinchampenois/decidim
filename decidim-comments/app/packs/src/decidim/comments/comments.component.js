@@ -1,6 +1,7 @@
 /* eslint id-length: ["error", { "exceptions": ["$"] }] */
 /* eslint max-lines: ["error", {"max": 350, "skipBlankLines": true}] */
 
+
 /**
  * A plain Javascript component that handles the comments.
  *
@@ -11,6 +12,11 @@
 // This is necessary for testing purposes
 const $ = window.$;
 
+import Rails from "@rails/ujs";
+
+import { createCharacterCounter } from "src/decidim/input_character_counter"
+import ExternalLink from "src/decidim/redesigned_external_link"
+import ExternalDomainLink from "src/decidim/external_domain_warning"
 import changeReportFormBehavior from "src/decidim/change_report_form_behavior"
 
 export default class CommentsComponent {
@@ -43,6 +49,8 @@ export default class CommentsComponent {
           $(".add-comment textarea", this.$element).prop("disabled", false);
         });
       }
+
+      $(".order-by__dropdown .is-submenu-item a", this.$element).on("click.decidim-comments", () => this._onInitOrder());
     }
   }
 
@@ -56,8 +64,9 @@ export default class CommentsComponent {
       this.mounted = false;
       this._stopPolling();
 
-      $(".add-comment .opinion-toggle button", this.$element).off("click.decidim-comments");
+      $(".add-comment .opinion-toggle .button", this.$element).off("click.decidim-comments");
       $(".add-comment textarea", this.$element).off("input.decidim-comments");
+      $(".order-by__dropdown .is-submenu-item a", this.$element).off("click.decidim-comments");
       $(".add-comment form", this.$element).off("submit.decidim-comments");
       $(".add-comment textarea", this.$element).each((_i, el) => el.removeEventListener("emoji.added", this._onTextInput));
     }
@@ -94,7 +103,7 @@ export default class CommentsComponent {
     const $comment = $(replyHtml);
     const $replies = $(`#comment-${commentId}-replies`);
     this._addComment($replies, $comment);
-    $replies.addClass("comment-reply");
+    $replies.siblings(".comment__additionalreply").removeClass("hide");
     this._finalizeCommentCreation($parent, fromCurrentUser);
   }
 
@@ -117,7 +126,7 @@ export default class CommentsComponent {
     $(".add-comment", $parent).each((_i, el) => {
       const $add = $(el);
       const $form = $("form", $add);
-      const $opinionButtons = $(".opinion-toggle button", $add);
+      const $opinionButtons = $(".opinion-toggle .button", $add);
       const $text = $("textarea", $form);
 
       $opinionButtons.on("click.decidim-comments", this._onToggleOpinion);
@@ -158,9 +167,13 @@ export default class CommentsComponent {
     this.lastCommentId = parseInt($comment.data("comment-id"), 10);
 
     $target.append($container);
-
+    $container.foundation();
     this._initializeComments($container);
-    document.dispatchEvent(new CustomEvent("comments:loaded", { detail: {commentsIds: [this.lastCommentId] }}));
+    createCharacterCounter($(".add-comment textarea", $container));
+    $container.find('a[target="_blank"]').each((_i, elem) => {
+      new ExternalLink(elem); // eslint-disable-line no-new
+      new ExternalDomainLink(elem); // eslint-disable-line no-new
+    });
   }
 
   /**
@@ -174,18 +187,16 @@ export default class CommentsComponent {
    */
   _finalizeCommentCreation($parent, fromCurrentUser) {
     if (fromCurrentUser) {
-      const $add = $(".add-comment", $parent);
-      $("textarea", $add).each((_i, text) => {
-        const $text = $(text);
-        // Reset textarea content
-        $text.val("")
-        // Update characterCounter component
-        const characterCounter = $text.data("remaining-characters-counter");
-        if (characterCounter) {
-          characterCounter.handleInput();
-          characterCounter.updateStatus();
-        }
-      })
+      const $add = $("> .add-comment", $parent);
+      const $text = $("textarea", $add);
+      const characterCounter = $text.data("remaining-characters-counter");
+      $text.val("");
+      if (characterCounter) {
+        characterCounter.updateStatus();
+      }
+      if (!$add.parent().is(".comments")) {
+        $add.addClass("hide");
+      }
     }
 
     // Restart the polling
@@ -221,7 +232,7 @@ export default class CommentsComponent {
         "commentable_gid": this.commentableGid,
         "root_depth": this.rootDepth,
         "order": this.order,
-        // From here, the rest of properties are optional
+        "after": this.lastCommentId,
         ...(this.toggleTranslations && { "toggle_translations": this.toggleTranslations }),
         ...(this.lastCommentId && { "after": this.lastCommentId })
       }),
@@ -251,9 +262,9 @@ export default class CommentsComponent {
    * @returns {Void} - Returns nothing
    */
   _setLoading() {
-    const $container = $("> #comments", this.$element);
-    $("> .comments", $container).addClass("hidden");
-    $("> .loading-comments", $container).removeClass("hidden");
+    const $container = $("> .comments-container", this.$element);
+    $("> .comments", $container).addClass("hide");
+    $("> .loading-comments", $container).removeClass("hide");
   }
 
   /**
@@ -274,13 +285,13 @@ export default class CommentsComponent {
    */
   _onToggleOpinion(ev) {
     let $btn = $(ev.target);
-    if (!$btn.is("button")) {
-      $btn = $btn.parents("button");
+    if (!$btn.is(".button")) {
+      $btn = $btn.parents(".button");
     }
 
     const $add = $btn.closest(".add-comment");
     const $form = $("form", $add);
-    const $opinionButtons = $(".opinion-toggle button", $add);
+    const $opinionButtons = $(".opinion-toggle .button", $add);
     const $selectedState = $(".opinion-toggle .selected-state", $add);
     const $alignment = $(".alignment-input", $form);
 

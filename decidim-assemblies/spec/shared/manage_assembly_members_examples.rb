@@ -5,18 +5,17 @@ shared_examples "manage assembly members examples" do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_assemblies.edit_assembly_path(assembly)
-    within_admin_sidebar_menu do
-      click_link "Members"
-    end
+    click_link "Members"
   end
 
   context "without existing user" do
     let!(:assembly_member) { create(:assembly_member, assembly:) }
 
     it "creates a new assembly member" do
-      click_link "New assembly member"
+      find(".card-title a.new").click
 
-      fill_in :assembly_member_designation_date, with: Time.current
+      execute_script("$('#assembly_member_designation_date').focus()")
+      find(".datepicker-days .active").click
 
       within ".new_assembly_member" do
         fill_in(
@@ -48,9 +47,10 @@ shared_examples "manage assembly members examples" do
     let!(:member_user) { create(:user, organization: assembly.organization) }
 
     it "creates a new assembly member" do
-      click_link "New assembly member"
+      find(".card-title a.new").click
 
-      fill_in :assembly_member_designation_date, with: Time.current
+      execute_script("$('#assembly_member_designation_date').focus()")
+      find(".datepicker-days .active").click
 
       within ".new_assembly_member" do
         select "Existing participant", from: :assembly_member_existing_user
@@ -74,9 +74,10 @@ shared_examples "manage assembly members examples" do
     let!(:member_organization) { create(:user_group, :verified, organization: assembly.organization) }
 
     it "creates a new assembly member" do
-      click_link "New assembly member"
+      find(".card-title a.new").click
 
-      fill_in :assembly_member_designation_date, with: Time.current
+      execute_script("$('#assembly_member_designation_date').focus()")
+      find(".datepicker-days .active").click
 
       within ".new_assembly_member" do
         select "Existing participant", from: :assembly_member_existing_user

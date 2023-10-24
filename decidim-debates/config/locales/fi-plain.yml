@@ -51,6 +51,7 @@ fi-pl:
         confirm_destroy: Oletko varma?
         destroy: Poista
         edit: Muokkaa
+        new: Uusi %{name}
         title: Toiminnot
       admin:
         debate_closes:
@@ -80,6 +81,9 @@ fi-pl:
             success: Keskustelu päivitetty onnistuneesti.
         exports:
           comments: Kommentit
+        models:
+          debate:
+            name: Keskustelu
       admin_log:
         debate:
           close: "%{user_name} sulki keskustelun %{resource_name} osallistumistilassa %{space_name}"
@@ -92,7 +96,7 @@ fi-pl:
           invalid: Keskustelun sulkeminen epäonnistui.
           success: Keskustelun sulkeminen onnistui.
         close_debate_modal:
-          cancel: Peruuta
+          close: Sulje
           description: Mitkä olivat keskustelussa syntyneet johtopäätökset lyhyesti kerrottuna?
           send: Sulje keskustelu
         closed: Suljettu
@@ -119,12 +123,18 @@ fi-pl:
           official: Virallinen
           origin: Alkuperä
           participants: Osallistujat
+          scope: Teema
           search: Hae
           state: Tila
           state_values:
             closed: Suljetut
             open: Avoimet
-          user_group: Ryhmät
+          user_groups: Ryhmät
+        filters_small_view:
+          close_modal: Sulje ikkuna
+          filter: Suodata
+          filter_by: Suodata
+          unfold: Avaa
         form:
           select_a_category: Valitse aihepiiri
         index:
@@ -140,6 +150,7 @@ fi-pl:
           recent: Viimeisimmät
           updated: Viimeksi päivitetyt
         show:
+          back: Takaisin listaan
           close_debate: Sulje keskustelu
           date: Päivämäärä
           debate_closed: Suljettu
@@ -147,21 +158,28 @@ fi-pl:
           edit_conclusions: Muokkaa johtopäätöksiä
           edit_debate: Muokkaa keskustelua
           groups_count: Ryhmiä
+          last_comment_by: Viimeisin kommentti käyttäjältä
+          no_comments_yet: Ei vielä kommentteja
           open: Avoin keskustelu
           participants_count: Osallistujia
         update:
           invalid: Keskustelun päivittäminen epäonnistui.
           success: Keskustelun päivittäminen onnistui.
+        versions:
+          debates:
+            back_to_resource: Takaisin keskusteluun
+          index:
+            title: Versiot
+        versions_list:
+          back_to_resource: Takaisin keskusteluun
       last_activity:
         debate_updated: 'Keskustelu päivitetty:'
         new_debate: 'Uusi keskustelu:'
       models:
         debate:
           fields:
-            end: Päättymisaika
             end_time: Päättymispäivä
             official_debate: Virallinen keskustelu
-            start: Alkamisaika
             start_time: Alkamispäivä
             title: Otsikko
     events:

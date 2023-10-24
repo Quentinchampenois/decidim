@@ -437,10 +437,6 @@ module Decidim
       committee_members.approved.count >= minimum_committee_members
     end
 
-    def missing_committee_members
-      minimum_committee_members - committee_members.approved.count
-    end
-
     def component
       nil
     end

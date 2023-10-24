@@ -25,8 +25,6 @@ module Decidim
           group = create_participatory_process_group
 
           if group.persisted?
-            Decidim::ContentBlocksCreator.new(group).create_default!
-
             broadcast(:ok, group)
           else
             form.errors.add(:hero_image, group.errors[:hero_image]) if group.errors.include? :hero_image

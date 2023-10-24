@@ -61,7 +61,6 @@ module Decidim
   autoload :ViewHooks, "decidim/view_hooks"
   autoload :ContentBlockRegistry, "decidim/content_block_registry"
   autoload :ContentBlockManifest, "decidim/content_block_manifest"
-  autoload :ContentBlocks, "decidim/content_blocks"
   autoload :MetricRegistry, "decidim/metric_registry"
   autoload :MetricManifest, "decidim/metric_manifest"
   autoload :MetricOperation, "decidim/metric_operation"
@@ -115,12 +114,13 @@ module Decidim
   autoload :EventRecorder, "decidim/event_recorder"
   autoload :ControllerHelpers, "decidim/controller_helpers"
   autoload :ProcessesFileLocally, "decidim/processes_file_locally"
+  autoload :RedesignLayout, "decidim/redesign_layout"
+  autoload :DisabledRedesignLayout, "decidim/disabled_redesign_layout"
   autoload :BlockRegistry, "decidim/block_registry"
   autoload :DependencyResolver, "decidim/dependency_resolver"
   autoload :Upgrade, "decidim/upgrade"
   autoload :ParticipatorySpaceUser, "decidim/participatory_space_user"
   autoload :ModerationTools, "decidim/moderation_tools"
-  autoload :ContentSecurityPolicy, "decidim/content_security_policy"
 
   include ActiveSupport::Configurable
   # Loads seeds from all engines.
@@ -389,7 +389,13 @@ module Decidim
 
   # Social Networking services used for social sharing
   config_accessor :social_share_services do
-    %w(X Facebook WhatsApp Telegram)
+    %w(Twitter Facebook WhatsApp Telegram)
+  end
+
+  # If set to true redesigned versions of layouts and cells will be used by
+  # default
+  config_accessor :redesign_active do
+    false
   end
 
   # The Decidim::Exporters::CSV's default column separator
@@ -515,13 +521,6 @@ module Decidim
   # List of static pages' slugs that can include content blocks
   config_accessor :page_blocks do
     %w(terms-of-service)
-  end
-
-  # List of additional content security policies to be appended to the default ones
-  # This is useful for adding custom CSPs for external services like Here Maps, YouTube, etc.
-  # Read more: https://docs.decidim.org/en/develop/configure/initializer#_content_security_policy
-  config_accessor :content_security_policies_extra do
-    {}
   end
 
   # Public: Registers a global engine. This method is intended to be used

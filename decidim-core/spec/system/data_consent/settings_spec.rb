@@ -21,10 +21,7 @@ describe "Data consent", type: :system do
     it "user accepts the cookies and dialog is not shown anymore'" do
       expect(page).to have_content(cookies_description)
 
-      within "#dc-dialog-wrapper" do
-        click_button "Accept all"
-      end
-
+      click_button "Accept all"
       expect(page).not_to have_content(cookies_description)
 
       visit decidim.root_path
@@ -34,10 +31,7 @@ describe "Data consent", type: :system do
     it "user rejects the cookies and dialog is not shown anymore'" do
       expect(page).to have_content(cookies_description)
 
-      within "#dc-dialog-wrapper" do
-        click_button "Accept only essential"
-      end
-
+      click_button "Accept only essential"
       expect(page).not_to have_content(cookies_description)
 
       visit decidim.root_path
@@ -55,18 +49,20 @@ describe "Data consent", type: :system do
     it "shows cookie" do
       expect(page).not_to have_content("decidim-consent")
       expect(page).not_to have_content("Stores information about the cookies allowed by the user on this website")
-      find("[data-id='essential']").find("[id^='accordion-trigger']").click
+      within ".category-wrapper[data-id='essential']" do
+        click_button(class: "dc-title")
+      end
       expect(page).to have_content("decidim-consent")
       expect(page).to have_content("Stores information about the cookies allowed by the user on this website")
     end
 
     it "modal remembers users selection" do
       within "[data-id='analytics']" do
-        find("label").click
+        find(".switch-paddle").click
       end
       click_button "Save settings"
 
-      within "footer" do
+      within ".footer" do
         click_link "Cookie settings"
       end
 

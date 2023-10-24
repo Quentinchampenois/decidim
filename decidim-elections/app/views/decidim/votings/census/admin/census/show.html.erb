@@ -1,15 +1,14 @@
-<% add_decidim_page_title(t("show.heading", scope: "decidim.votings.census.admin.census")) %>
 <div class="card">
-  <div class="item_show__header">
-    <h2 class="item_show__header-title">
+  <div class="card-divider">
+    <h2 class="card-title">
       <%= t("show.heading", scope: "decidim.votings.census.admin.census") %>
 
       <% if current_census.data_created? %>
         <%= link_to t("delete.button", scope: "decidim.votings.census.admin.census"),
-                    admin_voting_census_path,
-                    class: "button button__sm button__secondary alert hollow tiny button--title destroy",
-                    method: :delete,
-                    data: { confirm: t("delete.confirm", scope: "decidim.votings.census.admin.census") } %>
+                  admin_voting_census_path,
+                  class: "button alert hollow tiny button--title destroy",
+                  method: :delete,
+                  data: { confirm: t("delete.confirm", scope: "decidim.votings.census.admin.census") } %>
       <% end %>
     </h2>
   </div>
@@ -20,5 +19,5 @@
 </div>
 
 <% if waiting_status? %>
-  <%= append_javascript_pack_tag "decidim_votings_admin" %>
+  <%= append_javascript_pack_tag "decidim_votings_admin_update_census_dataset_status" %>
 <% end %>

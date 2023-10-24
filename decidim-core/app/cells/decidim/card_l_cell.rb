@@ -24,22 +24,8 @@ module Decidim
       "#{class_base_name}_#{resource.id}"
     end
 
-    def item_list_class
-      return "card__list" if extra_class.blank?
-
-      "card__list #{extra_class}"
-    end
-
     def extra_class
       ""
-    end
-
-    def wrapper_class
-      options[:wrapper_class] || ""
-    end
-
-    def html_options
-      @html_options ||= options[:html_options] || {}
     end
 
     def presented_resource
@@ -51,11 +37,7 @@ module Decidim
     end
 
     def resource_path
-      resource_locator(resource).path(url_extra_params)
-    end
-
-    def url_extra_params
-      options[:url_extra_params] || {}
+      resource_locator(resource).path
     end
 
     def class_base_name
@@ -73,7 +55,7 @@ module Decidim
     end
 
     def has_image?
-      resource_image_path.present?
+      false
     end
 
     def has_link_to_resource?
@@ -81,8 +63,6 @@ module Decidim
     end
 
     def link_whole_card?
-      return true unless options.has_key?(:link_whole_card)
-
       options[:link_whole_card]
     end
 
@@ -104,22 +84,20 @@ module Decidim
     end
 
     def title
-      decidim_html_escape(translated_attribute(resource.title))
+      translated_attribute resource.title
     end
 
     def title_tag
+      # REDESIGN_PENDING: May this tag should be a header below :h2 calculated
+      # dynamically?
       options[:title_tag] || :div
-    end
-
-    def description_length
-      100
     end
 
     def description
       attribute = resource.try(:short_description) || resource.try(:body) || resource.description
       text = translated_attribute(attribute)
 
-      decidim_sanitize_editor(html_truncate(text, length: description_length), strip_tags: true)
+      decidim_sanitize_editor(html_truncate(text, length: 100))
     end
 
     def has_authors?

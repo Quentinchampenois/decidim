@@ -2,6 +2,7 @@
 
 module Decidim
   class VersionsListItemCell < Decidim::ViewModel
+    include Decidim::TraceabilityHelper
     include Decidim::LayoutHelper
 
     def version
@@ -13,11 +14,7 @@ module Decidim
     end
 
     def index
-      total - options[:index]
-    end
-
-    def total
-      options[:total]
+      options[:index] + 1
     end
 
     def version_path
@@ -25,7 +22,7 @@ module Decidim
     end
 
     def i18n_version_index
-      i18n("version_index", index:, total:)
+      i18n("version_index", index:)
     end
 
     def i18n(string, **params)
@@ -38,10 +35,6 @@ module Decidim
 
     def default_i18n_scope
       "decidim.versions_list_item.show"
-    end
-
-    def html_options
-      @html_options ||= options[:html_options] || {}
     end
   end
 end

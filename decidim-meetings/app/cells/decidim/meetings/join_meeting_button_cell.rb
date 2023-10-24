@@ -10,8 +10,6 @@ module Decidim
       include ActionView::Helpers::FormOptionsHelper
 
       def show
-        return unless model.can_be_joined_by?(current_user) || model.on_different_platform?
-
         render
       end
 
@@ -24,7 +22,13 @@ module Decidim
       end
 
       def button_classes
-        "button button__xl button__secondary w-full"
+        return "button expanded button--sc" if big_button?
+
+        "button card__button button--sc small"
+      end
+
+      def big_button?
+        options[:big_button]
       end
 
       def shows_remaining_slots?

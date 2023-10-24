@@ -1,4 +1,5 @@
 import "src/decidim/vendor/jquery-tmpl"
+import * as L from "leaflet";
 import MapController from "src/decidim/map/controller"
 import "leaflet.markercluster";
 
@@ -42,10 +43,10 @@ export default class MapMarkersController extends MapController {
 
       $.tmpl(this.config.popupTemplateId, markerData).appendTo(node);
       marker.bindPopup(node, {
-        // The popup width is equal to 80% of the map width
-        maxWidth: this.map.getSize().x * 0.8,
+        maxwidth: 640,
+        minWidth: 500,
         keepInView: true,
-        closeButton: false
+        className: "map-info"
       }).openPopup();
 
       this.markerClusters.addLayer(marker);

@@ -45,14 +45,6 @@ module Decidim
         end
       end
 
-      def count_replies(comment)
-        if comment.comment_threads.size.positive?
-          comment.comment_threads.size + comment.comment_threads.sum { |reply| count_replies(reply) }
-        else
-          0
-        end
-      end
-
       private
 
       def base_scope
@@ -88,6 +80,14 @@ module Decidim
         scope.sort_by do |comment|
           count_replies(comment)
         end.reverse
+      end
+
+      def count_replies(comment)
+        if comment.comment_threads.size.positive?
+          comment.comment_threads.size + comment.comment_threads.sum { |reply| count_replies(reply) }
+        else
+          0
+        end
       end
     end
   end

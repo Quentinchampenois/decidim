@@ -27,10 +27,6 @@ module Decidim
       false
     end
 
-    def officialized?
-      false
-    end
-
     def members_count
       Decidim::UserGroups::AcceptedUsers.for(__getobj__).count
     end

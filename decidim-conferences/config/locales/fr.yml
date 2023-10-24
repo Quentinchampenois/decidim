@@ -5,6 +5,7 @@ fr:
         assemblies_ids: Assemblées associées
         available_slots: Nombre de places disponibles
         banner_image: Image d'en-tête
+        consultations_ids: Votations associées
         copy_categories: Copier les catégories
         copy_components: Copier les fonctionnalités
         copy_features: Copier les fonctionnalités
@@ -62,7 +63,7 @@ fr:
         personal_url: Site internet personnel
         position: Profession
         short_bio: Courte biographie
-        twitter_handle: Compte X
+        twitter_handle: Gestionnaire Twitter
         user_id: Utilisateur
       conference_user_role:
         email: Email
@@ -90,11 +91,6 @@ fr:
       actions:
         confirm: Confirmer
         new_conference: Nouvelle conférence
-        new_conference_user_role: Nouvel administrateur de conférence
-        new_media_link: Nouveau lien média
-        new_partner: Nouveau partenaire
-        new_registration_type: Nouveau type d'inscription
-        new_speaker: Nouveau conférencier
         send_diplomas: Envoyer des certificats de présence
       conference_copies:
         new:
@@ -157,8 +153,8 @@ fr:
         form:
           title: Informations générales
         index:
+          not_published: Non publié
           published: Publié
-          unpublished: Non publié
         new:
           create: Créer
           title: Conférence
@@ -198,18 +194,18 @@ fr:
           conference_invites: Invitations
           conference_speakers: Conférenciers
           diploma: Certificat de participation
-          info: À propos de cette conférence
+          info: Info
           media_links: Liens médias
           moderations: Modération
           partners: Partenaires
           registration_types: Types d'inscription
           registrations: Inscriptions
-          see_conference: Voir la conférence
           user_registrations: Utilisateurs inscrits
       models:
         conference:
           fields:
             created_at: Créé à
+            promoted: Mise en avant
             published: Publié
             title: Titre
         conference_speaker:
@@ -335,7 +331,7 @@ fr:
       admin:
         conference_copies:
           form:
-            slug_help_html: 'Les identifiants d''URL sont utilisés pour générer les URL qui pointent vers cette conférence. N''accepte que des lettres, des chiffres et des tirets et doit commencer par une lettre. Exemple : %{url}'
+            slug_help: 'Les slugs d''URL sont utilisés pour générer les URL qui pointent vers cette conférence. N''accepte que les lettres, les chiffres et les tirets et doit commencer par une lettre. Exemple: %{url}'
         conference_invites:
           create:
             error: Un problème est survenu lors de l'invitation de l'utilisateur à rejoindre la conférence.
@@ -352,6 +348,7 @@ fr:
               all: Tout
               rejected: Rejeté
               sent: Envoyé
+            filter_by: Filtrer par
             invite_attendee: Inviter un participant
             invites: Invite
             search: Chercher
@@ -376,7 +373,7 @@ fr:
             registrations_count:
               one: Il y a eu une inscription.
               other: Il y a eu %{count} inscriptions.
-            slug_help_html: 'Les identifiants d''URL sont utilisés pour générer les URL qui pointent vers cette conférence. N''accepte que des lettres, des chiffres et des tirets et doit commencer par une lettre. Exemple : %{url}'
+            slug_help: 'Les slugs d''URL sont utilisés pour générer les URL qui pointent vers cette conférence. N''accepte que les lettres, les chiffres et les tirets et doit commencer par une lettre. Exemple: %{url}'
         diplomas:
           edit:
             save: sauvegarder
@@ -438,7 +435,7 @@ fr:
           invalid: Il y a eu un problème pour quitter cette conférence.
           success: Vous avez quitté la conférence avec succès.
       conference_speaker:
-        go_to_twitter: Aller sur X
+        go_to_twitter: Aller sur Twitter
         more_info: Plus d'informations
         personal_website: Site Web personnel
         show:
@@ -457,14 +454,9 @@ fr:
           collaborators: Partenaires
           main_promotors: Organisateurs
         show:
-          already_have_an_account?: Vous avez déjà un compte ?
-          are_you_new?: Nouveau participant ?
           login_as: Vous êtes connecté en tant que %{name} <%{email}>
           make_conference_registration: S'inscrire à la conférence
-          manage_registration: Gérer l'inscription
           register: S'inscrire
-          sign_in_description: Connectez-vous pour vous inscrire à la conférence
-          sign_up_description: Créez un compte pour vous inscrire à la conférence
       content_blocks:
         highlighted_conferences:
           name: Conférences mises en avant
@@ -506,8 +498,9 @@ fr:
       pages:
         home:
           highlighted_conferences:
-            active_spaces: Conférences actives
-            see_all_spaces: Voir toutes les conférences
+            active_conferences: Conférences actives
+            conferences_button_title: Lien vers la page des conférences affichant toutes les conférences
+            see_all_conferences: Voir toutes les conférences
       registration_types:
         index:
           choose_an_option: 'Choisissez votre option d''inscription:'
@@ -519,6 +512,7 @@ fr:
         introduction: introduction
         objectives: Objectifs
         related_assemblies: Assemblées connexes
+        related_consultations: Votations connexes
         related_participatory_processes: Concertations associées
     events:
       conferences:
@@ -576,8 +570,10 @@ fr:
   layouts:
     decidim:
       conference_hero:
-        manage_registration: Gérer l'inscription
         register: S'inscrire
+      conference_widgets:
+        show:
+          take_part: Participer
       conferences:
         conference:
           more_info: Plus d'informations
@@ -588,7 +584,11 @@ fr:
           conferences:
             one: "%{count} conférence"
             other: "%{count} conférences"
+        promoted_conference:
+          more_info: Plus d'informations
+          take_part: Participer
       conferences_nav:
+        conference_menu_item: Information
         conference_partners_menu_item: Partenaires
         conference_speaker_menu_item: Conférenciers
         media: Médias

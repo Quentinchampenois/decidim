@@ -10,9 +10,9 @@ module Decidim
           def url_params(latitude:, longitude:, options: {})
             params = {
               c: "#{latitude}, #{longitude}",
-              z: options[:zoom] || Decidim::Map::StaticMap::DEFAULT_ZOOM,
-              w: options[:width] || Decidim::Map::StaticMap::DEFAULT_SIZE,
-              h: options[:height] || Decidim::Map::StaticMap::DEFAULT_SIZE,
+              z: options[:zoom] || 15,
+              w: options[:width] || 120,
+              h: options[:height] || 120,
               f: 1
             }
 

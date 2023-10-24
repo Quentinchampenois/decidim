@@ -4,8 +4,7 @@ require "spec_helper"
 
 describe "Assembly members", type: :system do
   let(:organization) { create(:organization) }
-  let(:assembly) { create(:assembly, :with_content_blocks, organization:, blocks_manifests:) }
-  let(:blocks_manifests) { [] }
+  let(:assembly) { create(:assembly, organization:) }
 
   before do
     switch_to_host(organization.host)
@@ -18,20 +17,10 @@ describe "Assembly members", type: :system do
   end
 
   context "when there are no assembly members and accessing from the assembly homepage" do
-    context "and the main data content block is disabled" do
-      it "the menu nav is not shown" do
-        visit decidim_assemblies.assembly_path(assembly)
+    it "the menu link is not shown" do
+      visit decidim_assemblies.assembly_path(assembly)
 
-        expect(page).not_to have_css(".participatory-space__nav-container")
-      end
-    end
-
-    context "and the main data content block is enabled" do
-      let(:blocks_manifests) { ["main_data"] }
-
-      it "the menu link is not shown" do
-        visit decidim_assemblies.assembly_path(assembly)
-
+      within ".main-nav" do
         expect(page).not_to have_content("Members")
       end
     end
@@ -56,21 +45,11 @@ describe "Assembly members", type: :system do
     end
 
     context "and accessing from the homepage" do
-      context "and the main data content block is disabled" do
-        it "the menu nav is not shown" do
-          visit decidim_assemblies.assembly_path(assembly)
+      it "the menu link is not shown" do
+        visit decidim_assemblies.assembly_path(assembly)
 
-          expect(page).not_to have_css(".participatory-space__nav-container")
-        end
-      end
-
-      context "and the main data content block is enabled" do
-        let(:blocks_manifests) { ["main_data"] }
-
-        it "the menu link is not shown" do
-          visit decidim_assemblies.assembly_path(assembly)
-
-          expect(page).not_to have_content("Members")
+        within ".process-header" do
+          expect(page).not_to have_content("MEMBERS")
         end
       end
     end
@@ -85,35 +64,27 @@ describe "Assembly members", type: :system do
     end
 
     context "and accessing from the assembly homepage" do
-      context "and the main data content block is disabled" do
-        it "the menu nav is not shown" do
-          visit decidim_assemblies.assembly_path(assembly)
+      it "the menu link is shown" do
+        visit decidim_assemblies.assembly_path(assembly)
 
-          expect(page).not_to have_css(".participatory-space__nav-container")
+        within ".process-nav" do
+          expect(page).to have_content("MEMBERS")
+          click_link "Members"
         end
+
+        expect(page).to have_current_path decidim_assemblies.assembly_assembly_members_path(assembly)
       end
+    end
 
-      context "and the main data content block is enabled" do
-        let(:blocks_manifests) { ["main_data"] }
+    it "lists all the non ceased assembly members" do
+      within "#assembly_members-grid" do
+        expect(page).to have_selector(".card--member", count: 2)
 
-        it "the menu link is shown" do
-          visit decidim_assemblies.assembly_path(assembly)
-
-          within ".participatory-space__nav-container" do
-            expect(page).to have_content("Members")
-            click_link "Members"
-          end
-
-          expect(page).to have_current_path decidim_assemblies.assembly_assembly_members_path(assembly)
+        assembly_members.each do |assembly_member|
+          expect(page).to have_content(Decidim::AssemblyMemberPresenter.new(assembly_member).name)
         end
-      end
 
-      it "lists all the non ceased assembly members" do
-        within "#assembly_members-grid" do
-          expect(page).to have_selector(".profile__user", count: 2)
-
-          expect(page).not_to have_content(Decidim::AssemblyMemberPresenter.new(ceased_assembly_member).name)
-        end
+        expect(page).not_to have_content(Decidim::AssemblyMemberPresenter.new(ceased_assembly_member).name)
       end
     end
   end

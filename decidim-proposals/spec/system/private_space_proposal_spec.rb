@@ -32,7 +32,7 @@ describe "Private Space Proposal", type: :system do
       it "does not allow create a proposal" do
         visit_component
 
-        within "aside" do
+        within ".title-action" do
           expect(page).not_to have_link("New proposal")
         end
       end
@@ -47,9 +47,7 @@ describe "Private Space Proposal", type: :system do
         it "not allows create a proposal" do
           visit_component
 
-          within "aside" do
-            expect(page).to have_link("New proposal")
-          end
+          expect(page).to have_link("New proposal")
         end
       end
 
@@ -61,7 +59,7 @@ describe "Private Space Proposal", type: :system do
         it "not allows create a proposal" do
           visit_component
 
-          within "aside" do
+          within ".title-action" do
             expect(page).not_to have_link("New proposal")
           end
         end

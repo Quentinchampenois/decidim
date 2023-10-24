@@ -9,7 +9,7 @@ module Decidim
       delegate :voting_open?, to: :controller
 
       def show
-        render if announce?
+        cell("decidim/announcement", announcement_message, callout_class: "warning") if announce?
       end
 
       private

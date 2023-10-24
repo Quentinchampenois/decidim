@@ -26,6 +26,7 @@ module Decidim
             add_admins_as_followers(conference)
             link_participatory_processes
             link_assemblies
+            link_consultations
 
             broadcast(:ok, conference)
           else
@@ -94,6 +95,15 @@ module Decidim
 
         def link_assemblies
           conference.link_participatory_space_resources(assemblies, "included_assemblies")
+        end
+
+        def consultations
+          @consultations ||= conference.participatory_space_sibling_scope(:consultations)
+                                       .where(id: @form.consultations_ids)
+        end
+
+        def link_consultations
+          conference.link_participatory_space_resources(consultations, "included_consultations")
         end
       end
     end

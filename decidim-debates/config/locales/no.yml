@@ -50,6 +50,7 @@
         confirm_destroy: Er du sikker?
         destroy: Slett
         edit: Rediger
+        new: Ny %{name}
         title: Handling
       admin:
         debate_closes:
@@ -79,6 +80,9 @@
             success: Innspillstråden ble oppdatert.
         exports:
           comments: Kommentarer
+        models:
+          debate:
+            name: Innspillstråd
       admin_log:
         debate:
           close: "%{user_name} lukket tråden %{resource_name} under området %{space_name}"
@@ -91,6 +95,7 @@
           invalid: Det oppstod et problem med å stenge innspillstråden.
           success: Innspillstråden ble avsluttet.
         close_debate_modal:
+          close: Lukk
           description: Hva er oppsummeringen fra denne innspillstråden?
           send: Lukk innspillstråd
         closed: Avsluttet
@@ -117,11 +122,18 @@
           official: Offentlig
           origin: Opprinnelse
           participants: Deltakere
+          scope: Tema
           search: Søk
           state: Status
           state_values:
             closed: Lukket
             open: Åpen
+          user_groups: Grupper
+        filters_small_view:
+          close_modal: Lukk vinduet
+          filter: Filtrer
+          filter_by: Filtrer etter
+          unfold: Åpne
         form:
           select_a_category: Velg en kategori
         index:
@@ -137,6 +149,7 @@
           recent: Nyeste
           updated: Sist oppdatert
         show:
+          back: Tilbake til liste
           close_debate: Avslutt innspillstråd
           date: Dato
           debate_closed: Lukket
@@ -144,11 +157,20 @@
           edit_conclusions: Rediger oppsummering
           edit_debate: Rediger innspillstråd
           groups_count: Grupper
+          last_comment_by: Siste kommentar av
+          no_comments_yet: Ingen kommentarer enda
           open: Åpen debatt
           participants_count: Deltakere
         update:
           invalid: Det oppsto et problem med å oppdatere innspillstråden.
           success: Innspillstråden ble oppdatert.
+        versions:
+          debates:
+            back_to_resource: Gå tilbake til innspillstråden
+          index:
+            title: Versjoner
+        versions_list:
+          back_to_resource: Gå tilbake til innspillstråden
       models:
         debate:
           fields:

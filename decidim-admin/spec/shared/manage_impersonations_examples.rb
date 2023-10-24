@@ -39,7 +39,7 @@ shared_examples "manage impersonations examples" do
       let(:document_number) { "123456789Y" }
 
       it "shows the errors in the form" do
-        expect(page).to have_selector("label", text: "Document number*\nRequired field\nis invalid")
+        expect(page).to have_selector("label", text: "Document number*Required field\nis invalid")
       end
     end
 
@@ -241,7 +241,7 @@ shared_examples "manage impersonations examples" do
         click_link "Promote"
       end
 
-      within ".item__edit form" do
+      within "form.new_managed_user_promotion" do
         fill_in :managed_user_promotion_email, with: "foo@example.org"
       end
 
@@ -256,15 +256,12 @@ shared_examples "manage impersonations examples" do
 
       within "form.new_user" do
         fill_in :invitation_user_password, with: "decidim123456789"
+        fill_in :invitation_user_password_confirmation, with: "decidim123456789"
         check :invitation_user_tos_agreement
         find("*[type=submit]").click
       end
 
       expect(page).to have_content("successfully")
-      within_user_menu do
-        click_link "My public profile"
-      end
-
       expect(page).to have_content(managed_user.name)
 
       relogin_as user
@@ -285,9 +282,7 @@ shared_examples "manage impersonations examples" do
 
       it "show only verifications of current organization" do
         navigate_to_impersonations_page
-        within_admin_sidebar_menu do
-          click_link "Verification conflicts"
-        end
+        click_link "Verification conflicts"
 
         expect(page).to have_content("Rigoberto")
       end
@@ -301,9 +296,7 @@ shared_examples "manage impersonations examples" do
 
       it "show only verifications of current organization" do
         navigate_to_impersonations_page
-        within_admin_sidebar_menu do
-          click_link "Verification conflicts"
-        end
+        click_link "Verification conflicts"
 
         expect(page).not_to have_content("Rigoberto")
       end
@@ -318,14 +311,14 @@ shared_examples "manage impersonations examples" do
       fill_in(:impersonate_user_reason, with: reason) if reason
       fill_in :impersonate_user_authorization_document_number, with: document_number
       fill_in :impersonate_user_authorization_postal_code, with: "08224"
-      fill_in :impersonate_user_authorization_birthday, with: Time.current.change(day: 12)
+      page.execute_script("$('#impersonate_user_authorization_birthday').focus()")
     end
 
-    within "[data-content]" do
-      expect(page).to have_selector("*[type=submit]", count: 1)
+    page.find(".datepicker-dropdown .datepicker-days", text: "12").click
 
-      click_button "Impersonate"
-    end
+    expect(page).to have_selector("*[type=submit]", count: 1)
+
+    click_button "Impersonate"
   end
 
   def impersonate(user, reason: nil)

@@ -41,6 +41,7 @@ de:
         edit: Bearbeiten
         import: Projekte zu Ergebnissen importieren
         import_csv: CSV importieren
+        new: Neu %{name}
         preview: Vorschau
         timeline_entries: Projektentwicklung
         title: Aktionen
@@ -76,13 +77,14 @@ de:
             title: Ergebnisse von CSV importieren
         imports:
           create:
-            invalid: Beim Importieren der Ergebnisse ist ein Fehler aufgetreten.
             success: Die Datei wird importiert. Innerhalb von ein paar Minuten erhalten Sie eine E-Mail mit dem Importergebnis.
         models:
           result:
             name: Ergebnis
           status:
             name: Status
+          timeline_entry:
+            name: Zeitachseneintrag
         projects_import:
           create:
             invalid: Es gab ein Problem beim Importieren der Projekte in Ergebnisse, bitte befolgen Sie die Anweisungen sorgfältig und stellen Sie sicher, dass Sie Projekte für die Umsetzung ausgewählt haben.
@@ -229,7 +231,6 @@ de:
           global_status: Globaler Umsetzungsstatus
         nav_breadcrumb:
           global: Globale Ausführung
-        no_results: Es gibt keine Projekte
         search:
           search: Suche nach Aktionen
         show:

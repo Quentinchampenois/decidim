@@ -5,9 +5,6 @@ module Decidim
     # A base class for static mapping functionality, common to all static map
     # services.
     class StaticMap < Map::Utility
-      DEFAULT_SIZE = 300
-      DEFAULT_ZOOM = 15
-
       # Creates a link for the static maps. This will point to an external map
       # service where the user can further explore the given location.
       #
@@ -51,9 +48,9 @@ module Decidim
       #   * zoom: A number to represent the zoom value of the map image (default
       #     15)
       #   * width: A number to represent the pixel width of the map image
-      #     (default 300)
+      #     (default 120)
       #   * height: A number to represent the pixel height of the map image
-      #     (default 300)
+      #     (default 120)
       #
       # @return [String] The URL to request for the static map image.
       def url(latitude:, longitude:, options: {})
@@ -106,9 +103,9 @@ module Decidim
         {
           latitude:,
           longitude:,
-          zoom: options.fetch(:zoom, DEFAULT_ZOOM),
-          width: options.fetch(:width, DEFAULT_SIZE),
-          height: options.fetch(:height, DEFAULT_SIZE)
+          zoom: options.fetch(:zoom, 15),
+          width: options.fetch(:width, 120),
+          height: options.fetch(:height, 120)
         }
       end
 

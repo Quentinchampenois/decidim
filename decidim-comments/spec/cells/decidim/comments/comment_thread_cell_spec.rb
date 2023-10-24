@@ -19,7 +19,8 @@ module Decidim::Comments
       it "renders the thread" do
         expect(subject).to have_css(".comment-thread")
         expect(subject).to have_content(comment.body.values.first)
-        expect(subject).not_to have_css(".comment-reply")
+
+        expect(subject).not_to have_css(".comment-thread__title")
       end
 
       context "with replies" do
@@ -31,16 +32,16 @@ module Decidim::Comments
           allow(resource_locator).to receive(:path).and_return("/dummies")
         end
 
-        it "renders the reply" do
-          expect(subject).to have_css(".comment-reply .comment", count: 10)
+        it "renders the title" do
+          expect(subject).to have_css(".comment-thread__title", text: "Conversation with #{comment.author.name}")
         end
 
         context "with a deleted user" do
           let(:user) { create(:user, :deleted, organization: component.organization) }
           let(:comment) { create(:comment, commentable:, author: user) }
 
-          it "renders the user as deleted" do
-            expect(subject).to have_css(".comment__header", text: "Deleted participant")
+          it "renders the title" do
+            expect(subject).to have_css(".comment-thread__title", text: "Conversation with Deleted participant")
           end
         end
       end

@@ -179,15 +179,12 @@ module Decidim
         root_commentable.can_participate?(user)
       end
 
-      # The override_translation argument has been added to be able to use this
-      # method from comment event in the resource_text method which requires
-      # the use of this argument in translated_attribute of body
-      def formatted_body(override_translation = nil)
-        Decidim::ContentProcessor.render(sanitize_content_for_comment(render_markdown(translated_body(override_translation))), "div")
+      def formatted_body
+        Decidim::ContentProcessor.render(sanitize_content_for_comment(render_markdown(translated_body)), "div")
       end
 
-      def translated_body(override_translation = nil)
-        translated_attribute(body, organization, override_translation)
+      def translated_body
+        translated_attribute(body, organization)
       end
 
       def delete!

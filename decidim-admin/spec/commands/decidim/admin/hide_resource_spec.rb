@@ -22,9 +22,6 @@ module Decidim::Admin
     end
 
     context "when everything is ok" do
-      let(:arguments) { { resource: reportable } }
-      let(:fired_event) { "decidim.admin.hide_resource" }
-
       it "broadcasts ok" do
         expect { command.call }.to broadcast(:ok)
       end
@@ -33,9 +30,6 @@ module Decidim::Admin
         command.call
         expect(reportable.reload).to be_hidden
       end
-
-      it_behaves_like "fires an ActiveSupport::Notification event", "decidim.admin.hide_resource:before"
-      it_behaves_like "fires an ActiveSupport::Notification event", "decidim.admin.hide_resource:after"
 
       it "traces the action", versioning: true do
         expect(Decidim.traceability)

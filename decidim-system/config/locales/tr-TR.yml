@@ -37,9 +37,7 @@ tr:
         confirm_destroy: Bunu silmek istediğinizden emin misiniz?
         destroy: Sil
         edit: Düzenle
-        new_admin: Yeni Yönetici
-        new_oauth_application: Yetkilendirilmiş Uygulama
-        new_organization: Yeni organizasyon
+        new: Yeni
         save: Kaydet
         title: Eylemler
       admins:
@@ -69,6 +67,7 @@ tr:
           fields:
             created_at: Adresinde düzenlendi
             email: E-posta
+          name: yönetim
           validations:
             email_uniqueness: aynı e-postaya sahip başka bir yönetici zaten var
         oauth_application:
@@ -76,6 +75,7 @@ tr:
             created_at: Oluşturuldu
             name: OAuth Uygulama Adı
             organization_name: Kuruluş
+          name: OAuth uygulaması
         organization:
           actions:
             save_and_invite: Kuruluş oluşturun ve yöneticiyi davet edin
@@ -85,6 +85,7 @@ tr:
             name: Adı
             omniauth_settings: Omniauth ayarları
             smtp_settings: SMTP ayarları
+          name: organizasyon
       oauth_applications:
         create:
           error: Bu uygulama oluşturulurken bir hata oluştu.

@@ -24,7 +24,7 @@ shared_examples "manage attachment collections examples" do
   end
 
   it "can add attachment collections to a process" do
-    click_link "New attachment folder"
+    find(".card-title a.new").click
 
     within ".new_attachment_collection" do
       fill_in_i18n(

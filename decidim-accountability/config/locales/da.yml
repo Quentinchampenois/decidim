@@ -36,6 +36,7 @@ da:
         destroy: Slet
         edit: Rediger
         import_csv: Importér CSV
+        new: Nyt %{name}
         preview: Eksempelvisning
         timeline_entries: Projektudvikling
         title: Handlinger
@@ -51,6 +52,8 @@ da:
             name: Resultat
           status:
             name: Status
+          timeline_entry:
+            name: Indførsel på tidslinje
         results:
           edit:
             title: Rediger resultat

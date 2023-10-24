@@ -24,6 +24,8 @@ module Decidim
     # @return [void]
     def call
       metadata = pull_request_metadata
+      raise InvalidMetadataError unless metadata
+
       make_cherrypick_and_branch(metadata)
       create_pull_request(metadata)
       Decidim::GitBackportManager.checkout_develop
@@ -37,7 +39,7 @@ module Decidim
     #
     # @return [Faraday::Response] An instance that represents an HTTP response from making an HTTP request
     def pull_request_metadata
-      Decidim::GithubManager::Querier::ByIssueId.new(
+      Decidim::GithubManager::Querier.new(
         token:,
         issue_id: pull_request_id
       ).call

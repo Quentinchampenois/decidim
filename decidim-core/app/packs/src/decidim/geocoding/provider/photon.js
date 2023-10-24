@@ -59,7 +59,7 @@ $(() => {
               return {
                 key: label,
                 value: label,
-                coordinates: item.geometry.coordinates.reverse()
+                coordinates: item.geometry.coordinates
               }
             }));
           }

@@ -4,8 +4,6 @@ module Decidim
   module Assemblies
     class AssemblyMembersController < Decidim::Assemblies::ApplicationController
       include ParticipatorySpaceContext
-      include AssemblyBreadcrumb
-
       participatory_space_layout only: :index
 
       helper_method :collection

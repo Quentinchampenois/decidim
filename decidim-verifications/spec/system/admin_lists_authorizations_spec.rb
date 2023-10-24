@@ -14,13 +14,11 @@ describe "Admin lists authorizations", type: :system do
     login_as admin, scope: :user
     visit decidim_admin.root_path
     click_link "Participants"
-    within_admin_sidebar_menu do
-      click_link "Authorizations"
-    end
+    click_link "Authorizations"
   end
 
   it "allows the user to list all available authorization methods" do
-    within "[data-content]" do
+    within ".container" do
       expect(page).to have_content("Identity documents")
     end
   end

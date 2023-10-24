@@ -31,9 +31,7 @@ describe "Explore elections", :slow, type: :system do
     context "with many elections" do
       it "shows all elections for the given process" do
         visit_component
-        within "#elections" do
-          expect(page).to have_css("[id^=elections]", count: elections_count)
-        end
+        expect(page).to have_selector(".card--election", count: elections_count)
 
         elections.each do |election|
           expect(page).to have_content(translated(election.title))
@@ -44,21 +42,18 @@ describe "Explore elections", :slow, type: :system do
     context "when filtering" do
       it "allows searching by text" do
         visit_component
-
-        within "[data-filters]" do
+        within ".filters" do
           fill_in "filter[search_text_cont]", with: translated(elections.first.title)
 
-          within "div.filter-search" do
-            click_button
-          end
+          # The form should be auto-submitted when filter box is filled up, but
+          # somehow it is not happening. So we workaround that be explicitly
+          # clicking on "Search" until we find out why.
+          find(".icon--magnifying-glass").click
         end
 
-        expect(page).to have_content("1 election")
-
-        within "#elections" do
-          expect(page).to have_css("[id^=elections]", count: 1)
-          expect(page).to have_content(translated(elections.first.title))
-        end
+        expect(page).to have_css("#elections-count", text: "1 ELECTION")
+        expect(page).to have_css(".card--election", count: 1)
+        expect(page).to have_content(translated(elections.first.title))
       end
 
       it "allows filtering by date" do
@@ -66,43 +61,34 @@ describe "Explore elections", :slow, type: :system do
         upcoming_election = create(:election, :complete, :published, :upcoming, component:)
         visit_component
 
-        within "#panel-dropdown-menu-date" do
-          uncheck "Active"
+        within ".with_any_date_check_boxes_tree_filter" do
+          uncheck "All"
           check "Finished"
         end
 
-        within "#elections" do
-          expect(page).to have_css("[id^=elections]", count: 1)
-          expect(page).to have_content(translated(finished_election.title))
-        end
+        expect(page).to have_css(".card--election", count: 1)
+        expect(page).to have_content(translated(finished_election.title))
 
-        within "#panel-dropdown-menu-date" do
-          uncheck "Finished"
+        within ".with_any_date_check_boxes_tree_filter" do
+          uncheck "All"
           check "Active"
         end
 
-        within "#elections" do
-          expect(page).to have_css("[id^=elections]", count: 5)
-        end
+        expect(page).to have_css(".card--election", count: 5)
 
-        within "#panel-dropdown-menu-date" do
-          uncheck "Active"
+        within ".with_any_date_check_boxes_tree_filter" do
+          uncheck "All"
           check "Upcoming"
         end
 
-        within "#elections" do
-          expect(page).to have_css("[id^=elections]", count: 1)
-          expect(page).to have_content(translated(upcoming_election.title))
-        end
+        expect(page).to have_css(".card--election", count: 1)
+        expect(page).to have_content(translated(upcoming_election.title))
 
-        within "#panel-dropdown-menu-date" do
-          check "All"
+        within ".with_any_date_check_boxes_tree_filter" do
           uncheck "All"
         end
 
-        within "#elections" do
-          expect(page).to have_css("[id^=elections]", count: 7)
-        end
+        expect(page).to have_css(".card--election", count: 7)
       end
     end
 
@@ -117,7 +103,7 @@ describe "Explore elections", :slow, type: :system do
 
       it "shows the correct warning" do
         visit_component
-        within ".flash" do
+        within ".callout" do
           expect(page).to have_content("no scheduled elections")
         end
       end
@@ -130,7 +116,7 @@ describe "Explore elections", :slow, type: :system do
 
       it "shows the correct warning" do
         visit_component
-        within ".flash" do
+        within ".callout" do
           expect(page).to have_content("any election scheduled")
         end
       end
@@ -142,7 +128,7 @@ describe "Explore elections", :slow, type: :system do
       end
 
       let!(:collection) { create_list(:election, collection_size, :complete, :published, :ongoing, component:) }
-      let!(:resource_selector) { "[id^=elections__election]" }
+      let!(:resource_selector) { ".card--election" }
 
       it_behaves_like "a paginated resource"
     end
@@ -169,18 +155,18 @@ describe "Explore elections", :slow, type: :system do
     end
 
     it "shows accordion with questions and answers" do
-      expect(page).to have_css("#accordion-preview li", count: election.questions.count)
-      expect(page).not_to have_css("[id^='accordion-panel']")
+      expect(page).to have_css(".accordion-item", count: election.questions.count)
+      expect(page).not_to have_css(".accordion-content")
 
-      within "#accordion-preview li", match: :first do
-        click_button translated(question.title)
+      within ".accordion-item:first-child" do
+        click_link translated(question.title)
         expect(page).to have_css("li", count: question.answers.count)
       end
     end
 
     context "with attached photos" do
       it "shows the image" do
-        expect(page).to have_selector("img[src*=\"city.jpeg\"]", count: 1)
+        expect(page).to have_xpath("//img[@src=\"#{image.url}\"]")
       end
     end
   end
@@ -196,7 +182,7 @@ describe "Explore elections", :slow, type: :system do
 
     it "shows result information" do
       expect(page).to have_i18n_content(question.title)
-      expect(page).to have_content("Election results")
+      expect(page).to have_content("ELECTION RESULTS")
     end
   end
 end

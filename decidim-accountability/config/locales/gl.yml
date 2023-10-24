@@ -38,6 +38,7 @@ gl:
         destroy: Eliminar
         edit: Editar
         import_csv: Importar CSV
+        new: Novo %{name}
         preview: Vista previa
         timeline_entries: Evolución do proxecto
         title: Accións
@@ -54,6 +55,8 @@ gl:
             name: Resultado
           status:
             name: Estado
+          timeline_entry:
+            name: Entrada de liña de tempo
         results:
           edit:
             title: Editar resultado

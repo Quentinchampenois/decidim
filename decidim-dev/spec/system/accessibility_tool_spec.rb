@@ -17,7 +17,7 @@ describe "Accessibility tool", type: :system do
   let(:html_document) do
     document_inner = html_body
     template.instance_eval do
-      js_config = { icons_path: asset_pack_path("media/images/remixicon.symbol.svg") }
+      js_config = { icons_path: asset_pack_path("media/images/icons.svg") }
 
       <<~HTML.strip
         <!doctype html>
@@ -41,7 +41,7 @@ describe "Accessibility tool", type: :system do
   end
   let(:html_body) do
     <<~HTML.strip
-      <p id="paragraph">This page is not <span id="color_contrast" style="color:#ffe;">accessible</span></p>
+      <p id="paragraph">This page is not <span id="color_contrast" style="color:#fff;">accessible</span></p>
     HTML
   end
 
@@ -116,7 +116,7 @@ describe "Accessibility tool", type: :system do
     it "runs the accessibility tool and reports violations" do
       expect(page).to have_selector(".decidim-accessibility-badge")
       within ".decidim-accessibility-badge .decidim-accessibility-info" do
-        expect(page).to have_selector("svg use[href$='#ri-check-fill']")
+        expect(page).to have_selector(".icon--check")
       end
       expect(page).not_to have_selector(".decidim-accessibility-report")
 

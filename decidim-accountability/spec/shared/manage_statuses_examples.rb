@@ -26,7 +26,7 @@ RSpec.shared_examples "manage statuses" do
   end
 
   it "creates a new status" do
-    click_link "New status"
+    click_link "New Status"
 
     within ".new_status" do
       fill_in :status_key, with: "status_key_1"

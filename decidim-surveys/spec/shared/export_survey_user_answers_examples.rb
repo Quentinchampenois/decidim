@@ -12,10 +12,13 @@ shared_examples "export survey user answers" do
   it "exports a CSV" do
     visit_component_admin
 
-    find(".exports").click
+    find(".exports.dropdown").click
     perform_enqueued_jobs { click_link "CSV" }
 
-    expect(page).to have_admin_callout("Your export is currently in progress. You will receive an email when it is complete.")
+    within ".callout.success" do
+      expect(page).to have_content("in progress")
+    end
+
     expect(last_email.subject).to include("survey_user_answers", "csv")
     expect(last_email.attachments.length).to be_positive
     expect(last_email.attachments.first.filename).to match(/^survey_user_answers.*\.zip$/)
@@ -24,10 +27,13 @@ shared_examples "export survey user answers" do
   it "exports a JSON" do
     visit_component_admin
 
-    find(".exports").click
+    find(".exports.dropdown").click
     perform_enqueued_jobs { click_link "JSON" }
 
-    expect(page).to have_admin_callout("Your export is currently in progress. You will receive an email when it is complete.")
+    within ".callout.success" do
+      expect(page).to have_content("in progress")
+    end
+
     expect(last_email.subject).to include("survey_user_answers", "json")
     expect(last_email.attachments.length).to be_positive
     expect(last_email.attachments.first.filename).to match(/^survey_user_answers.*\.zip$/)
@@ -36,10 +42,13 @@ shared_examples "export survey user answers" do
   it "exports a PDF" do
     visit_component_admin
 
-    find(".exports").click
+    find(".exports.dropdown").click
     perform_enqueued_jobs { click_link "PDF" }
 
-    expect(page).to have_admin_callout("Your export is currently in progress. You will receive an email when it is complete.")
+    within ".callout.success" do
+      expect(page).to have_content("in progress")
+    end
+
     expect(last_email.subject).to include("survey_user_answers", "pdf")
     expect(last_email.attachments.length).to be_positive
     expect(last_email.attachments.first.filename).to match(/^survey_user_answers.*\.zip$/)

@@ -11,11 +11,7 @@ module Decidim
       let!(:amendment) { create(:amendment, amendable:, emendation:) }
       let(:amendable_title) { "My super proposal" }
 
-      let(:event_name) { "decidim.events.amendments.amendment_accepted" }
-      let(:amendment_type) { "accepted" }
-      let(:email_subject) { "Accepted amendment for #{amendable_title} from #{emendation_author_nickname}" }
-
-      include_examples "amendment event"
+      include_examples "amendment accepted event"
     end
   end
 end

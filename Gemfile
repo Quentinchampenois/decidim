@@ -6,13 +6,14 @@ ruby RUBY_VERSION
 
 gem "decidim", path: "."
 gem "decidim-conferences", path: "."
+gem "decidim-consultations", path: "."
 gem "decidim-elections", path: "."
 gem "decidim-initiatives", path: "."
 gem "decidim-templates", path: "."
 
 gem "bootsnap", "~> 1.4"
 
-gem "puma", ">= 6.3.1"
+gem "puma", ">= 5.6.2"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri

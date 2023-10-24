@@ -60,8 +60,23 @@ describe "Explore versions", type: :system, versioning: true do
     end
 
     it "lists all versions" do
-      expect(page).to have_link("Version 2 of 2")
-      expect(page).to have_link("Version 1 of 2")
+      expect(page).to have_link("Version 1")
+      expect(page).to have_link("Version 2")
+    end
+
+    it "shows the versions count" do
+      expect(page).to have_content("VERSIONS\n2")
+    end
+
+    it "allows going back to the initiative" do
+      click_link "Go back to initiative"
+      expect(page).to have_current_path initiative_path, ignore_query: true
+    end
+
+    it "shows the creation date" do
+      within ".card--list__item:last-child" do
+        expect(page).to have_content(Time.zone.today.strftime("%d/%m/%Y"))
+      end
     end
   end
 
@@ -70,13 +85,30 @@ describe "Explore versions", type: :system, versioning: true do
       command.call
       visit initiative_path
       click_link "see other versions"
-      click_link("Version 2 of 2")
+
+      within ".card--list__item:last-child" do
+        first(:link, "Version 2").click
+      end
     end
 
     it_behaves_like "accessible page"
 
+    it "shows the version number" do
+      expect(page).to have_content("VERSION NUMBER\n2 out of 2")
+    end
+
+    it "allows going back to the initiative" do
+      click_link "Go back to initiative"
+      expect(page).to have_current_path initiative_path, ignore_query: true
+    end
+
+    it "allows going back to the versions list" do
+      click_link "Show all versions"
+      expect(page).to have_current_path "#{initiative_path}/versions"
+    end
+
     it "shows the creation date" do
-      within ".version__author" do
+      within ".card.extra.definition-data" do
         expect(page).to have_content(Time.zone.today.strftime("%d/%m/%Y"))
       end
     end
@@ -84,16 +116,16 @@ describe "Explore versions", type: :system, versioning: true do
     it "shows the changed attributes" do
       expect(page).to have_content("Changes at")
 
-      within "#diff-for-title-english" do
-        expect(page).to have_content("Title")
+      within ".diff-for-title-english" do
+        expect(page).to have_content("TITLE")
 
         within ".diff > ul > .ins" do
           expect(page).to have_content(translated(initiative.title, locale: :en))
         end
       end
 
-      within "#diff-for-description-english" do
-        expect(page).to have_content("Description")
+      within ".diff-for-description-english" do
+        expect(page).to have_content("DESCRIPTION")
 
         within ".diff > ul > .ins" do
           expect(page).to have_content(ActionView::Base.full_sanitizer.sanitize(translated(initiative.description, locale: :en), tags: []))

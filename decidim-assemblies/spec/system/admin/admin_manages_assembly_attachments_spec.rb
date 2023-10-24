@@ -12,9 +12,7 @@ describe "Admin manages assembly attachments", type: :system do
     switch_to_host(organization.host)
     login_as user, scope: :user
     visit decidim_admin_assemblies.edit_assembly_path(assembly)
-    within_admin_sidebar_menu do
-      click_link "Files"
-    end
+    click_link "Files"
   end
 
   it_behaves_like "manage attachments examples"

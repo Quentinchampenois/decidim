@@ -4,10 +4,11 @@ module Decidim
   class FollowsController < Decidim::ApplicationController
     include FormFactory
     before_action :authenticate_user!
-    helper_method :resource, :button_cell, :button_cell_mobile
+    helper_method :resource
 
     def destroy
       @form = form(Decidim::FollowForm).from_params(params)
+      @inline = params[:follow][:inline] == "true"
       enforce_permission_to :delete, :follow, follow: @form.follow
 
       DeleteFollow.call(@form, current_user) do
@@ -23,6 +24,7 @@ module Decidim
 
     def create
       @form = form(Decidim::FollowForm).from_params(params)
+      @inline = params[:follow][:inline] == "true"
       enforce_permission_to :create, :follow
 
       CreateFollow.call(@form, current_user) do
@@ -40,18 +42,6 @@ module Decidim
       @resource ||= GlobalID::Locator.locate_signed(
         params[:follow][:followable_gid]
       )
-    end
-
-    def button_options
-      params.require(:follow).permit(:button_classes).to_h.symbolize_keys
-    end
-
-    def button_cell_mobile
-      @button_cell_mobile ||= cell("decidim/follow_button", resource, **button_options.merge(mobile: true))
-    end
-
-    def button_cell
-      @button_cell ||= cell("decidim/follow_button", resource, **button_options)
     end
   end
 end

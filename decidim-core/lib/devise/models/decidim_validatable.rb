@@ -15,7 +15,7 @@ module Devise
     module DecidimValidatable
       # All validations used by this module.
       VALIDATIONS = [:validates_presence_of, :validates_uniqueness_of, :validates_format_of,
-                     :validates_length_of].freeze
+                     :validates_confirmation_of, :validates_length_of].freeze
 
       def self.required_fields(_klass)
         []
@@ -31,6 +31,7 @@ module Devise
           validates_format_of :email, with: email_regexp, allow_blank: true, if: :email_changed?
 
           validates_presence_of :password, if: :password_required?
+          validates_confirmation_of :password, if: :password_required?
 
           validates :password, password: { name: :name, email: :email, username: :nickname }
         end
@@ -49,9 +50,9 @@ module Devise
 
       # Checks whether a password is needed or not. For validations only.
       # Passwords are always required if it is a new record, or if the password
-      # is being set somewhere.
+      # or confirmation are being set somewhere.
       def password_required?
-        new_record? || password.present?
+        !persisted? || !password.nil? || !password_confirmation.nil?
       end
 
       def email_required?

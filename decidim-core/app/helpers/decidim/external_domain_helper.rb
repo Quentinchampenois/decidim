@@ -2,6 +2,7 @@
 
 module Decidim
   module ExternalDomainHelper
+    # Redesign: deprecated once the redesign has been completed
     def highlight_domain
       highlighted_domain = [
         external_url.host,

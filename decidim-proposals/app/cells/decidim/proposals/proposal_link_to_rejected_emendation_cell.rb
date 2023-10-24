@@ -12,15 +12,13 @@ module Decidim
         @linked_resource ||= model.linked_promoted_resource
       end
 
-      def link_to_resource_url
-        resource_locator(linked_resource).path
-      end
-
-      def link_to_resource_text
-        if model.emendation?
-          t("link_to_proposal_from_emendation_text", scope: "decidim.proposals.proposals.show")
-        else
-          t("link_to_promoted_emendation_text", scope: "decidim.proposals.proposals.show")
+      def link_to_resource
+        link_to resource_locator(linked_resource).path, class: "link" do
+          if model.emendation?
+            t("link_to_proposal_from_emendation_text", scope: "decidim.proposals.proposals.show")
+          else
+            t("link_to_promoted_emendation_text", scope: "decidim.proposals.proposals.show")
+          end
         end
       end
 

@@ -18,7 +18,7 @@ $(() => {
 
   // Ajax request is made at timeout_modal.html.erb
   $continueSessionButton.on("click", () => {
-    window.Decidim.currentDialogs.timeoutModal.close()
+    $timeoutModal.foundation("close");
     // In admin panel we have to hide all overlays
     $(".reveal-overlay").css("display", "none");
     lastActivityCheck = dayjs();
@@ -72,7 +72,8 @@ $(() => {
   const exitInterval = setInterval(() => {
     const timeSinceLastActivityCheckInSeconds = Math.round((dayjs() - lastActivityCheck) / 1000);
 
-    if (!window.Decidim.currentDialogs.timeoutModal.isOpen && timeSinceLastActivityCheckInSeconds >= activityCheckInterval) {
+    const popupOpen = $("#timeoutModal").parent().css("display") === "block";
+    if (!popupOpen && timeSinceLastActivityCheckInSeconds >= activityCheckInterval) {
       lastActivityCheck = dayjs();
       if (userBeenActiveSince(activityCheckInterval)) {
         heartbeat();
@@ -99,7 +100,7 @@ $(() => {
       } else if (secondsUntilSessionExpires <= 90) {
         $timeoutModal.find("#reveal-hidden-sign-out")[0].click();
       } else if (secondsUntilSessionExpires <= 150) {
-        window.Decidim.currentDialogs.timeoutModal.open()
+        $timeoutModal.foundation("open");
       }
     });
   }, interval);

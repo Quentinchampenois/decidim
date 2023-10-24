@@ -7,34 +7,9 @@ module Decidim
     extend ActiveSupport::Concern
 
     included do
-      # Displays the flash messages found in ActionDispatch's +flash+ hash using
-      # FoundationRailsHelper's +callout+ component.
-      #
-      # Overrides original function from foundation_rails_helper gem to allow
-      # flash messages with links inside.
-      #
-      # Parameters:
-      # * +closable+ - A boolean to determine whether the displayed flash messages
-      # should be closable by the user. Defaults to true.
-      # * +key_matching+ - A Hash of key/value pairs mapping flash keys to the
-      # corresponding class to use for the callout box.
-      def display_flash_messages(closable: true, key_matching: {})
-        key_matching = FoundationRailsHelper::FlashHelper::DEFAULT_KEY_MATCHING.merge(key_matching)
-        key_matching.default = :primary
-
-        capture do
-          flash.each do |key, value|
-            next if ignored_key?(key.to_sym)
-
-            alert_class = key_matching[key.to_sym]
-            concat alert_box(value.try(:html_safe), alert_class, closable)
-          end
-        end
-      end
-
       private
 
-      # Private: FoundationRailsHelper alert box.
+      # Private: Foundation alert box.
       #
       # Overrides the foundation alert box helper for adding accessibility tags.
       #
@@ -43,18 +18,17 @@ module Decidim
       # closable - A boolean indicating whether the close icon is added.
       #
       # Returns a HTML string.
-      def alert_box(value, alert_class, closable, opts = {})
+      def alert_box(value, alert_class, closable)
         options = {
           class: "flash #{alert_class}",
           data: { "alert-box": "" },
           role: "alert",
           aria: { atomic: "true" }
-        }.merge(opts)
-
+        }
         options[:data] = options[:data].merge(closable: "") if closable
         icon = {
           secondary: "information-line",
-          alert: "alert-line",
+          alert: "information-line",
           warning: "alert-line",
           success: "checkbox-circle-line"
         }
@@ -65,7 +39,7 @@ module Decidim
         end
       end
 
-      # Private: FoundationRailsHelper alert box close link.
+      # Private: Foudation alert box close link.
       #
       # Overrides the foundation alert box close link helper for the aria-label
       # translations.
@@ -76,7 +50,7 @@ module Decidim
           data: { close: "" },
           aria: { label: I18n.t("decidim.alert.dismiss") }
         ) do
-          icon "close-line"
+          content_tag(:span, "&times;".html_safe, aria: { hidden: true })
         end
       end
 

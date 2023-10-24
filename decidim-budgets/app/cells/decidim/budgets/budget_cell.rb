@@ -14,12 +14,7 @@ module Decidim
       private
 
       def card_size
-        case @options[:size]
-        when :s
-          "decidim/budgets/budget_s"
-        else
-          "decidim/budgets/budget_list_item"
-        end
+        "decidim/budgets/budget_m"
       end
     end
   end

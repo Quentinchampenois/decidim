@@ -4,6 +4,7 @@ lv:
       conference:
         assemblies_ids: Saistītās asamblejas
         banner_image: Reklāmkaroga attēls
+        consultations_ids: Saistītās konsultācijas
         copy_categories: Kopēt kategorijas
         copy_components: Kopēt komponentus
         copy_features: Kopēt funkcijas
@@ -45,6 +46,7 @@ lv:
     admin:
       actions:
         confirm: Apstiprināt
+        new_conference: Jauna konference
         send_diplomas: Nosūtīt apmeklējuma sertifikātus
       conference_copies:
         new:
@@ -105,6 +107,7 @@ lv:
         form:
           title: Vispārēja informācija
         index:
+          not_published: Nav publicēts
           published: Publicēts
         new:
           create: Izveidot
@@ -145,6 +148,7 @@ lv:
           conference_invites: Ielūgumi
           conference_speakers: Runātāji
           diploma: Apmeklējuma sertifikāts
+          info: Informācija
           media_links: Mediju saites
           moderations: Moderācijas
           partners: Partneri
@@ -155,6 +159,7 @@ lv:
         conference:
           fields:
             created_at: Izveidots plkst.
+            promoted: Izcelts
             published: Publicēts
             title: Nosaukums
         conference_speaker:
@@ -272,6 +277,9 @@ lv:
         title: Runātāji
     conferences:
       admin:
+        conference_copies:
+          form:
+            slug_help: 'URL sadaļas adrese (slug) tiek izmantota, lai ģenerētu URL, kas ved uz šo konferenci. Tajā var būt tikai burti, cipari un defises, un tai jāsākas ar burtu. Piemērs: %{url}'
         conference_invites:
           create:
             error: Uzaicinot dalībnieku pievienoties konferencei, radās problēma.
@@ -288,6 +296,7 @@ lv:
               all: Visi
               rejected: Noraidīts
               sent: Nosūtīts
+            filter_by: Filtrēt pēc
             invite_attendee: Uzaicināt dalībnieku
             invites: Ielūgumi
             search: Meklēt
@@ -312,6 +321,7 @@ lv:
               zero: Ir notikušas %{count} reģistrācijas.
               one: Ir notikusi viena reģistrācija.
               other: Ir notikušas %{count} reģistrācijas.
+            slug_help: 'URL sadaļas adrese (slug) tiek izmantota, lai ģenerētu URL, kas ved uz šo konferenci. Tajā var būt tikai burti, cipari un defises, un tai jāsākas ar burtu. Piemērs: %{url}'
         diplomas:
           edit:
             save: Saglabāt
@@ -370,6 +380,7 @@ lv:
           invalid: Pametot šo konferenci, radās problēma.
           success: Jūs esat veiksmīgi pametis konferenci.
       conference_speaker:
+        go_to_twitter: Dodieties uz Twitter
         more_info: sīkāka informācija
         personal_website: Personīgā tīmekļvietne
         show:
@@ -420,7 +431,8 @@ lv:
       pages:
         home:
           highlighted_conferences:
-            active_spaces: Aktīvās konferences
+            active_conferences: Aktīvās konferences
+            see_all_conferences: Skatīt visas konferences
       registration_types:
         index:
           choose_an_option: 'Izvēlieties savu reģistrācijas iespēju:'
@@ -431,6 +443,7 @@ lv:
         introduction: Ievads
         objectives: Mērķi
         related_assemblies: Saistītās asamblejas
+        related_consultations: Saistītās konsultācijas
         related_participatory_processes: Saistītie līdzdalības procesi
     events:
       conferences:
@@ -477,6 +490,9 @@ lv:
     decidim:
       conference_hero:
         register: Reģistrēties
+      conference_widgets:
+        show:
+          take_part: Piedalīties
       conferences:
         conference:
           more_info: Sīkāka informācija
@@ -488,7 +504,11 @@ lv:
             zero: "%{count} konferences"
             one: "%{count} konference"
             other: "%{count} konferences"
+        promoted_conference:
+          more_info: Sīkāka informācija
+          take_part: Piedalīties
       conferences_nav:
+        conference_menu_item: Informācija
         conference_partners_menu_item: Partneri
         conference_speaker_menu_item: Runātāji
         media: Plašsaziņas līdzekļi

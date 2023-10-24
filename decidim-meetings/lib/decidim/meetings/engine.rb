@@ -28,18 +28,15 @@ module Decidim
               post :answer
             end
           end
-          resources :versions, only: [:show]
+          resources :versions, only: [:show, :index]
+          resource :widget, only: :show, path: "embed"
           resource :live_event, only: :show
           namespace :polls do
             resources :questions, only: [:index, :update]
             resources :answers, only: [:index, :create]
           end
         end
-        scope "/meetings" do
-          root to: "meetings#index"
-        end
-        get "/", to: redirect("meetings", status: 301)
-
+        root to: "meetings#index"
         resource :calendar, only: [:show], format: :text do
           resources :meetings, only: [:show], controller: :calendars, action: :meeting_calendar
         end
@@ -51,22 +48,31 @@ module Decidim
         end
       end
 
-      initializer "decidim_meetings.content_security_handlers" do |_app|
-        Decidim.configure do |config|
-          config.content_security_policies_extra.deep_merge!({ "frame-src" => %w(player.twitch.tv meet.jit.si) })
-        end
-      end
-
       initializer "decidim_meetings.view_hooks" do
         Decidim.view_hooks.register(:participatory_space_highlighted_elements, priority: Decidim::ViewHooks::HIGH_PRIORITY) do |view_context|
           view_context.cell("decidim/meetings/highlighted_meetings", view_context.current_participatory_space)
         end
 
+        # This view hook is used in card cells. It renders the next upcoming
+        # meeting for the given participatory space.
+        Decidim.view_hooks.register(:upcoming_meeting_for_card, priority: Decidim::ViewHooks::LOW_PRIORITY) do |view_context|
+          published_components = Decidim::Component.where(participatory_space: view_context.current_participatory_space).published
+          upcoming_meeting = Decidim::Meetings::Meeting.where(component: published_components).published.upcoming.order(:start_time, :end_time).first
+
+          next unless upcoming_meeting
+
+          view_context.render(
+            partial: "decidim/participatory_spaces/upcoming_meeting_for_card.html",
+            locals: {
+              upcoming_meeting:
+            }
+          )
+        end
+
         Decidim.view_hooks.register(:conference_venues, priority: Decidim::ViewHooks::HIGH_PRIORITY) do |view_context|
           published_components = Decidim::Component.where(participatory_space: view_context.current_participatory_space).published
-          meetings = Decidim::Meetings::Meeting.visible.not_hidden.published.where(component: published_components).group_by(&:address)
-          meetings_geocoded = Decidim::Meetings::Meeting.visible.not_hidden.published.where(component: published_components).geocoded
-
+          meetings = Decidim::Meetings::Meeting.where(component: published_components).group_by(&:address)
+          meetings_geocoded = Decidim::Meetings::Meeting.where(component: published_components).geocoded
           next unless meetings.any?
 
           view_context.render(
@@ -141,10 +147,8 @@ module Decidim
       end
 
       initializer "decidim_meetings.moderation_content" do
-        config.to_prepare do
-          ActiveSupport::Notifications.subscribe("decidim.admin.block_user:after") do |_event_name, data|
-            Decidim::Meetings::HideAllCreatedByAuthorJob.perform_later(**data)
-          end
+        ActiveSupport::Notifications.subscribe("decidim.system.events.hide_user_created_content") do |_event_name, data|
+          Decidim::Meetings::HideAllCreatedByAuthorJob.perform_later(**data)
         end
       end
     end

@@ -42,6 +42,10 @@ module Decidim
       def decidim
         Decidim::Core::Engine.routes.url_helpers
       end
+
+      def button_classes
+        "amend_button_card_cell button expanded button--icon button--sc"
+      end
     end
   end
 end

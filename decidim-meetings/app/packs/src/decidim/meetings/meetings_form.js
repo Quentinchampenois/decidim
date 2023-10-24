@@ -62,7 +62,7 @@ $(() => {
 
     createFieldDependentInputs({
       controllerField: $("#meeting_iframe_embed_type"),
-      wrapperSelector: "main",
+      wrapperSelector: ".iframe-fields",
       dependentFieldsSelector: ".iframe-fields--access-level",
       dependentInputSelector: "input",
       enablingCondition: ($field) => {
