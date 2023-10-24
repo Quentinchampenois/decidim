@@ -39,6 +39,8 @@ module Decidim
       end
     end
 
+    private
+
     # Method to specify the utm_codes.
     # You can change or add utm_codes for track
     #
@@ -50,8 +52,6 @@ module Decidim
     def utm_codes(host, newsletter_id)
       "?utm_source=#{host}&utm_campaign=#{newsletter_id}"
     end
-
-    private
 
     # Interpret placeholder '%{name}' and replace by the user name
     # If user is not define, it returns content with blank instead of the placeholder

@@ -79,7 +79,7 @@ module Decidim
     end
 
     describe "#utm_codes" do
-      subject { helper.utm_codes(organization.host, newsletter.id) }
+      subject { helper.send(:utm_codes, organization.host, newsletter.id) }
 
       it "returns the utm codes" do
         expect(subject).to eq("?utm_source=#{organization.host}&utm_campaign=#{newsletter.id}")
