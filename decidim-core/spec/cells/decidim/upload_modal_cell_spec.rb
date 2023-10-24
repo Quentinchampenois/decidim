@@ -31,8 +31,7 @@ describe Decidim::UploadModalCell, type: :cell do
       resource_name:,
       attachments:,
       required:,
-      titled:,
-      redesigned:
+      titled:
     }
   end
   let(:attribute) { "dummy_attribute" }
@@ -40,69 +39,28 @@ describe Decidim::UploadModalCell, type: :cell do
   let(:attachments) { [] }
   let(:required) { false }
   let(:titled) { false }
-  let(:redesigned) { false }
-
-  shared_examples "a not redesigned cell" do
-    it "renders the open button" do
-      expect(subject).to have_css(".add-file[type='button']")
-    end
-
-    it "renders modal" do
-      expect(subject).to have_css(".upload-modal")
-    end
-
-    it "renders dropzone" do
-      expect(subject).to have_css(".dropzone")
-    end
-  end
-
-  shared_examples "a redesigned cell" do
-    it "renders the open button" do
-      expect(subject).to have_css("[data-upload][type='button']")
-    end
-
-    it "renders modal" do
-      expect(subject).to have_css(".upload-modal")
-    end
-
-    it "renders dropzone" do
-      expect(subject).to have_css("[data-dropzone]")
-    end
-  end
 
   before do
     allow(Decidim::FileValidatorHumanizer).to receive(:new).and_return(file_validation_humanizer)
   end
 
-  context "without redesigned option" do
-    let(:options) do
-      {
-        attribute:,
-        resource_name:,
-        attachments:,
-        required:,
-        titled:
-      }
-    end
-
-    it_behaves_like "a not redesigned cell"
+  it "renders the open button" do
+    expect(subject).to have_css("[data-upload][type='button']")
   end
 
-  context "with redesigned option disabled" do
-    it_behaves_like "a not redesigned cell"
+  it "renders modal" do
+    expect(subject).to have_css(".upload-modal")
   end
 
-  context "with redesigned option enabled" do
-    let(:redesigned) { true }
-
-    it_behaves_like "a redesigned cell"
+  it "renders dropzone" do
+    expect(subject).to have_css("[data-dropzone]")
   end
 
   context "when file is required" do
     let(:required) { true }
 
     it "renders hidden checkbox" do
-      expect(subject).to have_css("input[name='dummy[#{attribute}_validation]']")
+      expect(subject).to have_css("input[name='dummy[#{attribute}_validation]']", visible: :hidden)
     end
 
     it "renders the required field indicator" do
@@ -147,11 +105,29 @@ describe Decidim::UploadModalCell, type: :cell do
         expect(details).to have_content("#{attachments[0].title["en"]} (#{filename})")
       end
     end
+
+    context "when there is rich content in the filename" do
+      let(:blob) { ActiveStorage::Blob.find_signed(attachments.first) }
+
+      before do
+        blob.update!(filename: "<svg onload=alert('ALERT')>.pdf")
+      end
+
+      it "escapes the truncated filename" do
+        expect(my_cell.send(:truncated_file_name_for, attachments.first)).to eq("&lt;svg onload=alert(&#39;ALERT&#39;)&gt;.pdf")
+      end
+
+      it "escapes the filename" do
+        expect(my_cell.send(:file_name_for, attachments.first)).to eq("&lt;svg onload=alert(&#39;ALERT&#39;)&gt;.pdf")
+      end
+    end
   end
 
   context "when multiple attachments are present" do
-    let(:file1) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
-    let(:file2) { Decidim::Dev.test_file("city.jpeg", "image/jpeg") }
+    let(:filename1) { "Exampledocument.pdf" }
+    let(:filename2) { "city.jpeg" }
+    let(:file1) { Decidim::Dev.test_file(filename1, "application/pdf") }
+    let(:file2) { Decidim::Dev.test_file(filename2, "image/jpeg") }
     let(:attachments) { [upload_test_file(file1), upload_test_file(file2)] }
 
     it "renders the attachments" do
@@ -171,6 +147,25 @@ describe Decidim::UploadModalCell, type: :cell do
         expect(images.count).to be(2)
         expect(images[0]["src"]).to match(%r{/city.jpeg$})
         expect(images[1]["src"]).to match(%r{/city2.jpeg$})
+      end
+    end
+
+    context "when attachment is titled" do
+      let(:attachments) { [create(:attachment, file: file1), create(:attachment, file: file2)] }
+      let(:titled) { true }
+
+      before do
+        allow(form).to receive(:hidden_field).and_return(
+          %(<input type="hidden" name="#{attribute}[]" value="#{attachments[0].id}">)
+        )
+      end
+
+      it "renders the attachments" do
+        expect(subject).to have_css(".attachment-details", count: 2)
+        expect(subject).to have_selector("[data-filename='#{filename1}']")
+
+        details = subject.find(".attachment-details", match: :first)
+        expect(details).to have_content("#{attachments[0].title["en"]} (#{filename1})")
       end
     end
 
@@ -203,6 +198,18 @@ describe Decidim::UploadModalCell, type: :cell do
           expect(my_cell.send(:title_for, attachment)).to eq("An image alert(&quot;ALERT&quot;)")
         end
       end
+    end
+  end
+
+  context "when the engine is mounted on a different route" do
+    let(:path) { "/app/upload_validations" }
+
+    before do
+      allow(Decidim::Core::Engine.routes.url_helpers).to receive(:upload_validations_path).and_return(path)
+    end
+
+    it "generates a path relative to the mount location" do
+      expect(my_cell.send(:upload_validations_url)).to eq(path)
     end
   end
 end

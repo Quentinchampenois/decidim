@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 shared_examples "follows" do
-  include_context "with a component"
-
   before do
     login_as user, scope: :user
   end
@@ -12,11 +10,7 @@ shared_examples "follows" do
       it "makes the user follow the followable" do
         visit followable_path
         expect do
-          if Decidim.redesign_active
-            click_link "Follow"
-          else
-            click_button "Follow"
-          end
+          click_link "Follow"
           expect(page).to have_content "Stop following"
         end.to change(Decidim::Follow, :count).by(1)
       end
@@ -32,16 +26,17 @@ shared_examples "follows" do
       it "makes the user follow the followable" do
         visit followable_path
         expect do
-          if Decidim.redesign_active
-            click_link "Stop following"
-          else
-            click_button "Stop following"
-          end
+          click_link "Stop following"
           expect(page).to have_content "Follow"
         end.to change(Decidim::Follow, :count).by(-1)
       end
     end
   end
+end
+
+shared_examples "follows with a component" do
+  include_context "with a component"
+  include_examples "follows"
 
   context "when the user is following the followable's participatory space" do
     before do
@@ -52,11 +47,7 @@ shared_examples "follows" do
       it "makes the user follow the followable" do
         visit followable_path
         expect do
-          if Decidim.redesign_active
-            click_link "Follow"
-          else
-            click_button "Follow"
-          end
+          click_link "Follow"
           expect(page).to have_content "Stop following"
         end.to change(Decidim::Follow, :count).by(1)
       end
